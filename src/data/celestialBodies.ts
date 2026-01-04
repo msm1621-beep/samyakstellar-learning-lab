@@ -1,0 +1,438 @@
+export type CelestialCategory = 'solar-system' | 'stars' | 'nebulas' | 'galaxies' | 'other';
+export type DistanceFilter = 'near' | 'far' | 'all';
+
+export interface CelestialBody {
+  id: string;
+  name: string;
+  category: CelestialCategory;
+  type: string;
+  description: string;
+  longDescription: string;
+  coolFact: string;
+  metric: string;
+  metricLabel: string;
+  icon: string;
+  color: string;
+  distance: 'near' | 'far';
+}
+
+export const celestialBodies: CelestialBody[] = [
+  // Solar System
+  {
+    id: 'sun',
+    name: 'The Sun',
+    category: 'solar-system',
+    type: 'Star',
+    description: 'Our very own star that lights up our days!',
+    longDescription: 'The Sun is a giant ball of hot, glowing gas at the center of our solar system. It gives us light, warmth, and makes life on Earth possible!',
+    coolFact: 'About 1.3 million Earths could fit inside the Sun!',
+    metric: 'Very Hot',
+    metricLabel: 'Temperature',
+    icon: '☀️',
+    color: 'star',
+    distance: 'near'
+  },
+  {
+    id: 'mercury',
+    name: 'Mercury',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The smallest and fastest planet in our solar system.',
+    longDescription: 'Mercury is the closest planet to the Sun and the smallest in our solar system. It zooms around the Sun faster than any other planet!',
+    coolFact: 'A year on Mercury is only 88 Earth days!',
+    metric: 'Very Fast',
+    metricLabel: 'Speed',
+    icon: '🪨',
+    color: 'muted',
+    distance: 'near'
+  },
+  {
+    id: 'venus',
+    name: 'Venus',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The hottest planet and Earth\'s "twin sister".',
+    longDescription: 'Venus is similar in size to Earth but covered in thick, toxic clouds. It\'s the hottest planet in our solar system - even hotter than Mercury!',
+    coolFact: 'Venus spins backwards compared to most planets!',
+    metric: 'Super Hot',
+    metricLabel: 'Temperature',
+    icon: '🌕',
+    color: 'accent',
+    distance: 'near'
+  },
+  {
+    id: 'earth',
+    name: 'Earth',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'Our beautiful blue home - the only planet with known life!',
+    longDescription: 'Earth is the third planet from the Sun and the only known planet with liquid water on its surface. It\'s home to millions of species, including us!',
+    coolFact: 'Earth is the only planet not named after a god or goddess!',
+    metric: 'Just Right',
+    metricLabel: 'Temperature',
+    icon: '🌍',
+    color: 'planet',
+    distance: 'near'
+  },
+  {
+    id: 'moon',
+    name: 'The Moon',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Earth\'s faithful companion in space.',
+    longDescription: 'The Moon is Earth\'s only natural satellite. It controls our ocean tides and lights up our nights. Humans have even walked on it!',
+    coolFact: '12 people have walked on the Moon!',
+    metric: 'Close',
+    metricLabel: 'Distance',
+    icon: '🌙',
+    color: 'muted',
+    distance: 'near'
+  },
+  {
+    id: 'mars',
+    name: 'Mars',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The Red Planet - our next destination for exploration!',
+    longDescription: 'Mars is called the Red Planet because of its rusty red color. It has the tallest volcano in the solar system and robots are exploring it right now!',
+    coolFact: 'Mars has the largest volcano in the solar system - Olympus Mons!',
+    metric: 'Cold',
+    metricLabel: 'Temperature',
+    icon: '🔴',
+    color: 'destructive',
+    distance: 'near'
+  },
+  {
+    id: 'jupiter',
+    name: 'Jupiter',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The king of planets - biggest in our solar system!',
+    longDescription: 'Jupiter is a giant gas planet with a famous Great Red Spot - a storm bigger than Earth that has been raging for hundreds of years!',
+    coolFact: 'Jupiter has at least 95 moons!',
+    metric: 'Giant',
+    metricLabel: 'Size',
+    icon: '🟠',
+    color: 'accent',
+    distance: 'near'
+  },
+  {
+    id: 'saturn',
+    name: 'Saturn',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The beautiful ringed planet everyone loves!',
+    longDescription: 'Saturn is famous for its stunning rings made of ice and rock. It\'s so light it would float in water if you had a big enough bathtub!',
+    coolFact: 'Saturn\'s rings could stretch almost from Earth to the Moon!',
+    metric: 'Light',
+    metricLabel: 'Density',
+    icon: '💫',
+    color: 'star',
+    distance: 'near'
+  },
+  {
+    id: 'uranus',
+    name: 'Uranus',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The sideways planet that rolls around the Sun!',
+    longDescription: 'Uranus is an ice giant that spins on its side. Scientists think something huge crashed into it long ago, knocking it over!',
+    coolFact: 'Uranus rotates on its side like a rolling ball!',
+    metric: 'Tilted',
+    metricLabel: 'Rotation',
+    icon: '🔵',
+    color: 'planet',
+    distance: 'near'
+  },
+  {
+    id: 'neptune',
+    name: 'Neptune',
+    category: 'solar-system',
+    type: 'Planet',
+    description: 'The windiest planet with supersonic storms!',
+    longDescription: 'Neptune is the farthest planet from the Sun. It has the strongest winds in the solar system - faster than the speed of sound!',
+    coolFact: 'Neptune has winds up to 1,200 mph - the fastest in the solar system!',
+    metric: 'Windy',
+    metricLabel: 'Weather',
+    icon: '🔷',
+    color: 'primary',
+    distance: 'near'
+  },
+  {
+    id: 'pluto',
+    name: 'Pluto',
+    category: 'solar-system',
+    type: 'Dwarf Planet',
+    description: 'The famous dwarf planet with a heart-shaped feature!',
+    longDescription: 'Pluto was once called the ninth planet but is now a dwarf planet. It has a giant heart-shaped glacier on its surface!',
+    coolFact: 'Pluto is smaller than Earth\'s Moon!',
+    metric: 'Tiny',
+    metricLabel: 'Size',
+    icon: '❤️',
+    color: 'secondary',
+    distance: 'far'
+  },
+  {
+    id: 'asteroid',
+    name: 'Asteroids',
+    category: 'solar-system',
+    type: 'Space Rock',
+    description: 'Rocky leftovers from when the solar system formed!',
+    longDescription: 'Asteroids are space rocks that orbit the Sun. Most live in the asteroid belt between Mars and Jupiter. Some are tiny pebbles, others are huge!',
+    coolFact: 'The asteroid belt contains millions of asteroids!',
+    metric: 'Varied',
+    metricLabel: 'Size',
+    icon: '🪨',
+    color: 'muted',
+    distance: 'near'
+  },
+  {
+    id: 'comet',
+    name: 'Comets',
+    category: 'solar-system',
+    type: 'Icy Body',
+    description: 'Icy visitors with beautiful, glowing tails!',
+    longDescription: 'Comets are like dirty snowballs from the outer solar system. When they get close to the Sun, they grow amazing glowing tails!',
+    coolFact: 'Comet tails always point away from the Sun!',
+    metric: 'Fast',
+    metricLabel: 'Speed',
+    icon: '☄️',
+    color: 'primary',
+    distance: 'far'
+  },
+  // Stars
+  {
+    id: 'red-giant',
+    name: 'Red Giant',
+    category: 'stars',
+    type: 'Star Type',
+    description: 'Giant old stars that have puffed up and cooled down.',
+    longDescription: 'Red giants are stars that have run low on fuel and expanded to huge sizes. Our Sun will become a red giant in about 5 billion years!',
+    coolFact: 'A red giant can be 100 times bigger than our Sun!',
+    metric: 'Huge',
+    metricLabel: 'Size',
+    icon: '🔴',
+    color: 'destructive',
+    distance: 'far'
+  },
+  {
+    id: 'white-dwarf',
+    name: 'White Dwarf',
+    category: 'stars',
+    type: 'Star Type',
+    description: 'Tiny, super-dense stars at the end of their lives.',
+    longDescription: 'White dwarfs are what\'s left after a star like our Sun runs out of fuel. They\'re tiny but incredibly heavy - a teaspoon would weigh tons!',
+    coolFact: 'A white dwarf is about the size of Earth but as heavy as the Sun!',
+    metric: 'Dense',
+    metricLabel: 'Weight',
+    icon: '⚪',
+    color: 'foreground',
+    distance: 'far'
+  },
+  {
+    id: 'neutron-star',
+    name: 'Neutron Star',
+    category: 'stars',
+    type: 'Star Type',
+    description: 'Super-dense spinning stars that flash like lighthouses!',
+    longDescription: 'Neutron stars form when massive stars explode. They spin incredibly fast and can flash beams of light like cosmic lighthouses!',
+    coolFact: 'A sugar cube of neutron star would weigh as much as a mountain!',
+    metric: 'Super Dense',
+    metricLabel: 'Density',
+    icon: '💫',
+    color: 'primary',
+    distance: 'far'
+  },
+  {
+    id: 'supernova',
+    name: 'Supernova',
+    category: 'stars',
+    type: 'Stellar Explosion',
+    description: 'The biggest explosions in the universe!',
+    longDescription: 'A supernova happens when a massive star explodes at the end of its life. For a few weeks, it can outshine an entire galaxy!',
+    coolFact: 'Supernovas create elements like gold and silver!',
+    metric: 'Explosive',
+    metricLabel: 'Power',
+    icon: '💥',
+    color: 'accent',
+    distance: 'far'
+  },
+  {
+    id: 'binary-star',
+    name: 'Binary Stars',
+    category: 'stars',
+    type: 'Star System',
+    description: 'Two stars dancing together in space!',
+    longDescription: 'Binary stars are two stars that orbit around each other. More than half of all stars in the universe have a dance partner!',
+    coolFact: 'Some planets have two suns, just like in Star Wars!',
+    metric: 'Paired',
+    metricLabel: 'Type',
+    icon: '✨',
+    color: 'star',
+    distance: 'far'
+  },
+  // Nebulas
+  {
+    id: 'orion-nebula',
+    name: 'Orion Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'A colorful star nursery you can see without a telescope!',
+    longDescription: 'The Orion Nebula is a giant cloud of gas where new stars are being born. It\'s one of the brightest nebulas and you can spot it in the night sky!',
+    coolFact: 'The Orion Nebula is 1,344 light-years away!',
+    metric: 'Bright',
+    metricLabel: 'Visibility',
+    icon: '🌌',
+    color: 'nebula',
+    distance: 'far'
+  },
+  {
+    id: 'eagle-nebula',
+    name: 'Eagle Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'Home to the famous "Pillars of Creation"!',
+    longDescription: 'The Eagle Nebula contains tall columns of gas and dust where new stars are forming. The Hubble Space Telescope took a famous photo of its "Pillars of Creation"!',
+    coolFact: 'The pillars are 5 light-years tall!',
+    metric: 'Massive',
+    metricLabel: 'Size',
+    icon: '🦅',
+    color: 'secondary',
+    distance: 'far'
+  },
+  {
+    id: 'crab-nebula',
+    name: 'Crab Nebula',
+    category: 'nebulas',
+    type: 'Supernova Remnant',
+    description: 'The glowing remains of an exploded star!',
+    longDescription: 'The Crab Nebula is what\'s left after a star exploded as a supernova in 1054 AD. People on Earth could see it during the day!',
+    coolFact: 'Ancient Chinese astronomers recorded this supernova!',
+    metric: 'Historic',
+    metricLabel: 'Age',
+    icon: '🦀',
+    color: 'destructive',
+    distance: 'far'
+  },
+  {
+    id: 'ring-nebula',
+    name: 'Ring Nebula',
+    category: 'nebulas',
+    type: 'Planetary Nebula',
+    description: 'A beautiful cosmic donut in space!',
+    longDescription: 'The Ring Nebula looks like a colorful donut or ring in space. It\'s a shell of gas puffed out by a dying star at its center.',
+    coolFact: 'The Ring Nebula is expanding at 43,000 miles per hour!',
+    metric: 'Ring-shaped',
+    metricLabel: 'Shape',
+    icon: '🍩',
+    color: 'galaxy',
+    distance: 'far'
+  },
+  {
+    id: 'horsehead-nebula',
+    name: 'Horsehead Nebula',
+    category: 'nebulas',
+    type: 'Dark Nebula',
+    description: 'A dark cloud shaped like a horse\'s head!',
+    longDescription: 'The Horsehead Nebula is a dark cloud of dust shaped exactly like a horse\'s head. It blocks light from the bright nebula behind it.',
+    coolFact: 'It takes light 1,500 years to reach us from the Horsehead Nebula!',
+    metric: 'Dark',
+    metricLabel: 'Brightness',
+    icon: '🐴',
+    color: 'muted',
+    distance: 'far'
+  },
+  // Galaxies
+  {
+    id: 'milky-way',
+    name: 'Milky Way',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'Our home galaxy with hundreds of billions of stars!',
+    longDescription: 'The Milky Way is our home galaxy - a giant spiral of stars, planets, and cosmic dust. Our solar system is located in one of its spiral arms!',
+    coolFact: 'It takes 230 million years for our solar system to orbit the galaxy once!',
+    metric: 'Home',
+    metricLabel: 'Location',
+    icon: '🌌',
+    color: 'primary',
+    distance: 'near'
+  },
+  {
+    id: 'andromeda',
+    name: 'Andromeda Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'Our nearest big neighbor - and it\'s heading our way!',
+    longDescription: 'Andromeda is the closest large galaxy to the Milky Way. In about 4.5 billion years, it will collide and merge with our galaxy!',
+    coolFact: 'You can see Andromeda with your naked eye on a dark night!',
+    metric: 'Approaching',
+    metricLabel: 'Movement',
+    icon: '🔭',
+    color: 'secondary',
+    distance: 'far'
+  },
+  {
+    id: 'sombrero-galaxy',
+    name: 'Sombrero Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'A galaxy that looks like a Mexican hat!',
+    longDescription: 'The Sombrero Galaxy has a bright core and a dark dust lane that makes it look just like a sombrero hat floating in space.',
+    coolFact: 'The Sombrero Galaxy has 800 billion stars!',
+    metric: 'Unique',
+    metricLabel: 'Shape',
+    icon: '🎩',
+    color: 'accent',
+    distance: 'far'
+  },
+  {
+    id: 'whirlpool-galaxy',
+    name: 'Whirlpool Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'A spinning spiral galaxy with a smaller friend!',
+    longDescription: 'The Whirlpool Galaxy has beautiful spiral arms and is connected to a smaller galaxy. It was the first galaxy where spiral structure was discovered!',
+    coolFact: 'The Whirlpool Galaxy is merging with its smaller companion!',
+    metric: 'Spiraling',
+    metricLabel: 'Motion',
+    icon: '🌀',
+    color: 'galaxy',
+    distance: 'far'
+  },
+  {
+    id: 'black-hole',
+    name: 'Black Holes',
+    category: 'galaxies',
+    type: 'Space Phenomenon',
+    description: 'Invisible giants with gravity so strong nothing escapes!',
+    longDescription: 'Black holes are regions where gravity is so incredibly strong that not even light can escape. Many galaxies have supermassive black holes at their centers!',
+    coolFact: 'Time moves slower near a black hole!',
+    metric: 'Invisible',
+    metricLabel: 'Light',
+    icon: '🕳️',
+    color: 'foreground',
+    distance: 'far'
+  },
+  {
+    id: 'exoplanet',
+    name: 'Exoplanets',
+    category: 'galaxies',
+    type: 'Planet Type',
+    description: 'Planets orbiting stars far beyond our solar system!',
+    longDescription: 'Exoplanets are planets that orbit stars other than our Sun. Scientists have discovered thousands of them, and some might even have life!',
+    coolFact: 'We\'ve discovered over 5,000 exoplanets so far!',
+    metric: 'Countless',
+    metricLabel: 'Number',
+    icon: '🪐',
+    color: 'planet',
+    distance: 'far'
+  },
+];
+
+export const categoryLabels: Record<CelestialCategory, string> = {
+  'solar-system': 'Solar System',
+  'stars': 'Stars',
+  'nebulas': 'Nebulas',
+  'galaxies': 'Galaxies & Beyond',
+  'other': 'Other'
+};
