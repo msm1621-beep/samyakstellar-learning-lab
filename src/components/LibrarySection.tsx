@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { Play, BookOpen, Download, Filter } from 'lucide-react';
+import { Play, BookOpen, Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
-import { books } from '@/data/books';
+import { books, type Book } from '@/data/books';
 
 type LibraryTab = 'videos' | 'books';
 
 const LibrarySection = () => {
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
   const [selectedTag, setSelectedTag] = useState<string>('all');
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const [readingBook, setReadingBook] = useState<Book | null>(null);
+  const [currentChapter, setCurrentChapter] = useState(0);
 
   const allVideoTags = [...new Set(videos.flatMap((v) => v.tags))];
   const allBookTags = [...new Set(books.flatMap((b) => b.tags))];
@@ -21,6 +24,28 @@ const LibrarySection = () => {
   const filteredBooks = selectedTag === 'all'
     ? books
     : books.filter((b) => b.tags.includes(selectedTag));
+
+  const openBook = (book: Book) => {
+    setReadingBook(book);
+    setCurrentChapter(0);
+  };
+
+  const closeBook = () => {
+    setReadingBook(null);
+    setCurrentChapter(0);
+  };
+
+  const nextChapter = () => {
+    if (readingBook && currentChapter < readingBook.chapters.length - 1) {
+      setCurrentChapter(currentChapter + 1);
+    }
+  };
+
+  const prevChapter = () => {
+    if (currentChapter > 0) {
+      setCurrentChapter(currentChapter - 1);
+    }
+  };
 
   return (
     <section id="library" className="py-20 relative">
@@ -94,32 +119,68 @@ const LibrarySection = () => {
             {filteredVideos.map((video) => (
               <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                 <div className="relative aspect-video">
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-background/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow">
-                      <Play className="w-8 h-8 text-primary-foreground ml-1" />
-                    </div>
-                  </div>
-                  <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
-                    {video.duration}
-                  </span>
+                  {playingVideo === video.id ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`}
+                      title={video.title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <>
+                      <img 
+                        src={video.thumbnail} 
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <button 
+                        onClick={() => setPlayingVideo(video.id)}
+                        className="absolute inset-0 bg-background/40 flex items-center justify-center group-hover:bg-background/60 transition-colors"
+                      >
+                        <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow transform group-hover:scale-110 transition-transform">
+                          <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                        </div>
+                      </button>
+                      <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
+                        {video.duration}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <div className="p-4">
                   <h3 className="font-display font-bold mb-1 group-hover:text-primary transition-colors">
                     {video.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-3">{video.description}</p>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1 mb-3">
                     {video.tags.map((tag) => (
                       <span key={tag} className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
                         {tag}
                       </span>
                     ))}
                   </div>
+                  {playingVideo === video.id ? (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => setPlayingVideo(null)}
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Close Video
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => setPlayingVideo(video.id)}
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      Watch Now
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
@@ -155,9 +216,14 @@ const LibrarySection = () => {
                       </span>
                     ))}
                   </div>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <Download className="w-4 h-4 mr-2" />
-                    Read More
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="w-full"
+                    onClick={() => openBook(book)}
+                  >
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Read Now
                   </Button>
                 </div>
               </div>
@@ -165,6 +231,94 @@ const LibrarySection = () => {
           </div>
         )}
       </div>
+
+      {/* Book Reader Modal */}
+      {readingBook && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-md"
+          onClick={closeBook}
+        >
+          <div 
+            className="glass-card max-w-3xl w-full max-h-[85vh] rounded-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-4 md:p-6 border-b border-border/50 flex items-center justify-between">
+              <div>
+                <h3 className="text-xl md:text-2xl font-display font-bold">{readingBook.title}</h3>
+                <p className="text-sm text-muted-foreground">By {readingBook.author}</p>
+              </div>
+              <button
+                onClick={closeBook}
+                className="p-2 rounded-full hover:bg-muted transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-4 md:p-6">
+              {currentChapter === 0 && (
+                <div className="mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20">
+                  <h4 className="font-display font-semibold text-primary mb-2">📖 Introduction</h4>
+                  <p className="text-foreground leading-relaxed">{readingBook.fullContent}</p>
+                </div>
+              )}
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                  <span className="px-2 py-1 rounded-full bg-secondary/50 text-secondary-foreground">
+                    Chapter {currentChapter + 1} of {readingBook.chapters.length}
+                  </span>
+                </div>
+                <h4 className="text-lg md:text-xl font-display font-bold text-primary">
+                  {readingBook.chapters[currentChapter].title}
+                </h4>
+                <p className="text-foreground leading-relaxed text-base md:text-lg">
+                  {readingBook.chapters[currentChapter].content}
+                </p>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="p-4 md:p-6 border-t border-border/50 flex items-center justify-between gap-4">
+              <Button
+                variant="outline"
+                onClick={prevChapter}
+                disabled={currentChapter === 0}
+                className="flex items-center gap-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </Button>
+              
+              <div className="flex gap-1">
+                {readingBook.chapters.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentChapter(idx)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      idx === currentChapter ? 'bg-primary' : 'bg-muted hover:bg-muted-foreground/50'
+                    }`}
+                    aria-label={`Go to chapter ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <Button
+                variant="default"
+                onClick={nextChapter}
+                disabled={currentChapter === readingBook.chapters.length - 1}
+                className="flex items-center gap-2"
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

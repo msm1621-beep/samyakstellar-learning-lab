@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Sparkles } from 'lucide-react';
+import { X, Sparkles, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { celestialBodies, categoryLabels, type CelestialCategory, type DistanceFilter } from '@/data/celestialBodies';
 
@@ -7,6 +7,8 @@ const CelestialExplorer = () => {
   const [selectedCategory, setSelectedCategory] = useState<CelestialCategory | 'all'>('all');
   const [distanceFilter, setDistanceFilter] = useState<DistanceFilter>('all');
   const [selectedBody, setSelectedBody] = useState<string | null>(null);
+  const [showExtendedFacts, setShowExtendedFacts] = useState(false);
+  const [showReadMore, setShowReadMore] = useState(false);
 
   const categories: (CelestialCategory | 'all')[] = ['all', 'solar-system', 'stars', 'nebulas', 'galaxies'];
 
@@ -17,6 +19,12 @@ const CelestialExplorer = () => {
   });
 
   const selectedBodyData = celestialBodies.find((b) => b.id === selectedBody);
+
+  const closeModal = () => {
+    setSelectedBody(null);
+    setShowExtendedFacts(false);
+    setShowReadMore(false);
+  };
 
   return (
     <section id="explorer" className="py-20 relative">
@@ -100,15 +108,15 @@ const CelestialExplorer = () => {
       {/* Modal */}
       {selectedBodyData && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
-          onClick={() => setSelectedBody(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm overflow-y-auto"
+          onClick={closeModal}
         >
           <div 
-            className="glass-card max-w-lg w-full rounded-2xl p-6 relative animate-in fade-in zoom-in-95 duration-200"
+            className="glass-card max-w-2xl w-full rounded-2xl p-6 relative animate-in fade-in zoom-in-95 duration-200 my-8"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setSelectedBody(null)}
+              onClick={closeModal}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-muted transition-colors"
               aria-label="Close"
             >
@@ -129,6 +137,7 @@ const CelestialExplorer = () => {
                 <p className="text-foreground">{selectedBodyData.longDescription}</p>
               </div>
 
+              {/* Cool Fact */}
               <div className="glass-card p-4 rounded-xl bg-accent/10 border-accent/30">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-4 h-4 text-accent" />
@@ -137,14 +146,66 @@ const CelestialExplorer = () => {
                 <p className="text-foreground">{selectedBodyData.coolFact}</p>
               </div>
 
+              {/* Extended Facts */}
+              <div className="glass-card p-4 rounded-xl">
+                <button
+                  onClick={() => setShowExtendedFacts(!showExtendedFacts)}
+                  className="w-full flex items-center justify-between text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🌟</span>
+                    <h4 className="text-sm font-semibold text-foreground">More Amazing Facts</h4>
+                  </div>
+                  {showExtendedFacts ? (
+                    <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+                {showExtendedFacts && (
+                  <ul className="mt-3 space-y-2">
+                    {selectedBodyData.extendedFacts.map((fact, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <span className="text-primary mt-0.5">✦</span>
+                        <span>{fact}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Metric */}
               <div className="flex justify-between items-center glass-card p-4 rounded-xl">
                 <span className="text-sm text-muted-foreground">{selectedBodyData.metricLabel}</span>
                 <span className="font-display font-bold text-primary">{selectedBodyData.metric}</span>
               </div>
+
+              {/* Read More Section */}
+              <div className="glass-card p-4 rounded-xl bg-secondary/10 border-secondary/30">
+                <button
+                  onClick={() => setShowReadMore(!showReadMore)}
+                  className="w-full flex items-center justify-between text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-secondary" />
+                    <h4 className="text-sm font-semibold text-secondary">Read More About {selectedBodyData.name}</h4>
+                  </div>
+                  {showReadMore ? (
+                    <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+                {showReadMore && (
+                  <div className="mt-3 p-4 rounded-lg bg-background/50">
+                    <p className="text-foreground leading-relaxed">{selectedBodyData.readMoreContent}</p>
+                  </div>
+                )}
+              </div>
             </div>
 
             <Button 
-              onClick={() => setSelectedBody(null)}
+              onClick={closeModal}
               className="w-full mt-6"
             >
               Keep Exploring! 🚀
