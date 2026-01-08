@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { name: 'Home', href: '#home' },
   { name: 'Solar System', href: '#explorer' },
-  { name: 'Deep Space', href: '#explorer' },
+  { name: 'Constellations', href: '#constellations' },
   { name: 'Library', href: '#library' },
   { name: 'Games', href: '#games' },
   { name: 'Fun Facts', href: '#facts' },
