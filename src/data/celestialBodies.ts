@@ -1666,6 +1666,345 @@ export const celestialBodies: CelestialBody[] = [
     color: 'secondary',
     distance: 'far',
     readMoreContent: 'The cosmic web is the largest known structure in the universe, a vast network of galaxy clusters and filaments separated by enormous voids. Galaxies are not randomly distributed but arranged along sheets and filaments of dark matter, like beads on strings. Where filaments intersect, massive galaxy clusters form. The largest voids between filaments can be over 100 million light-years across, nearly empty of galaxies. This structure emerged from tiny density variations in the early universe.'
+  },
+  // Additional Moons
+  {
+    id: 'miranda',
+    name: 'Miranda',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Uranus\'s bizarre moon with the tallest cliff in the solar system!',
+    longDescription: 'Miranda is a small moon of Uranus with one of the most jumbled surfaces ever seen - including Verona Rupes, a cliff over 20 km tall!',
+    coolFact: 'A fall from Miranda\'s giant cliff would take 12 minutes!',
+    extendedFacts: [
+      'Miranda is only 470 km across',
+      'Its surface looks like it was reassembled from pieces',
+      'Miranda may have been shattered and reformed',
+      'Voyager 2 is the only spacecraft to have visited'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Terrain',
+    icon: '🗻',
+    color: 'muted',
+    distance: 'near',
+    readMoreContent: 'Miranda is the smallest and innermost of Uranus\'s five major moons. Its surface is a chaotic jumble of different terrain types that don\'t seem to fit together - including coronae (oval-shaped features), canyons, and the towering Verona Rupes cliff. Scientists think Miranda may have been shattered by a giant impact and then re-formed, explaining its patchwork appearance. Due to the low gravity, an object falling from Verona Rupes would take about 12 minutes to hit the ground!'
+  },
+  {
+    id: 'mimas',
+    name: 'Mimas',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s "Death Star" moon with a giant crater!',
+    longDescription: 'Mimas is famous for its giant Herschel crater that makes it look like the Death Star from Star Wars!',
+    coolFact: 'The Herschel crater is almost one-third of Mimas\'s diameter!',
+    extendedFacts: [
+      'Mimas is only about 400 km across',
+      'The impact that made Herschel nearly destroyed Mimas',
+      'Mimas creates a gap in Saturn\'s rings',
+      'Mimas may have a hidden ocean under its surface'
+    ],
+    metric: 'Iconic',
+    metricLabel: 'Appearance',
+    icon: '💀',
+    color: 'muted',
+    distance: 'near',
+    readMoreContent: 'Mimas is one of Saturn\'s innermost moons and is famous for its resemblance to the Death Star from Star Wars. The giant Herschel crater dominates its surface - spanning 130 km across and 10 km deep. The impact that created this crater nearly shattered Mimas entirely! Recent data suggests Mimas might have a subsurface ocean, which would be surprising given its cold, cratered appearance.'
+  },
+  {
+    id: 'dione',
+    name: 'Dione',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s moon with mysterious bright ice cliffs!',
+    longDescription: 'Dione is a medium-sized moon of Saturn with brilliant white ice cliffs and a possible hidden ocean beneath its frozen surface.',
+    coolFact: 'Dione has ice cliffs hundreds of meters tall!',
+    extendedFacts: [
+      'Dione is about 1,120 km across',
+      'Bright ice cliffs called "chasmata" cross its surface',
+      'Dione may have weak geological activity',
+      'It has a thin oxygen atmosphere'
+    ],
+    metric: 'Icy',
+    metricLabel: 'Surface',
+    icon: '🧊',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Dione is Saturn\'s fourth-largest moon, featuring a heavily cratered surface crisscrossed by bright ice cliffs called chasmata. These bright streaks are fractures in the crust where fresh ice has been exposed. Scientists believe Dione may have a subsurface liquid ocean similar to Enceladus, though less active. The moon also has an extremely thin oxygen atmosphere created by solar radiation hitting the ice.'
+  },
+  {
+    id: 'tethys',
+    name: 'Tethys',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s icy moon with a giant canyon!',
+    longDescription: 'Tethys is made almost entirely of water ice and has a massive canyon called Ithaca Chasma that stretches 2,000 km across its surface!',
+    coolFact: 'Ithaca Chasma is up to 100 km wide and several km deep!',
+    extendedFacts: [
+      'Tethys is about 1,060 km across',
+      'It has one of the lowest densities of any moon',
+      'Tethys is almost pure water ice',
+      'The Odysseus crater spans 400 km'
+    ],
+    metric: 'Frozen',
+    metricLabel: 'Composition',
+    icon: '❄️',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Tethys is one of Saturn\'s larger moons and is composed almost entirely of water ice. Its most prominent feature is Ithaca Chasma, a massive canyon system stretching 2,000 km across the moon - about three-quarters of Tethys\'s circumference. The canyon may have formed when the moon\'s interior froze and expanded, cracking the surface. Tethys also has a giant impact crater called Odysseus that spans 400 km.'
+  },
+  {
+    id: 'oberon',
+    name: 'Oberon',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Uranus\'s outermost major moon with dark crater floors!',
+    longDescription: 'Oberon is the outermost of Uranus\'s five major moons, covered in craters with mysteriously dark material on their floors.',
+    coolFact: 'Some of Oberon\'s craters have dark floors from ancient cryovolcanism!',
+    extendedFacts: [
+      'Oberon is about 1,520 km across',
+      'Named after the King of Fairies in Shakespeare',
+      'Dark material may be carbon-rich compounds',
+      'Mountains up to 6 km tall have been spotted'
+    ],
+    metric: 'Ancient',
+    metricLabel: 'Surface',
+    icon: '🌑',
+    color: 'muted',
+    distance: 'near',
+    readMoreContent: 'Oberon is the outermost of Uranus\'s five major moons and the second-largest. Its surface is heavily cratered, with some craters having unusually dark floors that may contain carbon-rich material or evidence of past cryovolcanism. Voyager 2 spotted a mountain about 6 km tall on Oberon\'s limb. Like all of Uranus\'s moons, Oberon is named after a character from Shakespeare - the King of the Fairies from A Midsummer Night\'s Dream.'
+  },
+  {
+    id: 'rhea',
+    name: 'Rhea',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s second-largest moon that might have rings!',
+    longDescription: 'Rhea is Saturn\'s second-largest moon and may be the only moon in the solar system with its own ring system!',
+    coolFact: 'Rhea might be the only moon with its own rings!',
+    extendedFacts: [
+      'Rhea is about 1,530 km across',
+      'Evidence suggests a possible debris ring around Rhea',
+      'Rhea is mostly water ice',
+      'Has a very thin atmosphere of oxygen and carbon dioxide'
+    ],
+    metric: 'Ringed',
+    metricLabel: 'Feature',
+    icon: '💍',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Rhea is Saturn\'s second-largest moon after Titan. In 2008, the Cassini spacecraft detected possible evidence of a debris ring around Rhea, which would make it the only moon known to have rings. Rhea is made mostly of water ice with a small rocky core and has a very thin atmosphere containing oxygen and carbon dioxide produced by radiation hitting the surface ice.'
+  },
+  // Additional Star Types
+  {
+    id: 'wolf-rayet',
+    name: 'Wolf-Rayet Stars',
+    category: 'stars',
+    type: 'Massive Star',
+    description: 'Super-hot massive stars with powerful stellar winds!',
+    longDescription: 'Wolf-Rayet stars are among the hottest and most massive stars, with temperatures over 100,000°C and winds that strip away their outer layers!',
+    coolFact: 'Wolf-Rayet winds can travel at 2,000 km per second!',
+    extendedFacts: [
+      'Surface temperatures exceed 100,000°C',
+      'They lose mass equivalent to Earth every year',
+      'Wolf-Rayet stars are destined to explode as supernovae',
+      'Only about 500 are known in our galaxy'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Temperature',
+    icon: '🔥',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Wolf-Rayet stars are extremely hot, massive stars in a brief but spectacular phase of stellar evolution. With surface temperatures exceeding 100,000°C, they are among the hottest stars known. Powerful stellar winds blow material off these stars at speeds up to 2,000 km per second, creating beautiful surrounding nebulae. These stars are doomed to explode as powerful supernovae, possibly producing gamma-ray bursts.'
+  },
+  {
+    id: 't-tauri',
+    name: 'T Tauri Stars',
+    category: 'stars',
+    type: 'Young Star',
+    description: 'Baby stars still forming from clouds of gas!',
+    longDescription: 'T Tauri stars are young stars less than 10 million years old that haven\'t yet started fusing hydrogen. They\'re surrounded by disks where planets may be forming!',
+    coolFact: 'T Tauri stars are still contracting and will eventually become stars like our Sun!',
+    extendedFacts: [
+      'T Tauri stars are less than 10 million years old',
+      'They vary in brightness as material falls onto them',
+      'Surrounded by protoplanetary disks',
+      'Our Sun was once a T Tauri star'
+    ],
+    metric: 'Young',
+    metricLabel: 'Age',
+    icon: '👶',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'T Tauri stars are very young stars in the process of forming. They haven\'t yet reached the temperature and pressure needed to fuse hydrogen in their cores. These baby stars are typically surrounded by disks of gas and dust where planets are forming. T Tauri stars vary in brightness as clumps of material fall onto their surfaces. Our own Sun went through a T Tauri phase about 4.6 billion years ago before settling into stable hydrogen fusion.'
+  },
+  {
+    id: 'hypergiant',
+    name: 'Hypergiants',
+    category: 'stars',
+    type: 'Extreme Star',
+    description: 'The largest and most luminous stars in the universe!',
+    longDescription: 'Hypergiants are the most massive and luminous stars known, so large that if placed in our solar system, they would engulf Jupiter\'s orbit!',
+    coolFact: 'Some hypergiants are over 1,500 times the size of our Sun!',
+    extendedFacts: [
+      'UY Scuti and Stephenson 2-18 are among the largest known',
+      'Hypergiants can be millions of times brighter than the Sun',
+      'They live only a few million years',
+      'Hypergiants are extremely unstable and variable'
+    ],
+    metric: 'Colossal',
+    metricLabel: 'Size',
+    icon: '🌟',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Hypergiants are the largest and most luminous stars in the universe. Stars like UY Scuti and Stephenson 2-18 are over 1,500 times the diameter of our Sun - so large that light takes hours to travel around them! Despite their enormous size, hypergiants have short, unstable lives lasting only a few million years before exploding as supernovae. Their extreme luminosity makes them visible across vast cosmic distances.'
+  },
+  // Additional Cosmic Objects
+  {
+    id: 'bootes-void',
+    name: 'Boötes Void',
+    category: 'other',
+    type: 'Cosmic Void',
+    description: 'A mysterious region of space with almost no galaxies!',
+    longDescription: 'The Boötes Void is a nearly spherical region of space about 330 million light-years across that contains almost no galaxies - one of the emptiest places known!',
+    coolFact: 'The Boötes Void contains only about 60 galaxies when it should have 2,000!',
+    extendedFacts: [
+      'Also called the Great Void',
+      'It\'s about 700 million light-years away',
+      'Scientists still don\'t fully understand why it\'s so empty',
+      'If we lived in the center, we wouldn\'t have known about other galaxies until the 1960s'
+    ],
+    metric: 'Empty',
+    metricLabel: 'Density',
+    icon: '⚫',
+    color: 'foreground',
+    distance: 'far',
+    readMoreContent: 'The Boötes Void is one of the largest known voids in the universe - a roughly spherical region about 330 million light-years across that is nearly empty of galaxies. While it contains about 60 known galaxies, a region this size should contain around 2,000. If Earth were located in the center of the Boötes Void, we would have had no idea other galaxies existed until the 1960s when advanced telescopes were developed!'
+  },
+  {
+    id: 'great-attractor',
+    name: 'Great Attractor',
+    category: 'other',
+    type: 'Gravitational Anomaly',
+    description: 'A mysterious gravity source pulling thousands of galaxies!',
+    longDescription: 'The Great Attractor is a gravitational anomaly pulling the Milky Way and thousands of other galaxies toward it at millions of miles per hour!',
+    coolFact: 'The Milky Way is being pulled toward the Great Attractor at 1.4 million mph!',
+    extendedFacts: [
+      'Located about 250 million light-years away',
+      'Hidden behind the Zone of Avoidance (Milky Way\'s disk)',
+      'It\'s pulling on thousands of galaxies',
+      'May be part of an even larger structure called Laniakea'
+    ],
+    metric: 'Powerful',
+    metricLabel: 'Gravity',
+    icon: '🌀',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Great Attractor is a gravitational anomaly located about 250 million light-years away that\'s pulling the Milky Way and thousands of other galaxies toward it. It\'s difficult to observe because it lies behind the densest part of the Milky Way (the "Zone of Avoidance"). Recent studies show the Great Attractor is part of a much larger cosmic structure called Laniakea, a supercluster containing 100,000 galaxies spanning 520 million light-years.'
+  },
+  {
+    id: 'pillars-creation',
+    name: 'Pillars of Creation',
+    category: 'nebulas',
+    type: 'Stellar Nursery',
+    description: 'Famous towers of gas and dust where stars are born!',
+    longDescription: 'The Pillars of Creation are towering columns of cosmic gas and dust in the Eagle Nebula, made famous by one of the most iconic Hubble images ever taken!',
+    coolFact: 'The tallest pillar is about 4 light-years tall!',
+    extendedFacts: [
+      'Located in the Eagle Nebula, 6,500 light-years away',
+      'First photographed by Hubble in 1995',
+      'New stars are forming inside the pillars',
+      'The pillars may have already been destroyed by a supernova'
+    ],
+    metric: 'Iconic',
+    metricLabel: 'Fame',
+    icon: '🏛️',
+    color: 'nebula',
+    distance: 'far',
+    readMoreContent: 'The Pillars of Creation are elephant trunk-like columns of interstellar gas and dust in the Eagle Nebula, about 6,500 light-years from Earth. The iconic 1995 Hubble image made them one of the most famous astronomical objects. These pillars are stellar nurseries where new stars are being born. Interestingly, infrared observations suggest a supernova may have already destroyed the pillars, but because of the distance, we won\'t see the destruction for another 1,000 years!'
+  },
+  {
+    id: 'horsehead-nebula',
+    name: 'Horsehead Nebula',
+    category: 'nebulas',
+    type: 'Dark Nebula',
+    description: 'A famous dark nebula shaped like a horse\'s head!',
+    longDescription: 'The Horsehead Nebula is one of the most recognizable objects in the sky - a dark cloud of gas and dust silhouetted against a bright emission nebula!',
+    coolFact: 'The Horsehead Nebula is slowly being eroded by nearby hot stars!',
+    extendedFacts: [
+      'Located about 1,375 light-years away in Orion',
+      'The "head" is about 3.5 light-years tall',
+      'First recorded in 1888',
+      'Will eventually be destroyed by radiation in about 5 million years'
+    ],
+    metric: 'Striking',
+    metricLabel: 'Appearance',
+    icon: '🐴',
+    color: 'foreground',
+    distance: 'far',
+    readMoreContent: 'The Horsehead Nebula is one of the most photographed objects in the night sky. It\'s a dark nebula - a cloud of cold gas and dust so dense that it blocks light from behind. Silhouetted against the bright emission nebula IC 434, it creates the distinctive horse-head shape. The nebula is being slowly eroded by intense ultraviolet radiation from the nearby star Sigma Orionis and will eventually disappear in about 5 million years.'
+  },
+  {
+    id: 'stellar-stream',
+    name: 'Stellar Streams',
+    category: 'other',
+    type: 'Galactic Structure',
+    description: 'Rivers of stars torn from dwarf galaxies!',
+    longDescription: 'Stellar streams are elongated groups of stars that were once part of dwarf galaxies or star clusters, stretched out by our galaxy\'s gravity!',
+    coolFact: 'The Milky Way has consumed over 50 smaller galaxies, leaving stellar streams behind!',
+    extendedFacts: [
+      'Stellar streams can stretch across thousands of light-years',
+      'They reveal the Milky Way\'s gravitational history',
+      'The Sagittarius Stream wraps around our galaxy',
+      'Gaia spacecraft has discovered many new stellar streams'
+    ],
+    metric: 'Stretched',
+    metricLabel: 'Shape',
+    icon: '🌊',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Stellar streams are elongated structures of stars that were once part of dwarf galaxies or globular clusters, stretched out like taffy by the Milky Way\'s gravitational tidal forces. These cosmic fossils reveal our galaxy\'s violent history of consuming smaller galaxies. The Sagittarius Stream, left behind by a dwarf galaxy being devoured by the Milky Way, wraps completely around our galaxy. The ESA\'s Gaia mission has discovered dozens of previously unknown stellar streams.'
+  },
+  {
+    id: 'rogue-planet',
+    name: 'Rogue Planets',
+    category: 'other',
+    type: 'Orphan World',
+    description: 'Lonely planets wandering through space without a star!',
+    longDescription: 'Rogue planets are planetary bodies that drift through interstellar space without orbiting any star. They were either ejected from their solar systems or formed alone!',
+    coolFact: 'There may be billions of rogue planets wandering our galaxy!',
+    extendedFacts: [
+      'Rogue planets are extremely difficult to detect',
+      'They can be ejected from solar systems by gravitational interactions',
+      'Some may have been born in interstellar space',
+      'A few might have subsurface oceans heated by radioactive decay'
+    ],
+    metric: 'Nomadic',
+    metricLabel: 'Status',
+    icon: '🌑',
+    color: 'muted',
+    distance: 'far',
+    readMoreContent: 'Rogue planets are worlds without stars - planetary bodies drifting through the darkness of interstellar space. They can form this way or be ejected from young solar systems through gravitational interactions with other planets. Recent surveys suggest there may be billions of rogue planets in our galaxy alone - possibly more rogue planets than stars! Some large rogue planets might even maintain subsurface liquid oceans through heat generated by radioactive decay.'
+  },
+  {
+    id: 'cosmic-void',
+    name: 'Cosmic Voids',
+    category: 'other',
+    type: 'Large Scale Structure',
+    description: 'Giant empty bubbles between galaxy filaments!',
+    longDescription: 'Cosmic voids are enormous regions of space containing very few galaxies, separated by the filaments and walls of the cosmic web.',
+    coolFact: 'Voids make up about 80% of the volume of the universe!',
+    extendedFacts: [
+      'Typical voids are 30-300 million light-years across',
+      'Voids are not completely empty but have very low galaxy density',
+      'They expand faster than the rest of the universe',
+      'The KBC Void may surround our local universe'
+    ],
+    metric: 'Vast',
+    metricLabel: 'Size',
+    icon: '⭕',
+    color: 'muted',
+    distance: 'far',
+    readMoreContent: 'Cosmic voids are immense regions of space that contain far fewer galaxies than average. These bubble-like structures are separated by the filaments and walls of galaxies that make up the cosmic web. Voids typically range from 30 to 300 million light-years across and make up about 80% of the universe\'s volume. Despite their name, voids aren\'t completely empty - they just have much lower galaxy density than other regions.'
   }
 ];
 
