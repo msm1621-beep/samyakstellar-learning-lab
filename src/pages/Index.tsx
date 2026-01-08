@@ -2,6 +2,7 @@ import StarField from '@/components/StarField';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 import CelestialExplorer from '@/components/CelestialExplorer';
+import ConstellationViewer from '@/components/ConstellationViewer';
 import LibrarySection from '@/components/LibrarySection';
 import GamesSection from '@/components/GamesSection';
 import FunFactsSection from '@/components/FunFactsSection';
@@ -17,6 +18,7 @@ const Index = () => {
       <main className="relative z-10">
         <HeroSection />
         <CelestialExplorer />
+        <ConstellationViewer />
         <LibrarySection />
         <GamesSection />
         <FunFactsSection />
