@@ -1093,6 +1093,579 @@ export const celestialBodies: CelestialBody[] = [
     color: 'primary',
     distance: 'far',
     readMoreContent: 'Pulsars are rapidly rotating neutron stars with extremely strong magnetic fields. They emit beams of electromagnetic radiation from their magnetic poles, which may not align with their rotational axis. As the star spins, these beams sweep across space like lighthouse beams. When a beam points toward Earth, we detect a pulse - hence the name "pulsar." Pulsars are incredibly precise cosmic clocks, keeping time as accurately as atomic clocks on Earth.'
+  },
+  // Additional Moons
+  {
+    id: 'io',
+    name: 'Io',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Jupiter\'s volcanic moon with over 400 active volcanoes!',
+    longDescription: 'Io is the most volcanically active body in our solar system. Its surface is constantly being reshaped by hundreds of erupting volcanoes!',
+    coolFact: 'Io\'s volcanoes can shoot lava 300 miles into space!',
+    extendedFacts: [
+      'Io has over 400 active volcanoes',
+      'The surface is covered in sulfur, giving it yellow and orange colors',
+      'Io orbits Jupiter in just 1.77 Earth days',
+      'Tidal heating from Jupiter\'s gravity powers the volcanoes'
+    ],
+    metric: 'Explosive',
+    metricLabel: 'Activity',
+    icon: '🌋',
+    color: 'accent',
+    distance: 'near',
+    readMoreContent: 'Io is one of Jupiter\'s four largest moons and the most volcanically active body in our solar system. Its volcanism is caused by tidal heating - Jupiter\'s immense gravity stretches and squeezes Io as it orbits, generating tremendous internal heat. The surface is covered in colorful sulfur compounds from volcanic eruptions, creating a pizza-like appearance. Some of Io\'s volcanic plumes reach heights of 300 miles!'
+  },
+  {
+    id: 'ganymede',
+    name: 'Ganymede',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'The largest moon in the solar system - bigger than Mercury!',
+    longDescription: 'Ganymede is Jupiter\'s largest moon and the only moon known to have its own magnetic field. It\'s even bigger than the planet Mercury!',
+    coolFact: 'Ganymede is the only moon with its own magnetic field!',
+    extendedFacts: [
+      'Ganymede is larger than Mercury',
+      'It may have a subsurface ocean 100 miles deep',
+      'Ganymede has both icy and rocky terrain',
+      'The moon has a thin oxygen atmosphere'
+    ],
+    metric: 'Huge',
+    metricLabel: 'Size',
+    icon: '🔵',
+    color: 'planet',
+    distance: 'near',
+    readMoreContent: 'Ganymede is the largest moon in our solar system, bigger than the planet Mercury and 3/4 the size of Mars. It\'s the only moon known to generate its own magnetic field, likely from a liquid iron core. Scientists believe Ganymede has a vast underground ocean sandwiched between layers of ice, potentially containing more water than all of Earth\'s oceans combined. The ESA\'s JUICE mission will study Ganymede closely in the 2030s.'
+  },
+  {
+    id: 'callisto',
+    name: 'Callisto',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'The most heavily cratered object in the solar system!',
+    longDescription: 'Callisto is Jupiter\'s second-largest moon and one of the oldest surfaces we know of, covered in ancient craters from billions of years of impacts.',
+    coolFact: 'Callisto\'s surface is about 4 billion years old - unchanged since the early solar system!',
+    extendedFacts: [
+      'Callisto is made of roughly equal parts rock and ice',
+      'It may have a subsurface ocean',
+      'Callisto has no tectonic or volcanic activity',
+      'It\'s considered a good candidate for a future space base'
+    ],
+    metric: 'Ancient',
+    metricLabel: 'Age',
+    icon: '🌑',
+    color: 'muted',
+    distance: 'near',
+    readMoreContent: 'Callisto is Jupiter\'s second-largest moon and has the most cratered surface in the solar system. Unlike its neighbor Io, Callisto is geologically dead, with no volcanic or tectonic activity. Its ancient surface has remained virtually unchanged for 4 billion years, making it a time capsule from the early solar system. Scientists have proposed Callisto as a potential base for future human exploration of Jupiter\'s moons because it\'s outside Jupiter\'s harmful radiation belts.'
+  },
+  {
+    id: 'enceladus',
+    name: 'Enceladus',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s icy moon that shoots water into space!',
+    longDescription: 'Enceladus is one of the most exciting places in our solar system - it has geysers that spray water ice from a hidden ocean into space!',
+    coolFact: 'Enceladus sprays water and organic molecules from geysers at its south pole!',
+    extendedFacts: [
+      'Enceladus has over 100 geysers at its south pole',
+      'The moon has a global subsurface ocean',
+      'Its sprayed material forms Saturn\'s E ring',
+      'Scientists found organic molecules in the plumes'
+    ],
+    metric: 'Active',
+    metricLabel: 'Geysers',
+    icon: '💦',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Enceladus is a small, ice-covered moon of Saturn that has become one of the most promising places to search for extraterrestrial life. Dramatic geysers at its south pole spray water ice, salt, and organic molecules into space from a global subsurface ocean. This ocean is kept liquid by tidal heating and may have hydrothermal vents on its sea floor - similar to environments on Earth where life thrives without sunlight.'
+  },
+  {
+    id: 'triton',
+    name: 'Triton',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Neptune\'s largest moon that orbits backwards!',
+    longDescription: 'Triton is Neptune\'s largest moon and is the only large moon that orbits in the opposite direction to its planet\'s rotation - it was likely captured from the Kuiper Belt!',
+    coolFact: 'Triton is slowly spiraling toward Neptune and will eventually be torn apart!',
+    extendedFacts: [
+      'Triton orbits backwards (retrograde) around Neptune',
+      'It has active nitrogen geysers',
+      'Triton is the coldest known object in the solar system',
+      'The moon was likely captured from the Kuiper Belt'
+    ],
+    metric: 'Freezing',
+    metricLabel: 'Temperature',
+    icon: '❄️',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Triton is Neptune\'s largest moon and one of the most unusual in our solar system. It orbits in the opposite direction to Neptune\'s rotation, suggesting it was captured from the Kuiper Belt. Triton is the coldest known object in the solar system at -235°C, yet it\'s geologically active with nitrogen geysers. Unfortunately, Triton is slowly spiraling inward and will be torn apart by Neptune\'s gravity in about 3.6 billion years.'
+  },
+  {
+    id: 'charon',
+    name: 'Charon',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Pluto\'s giant moon - almost a double dwarf planet system!',
+    longDescription: 'Charon is so large compared to Pluto that they orbit around a point in space between them, making them almost like a double planet!',
+    coolFact: 'Pluto and Charon always show the same face to each other!',
+    extendedFacts: [
+      'Charon is half the diameter of Pluto',
+      'The pair are tidally locked to each other',
+      'Charon has a reddish north pole from Pluto\'s atmosphere',
+      'Charon has canyons, mountains, and evidence of past geological activity'
+    ],
+    metric: 'Binary',
+    metricLabel: 'System',
+    icon: '⚫',
+    color: 'foreground',
+    distance: 'far',
+    readMoreContent: 'Charon is Pluto\'s largest moon and is so large relative to Pluto that the two are sometimes called a double dwarf planet system. They both orbit around a point in space between them called the barycenter. Charon\'s reddish polar cap comes from gases escaping Pluto\'s atmosphere that freeze onto Charon\'s cold north pole. NASA\'s New Horizons revealed a complex world with canyons, mountains, and evidence of past cryovolcanic activity.'
+  },
+  // Additional Asteroids and Comets
+  {
+    id: 'vesta',
+    name: 'Vesta',
+    category: 'solar-system',
+    type: 'Asteroid',
+    description: 'One of the largest asteroids with a giant mountain!',
+    longDescription: 'Vesta is the second-largest asteroid in the asteroid belt and has a mountain nearly three times the height of Mount Everest!',
+    coolFact: 'Vesta\'s south pole mountain is one of the tallest mountains in the solar system!',
+    extendedFacts: [
+      'Vesta was visited by NASA\'s Dawn spacecraft',
+      'Pieces of Vesta have fallen to Earth as meteorites',
+      'Vesta has layers like a planet (core, mantle, crust)',
+      'The asteroid is about 525 km in diameter'
+    ],
+    metric: 'Tall',
+    metricLabel: 'Mountain',
+    icon: '⛰️',
+    color: 'muted',
+    distance: 'near',
+    readMoreContent: 'Vesta is one of the largest objects in the asteroid belt and is sometimes called a protoplanet because it has a differentiated interior with a core, mantle, and crust like Earth. Its most dramatic feature is Rheasilvia, a massive impact crater with a central mountain nearly 22 km tall - almost three times the height of Mount Everest. Vesta\'s unique composition means we can identify meteorites that came from it.'
+  },
+  {
+    id: 'bennu',
+    name: 'Bennu',
+    category: 'solar-system',
+    type: 'Asteroid',
+    description: 'A near-Earth asteroid that NASA collected samples from!',
+    longDescription: 'Bennu is a small asteroid that passes close to Earth. NASA\'s OSIRIS-REx spacecraft collected samples from its surface and brought them back to Earth!',
+    coolFact: 'Bennu has a small chance of hitting Earth in 2182!',
+    extendedFacts: [
+      'Bennu is only about 500 meters wide',
+      'OSIRIS-REx collected samples in 2020',
+      'The samples returned to Earth in 2023',
+      'Bennu is made of carbon-rich material from the early solar system'
+    ],
+    metric: 'Sampled',
+    metricLabel: 'Status',
+    icon: '🪨',
+    color: 'accent',
+    distance: 'near',
+    readMoreContent: 'Bennu is a carbon-rich asteroid that crosses Earth\'s orbit, making it a potentially hazardous object. NASA\'s OSIRIS-REx mission studied Bennu and collected a sample from its surface, which returned to Earth in September 2023. The sample contains pristine material from the early solar system that could help us understand how planets formed and how water and organic molecules arrived on Earth.'
+  },
+  {
+    id: 'halley',
+    name: 'Halley\'s Comet',
+    category: 'solar-system',
+    type: 'Comet',
+    description: 'The most famous comet that returns every 76 years!',
+    longDescription: 'Halley\'s Comet is the most famous comet in history. It has been observed for over 2,000 years and returns to pass by Earth about every 76 years!',
+    coolFact: 'Halley\'s Comet will next be visible from Earth in 2061!',
+    extendedFacts: [
+      'Records of Halley\'s Comet go back to 240 BCE',
+      'It was named after astronomer Edmond Halley',
+      'The comet\'s nucleus is about 15 km long',
+      'Multiple spacecraft visited it in 1986'
+    ],
+    metric: 'Historic',
+    metricLabel: 'Fame',
+    icon: '☄️',
+    color: 'star',
+    distance: 'near',
+    readMoreContent: 'Halley\'s Comet is the most famous comet in human history, with recorded sightings going back over 2,000 years. Astronomer Edmond Halley realized in 1705 that sightings from 1531, 1607, and 1682 were all the same comet and predicted its return in 1758. The comet last visited in 1986, when several spacecraft flew past it, and will return in 2061. Its nucleus is shaped like a peanut and is about 15 km long.'
+  },
+  {
+    id: 'neowise',
+    name: 'Comet NEOWISE',
+    category: 'solar-system',
+    type: 'Comet',
+    description: 'A spectacular comet visible to the naked eye in 2020!',
+    longDescription: 'Comet NEOWISE was discovered in March 2020 and became the brightest comet visible from the Northern Hemisphere in over 20 years!',
+    coolFact: 'NEOWISE won\'t return for another 6,800 years!',
+    extendedFacts: [
+      'NEOWISE was discovered by the NEOWISE space telescope',
+      'Its nucleus is about 5 km across',
+      'The comet was visible to the naked eye in July 2020',
+      'NEOWISE has a very long orbital period'
+    ],
+    metric: 'Bright',
+    metricLabel: 'Visibility',
+    icon: '🌠',
+    color: 'star',
+    distance: 'near',
+    readMoreContent: 'Comet NEOWISE (C/2020 F3) was discovered on March 27, 2020, by NASA\'s NEOWISE space telescope. It became the brightest comet visible from the Northern Hemisphere since Comet Hale-Bopp in 1997. During July 2020, it was visible to the naked eye, delighting millions of people who photographed it. The comet has an extremely long orbital period and won\'t return to the inner solar system for about 6,800 years.'
+  },
+  // Additional Stars
+  {
+    id: 'proxima-centauri',
+    name: 'Proxima Centauri',
+    category: 'stars',
+    type: 'Red Dwarf',
+    description: 'The closest star to our solar system!',
+    longDescription: 'Proxima Centauri is the closest star to our Sun, located about 4.24 light-years away. It has at least one planet in its habitable zone!',
+    coolFact: 'Proxima Centauri has an Earth-sized planet in its habitable zone!',
+    extendedFacts: [
+      'It\'s about 4.24 light-years from Earth',
+      'Proxima b orbits in the habitable zone',
+      'The star is part of the Alpha Centauri system',
+      'It\'s a red dwarf, much smaller and cooler than our Sun'
+    ],
+    metric: 'Nearest',
+    metricLabel: 'Distance',
+    icon: '⭐',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Proxima Centauri is the closest star to our solar system at about 4.24 light-years away. It\'s a small, cool red dwarf star, part of the Alpha Centauri triple star system. In 2016, astronomers discovered Proxima b, an Earth-sized planet orbiting in the star\'s habitable zone where liquid water could exist. However, Proxima Centauri is a flare star that produces powerful bursts of radiation that might make the planet inhospitable.'
+  },
+  {
+    id: 'polaris',
+    name: 'Polaris (North Star)',
+    category: 'stars',
+    type: 'Supergiant',
+    description: 'The famous North Star used for navigation for centuries!',
+    longDescription: 'Polaris, the North Star, appears to stay fixed in the sky as Earth rotates. Sailors and travelers have used it to find north for thousands of years!',
+    coolFact: 'Polaris is actually a system of three stars!',
+    extendedFacts: [
+      'Polaris is about 433 light-years from Earth',
+      'It\'s a Cepheid variable star that pulsates',
+      'Polaris wasn\'t always the North Star due to Earth\'s wobble',
+      'In about 12,000 years, Vega will be the North Star'
+    ],
+    metric: 'Guiding',
+    metricLabel: 'Purpose',
+    icon: '⭐',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Polaris, the North Star, has guided navigators for centuries because it appears almost stationary in the northern sky while other stars rotate around it. This is because it\'s located nearly directly above Earth\'s north pole. Polaris is actually a triple star system, with the main star being a yellow supergiant about 45 times larger than our Sun. Due to Earth\'s axial precession, different stars take turns being the "North Star" over a 26,000-year cycle.'
+  },
+  {
+    id: 'rigel',
+    name: 'Rigel',
+    category: 'stars',
+    type: 'Blue Supergiant',
+    description: 'A brilliant blue star in the constellation Orion!',
+    longDescription: 'Rigel is a blue supergiant star and the brightest star in the constellation Orion. It shines with the light of over 120,000 Suns!',
+    coolFact: 'Rigel is so luminous it would outshine our Sun by 120,000 times!',
+    extendedFacts: [
+      'Rigel is about 860 light-years from Earth',
+      'It\'s the seventh brightest star in the night sky',
+      'Rigel is actually a multiple star system',
+      'The star will likely end its life as a supernova'
+    ],
+    metric: 'Brilliant',
+    metricLabel: 'Brightness',
+    icon: '💎',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Rigel is a blue supergiant star marking the "foot" of the constellation Orion. Despite being about 860 light-years away, it\'s the seventh brightest star in our night sky because it\'s incredibly luminous - about 120,000 times brighter than our Sun. Rigel is a massive star, about 21 times the mass of our Sun, and is destined to explode as a supernova within the next few million years.'
+  },
+  {
+    id: 'vega',
+    name: 'Vega',
+    category: 'stars',
+    type: 'Main Sequence',
+    description: 'One of the brightest stars and a future North Star!',
+    longDescription: 'Vega is one of the brightest stars in our night sky and spins so fast it bulges at its equator. In about 12,000 years, it will become our North Star!',
+    coolFact: 'Vega spins so fast it completes a rotation in just 12.5 hours!',
+    extendedFacts: [
+      'Vega is about 25 light-years from Earth',
+      'It was the first star photographed (other than the Sun)',
+      'Vega has a disk of debris around it',
+      'It\'s part of the Summer Triangle asterism'
+    ],
+    metric: 'Spinning',
+    metricLabel: 'Rotation',
+    icon: '✨',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Vega is a brilliant blue-white star about 25 light-years away, making it one of the closest bright stars to Earth. It rotates extremely rapidly - once every 12.5 hours - which causes it to bulge at its equator. Vega was historically used as the standard star for calibrating brightness measurements. Due to Earth\'s axial precession, Vega was the North Star about 12,000 years ago and will be again in about 12,000 years.'
+  },
+  {
+    id: 'arcturus',
+    name: 'Arcturus',
+    category: 'stars',
+    type: 'Red Giant',
+    description: 'A bright orange giant racing through our galaxy!',
+    longDescription: 'Arcturus is a red giant star and the brightest star in the northern celestial hemisphere. It\'s moving through space faster than most stars!',
+    coolFact: 'Arcturus is zooming through space at 122 km per second!',
+    extendedFacts: [
+      'Arcturus is about 37 light-years from Earth',
+      'It\'s 25 times the diameter of our Sun',
+      'The star is about 7 billion years old',
+      'Arcturus belongs to a different stellar population than our Sun'
+    ],
+    metric: 'Fast',
+    metricLabel: 'Movement',
+    icon: '🔶',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Arcturus is a red giant star about 37 light-years from Earth and the brightest star in the northern celestial hemisphere. It\'s particularly interesting because it\'s moving through space at 122 km per second relative to our solar system - much faster than typical stars. Arcturus is an older star from a different galactic population, passing through our region of the Milky Way. In about 4,000 years, its motion will make it significantly dimmer as it moves away from us.'
+  },
+  // Additional Nebulas
+  {
+    id: 'ring-nebula',
+    name: 'Ring Nebula',
+    category: 'nebulas',
+    type: 'Planetary Nebula',
+    description: 'A beautiful ring-shaped nebula from a dying star!',
+    longDescription: 'The Ring Nebula is a famous planetary nebula that looks like a cosmic donut. It formed when a Sun-like star shed its outer layers at the end of its life.',
+    coolFact: 'The Ring Nebula is expanding at 43,000 miles per hour!',
+    extendedFacts: [
+      'The Ring Nebula is about 2,300 light-years away',
+      'It was discovered in 1779',
+      'The nebula is about 1 light-year across',
+      'The central star is becoming a white dwarf'
+    ],
+    metric: 'Expanding',
+    metricLabel: 'Motion',
+    icon: '⭕',
+    color: 'nebula',
+    distance: 'far',
+    readMoreContent: 'The Ring Nebula (M57) is one of the most famous planetary nebulae, located in the constellation Lyra. It was formed when a Sun-like star exhausted its nuclear fuel and shed its outer layers into space, leaving behind a hot white dwarf at the center. The nebula\'s ring-like appearance is actually a barrel-shaped structure that we happen to be viewing end-on. Recent observations show the structure is much more complex than a simple ring.'
+  },
+  {
+    id: 'cat-eye-nebula',
+    name: 'Cat\'s Eye Nebula',
+    category: 'nebulas',
+    type: 'Planetary Nebula',
+    description: 'One of the most complex nebulae ever seen!',
+    longDescription: 'The Cat\'s Eye Nebula has an incredibly intricate structure with shells, jets, and knots that have puzzled astronomers for years.',
+    coolFact: 'The Cat\'s Eye Nebula has at least 11 concentric shells!',
+    extendedFacts: [
+      'The nebula is about 3,000 light-years away',
+      'It was one of the first planetary nebulae discovered',
+      'The central star may be a binary system',
+      'Complex jets and halos surround the main structure'
+    ],
+    metric: 'Complex',
+    metricLabel: 'Structure',
+    icon: '👁️',
+    color: 'nebula',
+    distance: 'far',
+    readMoreContent: 'The Cat\'s Eye Nebula (NGC 6543) is one of the most structurally complex nebulae known. Its intricate pattern of concentric gas shells, high-speed jets, and unusual shock-induced knots have fascinated astronomers since the Hubble Space Telescope revealed its details. The central star is extremely hot and may actually be a binary star system, which could explain the nebula\'s unusual complexity.'
+  },
+  {
+    id: 'lagoon-nebula',
+    name: 'Lagoon Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'A giant stellar nursery visible to the naked eye!',
+    longDescription: 'The Lagoon Nebula is one of the brightest and most beautiful star-forming regions in our galaxy. It\'s so bright you can see it without a telescope!',
+    coolFact: 'The Lagoon Nebula contains a giant tornado-like structure 0.5 light-years long!',
+    extendedFacts: [
+      'The nebula is about 4,400 light-years away',
+      'It spans about 110 by 50 light-years',
+      'New stars are actively forming in the nebula',
+      'The Lagoon was catalogued by Charles Messier in 1764'
+    ],
+    metric: 'Visible',
+    metricLabel: 'Brightness',
+    icon: '🌅',
+    color: 'nebula',
+    distance: 'far',
+    readMoreContent: 'The Lagoon Nebula (M8) is one of the largest and brightest nebulae in the night sky, visible to the naked eye in the constellation Sagittarius. It\'s a stellar nursery where new stars are being born from clouds of hydrogen gas. The nebula gets its name from the dark lane of dust that crosses its center, giving it a lagoon-like appearance. At its core is the Hourglass Nebula, with a twisted funnel structure caused by stellar winds.'
+  },
+  {
+    id: 'tarantula-nebula',
+    name: 'Tarantula Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'The largest and most active star-forming region known!',
+    longDescription: 'The Tarantula Nebula is the most active star-forming region in our local group of galaxies. It contains some of the most massive and luminous stars ever discovered!',
+    coolFact: 'If the Tarantula Nebula were as close as Orion Nebula, it would cast shadows!',
+    extendedFacts: [
+      'Located in the Large Magellanic Cloud',
+      'It\'s about 160,000 light-years away',
+      'Contains the star cluster R136 with super-massive stars',
+      'The nebula is about 1,000 light-years across'
+    ],
+    metric: 'Massive',
+    metricLabel: 'Scale',
+    icon: '🕷️',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Tarantula Nebula (30 Doradus) is the largest and most active star-forming region in our local group of galaxies. Located in the Large Magellanic Cloud, it\'s so luminous that if it were as close as the Orion Nebula, it would cast shadows on Earth! At its heart is the super star cluster R136, containing some of the most massive stars ever discovered - up to 200 times the mass of our Sun.'
+  },
+  // Additional Galaxies
+  {
+    id: 'triangulum',
+    name: 'Triangulum Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'The third-largest galaxy in our Local Group!',
+    longDescription: 'The Triangulum Galaxy is a beautiful spiral galaxy and the third-largest member of our Local Group, after Andromeda and the Milky Way.',
+    coolFact: 'The Triangulum Galaxy is one of the most distant objects visible to the naked eye!',
+    extendedFacts: [
+      'Located about 2.7 million light-years away',
+      'Contains about 40 billion stars',
+      'It\'s approaching the Milky Way',
+      'The galaxy hosts a giant star-forming region called NGC 604'
+    ],
+    metric: 'Distant',
+    metricLabel: 'Location',
+    icon: '🌀',
+    color: 'galaxy',
+    distance: 'far',
+    readMoreContent: 'The Triangulum Galaxy (M33) is the third-largest galaxy in our Local Group and one of the most distant objects visible to the naked eye under dark skies. Located about 2.7 million light-years away, it\'s a face-on spiral galaxy that appears about twice the angular size of the full Moon in our sky. The Triangulum Galaxy hosts NGC 604, one of the largest known star-forming regions, about 40 times the size of the Orion Nebula.'
+  },
+  {
+    id: 'sombrero',
+    name: 'Sombrero Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'A galaxy that looks like a Mexican hat!',
+    longDescription: 'The Sombrero Galaxy has a brilliant white core surrounded by a dark dust lane, giving it the appearance of a sombrero hat.',
+    coolFact: 'The Sombrero Galaxy has an unusually large central bulge with billions of old stars!',
+    extendedFacts: [
+      'Located about 29 million light-years away',
+      'Contains a supermassive black hole at its center',
+      'The galaxy has about 2,000 globular clusters',
+      'Its dark dust lane is a ring of dust and gas'
+    ],
+    metric: 'Iconic',
+    metricLabel: 'Appearance',
+    icon: '🎩',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'The Sombrero Galaxy (M104) is one of the most photogenic galaxies in the universe. Its brilliant white core, surrounded by a thick dark dust lane, creates the distinctive sombrero shape. The galaxy has an unusually large central bulge containing hundreds of billions of old stars and a supermassive black hole with a mass of a billion Suns. Unlike most spirals, the Sombrero also has an extensive system of about 2,000 globular clusters.'
+  },
+  {
+    id: 'cartwheel',
+    name: 'Cartwheel Galaxy',
+    category: 'galaxies',
+    type: 'Ring Galaxy',
+    description: 'A galaxy shaped like a wagon wheel after a cosmic collision!',
+    longDescription: 'The Cartwheel Galaxy got its unusual shape when a smaller galaxy crashed through its center, creating ripples like a stone dropped in water!',
+    coolFact: 'The Cartwheel\'s ring is expanding outward at 200,000 miles per hour!',
+    extendedFacts: [
+      'Located about 500 million light-years away',
+      'The collision happened about 200 million years ago',
+      'The outer ring is full of newly formed stars',
+      'Two smaller companion galaxies are nearby'
+    ],
+    metric: 'Collision',
+    metricLabel: 'Origin',
+    icon: '🎡',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Cartwheel Galaxy is a spectacular ring galaxy formed when a smaller galaxy punched through the center of a larger spiral galaxy about 200 million years ago. The collision sent shockwaves outward like ripples from a stone in a pond, triggering a ring of intense star formation. The James Webb Space Telescope revealed new details of this unusual galaxy, showing spokes of dust connecting the bright outer ring to the central core.'
+  },
+  {
+    id: 'cigar-galaxy',
+    name: 'Cigar Galaxy',
+    category: 'galaxies',
+    type: 'Starburst Galaxy',
+    description: 'A galaxy exploding with new star formation!',
+    longDescription: 'The Cigar Galaxy is undergoing a dramatic burst of star formation, creating new stars 10 times faster than normal galaxies!',
+    coolFact: 'The Cigar Galaxy creates new stars 10 times faster than the Milky Way!',
+    extendedFacts: [
+      'Located about 12 million light-years away',
+      'The starburst was triggered by its neighbor, M81',
+      'Superwinds blow gas out of the galaxy',
+      'It\'s one of the brightest infrared galaxies in the sky'
+    ],
+    metric: 'Explosive',
+    metricLabel: 'Star Formation',
+    icon: '💥',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Cigar Galaxy (M82) is a starburst galaxy undergoing an explosive burst of star formation, triggered by a close encounter with its neighbor, the larger spiral galaxy M81. New stars are forming 10 times faster than in the Milky Way, and powerful galactic superwinds are blowing gas and dust out of the galaxy\'s center. This intense activity makes the Cigar Galaxy one of the brightest galaxies at infrared wavelengths.'
+  },
+  // Other cosmic phenomena
+  {
+    id: 'magnetar',
+    name: 'Magnetars',
+    category: 'stars',
+    type: 'Neutron Star',
+    description: 'The strongest magnets in the universe!',
+    longDescription: 'Magnetars are neutron stars with incredibly powerful magnetic fields - strong enough to erase a credit card from halfway across the solar system!',
+    coolFact: 'A magnetar\'s magnetic field is a quadrillion times stronger than Earth\'s!',
+    extendedFacts: [
+      'Magnetars can release more energy in 0.1 seconds than the Sun does in 100,000 years',
+      'Only about 30 magnetars are known',
+      'Their crusts can crack, releasing massive bursts of energy',
+      'Magnetars eventually become regular pulsars as their fields decay'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Magnetism',
+    icon: '🧲',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Magnetars are a type of neutron star with the most powerful magnetic fields in the universe - about a quadrillion times stronger than Earth\'s. These incredible magnetic fields can cause "starquakes" as the neutron star\'s crust shifts, releasing tremendous bursts of X-rays and gamma rays. A magnetar located halfway to the Moon would be strong enough to erase your credit card! Only about 30 magnetars are known, making them rare cosmic objects.'
+  },
+  {
+    id: 'dark-matter',
+    name: 'Dark Matter',
+    category: 'other',
+    type: 'Mysterious Matter',
+    description: 'The invisible stuff that makes up most of the universe!',
+    longDescription: 'Dark matter is a mysterious substance that doesn\'t emit light or energy. We can\'t see it, but we know it\'s there because of its gravitational effects on galaxies!',
+    coolFact: 'Dark matter makes up about 27% of the universe, but we\'ve never directly detected it!',
+    extendedFacts: [
+      'Dark matter doesn\'t interact with light',
+      'Galaxies wouldn\'t hold together without dark matter',
+      'Scientists are trying to detect dark matter particles',
+      'Dark matter forms a cosmic web connecting galaxies'
+    ],
+    metric: 'Invisible',
+    metricLabel: 'Nature',
+    icon: '👻',
+    color: 'foreground',
+    distance: 'far',
+    readMoreContent: 'Dark matter is one of the greatest mysteries in astronomy. We know it exists because galaxies rotate too fast - they should fly apart without extra invisible mass holding them together. Dark matter makes up about 27% of the universe but has never been directly detected because it doesn\'t emit, absorb, or reflect light. Scientists believe dark matter particles pass through us constantly without interacting. Understanding dark matter is one of the biggest challenges in modern physics.'
+  },
+  {
+    id: 'dark-energy',
+    name: 'Dark Energy',
+    category: 'other',
+    type: 'Mysterious Force',
+    description: 'The mysterious force accelerating the universe\'s expansion!',
+    longDescription: 'Dark energy is a mysterious force causing the universe to expand faster and faster. It makes up about 68% of all the energy in the universe!',
+    coolFact: 'Dark energy is pushing galaxies apart faster every second!',
+    extendedFacts: [
+      'Dark energy was discovered in 1998',
+      'It makes up about 68% of the universe',
+      'Dark energy causes the universe to accelerate its expansion',
+      'Its true nature remains completely unknown'
+    ],
+    metric: 'Accelerating',
+    metricLabel: 'Effect',
+    icon: '🌌',
+    color: 'galaxy',
+    distance: 'far',
+    readMoreContent: 'Dark energy is perhaps the biggest mystery in all of science. Discovered in 1998 when astronomers found that the universe\'s expansion is accelerating, dark energy makes up about 68% of all the energy in the universe. Unlike gravity, which pulls things together, dark energy acts as a repulsive force pushing space itself apart. As the universe ages, dark energy becomes more dominant, meaning distant galaxies are racing away from us faster and faster.'
+  },
+  {
+    id: 'cosmic-web',
+    name: 'Cosmic Web',
+    category: 'other',
+    type: 'Large Scale Structure',
+    description: 'The giant web connecting all galaxies in the universe!',
+    longDescription: 'The cosmic web is the largest structure in the universe - a network of galaxy clusters connected by filaments of gas and dark matter, surrounding vast empty voids.',
+    coolFact: 'The cosmic web spans billions of light-years across the universe!',
+    extendedFacts: [
+      'Galaxy clusters form at the intersections of filaments',
+      'Filaments can be hundreds of millions of light-years long',
+      'Voids between filaments can be 100+ million light-years across',
+      'The web structure is shaped primarily by dark matter'
+    ],
+    metric: 'Universal',
+    metricLabel: 'Scale',
+    icon: '🕸️',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'The cosmic web is the largest known structure in the universe, a vast network of galaxy clusters and filaments separated by enormous voids. Galaxies are not randomly distributed but arranged along sheets and filaments of dark matter, like beads on strings. Where filaments intersect, massive galaxy clusters form. The largest voids between filaments can be over 100 million light-years across, nearly empty of galaxies. This structure emerged from tiny density variations in the early universe.'
   }
 ];
 
