@@ -129,5 +129,125 @@ export const videos: Video[] = [
     category: 'Solar System',
     tags: ['Moons', 'Planets', 'Beginner'],
     youtubeId: 'rcLnMe1ELPA'
+  },
+  {
+    id: 'v13',
+    title: 'What is a Comet?',
+    description: 'Learn about these amazing icy visitors from the outer solar system!',
+    thumbnail: 'https://images.unsplash.com/photo-1506443432602-ac2fcd6f54e0?w=400&h=225&fit=crop',
+    duration: '6:00',
+    category: 'Solar System',
+    tags: ['Comets', 'Solar System', 'Beginner'],
+    youtubeId: '4jfRxZgcLjc'
+  },
+  {
+    id: 'v14',
+    title: 'Constellations for Kids',
+    description: 'Find patterns in the stars and learn their ancient stories!',
+    thumbnail: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=400&h=225&fit=crop',
+    duration: '10:15',
+    category: 'Stars',
+    tags: ['Constellations', 'Stars', 'Beginner'],
+    youtubeId: 'F4FkBGxB0Mg'
+  },
+  {
+    id: 'v15',
+    title: 'How Big is the Universe?',
+    description: 'A mind-blowing journey from Earth to the edge of the observable universe!',
+    thumbnail: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?w=400&h=225&fit=crop',
+    duration: '12:30',
+    category: 'Galaxies',
+    tags: ['Galaxies', 'Advanced'],
+    youtubeId: 'Iy7NzjCmUf0'
+  },
+  {
+    id: 'v16',
+    title: 'The Ice Giants: Uranus and Neptune',
+    description: 'Explore the mysterious worlds at the edge of our solar system!',
+    thumbnail: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400&h=225&fit=crop',
+    duration: '8:45',
+    category: 'Solar System',
+    tags: ['Planets', 'Uranus', 'Neptune', 'Beginner'],
+    youtubeId: 'mFj2EY3oLsA'
+  },
+  {
+    id: 'v17',
+    title: 'What is Dark Matter?',
+    description: 'Discover the invisible stuff that holds galaxies together!',
+    thumbnail: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=225&fit=crop',
+    duration: '7:20',
+    category: 'Galaxies',
+    tags: ['Dark Matter', 'Galaxies', 'Advanced'],
+    youtubeId: 'QAa2O_8wBUQ'
+  },
+  {
+    id: 'v18',
+    title: 'Dwarf Planets Explained',
+    description: 'Meet Pluto, Eris, and the other tiny worlds of our solar system!',
+    thumbnail: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&h=225&fit=crop',
+    duration: '9:00',
+    category: 'Solar System',
+    tags: ['Dwarf Planets', 'Pluto', 'Beginner'],
+    youtubeId: 'SnrVaLFpP5M'
+  },
+  {
+    id: 'v19',
+    title: 'The James Webb Space Telescope',
+    description: 'See the universe like never before with the most powerful telescope ever built!',
+    thumbnail: 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=400&h=225&fit=crop',
+    duration: '11:00',
+    category: 'Space Tech',
+    tags: ['Telescopes', 'Space Exploration', 'Advanced'],
+    youtubeId: '4P8fKd0IVOs'
+  },
+  {
+    id: 'v20',
+    title: 'Asteroid Belt Adventure',
+    description: 'Fly through the asteroid belt between Mars and Jupiter!',
+    thumbnail: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=225&fit=crop',
+    duration: '7:30',
+    category: 'Solar System',
+    tags: ['Asteroids', 'Solar System', 'Beginner'],
+    youtubeId: 'S_d-gs0WoUw'
+  },
+  {
+    id: 'v21',
+    title: 'Neutron Stars and Pulsars',
+    description: 'Meet the universe\'s most extreme spinning objects!',
+    thumbnail: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=225&fit=crop',
+    duration: '8:15',
+    category: 'Stars',
+    tags: ['Stars', 'Neutron Stars', 'Advanced'],
+    youtubeId: 'RrMvUL8HFlM'
+  },
+  {
+    id: 'v22',
+    title: 'Living in Space',
+    description: 'What\'s it like to eat, sleep, and float on the ISS?',
+    thumbnail: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=400&h=225&fit=crop',
+    duration: '10:45',
+    category: 'Space Tech',
+    tags: ['Space Exploration', 'ISS', 'Beginner'],
+    youtubeId: 'SGP6Y0Pnhe4'
+  },
+  {
+    id: 'v23',
+    title: 'The Moon: Our Cosmic Companion',
+    description: 'Everything you need to know about Earth\'s best friend in space!',
+    thumbnail: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=400&h=225&fit=crop',
+    duration: '9:30',
+    category: 'Solar System',
+    tags: ['Moon', 'Solar System', 'Beginner'],
+    youtubeId: '6AviDjR9mmo'
+  },
+  {
+    id: 'v24',
+    title: 'How Planets Form',
+    description: 'Watch a solar system being born from dust and gas!',
+    thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=225&fit=crop',
+    duration: '8:00',
+    category: 'Solar System',
+    tags: ['Planets', 'Stars', 'Advanced'],
+    youtubeId: 'QdpKP2hE4Vc'
   }
 ];

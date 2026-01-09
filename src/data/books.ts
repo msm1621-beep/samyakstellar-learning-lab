@@ -163,5 +163,119 @@ export const books: Book[] = [
       { title: 'Meteor Showers', content: 'Several times a year, Earth passes through trails of debris left by comets. This creates meteor showers where you might see dozens of shooting stars in an hour! The Perseids in August and Geminids in December are two of the best meteor showers to watch.' },
       { title: 'Protecting Earth', content: 'Could an asteroid hit Earth? It\'s happened before! Scientists believe an asteroid impact killed the dinosaurs 66 million years ago. Today, NASA and other agencies track potentially hazardous asteroids. The DART mission even tested whether we could deflect an asteroid by crashing a spacecraft into it!' }
     ]
+  },
+  {
+    id: 'b9',
+    title: 'The Wonders of Jupiter',
+    author: 'Dr. Space Giant',
+    ageRange: '7-11',
+    description: 'Explore the king of planets with its amazing moons, storms, and mysteries!',
+    cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=300&h=400&fit=crop',
+    tags: ['Planets', 'Jupiter', 'Moons', 'Beginner'],
+    type: 'book',
+    fullContent: 'Jupiter is the biggest planet in our solar system - so big that all the other planets could fit inside it! Let\'s explore this giant world and its amazing family of moons.',
+    chapters: [
+      { title: 'The King of Planets', content: 'Jupiter is more than 11 times wider than Earth and has a mass greater than all other planets combined! It\'s made mostly of hydrogen and helium gas, with no solid surface to stand on. If you tried to land on Jupiter, you\'d just sink deeper and deeper into its thick atmosphere.' },
+      { title: 'The Great Red Spot', content: 'Jupiter\'s most famous feature is the Great Red Spot - a massive storm bigger than Earth that has been raging for at least 400 years! The spot is actually shrinking slowly, but it\'s still the biggest storm in the solar system. Winds inside can reach over 400 miles per hour!' },
+      { title: 'Jupiter\'s Galilean Moons', content: 'In 1610, Galileo discovered four large moons orbiting Jupiter: Io, Europa, Ganymede, and Callisto. Ganymede is the largest moon in the solar system - even bigger than Mercury! Europa might have an ocean under its icy surface that could contain life.' },
+      { title: 'Io - The Volcanic Moon', content: 'Io is the most volcanically active world in the solar system! It has hundreds of volcanoes that shoot lava and sulfur hundreds of miles into space. Jupiter\'s strong gravity constantly squeezes Io, heating its interior and creating all this volcanic activity.' },
+      { title: 'Jupiter\'s Rings', content: 'Did you know Jupiter has rings? They\'re very faint and made of dust, unlike Saturn\'s bright icy rings. Jupiter\'s rings were discovered in 1979 by the Voyager 1 spacecraft. They\'re so thin that you can\'t see them from Earth with regular telescopes.' },
+      { title: 'Exploring Jupiter', content: 'NASA\'s Juno spacecraft has been orbiting Jupiter since 2016, sending back amazing pictures and data. Juno has discovered that Jupiter\'s colorful bands and storms go deep into the planet. Future missions might explore the icy moons to search for signs of life!' }
+    ]
+  },
+  {
+    id: 'b10',
+    title: 'Star Types Explained',
+    author: 'Professor Stellar',
+    ageRange: '9-13',
+    description: 'Learn about the different types of stars in the universe, from red dwarfs to supergiants!',
+    cover: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&h=400&fit=crop',
+    tags: ['Stars', 'Advanced'],
+    type: 'guide',
+    fullContent: 'Not all stars are the same! They come in many different colors, sizes, and temperatures. Let\'s explore the amazing variety of stars in our universe.',
+    chapters: [
+      { title: 'Star Colors and Temperature', content: 'Stars come in different colors based on their temperature. Blue and white stars are the hottest, yellow stars like our Sun are medium temperature, and red stars are the coolest. You can see this yourself - look at the sky and compare the colors of different stars!' },
+      { title: 'Red Dwarf Stars', content: 'Red dwarfs are the smallest and coolest type of normal star. They\'re also the most common - about 70% of all stars are red dwarfs! They burn their fuel so slowly that they can live for trillions of years. Proxima Centauri, the closest star to our Sun, is a red dwarf.' },
+      { title: 'Yellow Dwarf Stars', content: 'Our Sun is a yellow dwarf star (also called a G-type star). These medium-sized stars are perfect for life - not too hot, not too cold, and stable for billions of years. Yellow dwarfs eventually become red giants before ending their lives as white dwarfs.' },
+      { title: 'Giant Stars', content: 'Giant stars are what medium-sized stars become when they start running out of hydrogen fuel. They swell up to many times their original size and become cooler and redder. Aldebaran, the "eye" of Taurus the Bull, is a red giant about 44 times wider than our Sun!' },
+      { title: 'Supergiant Stars', content: 'The biggest stars of all are supergiants! Betelgeuse in Orion is a red supergiant about 700 times wider than our Sun. If Betelgeuse were in the center of our solar system, it would extend past the orbit of Mars! Supergiants live fast and die young in spectacular supernova explosions.' },
+      { title: 'Weird Stars', content: 'Some stars are really strange! Neutron stars are incredibly dense collapsed stars - a teaspoon would weigh billions of tons. Pulsars are spinning neutron stars that beam radiation like cosmic lighthouses. White dwarfs are the dense cores left behind when stars like our Sun die.' }
+    ]
+  },
+  {
+    id: 'b11',
+    title: 'The Big Bang and Beyond',
+    author: 'Cosmic Origins Team',
+    ageRange: '10-14',
+    description: 'Journey back to the beginning of the universe and learn how everything began!',
+    cover: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?w=300&h=400&fit=crop',
+    tags: ['Cosmology', 'Advanced', 'Galaxies'],
+    type: 'book',
+    fullContent: 'How did the universe begin? Where did all the stars and galaxies come from? Scientists have discovered amazing answers to these big questions!',
+    chapters: [
+      { title: 'The Beginning of Everything', content: 'About 13.8 billion years ago, the universe began with the Big Bang! It wasn\'t an explosion in space - it was the beginning of space itself. Everything was incredibly hot and dense, then it started expanding and cooling. The expansion continues today!' },
+      { title: 'The First Light', content: 'For the first 380,000 years, the universe was so hot that light couldn\'t travel freely - everything was a glowing fog. When it finally cooled enough, light was released in a cosmic flash. We can still see this "afterglow" today as the Cosmic Microwave Background!' },
+      { title: 'The First Stars', content: 'The first stars formed about 100-200 million years after the Big Bang. They were giants - some were hundreds of times more massive than our Sun! These early stars created the first heavy elements and exploded as supernovas, spreading those elements through space.' },
+      { title: 'Galaxy Formation', content: 'Gravity pulled matter together into the first galaxies about 1 billion years after the Big Bang. These early galaxies were smaller and more chaotic than modern ones. Over billions of years, they merged and grew into the beautiful spirals and ellipticals we see today.' },
+      { title: 'The Expanding Universe', content: 'The universe has been expanding since the Big Bang, and it\'s still expanding today! In 1998, scientists discovered something shocking - the expansion is speeding up! A mysterious force called "dark energy" is pushing galaxies apart faster and faster.' },
+      { title: 'The Future of the Universe', content: 'What will happen to the universe in the far future? If dark energy keeps pushing, galaxies will eventually move so far apart that we won\'t be able to see any others. Stars will burn out, and the universe will become cold and dark. But don\'t worry - this is trillions of years away!' }
+    ]
+  },
+  {
+    id: 'b12',
+    title: 'Rocket Science for Kids',
+    author: 'Launch Pad Academy',
+    ageRange: '7-12',
+    description: 'Discover how rockets work and the amazing vehicles that take us to space!',
+    cover: 'https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=300&h=400&fit=crop',
+    tags: ['Space Exploration', 'Rockets', 'Beginner'],
+    type: 'guide',
+    fullContent: 'Rockets are incredible machines that let us escape Earth\'s gravity and explore space! From tiny model rockets to massive launch vehicles, let\'s learn how they work.',
+    chapters: [
+      { title: 'How Rockets Work', content: 'Rockets work using Newton\'s Third Law - for every action, there\'s an equal and opposite reaction. When hot gases shoot out the bottom of a rocket, the rocket is pushed upward! Unlike airplanes, rockets carry their own oxygen, so they can work in the vacuum of space.' },
+      { title: 'Rocket Fuel', content: 'Rockets need special fuels to produce enough thrust to reach space. Some use liquid fuels like hydrogen and oxygen, stored in giant tanks. Others use solid fuel that burns like a powerful firework. SpaceX\'s rockets use kerosene and liquid oxygen!' },
+      { title: 'Escaping Earth', content: 'To leave Earth, a rocket must reach "escape velocity" - about 25,000 miles per hour! That\'s fast enough to overcome Earth\'s gravity. Getting to orbit is a bit easier - you need to go about 17,500 mph sideways to continuously "fall around" Earth.' },
+      { title: 'Famous Rockets', content: 'The Saturn V rocket that took astronauts to the Moon was 363 feet tall - taller than the Statue of Liberty! Today\'s rockets include SpaceX\'s Falcon 9 and Falcon Heavy, NASA\'s SLS, and Blue Origin\'s New Glenn. Each is designed for different missions.' },
+      { title: 'Reusable Rockets', content: 'SpaceX made history by landing rocket boosters back on Earth so they can be used again! This makes space travel much cheaper. Watching a booster land on its legs after launching a spacecraft is like seeing science fiction become real!' },
+      { title: 'The Future of Rockets', content: 'Engineers are developing new rocket technologies. SpaceX\'s Starship is designed to carry 100 people to Mars! NASA is working on nuclear rockets that could reach Mars faster. One day, rockets might be as common as airplanes!' }
+    ]
+  },
+  {
+    id: 'b13',
+    title: 'Moons of the Solar System',
+    author: 'Luna Explorers',
+    ageRange: '8-12',
+    description: 'Meet the fascinating moons orbiting the planets of our solar system!',
+    cover: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=300&h=400&fit=crop',
+    tags: ['Moons', 'Solar System', 'Beginner'],
+    type: 'book',
+    fullContent: 'Our solar system has over 200 known moons! Some are tiny rocks, while others are larger than planets. Let\'s explore these amazing worlds.',
+    chapters: [
+      { title: 'What is a Moon?', content: 'A moon is a natural satellite that orbits a planet. Earth has one Moon, but Jupiter and Saturn have over 80 each! Moons come in all shapes and sizes. Some are round like mini-planets, while others are lumpy like potatoes.' },
+      { title: 'Our Moon', content: 'Earth\'s Moon is the fifth largest in the solar system. It controls our ocean tides and stabilizes Earth\'s tilt. The Moon is the only place beyond Earth where humans have walked. Its craters and "seas" (actually ancient lava plains) are visible even without a telescope!' },
+      { title: 'Europa - Ocean Moon', content: 'Jupiter\'s moon Europa is covered in a shell of ice. But underneath that ice is probably a vast ocean of liquid water - more water than all of Earth\'s oceans combined! Scientists think Europa could be one of the best places to look for alien life.' },
+      { title: 'Titan - Moon with Weather', content: 'Saturn\'s largest moon, Titan, has a thick atmosphere and liquid lakes - but they\'re not water! Titan\'s lakes are made of liquid methane and ethane. It\'s the only moon with a substantial atmosphere and the only place besides Earth with surface liquids.' },
+      { title: 'Enceladus - Ice Geysers', content: 'Enceladus is a small icy moon of Saturn that shoots giant geysers of water vapor into space! These plumes come from a subsurface ocean heated by Saturn\'s gravity. Spacecraft have even flown through the plumes to sample what\'s inside!' },
+      { title: 'Strange Moons', content: 'Some moons are really weird! Io has hundreds of active volcanoes. Miranda has cliffs 12 miles high. Triton orbits Neptune backwards and was probably captured from the Kuiper Belt. Phobos and Deimos, Mars\'s moons, might be captured asteroids!' }
+    ]
+  },
+  {
+    id: 'b14',
+    title: 'Stargazing for Beginners',
+    author: 'Night Sky Academy',
+    ageRange: '6-10',
+    description: 'Your guide to exploring the night sky with just your eyes!',
+    cover: 'https://images.unsplash.com/photo-1509773896068-7fd415d91e2e?w=300&h=400&fit=crop',
+    tags: ['Stargazing', 'Constellations', 'Beginner'],
+    type: 'guide',
+    fullContent: 'You don\'t need a telescope to explore the night sky! With just your eyes, you can see amazing things. Let\'s learn how to become a stargazer!',
+    chapters: [
+      { title: 'Getting Started', content: 'The best stargazing happens away from city lights on clear, moonless nights. Give your eyes 20-30 minutes to adjust to the dark - you\'ll be amazed how many more stars appear! Dress warmly and bring a blanket to lie on.' },
+      { title: 'Finding Your Way', content: 'Learn to find the North Star (Polaris) using the Big Dipper. The two stars at the end of the Dipper\'s cup point right to it! Once you know where north is, you can find other constellations. Star maps and phone apps can help guide you.' },
+      { title: 'Easy Constellations', content: 'Start with easy-to-find patterns. Orion\'s three belt stars are unmistakable in winter. The Big Dipper is visible year-round in the northern hemisphere. Cassiopeia looks like a big "W" in the sky. Once you learn these, finding others becomes easier!' },
+      { title: 'Planets vs Stars', content: 'How can you tell a planet from a star? Planets don\'t twinkle like stars do! They also wander among the constellations over weeks and months. Venus, Mars, Jupiter, and Saturn are all bright enough to see easily with your eyes.' },
+      { title: 'Meteor Showers', content: 'Several times a year, Earth passes through streams of comet dust, creating meteor showers! The Perseids in August and Geminids in December are especially good. Find a dark spot, lie back, and watch for "shooting stars" streaking across the sky.' },
+      { title: 'The Milky Way', content: 'From a truly dark location, you can see the Milky Way - a glowing band of light arching across the sky. You\'re looking into the disk of our galaxy, seeing the combined light of billions of distant stars. It\'s one of the most beautiful sights in nature!' }
+    ]
   }
 ];
