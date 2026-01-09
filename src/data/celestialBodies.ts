@@ -2005,6 +2005,283 @@ export const celestialBodies: CelestialBody[] = [
     color: 'muted',
     distance: 'far',
     readMoreContent: 'Cosmic voids are immense regions of space that contain far fewer galaxies than average. These bubble-like structures are separated by the filaments and walls of galaxies that make up the cosmic web. Voids typically range from 30 to 300 million light-years across and make up about 80% of the universe\'s volume. Despite their name, voids aren\'t completely empty - they just have much lower galaxy density than other regions.'
+  },
+  // Star Clusters
+  {
+    id: 'pleiades',
+    name: 'Pleiades (Seven Sisters)',
+    category: 'stars',
+    type: 'Open Star Cluster',
+    description: 'A beautiful cluster of young, hot blue stars!',
+    longDescription: 'The Pleiades, also known as the Seven Sisters, is one of the most famous star clusters in the sky. You can see it with your naked eyes on a clear night!',
+    coolFact: 'The Pleiades are only about 100 million years old - baby stars in cosmic terms!',
+    extendedFacts: [
+      'The cluster contains over 1,000 stars',
+      'Located about 444 light-years from Earth',
+      'Named after the seven daughters of Atlas in Greek mythology',
+      'Surrounded by a beautiful blue reflection nebula'
+    ],
+    metric: 'Young',
+    metricLabel: 'Age',
+    icon: '✨',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Pleiades is one of the nearest star clusters to Earth and among the most visible to the naked eye. Also called the Seven Sisters after Greek mythology, this cluster actually contains over 1,000 stars. The bright blue stars are surrounded by a stunning reflection nebula - clouds of dust that reflect the starlight. The Pleiades are important in many cultures around the world, from Native American to Japanese traditions.'
+  },
+  {
+    id: 'hyades',
+    name: 'Hyades',
+    category: 'stars',
+    type: 'Open Star Cluster',
+    description: 'The nearest star cluster to our solar system!',
+    longDescription: 'The Hyades is the closest star cluster to Earth. It forms the face of Taurus the Bull constellation and has been known since ancient times.',
+    coolFact: 'The Hyades are about 625 million years old - much older than the Pleiades!',
+    extendedFacts: [
+      'Located only 153 light-years from Earth',
+      'Contains several hundred stars',
+      'Aldebaran appears in the cluster but is not actually part of it',
+      'Named after the rain nymphs in Greek mythology'
+    ],
+    metric: 'Nearby',
+    metricLabel: 'Distance',
+    icon: '⭐',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'The Hyades is the nearest open star cluster to the Sun, located about 153 light-years away in the constellation Taurus. The cluster forms a distinctive V-shape that represents the bull\'s face. Although the bright orange star Aldebaran appears to be part of the group, it\'s actually much closer to us and just happens to lie in the same direction. The Hyades was crucial in early astronomy for measuring stellar distances.'
+  },
+  {
+    id: 'messier-3',
+    name: 'Messier 3 (M3)',
+    category: 'stars',
+    type: 'Globular Cluster',
+    description: 'A spectacular ball of half a million ancient stars!',
+    longDescription: 'Messier 3 is one of the brightest and most beautiful globular clusters, containing about 500,000 stars packed into a spherical shape.',
+    coolFact: 'M3 is about 8 billion years old - nearly twice as old as our Sun!',
+    extendedFacts: [
+      'Contains about 500,000 stars',
+      'Located 33,900 light-years from Earth',
+      'One of the brightest globular clusters visible from Earth',
+      'Contains more variable stars than almost any other cluster'
+    ],
+    metric: 'Ancient',
+    metricLabel: 'Age',
+    icon: '🔮',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Messier 3 is a stunning globular cluster discovered by Charles Messier in 1764. It contains roughly 500,000 stars gravitationally bound together in a sphere about 180 light-years across. M3 is famous for containing a huge number of variable stars - stars that change brightness over time - which astronomers use to measure cosmic distances. This ancient cluster formed when the universe was young, making its stars some of the oldest known.'
+  },
+  // Blazars and Explosive Events
+  {
+    id: 'blazar',
+    name: 'Blazars',
+    category: 'galaxies',
+    type: 'Active Galactic Nucleus',
+    description: 'Supermassive black holes shooting beams right at us!',
+    longDescription: 'Blazars are supermassive black holes at galaxy centers that shoot powerful jets of energy and particles directly toward Earth. They are the brightest objects in the universe!',
+    coolFact: 'Blazar jets travel at nearly the speed of light!',
+    extendedFacts: [
+      'Blazars are a type of quasar with jets pointed at Earth',
+      'They can vary in brightness dramatically over hours or days',
+      'Blazars emit energy across the entire electromagnetic spectrum',
+      'The nearest known blazar is Markarian 421'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Power',
+    icon: '💥',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Blazars are among the most energetic phenomena in the universe. They are a special type of active galactic nucleus - a supermassive black hole actively consuming material - with relativistic jets pointed directly at Earth. This alignment makes them appear incredibly bright and highly variable. Blazars emit radiation across all wavelengths, from radio waves to gamma rays, and can outshine entire galaxies. They help scientists study extreme physics and the early universe.'
+  },
+  {
+    id: 'kilonova',
+    name: 'Kilonova',
+    category: 'other',
+    type: 'Stellar Explosion',
+    description: 'The spectacular collision of two neutron stars!',
+    longDescription: 'A kilonova occurs when two neutron stars smash together, creating a massive explosion that produces heavy elements like gold and platinum!',
+    coolFact: 'All the gold in the universe was likely created in kilonovae!',
+    extendedFacts: [
+      'First directly observed in 2017',
+      'Creates gravitational waves detectable on Earth',
+      'Produces elements heavier than iron',
+      'About 1,000 times brighter than a regular nova'
+    ],
+    metric: 'Brilliant',
+    metricLabel: 'Brightness',
+    icon: '💫',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Kilonovae are cosmic events that occur when two neutron stars or a neutron star and black hole merge. The first kilonova was directly observed in August 2017, detected through both gravitational waves and light. These mergers create the heaviest elements in the universe, including gold, platinum, and uranium. The explosion is about 1,000 times brighter than a nova but less bright than a supernova, hence the name "kilonova."'
+  },
+  {
+    id: 'hypernova',
+    name: 'Hypernova',
+    category: 'other',
+    type: 'Stellar Explosion',
+    description: 'The most powerful explosions since the Big Bang!',
+    longDescription: 'Hypernovae are supernovae on steroids - explosions 10 to 100 times more powerful than regular supernovae, caused by the collapse of the most massive stars!',
+    coolFact: 'A hypernova releases more energy in seconds than the Sun will produce in its entire lifetime!',
+    extendedFacts: [
+      'Also called collapsar or superluminous supernovae',
+      'Can produce gamma-ray bursts',
+      'Only the most massive stars (over 30 solar masses) can create them',
+      'They can briefly outshine their entire host galaxy'
+    ],
+    metric: 'Colossal',
+    metricLabel: 'Energy',
+    icon: '🌟',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Hypernovae are the most energetic stellar explosions known, releasing 10 to 100 times more energy than typical supernovae. They occur when extremely massive stars - at least 30 times the mass of our Sun - collapse at the end of their lives. Some hypernovae produce long gamma-ray bursts, the most luminous events in the universe. These explosions can briefly outshine billions of stars and spread heavy elements across vast regions of space.'
+  },
+  // Cosmic Expansion
+  {
+    id: 'cosmic-expansion',
+    name: 'Cosmic Expansion',
+    category: 'other',
+    type: 'Cosmological Phenomenon',
+    description: 'The universe is getting bigger every second!',
+    longDescription: 'Space itself is stretching, carrying galaxies apart from each other. This expansion has been happening since the Big Bang and is actually speeding up!',
+    coolFact: 'Distant galaxies are moving away from us faster than the speed of light because space itself is expanding!',
+    extendedFacts: [
+      'Discovered by Edwin Hubble in 1929',
+      'The expansion rate is called the Hubble constant',
+      'Dark energy is causing the expansion to accelerate',
+      'Eventually, distant galaxies will disappear from our view'
+    ],
+    metric: 'Accelerating',
+    metricLabel: 'Rate',
+    icon: '🌌',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Cosmic expansion is one of the most profound discoveries in science. In 1929, Edwin Hubble noticed that distant galaxies are moving away from us, with farther galaxies moving faster. This led to the understanding that the universe began with the Big Bang and has been expanding ever since. Surprisingly, scientists discovered in 1998 that this expansion is accelerating, driven by a mysterious force called dark energy. Eventually, the expansion will carry distant galaxies beyond our observable universe.'
+  },
+  // Exoplanets
+  {
+    id: 'proxima-b',
+    name: 'Proxima Centauri b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'The closest exoplanet to Earth - our nearest cosmic neighbor!',
+    longDescription: 'Proxima b orbits the closest star to our Sun, Proxima Centauri, in the habitable zone where liquid water might exist on its surface!',
+    coolFact: 'Proxima b is only 4.2 light-years away - the closest potentially habitable exoplanet!',
+    extendedFacts: [
+      'Discovered in 2016',
+      'Orbits in just 11.2 Earth days',
+      'About 1.17 times the mass of Earth',
+      'May be tidally locked with one side always facing its star'
+    ],
+    metric: 'Nearest',
+    metricLabel: 'Distance',
+    icon: '🌍',
+    color: 'planet',
+    distance: 'far',
+    readMoreContent: 'Proxima Centauri b is the closest known exoplanet to our solar system, orbiting the red dwarf star Proxima Centauri just 4.2 light-years away. The planet is in the habitable zone, where temperatures might allow liquid water to exist. However, Proxima Centauri is a flare star that produces intense radiation bursts, which could make conditions challenging for life. Proxima b is a prime target for future interstellar exploration.'
+  },
+  {
+    id: 'kepler-16b',
+    name: 'Kepler-16b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'A real-life Tatooine with two suns!',
+    longDescription: 'Kepler-16b is a circumbinary planet, meaning it orbits two stars! From its surface, you would see two suns in the sky, just like Luke Skywalker\'s home planet.',
+    coolFact: 'You would see two sunsets every day on Kepler-16b!',
+    extendedFacts: [
+      'Discovered in 2011 by the Kepler space telescope',
+      'Located about 245 light-years from Earth',
+      'About the size of Saturn',
+      'Nicknamed "Tatooine" after the Star Wars planet'
+    ],
+    metric: 'Binary',
+    metricLabel: 'Star System',
+    icon: '☀️☀️',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Kepler-16b made headlines when discovered because it proved that planets can form and survive in the complex gravitational environment of a binary star system. The planet is about the size of Saturn and orbits both of its stars every 229 days. While its double sunsets would be spectacular, Kepler-16b is too cold for liquid water and unlikely to support life as we know it. This discovery opened our eyes to the diversity of planetary systems in the galaxy.'
+  },
+  {
+    id: 'kepler-22b',
+    name: 'Kepler-22b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'A super-Earth in the habitable zone!',
+    longDescription: 'Kepler-22b was one of the first exoplanets discovered in the habitable zone of a Sun-like star, making it an exciting candidate for potential habitability.',
+    coolFact: 'Kepler-22b is about 2.4 times the size of Earth!',
+    extendedFacts: [
+      'Discovered in 2011',
+      'Located 640 light-years from Earth',
+      'Orbits its star in 290 days',
+      'Surface temperature might be around 22°C (72°F) if it has an atmosphere'
+    ],
+    metric: 'Super',
+    metricLabel: 'Size Class',
+    icon: '🌏',
+    color: 'planet',
+    distance: 'far',
+    readMoreContent: 'Kepler-22b was a groundbreaking discovery - the first planet found by Kepler in the habitable zone of a Sun-like star. At 2.4 times Earth\'s radius, it\'s classified as a "super-Earth" or possibly a "mini-Neptune." We don\'t know if it has a rocky surface or is a water world or gas planet. If it has an Earth-like atmosphere, surface temperatures could be comfortable for liquid water. Kepler-22b represents our ongoing quest to find Earth-like worlds.'
+  },
+  {
+    id: '51-pegasi-b',
+    name: '51 Pegasi b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'The first exoplanet ever found around a Sun-like star!',
+    longDescription: '51 Pegasi b made history in 1995 as the first exoplanet discovered orbiting a main-sequence star. It changed our understanding of planetary systems forever!',
+    coolFact: 'The discovery of 51 Pegasi b won the 2019 Nobel Prize in Physics!',
+    extendedFacts: [
+      'Discovered in 1995 by Michel Mayor and Didier Queloz',
+      'Located about 50 light-years from Earth',
+      'A "hot Jupiter" - a gas giant orbiting very close to its star',
+      'Orbits its star in just 4.2 Earth days'
+    ],
+    metric: 'Historic',
+    metricLabel: 'Significance',
+    icon: '🏆',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: '51 Pegasi b represents a turning point in astronomy - the first confirmed exoplanet around a Sun-like star. Before its discovery, we only knew of planets in our own solar system. Finding a Jupiter-sized planet orbiting its star in just 4 days was shocking - nothing like this exists in our solar system. This discovery launched a revolution in planet hunting that has now found over 5,000 exoplanets. The discoverers, Mayor and Queloz, received the Nobel Prize in 2019.'
+  },
+  {
+    id: '55-cancri-e',
+    name: '55 Cancri e',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'A super-Earth that might be covered in lava!',
+    longDescription: '55 Cancri e is a rocky super-Earth that orbits so close to its star that its surface may be covered in oceans of molten lava!',
+    coolFact: '55 Cancri e was once thought to be made partly of diamond!',
+    extendedFacts: [
+      'Located 41 light-years from Earth',
+      'Surface temperature reaches about 2,000°C (3,600°F)',
+      'Orbits its star in just 18 hours',
+      'About twice Earth\'s diameter and 8 times its mass'
+    ],
+    metric: 'Scorching',
+    metricLabel: 'Temperature',
+    icon: '🔥',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: '55 Cancri e is one of the most extreme exoplanets known. It orbits so close to its star that a year lasts only 18 hours! Surface temperatures reach about 2,000°C, hot enough to melt most rocks. The James Webb Space Telescope has studied this world, revealing a thick atmosphere despite the extreme conditions. Early studies suggested it might contain diamond, but recent observations paint a picture of a hellish lava world with a substantial atmosphere.'
+  },
+  {
+    id: 'wasp-76b',
+    name: 'WASP-76b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'A planet where it rains molten iron!',
+    longDescription: 'WASP-76b is an ultra-hot Jupiter where temperatures are so extreme that iron vaporizes on the day side and rains down as liquid metal on the night side!',
+    coolFact: 'The dayside of WASP-76b reaches 2,400°C - hot enough to vaporize iron!',
+    extendedFacts: [
+      'Located 640 light-years from Earth',
+      'Tidally locked - one side always faces the star',
+      'Iron rain falls on the cooler night side',
+      'About 1.8 times the size of Jupiter'
+    ],
+    metric: 'Iron Rain',
+    metricLabel: 'Weather',
+    icon: '🌧️',
+    color: 'muted',
+    distance: 'far',
+    readMoreContent: 'WASP-76b has some of the most extreme weather in the known universe. This ultra-hot gas giant is tidally locked, meaning one side permanently faces its star. The dayside reaches temperatures of 2,400°C, hot enough to vaporize metals including iron. These iron vapors are carried by powerful winds to the cooler night side, where temperatures drop enough for iron to condense and fall as rain. This bizarre weather was detected by studying the planet\'s atmosphere during transits.'
   }
 ];
 
