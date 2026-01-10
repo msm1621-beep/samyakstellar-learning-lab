@@ -1,4 +1,5 @@
 import QuizGame from './QuizGame';
+import SizeComparison from './SizeComparison';
 
 const GamesSection = () => {
   return (
@@ -9,11 +10,14 @@ const GamesSection = () => {
             🎮 Games & Quizzes
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Test your space knowledge and earn awesome badges!
+            Test your space knowledge and explore the universe interactively!
           </p>
         </div>
 
-        <QuizGame />
+        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <QuizGame />
+          <SizeComparison />
+        </div>
       </div>
     </section>
   );
