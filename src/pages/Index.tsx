@@ -4,6 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import CelestialExplorer from '@/components/CelestialExplorer';
 import SpaceTimeline from '@/components/SpaceTimeline';
 import DailyFactWidget from '@/components/DailyFactWidget';
+import SpaceQnA from '@/components/SpaceQnA';
 import ConstellationViewer from '@/components/ConstellationViewer';
 import LibrarySection from '@/components/LibrarySection';
 import GamesSection from '@/components/GamesSection';
@@ -20,6 +21,7 @@ const Index = () => {
       <main className="relative z-10">
         <HeroSection />
         <DailyFactWidget />
+        <SpaceQnA />
         <CelestialExplorer />
         <SpaceTimeline />
         <ConstellationViewer />
