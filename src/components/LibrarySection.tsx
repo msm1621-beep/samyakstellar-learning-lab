@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Play, BookOpen, Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
 
-type LibraryTab = 'videos' | 'books';
+type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
 const LibrarySection = () => {
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
@@ -12,18 +12,34 @@ const LibrarySection = () => {
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
   const [readingBook, setReadingBook] = useState<Book | null>(null);
   const [currentChapter, setCurrentChapter] = useState(0);
+  const [playingAudiobook, setPlayingAudiobook] = useState<Book | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioProgress, setAudioProgress] = useState(0);
+
+  const regularBooks = books.filter(b => b.type !== 'audiobook');
+  const audiobooks = books.filter(b => b.type === 'audiobook');
 
   const allVideoTags = [...new Set(videos.flatMap((v) => v.tags))];
-  const allBookTags = [...new Set(books.flatMap((b) => b.tags))];
-  const currentTags = activeTab === 'videos' ? allVideoTags : allBookTags;
+  const allBookTags = [...new Set(regularBooks.flatMap((b) => b.tags))];
+  const allAudiobookTags = [...new Set(audiobooks.flatMap((b) => b.tags))];
+  
+  const currentTags = activeTab === 'videos' 
+    ? allVideoTags 
+    : activeTab === 'books' 
+      ? allBookTags 
+      : allAudiobookTags;
 
   const filteredVideos = selectedTag === 'all' 
     ? videos 
     : videos.filter((v) => v.tags.includes(selectedTag));
 
   const filteredBooks = selectedTag === 'all'
-    ? books
-    : books.filter((b) => b.tags.includes(selectedTag));
+    ? regularBooks
+    : regularBooks.filter((b) => b.tags.includes(selectedTag));
+
+  const filteredAudiobooks = selectedTag === 'all'
+    ? audiobooks
+    : audiobooks.filter((b) => b.tags.includes(selectedTag));
 
   const openBook = (book: Book) => {
     setReadingBook(book);
@@ -47,6 +63,24 @@ const LibrarySection = () => {
     }
   };
 
+  const openAudiobook = (book: Book) => {
+    setPlayingAudiobook(book);
+    setCurrentChapter(0);
+    setIsPlaying(true);
+    setAudioProgress(0);
+  };
+
+  const closeAudiobook = () => {
+    setPlayingAudiobook(null);
+    setIsPlaying(false);
+    setCurrentChapter(0);
+    setAudioProgress(0);
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
   return (
     <section id="library" className="py-20 relative">
       <div className="container mx-auto px-4">
@@ -55,33 +89,45 @@ const LibrarySection = () => {
             📚 Celestial Library
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Watch amazing videos and explore space books designed for young explorers!
+            Watch amazing videos, explore space books, and listen to audiobooks about space theories!
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           <button
             onClick={() => { setActiveTab('videos'); setSelectedTag('all'); }}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all ${
               activeTab === 'videos'
                 ? 'bg-primary text-primary-foreground cosmic-glow'
                 : 'glass-card hover:border-primary/50'
             }`}
           >
-            <Play className="w-5 h-5" />
+            <Play className="w-4 h-4" />
             Videos
           </button>
           <button
             onClick={() => { setActiveTab('books'); setSelectedTag('all'); }}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all ${
               activeTab === 'books'
                 ? 'bg-secondary text-secondary-foreground nebula-glow'
                 : 'glass-card hover:border-secondary/50'
             }`}
           >
-            <BookOpen className="w-5 h-5" />
-            Books & Guides
+            <BookOpen className="w-4 h-4" />
+            Books
+          </button>
+          <button
+            onClick={() => { setActiveTab('audiobooks'); setSelectedTag('all'); }}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all ${
+              activeTab === 'audiobooks'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                : 'glass-card hover:border-purple-500/50'
+            }`}
+          >
+            <Headphones className="w-4 h-4" />
+            Audiobooks
+            <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">NEW</span>
           </button>
         </div>
 
@@ -230,6 +276,58 @@ const LibrarySection = () => {
             ))}
           </div>
         )}
+
+        {/* Audiobooks Grid */}
+        {activeTab === 'audiobooks' && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAudiobooks.map((book) => (
+              <div key={book.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 border-2 border-purple-500/20 hover:border-purple-500/50">
+                <div className="relative aspect-[3/4] max-h-48">
+                  <img 
+                    src={book.cover} 
+                    alt={book.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <span className="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white flex items-center gap-1">
+                    <Headphones className="w-3 h-3" />
+                    Audiobook
+                  </span>
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs">
+                    <span className="flex items-center gap-1">
+                      <Volume2 className="w-3 h-3" />
+                      {book.duration}
+                    </span>
+                    <span>🎧 {book.narrator}</span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-display font-bold mb-1 group-hover:text-purple-400 transition-colors">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-1">By {book.author}</p>
+                  <p className="text-xs text-purple-400 mb-2">Ages {book.ageRange} • Narrated by {book.narrator}</p>
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{book.description}</p>
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {book.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 rounded-full text-xs bg-purple-500/20 text-purple-300">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <Button 
+                    size="sm" 
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                    onClick={() => openAudiobook(book)}
+                  >
+                    <Headphones className="w-4 h-4 mr-2" />
+                    Listen Now
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Book Reader Modal */}
@@ -315,6 +413,127 @@ const LibrarySection = () => {
                 Next
                 <ChevronRight className="w-4 h-4" />
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Audiobook Player Modal */}
+      {playingAudiobook && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-md"
+          onClick={closeAudiobook}
+        >
+          <div 
+            className="glass-card max-w-3xl w-full max-h-[85vh] rounded-2xl relative animate-in fade-in zoom-in-95 duration-200 flex flex-col border-2 border-purple-500/30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-4 md:p-6 border-b border-purple-500/20 flex items-center justify-between bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-lg overflow-hidden shadow-lg">
+                  <img src={playingAudiobook.cover} alt={playingAudiobook.title} className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <h3 className="text-lg md:text-xl font-display font-bold">{playingAudiobook.title}</h3>
+                  <p className="text-sm text-purple-300">🎧 Narrated by {playingAudiobook.narrator}</p>
+                </div>
+              </div>
+              <button
+                onClick={closeAudiobook}
+                className="p-2 rounded-full hover:bg-purple-500/20 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Player Controls */}
+            <div className="p-4 md:p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+              <div className="flex items-center justify-center gap-6 mb-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => currentChapter > 0 && setCurrentChapter(currentChapter - 1)}
+                  disabled={currentChapter === 0}
+                  className="text-purple-300 hover:text-white hover:bg-purple-500/20"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </Button>
+                <Button
+                  size="lg"
+                  onClick={togglePlayPause}
+                  className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/30"
+                >
+                  {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => currentChapter < playingAudiobook.chapters.length - 1 && setCurrentChapter(currentChapter + 1)}
+                  disabled={currentChapter === playingAudiobook.chapters.length - 1}
+                  className="text-purple-300 hover:text-white hover:bg-purple-500/20"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </Button>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-2">
+                <div className="h-2 bg-purple-500/20 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-300"
+                    style={{ width: `${(currentChapter / playingAudiobook.chapters.length) * 100 + (isPlaying ? 10 : 0)}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-purple-300">
+                  <span>Chapter {currentChapter + 1} of {playingAudiobook.chapters.length}</span>
+                  <span>{playingAudiobook.duration}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Chapter Content */}
+            <div className="flex-1 overflow-y-auto p-4 md:p-6">
+              {currentChapter === 0 && (
+                <div className="mb-6 p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
+                  <h4 className="font-display font-semibold text-purple-300 mb-2 flex items-center gap-2">
+                    <Headphones className="w-5 h-5" />
+                    Introduction
+                  </h4>
+                  <p className="text-foreground leading-relaxed">{playingAudiobook.fullContent}</p>
+                </div>
+              )}
+              
+              <div className="space-y-4">
+                <h4 className="text-lg md:text-xl font-display font-bold text-purple-300 flex items-center gap-2">
+                  {isPlaying && <Volume2 className="w-5 h-5 animate-pulse" />}
+                  {playingAudiobook.chapters[currentChapter].title}
+                </h4>
+                <p className="text-foreground leading-relaxed text-base md:text-lg">
+                  {playingAudiobook.chapters[currentChapter].content}
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter List */}
+            <div className="p-4 md:p-6 border-t border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+              <p className="text-xs text-purple-300 mb-2">Chapters:</p>
+              <div className="flex flex-wrap gap-2">
+                {playingAudiobook.chapters.map((chapter, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentChapter(idx)}
+                    className={`px-3 py-1 rounded-full text-xs transition-all ${
+                      idx === currentChapter 
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                        : 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30'
+                    }`}
+                  >
+                    {idx + 1}. {chapter.title.replace('Chapter ', '').replace(/^\d+:\s*/, '')}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

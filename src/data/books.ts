@@ -6,9 +6,11 @@ export interface Book {
   description: string;
   cover: string;
   tags: string[];
-  type: 'book' | 'guide';
+  type: 'book' | 'guide' | 'audiobook';
   fullContent: string;
   chapters: { title: string; content: string }[];
+  narrator?: string;
+  duration?: string;
 }
 
 export const books: Book[] = [
@@ -276,6 +278,207 @@ export const books: Book[] = [
       { title: 'Planets vs Stars', content: 'How can you tell a planet from a star? Planets don\'t twinkle like stars do! They also wander among the constellations over weeks and months. Venus, Mars, Jupiter, and Saturn are all bright enough to see easily with your eyes.' },
       { title: 'Meteor Showers', content: 'Several times a year, Earth passes through streams of comet dust, creating meteor showers! The Perseids in August and Geminids in December are especially good. Find a dark spot, lie back, and watch for "shooting stars" streaking across the sky.' },
       { title: 'The Milky Way', content: 'From a truly dark location, you can see the Milky Way - a glowing band of light arching across the sky. You\'re looking into the disk of our galaxy, seeing the combined light of billions of distant stars. It\'s one of the most beautiful sights in nature!' }
+    ]
+  },
+  // AUDIOBOOKS - Space Theories
+  {
+    id: 'ab1',
+    title: 'The Big Bang: How Everything Began',
+    author: 'Dr. Cosmos Academy',
+    narrator: 'Professor Stellar',
+    duration: '25 min',
+    ageRange: '8-13',
+    description: 'Listen to the incredible story of how the entire universe started from a single tiny point 13.8 billion years ago!',
+    cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=300&h=400&fit=crop',
+    tags: ['Big Bang', 'Cosmology', 'Theory'],
+    type: 'audiobook',
+    fullContent: 'Close your eyes and imagine... nothing. No stars, no planets, no space, no time. Then suddenly - BOOM! The Big Bang happened, and everything began!',
+    chapters: [
+      { title: 'Chapter 1: Before the Beginning', content: 'Imagine a time before time itself existed. There was no space, no matter, no energy - nothing at all. Then, about 13.8 billion years ago, something incredible happened. A point smaller than an atom, containing everything that would become our universe, suddenly began to expand. This wasn\'t an explosion in space - it was the beginning of space itself!' },
+      { title: 'Chapter 2: The First Second', content: 'In just the first second after the Big Bang, the universe changed more than it would in the next billion years! It went from smaller than an atom to bigger than a galaxy. It was unimaginably hot - trillions of degrees! During this time, the basic building blocks of matter formed: quarks combined to make protons and neutrons.' },
+      { title: 'Chapter 3: Let There Be Light', content: 'For 380,000 years after the Big Bang, the universe was so hot that light couldn\'t travel freely. Everything was a glowing fog of particles. Then, as the universe cooled, atoms formed and light was released in a cosmic flash! We can still see this ancient light today - scientists call it the Cosmic Microwave Background.' },
+      { title: 'Chapter 4: The First Stars', content: 'After millions of years of darkness, gravity pulled clouds of hydrogen gas together. These clouds got denser and hotter until - whoosh! - the first stars ignited! These early stars were giants, hundreds of times more massive than our Sun. When they exploded, they created heavier elements like carbon, oxygen, and iron.' },
+      { title: 'Chapter 5: Evidence for the Big Bang', content: 'How do we know the Big Bang really happened? Scientists have found three main pieces of evidence: the universe is still expanding (galaxies are moving apart), we can detect the cosmic microwave background radiation, and we can see the right amounts of hydrogen and helium in space. It\'s like a cosmic detective story!' }
+    ]
+  },
+  {
+    id: 'ab2',
+    title: 'Einstein\'s Theory of Relativity for Kids',
+    author: 'Professor Brainy',
+    narrator: 'Dr. Time Warp',
+    duration: '30 min',
+    ageRange: '9-14',
+    description: 'Discover how Albert Einstein changed our understanding of space, time, and gravity forever!',
+    cover: 'https://images.unsplash.com/photo-1534996858221-380b92700493?w=300&h=400&fit=crop',
+    tags: ['Relativity', 'Einstein', 'Theory', 'Physics'],
+    type: 'audiobook',
+    fullContent: 'Albert Einstein was one of the greatest scientists ever! His ideas about space and time seem like magic, but they\'re real science that scientists use every day.',
+    chapters: [
+      { title: 'Chapter 1: Who Was Einstein?', content: 'Albert Einstein was born in Germany in 1879. As a child, he was curious about everything! He wondered what it would be like to ride on a beam of light. This simple question led him to discoveries that changed the world. Einstein showed us that space and time are connected, and that nothing can travel faster than light.' },
+      { title: 'Chapter 2: Special Relativity', content: 'Imagine you\'re on a super-fast spaceship traveling near the speed of light. Something strange happens - time slows down for you! A year on your ship might be ten years on Earth. This is called time dilation, and it\'s real! Einstein proved that the faster you move, the slower time passes for you.' },
+      { title: 'Chapter 3: E = mc²', content: 'Einstein\'s most famous equation says that energy (E) equals mass (m) times the speed of light (c) squared. What does this mean? A tiny bit of matter contains an enormous amount of energy! This is how the Sun produces energy and why nuclear power works. The "c squared" part makes the number huge!' },
+      { title: 'Chapter 4: General Relativity', content: 'Einstein had an even bigger idea: gravity isn\'t really a force - it\'s the bending of space itself! Imagine putting a bowling ball on a trampoline. It creates a dip, and smaller balls roll toward it. Massive objects like the Sun bend space around them, and that\'s why planets orbit!' },
+      { title: 'Chapter 5: Proving Einstein Right', content: 'Scientists have tested Einstein\'s theories many times. GPS satellites have to account for time dilation or they\'d be wrong by kilometers! We\'ve seen light bend around the Sun during eclipses. In 2015, we detected gravitational waves - ripples in space itself - just as Einstein predicted 100 years earlier!' }
+    ]
+  },
+  {
+    id: 'ab3',
+    title: 'Black Holes: Cosmic Monsters',
+    author: 'Space Mysteries Team',
+    narrator: 'Captain Void',
+    duration: '22 min',
+    ageRange: '8-13',
+    description: 'Journey into the strangest objects in the universe - places where even light cannot escape!',
+    cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=300&h=400&fit=crop',
+    tags: ['Black Holes', 'Theory', 'Gravity'],
+    type: 'audiobook',
+    fullContent: 'Black holes are the universe\'s ultimate mystery! They\'re places where gravity is so incredibly strong that nothing - not even light - can escape. Let\'s explore these cosmic monsters!',
+    chapters: [
+      { title: 'Chapter 1: What Makes a Black Hole?', content: 'A black hole forms when a massive star - at least 20 times heavier than our Sun - runs out of fuel and collapses. All that mass gets squished into an incredibly tiny space. The gravity becomes so strong that not even light can escape! The boundary around a black hole is called the event horizon - cross it, and there\'s no coming back.' },
+      { title: 'Chapter 2: The Singularity', content: 'At the very center of a black hole is something called a singularity - a point where all the mass is concentrated. Here, the laws of physics as we know them break down! Space and time get so warped that scientists aren\'t sure what really happens. It\'s one of the biggest mysteries in the universe.' },
+      { title: 'Chapter 3: Spaghettification', content: 'If you fell into a black hole, something really weird would happen. The gravity pulling on your feet would be much stronger than the gravity on your head, stretching you like spaghetti! Scientists actually call this "spaghettification." Don\'t worry - you\'d never want to test this in real life!' },
+      { title: 'Chapter 4: Supermassive Black Holes', content: 'At the center of most galaxies, including our Milky Way, lurk supermassive black holes. These monsters can be millions or even billions of times heavier than our Sun! The one in our galaxy is called Sagittarius A* (A-star), and it\'s 4 million times more massive than the Sun.' },
+      { title: 'Chapter 5: Seeing the Invisible', content: 'How can we see something that doesn\'t emit light? We can\'t see black holes directly, but we can see how they affect things around them. Gas falling into a black hole heats up and glows brightly. In 2019, scientists took the first actual photo of a black hole - a dark shadow surrounded by glowing hot gas!' }
+    ]
+  },
+  {
+    id: 'ab4',
+    title: 'Dark Matter & Dark Energy',
+    author: 'Cosmic Mysteries Lab',
+    narrator: 'Dr. Shadow',
+    duration: '28 min',
+    ageRange: '10-14',
+    description: 'Explore the invisible forces that make up 95% of our universe - the greatest mystery in modern science!',
+    cover: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=300&h=400&fit=crop',
+    tags: ['Dark Matter', 'Dark Energy', 'Theory', 'Cosmology'],
+    type: 'audiobook',
+    fullContent: 'Everything you can see - stars, planets, galaxies, even yourself - makes up only 5% of the universe! The rest is made of mysterious things called dark matter and dark energy.',
+    chapters: [
+      { title: 'Chapter 1: The Missing Universe', content: 'Scientists noticed something strange: galaxies were spinning too fast! Based on the stars we could see, they should fly apart. But they didn\'t. Something invisible was holding them together with extra gravity. Scientists call this mysterious stuff "dark matter" - dark because we can\'t see it, not because it\'s evil!' },
+      { title: 'Chapter 2: What Is Dark Matter?', content: 'Dark matter doesn\'t emit, reflect, or block light - it\'s completely invisible! But it has mass and creates gravity. About 27% of the universe is dark matter. What is it made of? Scientists don\'t know yet! It might be undiscovered particles. Solving this mystery could win a Nobel Prize!' },
+      { title: 'Chapter 3: Discovering Dark Energy', content: 'In 1998, scientists made a shocking discovery. They expected the universe\'s expansion to be slowing down due to gravity. Instead, it was speeding up! Something was pushing galaxies apart faster and faster. Scientists named this mysterious force "dark energy."' },
+      { title: 'Chapter 4: The Biggest Mystery', content: 'Dark energy makes up about 68% of the universe - more than everything else combined! But we have almost no idea what it is. It might be energy built into space itself, or a new force we don\'t understand. Some scientists think solving this mystery will completely change physics!' },
+      { title: 'Chapter 5: The Hunt Continues', content: 'Scientists around the world are searching for answers. Deep underground, detectors wait for dark matter particles to pass through. Telescopes map how dark energy affects the universe. One day, perhaps you could help solve one of the greatest mysteries in science!' }
+    ]
+  },
+  {
+    id: 'ab5',
+    title: 'The Multiverse Theory',
+    author: 'Infinite Possibilities Team',
+    narrator: 'Professor Parallel',
+    duration: '24 min',
+    ageRange: '9-14',
+    description: 'What if our universe is just one of infinite universes? Explore the mind-bending theory of the multiverse!',
+    cover: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?w=300&h=400&fit=crop',
+    tags: ['Multiverse', 'Theory', 'Cosmology'],
+    type: 'audiobook',
+    fullContent: 'What if there are other universes beyond our own? What if there are infinite versions of you living different lives? Welcome to the wild theory of the multiverse!',
+    chapters: [
+      { title: 'Chapter 1: Beyond Our Universe', content: 'We call everything we can see "the observable universe." But what lies beyond that? Some scientists think our universe might be just one bubble in an infinite ocean of universes! This collection of all universes is called the multiverse. It sounds like science fiction, but serious scientists study this idea.' },
+      { title: 'Chapter 2: Infinite Possibilities', content: 'If space is truly infinite, math tells us something wild: every possible combination of matter must exist somewhere! That means there could be another Earth out there, with another version of you. Some versions might be nearly identical; others might be completely different. Mind-blowing, right?' },
+      { title: 'Chapter 3: Many Worlds', content: 'Quantum physics - the science of tiny particles - suggests something strange. Every time a particle could do multiple things, maybe it does ALL of them in different universes! When you make a choice, perhaps the universe splits: one version where you chose one thing, another where you chose differently.' },
+      { title: 'Chapter 4: Bubble Universes', content: 'During cosmic inflation, space expanded incredibly fast. Some scientists think different regions stopped inflating at different times, creating separate "bubble universes." Each bubble could have different laws of physics! Some might not even have atoms as we know them.' },
+      { title: 'Chapter 5: Can We Prove It?', content: 'The tricky thing about the multiverse is that we might never be able to prove it exists. If other universes are beyond our observable universe, we can\'t see them directly. But scientists look for indirect clues, like unusual patterns in the cosmic microwave background. The search continues!' }
+    ]
+  },
+  {
+    id: 'ab6',
+    title: 'How Stars Are Born and Die',
+    author: 'Stellar Life Cycle Lab',
+    narrator: 'Nova Bright',
+    duration: '26 min',
+    ageRange: '8-13',
+    description: 'Follow the incredible life journey of stars - from their birth in cosmic clouds to their spectacular deaths!',
+    cover: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&h=400&fit=crop',
+    tags: ['Stars', 'Theory', 'Nebulas', 'Supernovas'],
+    type: 'audiobook',
+    fullContent: 'Stars are born, they live for millions or billions of years, and then they die - sometimes spectacularly! Let\'s follow the amazing life story of stars.',
+    chapters: [
+      { title: 'Chapter 1: Stellar Nurseries', content: 'Stars are born in giant clouds of gas and dust called nebulae. Gravity pulls the gas together into clumps. As each clump gets denser, it heats up. When the center reaches 10 million degrees, nuclear fusion begins - hydrogen atoms smash together to make helium, releasing enormous energy. A star is born!' },
+      { title: 'Chapter 2: Main Sequence Life', content: 'For most of its life, a star fuses hydrogen into helium in its core. This stage is called the "main sequence." Our Sun has been doing this for 4.6 billion years and will continue for another 5 billion! Bigger stars burn through their fuel faster and live shorter lives - some only a few million years.' },
+      { title: 'Chapter 3: Red Giants', content: 'When a star like our Sun runs low on hydrogen in its core, it swells up into a red giant - hundreds of times bigger! The outer layers cool down and turn red. When our Sun becomes a red giant in about 5 billion years, it might swallow Mercury and Venus!' },
+      { title: 'Chapter 4: Planetary Nebulae', content: 'Medium-sized stars like our Sun end their lives gently. They puff off their outer layers into space, creating beautiful glowing shells called planetary nebulae. The leftover core becomes a white dwarf - a super-dense star about the size of Earth that slowly cools over billions of years.' },
+      { title: 'Chapter 5: Supernovas!', content: 'Massive stars die dramatically! When they run out of fuel, their cores collapse in less than a second, then explode in a supernova - one of the most powerful events in the universe! For a few weeks, a single supernova can outshine an entire galaxy. What\'s left behind might be a neutron star or even a black hole!' }
+    ]
+  },
+  {
+    id: 'ab7',
+    title: 'Wormholes: Tunnels Through Space',
+    author: 'Dr. Space-Time',
+    narrator: 'Warp Speed Walker',
+    duration: '20 min',
+    ageRange: '9-14',
+    description: 'Could there be shortcuts through space? Learn about the fascinating theory of wormholes!',
+    cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&h=400&fit=crop',
+    tags: ['Wormholes', 'Theory', 'Space Travel'],
+    type: 'audiobook',
+    fullContent: 'Imagine folding a piece of paper and poking a hole through it - that\'s the basic idea of a wormhole! These theoretical tunnels could connect distant parts of space.',
+    chapters: [
+      { title: 'Chapter 1: Bending Space', content: 'Einstein showed us that massive objects bend space. Now imagine bending space so much that two distant points touch! A wormhole would be like a tunnel connecting these points. Instead of traveling millions of light-years through normal space, you could take a shortcut!' },
+      { title: 'Chapter 2: Einstein-Rosen Bridges', content: 'In 1935, Einstein and physicist Nathan Rosen discovered that the math of general relativity allowed for these space tunnels. They called them "Einstein-Rosen bridges." The equations showed that wormholes were theoretically possible - but could they actually exist in real life?' },
+      { title: 'Chapter 3: The Problem with Wormholes', content: 'Here\'s the catch: any natural wormhole would collapse instantly! To keep one open, you\'d need something with "negative energy" - and we don\'t know if that even exists. Some scientists think exotic matter might work, but we\'ve never found any.' },
+      { title: 'Chapter 4: Wormholes and Time Travel', content: 'Here\'s where it gets really wild. Some scientists think wormholes could connect not just different places, but different times! By moving one end of a wormhole very fast, time would pass differently. You might enter the wormhole and exit in the past! Most scientists think this is probably impossible, though.' },
+      { title: 'Chapter 5: Science Fiction vs Reality', content: 'Wormholes are popular in movies and books for good reason - they\'re amazing! But in real life, we\'ve never found one. They might exist, they might not. What we do know is that studying wormholes helps us understand the universe better, even if we never actually find one.' }
+    ]
+  },
+  {
+    id: 'ab8',
+    title: 'The Fate of the Universe',
+    author: 'Future Cosmos Lab',
+    narrator: 'Dr. Destiny',
+    duration: '27 min',
+    ageRange: '10-14',
+    description: 'What will happen to the universe in the far, far future? Explore the possible endings of everything!',
+    cover: 'https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=300&h=400&fit=crop',
+    tags: ['Cosmology', 'Theory', 'Future'],
+    type: 'audiobook',
+    fullContent: 'The universe is 13.8 billion years old, but what comes next? Scientists have theories about how everything might end - don\'t worry, it\'s trillions of years away!',
+    chapters: [
+      { title: 'Chapter 1: The Expanding Universe', content: 'Right now, the universe is expanding - galaxies are moving apart from each other. But what happens next depends on how this expansion continues. Will it slow down? Speed up? Or stay the same? Scientists have three main theories about the ultimate fate of everything.' },
+      { title: 'Chapter 2: The Big Freeze', content: 'The most likely ending is called the "Big Freeze" or "Heat Death." If dark energy keeps pushing, galaxies will move so far apart that we won\'t see any others. Stars will burn out, and the universe will become cold, dark, and empty. This would take trillions and trillions of years!' },
+      { title: 'Chapter 3: The Big Rip', content: 'What if dark energy gets stronger over time? Then the expansion would accelerate until it tears everything apart - first galaxies, then stars, then planets, then atoms themselves! This is called the "Big Rip." Scientists don\'t think this will happen, but it\'s possible!' },
+      { title: 'Chapter 4: The Big Crunch', content: 'Another possibility: what if gravity eventually wins and pulls everything back together? The universe would collapse into a super-hot, super-dense point - like the Big Bang in reverse! This is called the "Big Crunch." Maybe it would trigger a new Big Bang and the cycle would repeat!' },
+      { title: 'Chapter 5: Don\'t Worry!', content: 'Whatever happens to the universe, it\'s so far in the future that we can\'t even imagine it. Our Sun has 5 billion years left, and humans have plenty of time to explore, discover, and maybe even find ways to survive anything! The universe\'s story is just beginning.' }
+    ]
+  },
+  {
+    id: 'ab9',
+    title: 'Gravity: The Force That Shapes Everything',
+    author: 'Newton & Einstein Academy',
+    narrator: 'Professor G-Force',
+    duration: '23 min',
+    ageRange: '8-13',
+    description: 'Discover how gravity works, from falling apples to orbiting planets to bending light!',
+    cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=300&h=400&fit=crop',
+    tags: ['Gravity', 'Theory', 'Physics'],
+    type: 'audiobook',
+    fullContent: 'Gravity is the force that keeps your feet on the ground, makes the Moon orbit Earth, and holds galaxies together. But what IS gravity? Let\'s find out!',
+    chapters: [
+      { title: 'Chapter 1: Newton\'s Apple', content: 'Legend says Isaac Newton was sitting under an apple tree when an apple fell on his head. This made him wonder: what pulls the apple down? Newton realized the same force that pulls apples also keeps the Moon orbiting Earth! He called this force "gravity" and created equations to describe it.' },
+      { title: 'Chapter 2: Universal Gravitation', content: 'Newton discovered that every object with mass attracts every other object with mass. The bigger the mass, the stronger the pull. The farther apart the objects, the weaker the pull. This is why the Sun\'s gravity is strong enough to hold the planets in orbit even across millions of miles!' },
+      { title: 'Chapter 3: Einstein\'s Revolution', content: 'Einstein had a different way of thinking about gravity. He said gravity isn\'t really a force - it\'s the bending of space itself! Massive objects like the Sun create dips in the fabric of space. Planets roll around these dips like marbles around a bowl. This explained things Newton\'s equations couldn\'t!' },
+      { title: 'Chapter 4: Gravitational Waves', content: 'When massive objects accelerate - like two black holes spiraling together - they create ripples in space-time called gravitational waves. Einstein predicted these in 1916, but we didn\'t detect them until 2015! These waves stretch and squeeze space as they pass, but the effect is tinier than an atom.' },
+      { title: 'Chapter 5: Gravity\'s Greatest Hits', content: 'Gravity does amazing things! It bends light around massive objects, letting us see galaxies behind other galaxies. It slows down time near massive objects. It creates black holes and shapes the entire universe. Without gravity, there would be no stars, no planets, and no us!' }
+    ]
+  },
+  {
+    id: 'ab10',
+    title: 'Are We Alone? The Search for Alien Life',
+    author: 'SETI Kids Team',
+    narrator: 'Dr. First Contact',
+    duration: '29 min',
+    ageRange: '8-14',
+    description: 'Could there be life on other planets? Explore how scientists search for alien life!',
+    cover: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&h=400&fit=crop',
+    tags: ['Aliens', 'Exoplanets', 'Theory', 'SETI'],
+    type: 'audiobook',
+    fullContent: 'Is Earth the only planet with life? With billions of galaxies and trillions of stars, surely there must be life somewhere else! Let\'s explore how scientists search for our cosmic neighbors.',
+    chapters: [
+      { title: 'Chapter 1: The Big Question', content: 'Are we alone in the universe? Humans have wondered this for thousands of years. Today, scientists are actually searching for the answer! With billions of stars in our galaxy alone, and billions of galaxies in the universe, the odds seem good that life exists somewhere else.' },
+      { title: 'Chapter 2: Where to Look', content: 'Scientists look for life in the "habitable zone" - the area around a star where temperatures allow liquid water. Too close, and water boils; too far, and it freezes. We\'ve found thousands of planets in habitable zones around other stars! Some might have conditions similar to Earth.' },
+      { title: 'Chapter 3: Signs of Life', content: 'How would we know if a planet has life? The James Webb Space Telescope can analyze light passing through distant planets\' atmospheres. Certain gases like oxygen and methane together could be a sign of life! These are called "biosignatures." Finding them would be one of the biggest discoveries ever.' },
+      { title: 'Chapter 4: Listening for Signals', content: 'What if intelligent aliens are out there? SETI (Search for Extraterrestrial Intelligence) uses radio telescopes to listen for signals from space. So far, we haven\'t heard anything definite, but we\'ve only listened to a tiny fraction of the sky. The search continues 24/7!' },
+      { title: 'Chapter 5: The Fermi Paradox', content: 'Here\'s a puzzle: if life is common, why haven\'t we found any evidence yet? This is called the Fermi Paradox. Maybe intelligent life is very rare. Maybe civilizations don\'t last long. Maybe aliens exist but haven\'t noticed us yet. Or maybe we\'ll make contact tomorrow! What do you think?' }
     ]
   }
 ];
