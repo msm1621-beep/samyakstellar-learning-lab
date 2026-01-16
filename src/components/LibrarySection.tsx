@@ -1,10 +1,16 @@
-import { useState } from 'react';
-import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, Award, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
+import CompletionCertificate from './CompletionCertificate';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
+
+interface CompletedBook {
+  bookId: string;
+  completedDate: string;
+}
 
 const LibrarySection = () => {
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
@@ -15,6 +21,41 @@ const LibrarySection = () => {
   const [playingAudiobook, setPlayingAudiobook] = useState<Book | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
+  const [completedBooks, setCompletedBooks] = useState<CompletedBook[]>([]);
+  const [showCertificate, setShowCertificate] = useState<Book | null>(null);
+
+  // Load completed books from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('completedBooks');
+    if (saved) {
+      setCompletedBooks(JSON.parse(saved));
+    }
+  }, []);
+
+  // Save completed books to localStorage
+  const saveCompletion = (book: Book) => {
+    const completedDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    const newCompletion: CompletedBook = { bookId: book.id, completedDate };
+    const updated = [...completedBooks.filter(c => c.bookId !== book.id), newCompletion];
+    setCompletedBooks(updated);
+    localStorage.setItem('completedBooks', JSON.stringify(updated));
+  };
+
+  const isBookCompleted = (bookId: string) => completedBooks.some(c => c.bookId === bookId);
+  
+  const getCompletionDate = (bookId: string) => {
+    const completed = completedBooks.find(c => c.bookId === bookId);
+    return completed?.completedDate || '';
+  };
+
+  const handleMarkComplete = (book: Book) => {
+    saveCompletion(book);
+    setShowCertificate(book);
+  };
 
   const regularBooks = books.filter(b => b.type !== 'audiobook');
   const audiobooks = books.filter(b => b.type === 'audiobook');
@@ -262,15 +303,42 @@ const LibrarySection = () => {
                       </span>
                     ))}
                   </div>
-                  <Button 
-                    variant="default" 
-                    size="sm" 
-                    className="w-full"
-                    onClick={() => openBook(book)}
-                  >
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Read Now
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => openBook(book)}
+                    >
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Read Now
+                    </Button>
+                    {isBookCompleted(book.id) ? (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setShowCertificate(book)}
+                        className="border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10"
+                      >
+                        <Award className="w-4 h-4" />
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleMarkComplete(book)}
+                        className="hover:border-green-500/50 hover:text-green-500"
+                        title="Mark as completed"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                  {isBookCompleted(book.id) && (
+                    <p className="text-xs text-green-400 mt-2 flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> Completed!
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -315,14 +383,41 @@ const LibrarySection = () => {
                       </span>
                     ))}
                   </div>
-                  <Button 
-                    size="sm" 
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                    onClick={() => openAudiobook(book)}
-                  >
-                    <Headphones className="w-4 h-4 mr-2" />
-                    Listen Now
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                      onClick={() => openAudiobook(book)}
+                    >
+                      <Headphones className="w-4 h-4 mr-2" />
+                      Listen Now
+                    </Button>
+                    {isBookCompleted(book.id) ? (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setShowCertificate(book)}
+                        className="border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10"
+                      >
+                        <Award className="w-4 h-4" />
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleMarkComplete(book)}
+                        className="hover:border-green-500/50 hover:text-green-500"
+                        title="Mark as completed"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                  {isBookCompleted(book.id) && (
+                    <p className="text-xs text-green-400 mt-2 flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> Completed!
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -537,6 +632,15 @@ const LibrarySection = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Completion Certificate Modal */}
+      {showCertificate && (
+        <CompletionCertificate
+          book={showCertificate}
+          completedDate={getCompletionDate(showCertificate.id)}
+          onClose={() => setShowCertificate(null)}
+        />
       )}
     </section>
   );
