@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, Award, CheckCircle } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, VolumeX, Award, CheckCircle, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
@@ -23,6 +23,12 @@ const LibrarySection = () => {
   const [audioProgress, setAudioProgress] = useState(0);
   const [completedBooks, setCompletedBooks] = useState<CompletedBook[]>([]);
   const [showCertificate, setShowCertificate] = useState<Book | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechRate, setSpeechRate] = useState(0.9);
+  const [volume, setVolume] = useState(1);
+  
+  const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const currentTextRef = useRef<string>('');
 
   // Load completed books from localStorage
   useEffect(() => {
@@ -30,6 +36,13 @@ const LibrarySection = () => {
     if (saved) {
       setCompletedBooks(JSON.parse(saved));
     }
+  }, []);
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
   }, []);
 
   // Save completed books to localStorage
@@ -104,22 +117,94 @@ const LibrarySection = () => {
     }
   };
 
+  // Text-to-Speech functions
+  const speak = useCallback((text: string) => {
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = speechRate;
+    utterance.pitch = 1;
+    utterance.volume = volume;
+    
+    // Try to get a good voice
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => 
+      v.lang.startsWith('en') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google'))
+    ) || voices.find(v => v.lang.startsWith('en'));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setIsPlaying(false);
+    };
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setIsPlaying(false);
+    };
+
+    speechSynthRef.current = utterance;
+    currentTextRef.current = text;
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+  }, [speechRate, volume]);
+
+  const stopSpeaking = useCallback(() => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setIsPlaying(false);
+  }, []);
+
+  const pauseSpeaking = useCallback(() => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+
+  const resumeSpeaking = useCallback(() => {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsPlaying(true);
+    }
+  }, []);
+
   const openAudiobook = (book: Book) => {
     setPlayingAudiobook(book);
     setCurrentChapter(0);
-    setIsPlaying(true);
     setAudioProgress(0);
+    // Start reading the introduction
+    const introText = `${book.title}. By ${book.author}. Narrated for you. ${book.fullContent}`;
+    speak(introText);
   };
 
   const closeAudiobook = () => {
+    stopSpeaking();
     setPlayingAudiobook(null);
-    setIsPlaying(false);
     setCurrentChapter(0);
     setAudioProgress(0);
   };
 
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
+    if (isPlaying) {
+      pauseSpeaking();
+    } else if (window.speechSynthesis.paused) {
+      resumeSpeaking();
+    } else if (playingAudiobook) {
+      // Start reading current chapter
+      const chapter = playingAudiobook.chapters[currentChapter];
+      speak(`${chapter.title}. ${chapter.content}`);
+    }
+  };
+
+  const playChapter = (chapterIndex: number) => {
+    if (!playingAudiobook) return;
+    setCurrentChapter(chapterIndex);
+    const chapter = playingAudiobook.chapters[chapterIndex];
+    speak(`${chapter.title}. ${chapter.content}`);
   };
 
   return (
@@ -545,32 +630,89 @@ const LibrarySection = () => {
 
             {/* Player Controls */}
             <div className="p-4 md:p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
-              <div className="flex items-center justify-center gap-6 mb-4">
+              <div className="flex items-center justify-center gap-4 mb-4">
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => currentChapter > 0 && setCurrentChapter(currentChapter - 1)}
+                  onClick={() => currentChapter > 0 && playChapter(currentChapter - 1)}
                   disabled={currentChapter === 0}
                   className="text-purple-300 hover:text-white hover:bg-purple-500/20"
+                  title="Previous chapter"
                 >
                   <ChevronLeft className="w-6 h-6" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={stopSpeaking}
+                  className="text-purple-300 hover:text-white hover:bg-red-500/20"
+                  title="Stop"
+                >
+                  <Square className="w-5 h-5" />
                 </Button>
                 <Button
                   size="lg"
                   onClick={togglePlayPause}
                   className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/30"
+                  title={isPlaying ? "Pause" : "Play"}
                 >
                   {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => currentChapter < playingAudiobook.chapters.length - 1 && setCurrentChapter(currentChapter + 1)}
+                  onClick={() => setVolume(volume > 0 ? 0 : 1)}
+                  className="text-purple-300 hover:text-white hover:bg-purple-500/20"
+                  title={volume > 0 ? "Mute" : "Unmute"}
+                >
+                  {volume > 0 ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => currentChapter < playingAudiobook.chapters.length - 1 && playChapter(currentChapter + 1)}
                   disabled={currentChapter === playingAudiobook.chapters.length - 1}
                   className="text-purple-300 hover:text-white hover:bg-purple-500/20"
+                  title="Next chapter"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </Button>
+              </div>
+
+              {/* Status indicator */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                {isSpeaking && (
+                  <div className="flex items-center gap-2 text-sm text-purple-300">
+                    <div className="flex gap-1">
+                      <span className="w-1 h-4 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-1 h-6 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-1 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-1 h-5 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></span>
+                    </div>
+                    <span>Now playing...</span>
+                  </div>
+                )}
+                {!isSpeaking && !isPlaying && (
+                  <span className="text-sm text-purple-300/70">Click play to start listening</span>
+                )}
+              </div>
+
+              {/* Speed control */}
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <span className="text-xs text-purple-300">Speed:</span>
+                {[0.75, 0.9, 1, 1.25].map((rate) => (
+                  <button
+                    key={rate}
+                    onClick={() => setSpeechRate(rate)}
+                    className={`px-2 py-1 text-xs rounded ${
+                      speechRate === rate 
+                        ? 'bg-purple-500 text-white' 
+                        : 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30'
+                    }`}
+                  >
+                    {rate}x
+                  </button>
+                ))}
               </div>
 
               {/* Progress Bar */}
@@ -578,7 +720,7 @@ const LibrarySection = () => {
                 <div className="h-2 bg-purple-500/20 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-300"
-                    style={{ width: `${(currentChapter / playingAudiobook.chapters.length) * 100 + (isPlaying ? 10 : 0)}%` }}
+                    style={{ width: `${((currentChapter + (isSpeaking ? 0.5 : 0)) / playingAudiobook.chapters.length) * 100}%` }}
                   />
                 </div>
                 <div className="flex justify-between text-xs text-purple-300">
@@ -613,12 +755,12 @@ const LibrarySection = () => {
 
             {/* Chapter List */}
             <div className="p-4 md:p-6 border-t border-purple-500/20 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
-              <p className="text-xs text-purple-300 mb-2">Chapters:</p>
+              <p className="text-xs text-purple-300 mb-2">Click a chapter to listen:</p>
               <div className="flex flex-wrap gap-2">
                 {playingAudiobook.chapters.map((chapter, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setCurrentChapter(idx)}
+                    onClick={() => playChapter(idx)}
                     className={`px-3 py-1 rounded-full text-xs transition-all ${
                       idx === currentChapter 
                         ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
