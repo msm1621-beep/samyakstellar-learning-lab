@@ -10,7 +10,7 @@ const CelestialExplorer = () => {
   const [showExtendedFacts, setShowExtendedFacts] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
 
-  const categories: (CelestialCategory | 'all')[] = ['all', 'solar-system', 'stars', 'nebulas', 'galaxies'];
+  const categories: (CelestialCategory | 'all')[] = ['all', 'solar-system', 'stars', 'nebulas', 'galaxies', 'other'];
 
   const filteredBodies = celestialBodies.filter((body) => {
     const categoryMatch = selectedCategory === 'all' || body.category === selectedCategory;

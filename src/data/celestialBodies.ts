@@ -2282,6 +2282,600 @@ export const celestialBodies: CelestialBody[] = [
     color: 'muted',
     distance: 'far',
     readMoreContent: 'WASP-76b has some of the most extreme weather in the known universe. This ultra-hot gas giant is tidally locked, meaning one side permanently faces its star. The dayside reaches temperatures of 2,400°C, hot enough to vaporize metals including iron. These iron vapors are carried by powerful winds to the cooler night side, where temperatures drop enough for iron to condense and fall as rain. This bizarre weather was detected by studying the planet\'s atmosphere during transits.'
+  },
+  // === 30 NEW CELESTIAL BODIES ===
+  // Moons
+  {
+    id: 'europa',
+    name: 'Europa',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Jupiter\'s icy moon hiding a liquid ocean!',
+    longDescription: 'Europa is one of Jupiter\'s largest moons and one of the most promising places to search for extraterrestrial life. Beneath its icy crust lies a global ocean of liquid water!',
+    coolFact: 'Europa has more water than all of Earth\'s oceans combined!',
+    extendedFacts: [
+      'The ice shell is about 15-25 km thick',
+      'The subsurface ocean may be 60-150 km deep',
+      'Geysers may spray water into space',
+      'NASA\'s Europa Clipper mission launches in 2024'
+    ],
+    metric: 'Oceanic',
+    metricLabel: 'Type',
+    icon: '🧊',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Europa is slightly smaller than Earth\'s Moon but harbors an ocean containing twice as much water as all of Earth\'s oceans combined. The ocean is kept liquid by tidal heating - Jupiter\'s immense gravity flexes Europa as it orbits, generating internal heat. The Hubble Space Telescope has observed plumes of water vapor erupting from the surface. NASA\'s Europa Clipper spacecraft will conduct detailed reconnaissance of this fascinating moon in the late 2020s.'
+  },
+  {
+    id: 'enceladus',
+    name: 'Enceladus',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'A tiny moon with geysers spraying into space!',
+    longDescription: 'Enceladus is a small, icy moon of Saturn famous for its spectacular geysers. These plumes spray water and organic molecules from a subsurface ocean into space!',
+    coolFact: 'Enceladus shoots water geysers 500 km into space!',
+    extendedFacts: [
+      'Only 504 km in diameter - small enough to fit in Texas',
+      'The geysers create Saturn\'s E ring',
+      'Scientists detected hydrogen in the plumes - a sign of hydrothermal vents',
+      'One of the most reflective objects in the solar system'
+    ],
+    metric: 'Active',
+    metricLabel: 'Geology',
+    icon: '💨',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Enceladus is a small icy moon that punches far above its weight in scientific interest. The Cassini spacecraft discovered dramatic geysers erupting from "tiger stripe" fissures near its south pole. These plumes contain water, organic molecules, and hydrogen - potentially all the ingredients for life. The subsurface ocean is relatively small but chemically rich, with possible hydrothermal vents similar to those supporting life in Earth\'s deep oceans.'
+  },
+  {
+    id: 'titan',
+    name: 'Titan',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Saturn\'s giant moon with lakes of liquid methane!',
+    longDescription: 'Titan is the second-largest moon in the solar system and the only moon with a thick atmosphere. It has lakes, rivers, and rain - but made of liquid methane and ethane!',
+    coolFact: 'Titan is the only place beyond Earth where we\'ve landed a probe on a solid surface and returned images!',
+    extendedFacts: [
+      'Larger than the planet Mercury',
+      'Its atmosphere is thicker than Earth\'s (1.5x surface pressure)',
+      'Has a subsurface water ocean beneath its icy crust',
+      'NASA\'s Dragonfly mission will land in 2034'
+    ],
+    metric: 'Earth-like',
+    metricLabel: 'Features',
+    icon: '🟠',
+    color: 'accent',
+    distance: 'near',
+    readMoreContent: 'Titan is the most Earth-like world in our solar system, with a thick nitrogen atmosphere, seasonal weather patterns, and a liquid cycle like our water cycle - but with methane instead. The Huygens probe landed on Titan in 2005, revealing a frozen world with rounded rocks (ice pebbles) and evidence of flowing liquid. NASA\'s Dragonfly mission will send a drone-like rotorcraft to explore Titan\'s diverse surface in 2034.'
+  },
+  {
+    id: 'io',
+    name: 'Io',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'The most volcanic world in the solar system!',
+    longDescription: 'Io is Jupiter\'s innermost large moon and the most geologically active object we know of. Its surface is covered in volcanoes that constantly reshape the landscape!',
+    coolFact: 'Io has over 400 active volcanoes!',
+    extendedFacts: [
+      'Volcanoes shoot sulfur 500 km into space',
+      'The surface is completely renewed every few thousand years',
+      'Tidal heating from Jupiter powers the volcanism',
+      'Named after a priestess in Greek mythology'
+    ],
+    metric: 'Volcanic',
+    metricLabel: 'Activity',
+    icon: '🌋',
+    color: 'destructive',
+    distance: 'near',
+    readMoreContent: 'Io\'s intense volcanism is powered by tidal heating - the gravitational tug-of-war between Jupiter, Europa, and Ganymede flexes Io\'s interior, generating tremendous heat. This creates a world of constant eruptions, with sulfur-rich lava flows and plumes reaching hundreds of kilometers into space. The surface is a colorful patchwork of yellow, orange, and red sulfur deposits. No other world in the solar system is so actively volcanic.'
+  },
+  {
+    id: 'triton',
+    name: 'Triton',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Neptune\'s backwards-orbiting captured moon!',
+    longDescription: 'Triton is Neptune\'s largest moon and the only large moon that orbits backward (retrograde). It was likely captured from the Kuiper Belt and has active nitrogen geysers!',
+    coolFact: 'Triton orbits Neptune backward - the only large moon to do this!',
+    extendedFacts: [
+      'Surface temperature is -235°C (-391°F)',
+      'Has nitrogen ice geysers that shoot 8 km high',
+      'Will eventually crash into Neptune in 3.6 billion years',
+      'Has a thin nitrogen atmosphere'
+    ],
+    metric: 'Captured',
+    metricLabel: 'Origin',
+    icon: '❄️',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Triton is a world of extremes - the coldest known object with a measured surface temperature (-235°C) and the only large moon orbiting backward around its planet. This retrograde orbit suggests Triton was once a Kuiper Belt object captured by Neptune\'s gravity. Despite the extreme cold, Triton is geologically active, with geysers of nitrogen gas erupting through the ice. Its retrograde orbit is causing it to slowly spiral inward, and it will eventually be torn apart by Neptune\'s gravity.'
+  },
+  // Famous Stars
+  {
+    id: 'polaris',
+    name: 'Polaris (North Star)',
+    category: 'stars',
+    type: 'Yellow Supergiant',
+    description: 'The famous North Star that helps travelers navigate!',
+    longDescription: 'Polaris is the current North Star, sitting almost directly above Earth\'s North Pole. For centuries, it has guided travelers, sailors, and navigators!',
+    coolFact: 'Polaris is actually a triple star system - three stars orbiting each other!',
+    extendedFacts: [
+      'Located 433 light-years away',
+      'About 50 times the Sun\'s diameter',
+      'A Cepheid variable star (brightness pulsates)',
+      'Won\'t always be the North Star - Earth\'s axis wobbles'
+    ],
+    metric: 'Guiding',
+    metricLabel: 'Role',
+    icon: '⭐',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Polaris sits less than a degree from the north celestial pole, making it appear almost stationary while other stars rotate around it. This made it invaluable for navigation. Polaris is actually a triple star system, with the main star being a Cepheid variable - a type of pulsating star crucial for measuring cosmic distances. Due to Earth\'s axial precession (wobble), different stars serve as the North Star over a 26,000-year cycle.'
+  },
+  {
+    id: 'vega',
+    name: 'Vega',
+    category: 'stars',
+    type: 'Blue-White Star',
+    description: 'One of the brightest stars and a future North Star!',
+    longDescription: 'Vega is one of the brightest stars in the night sky and was once the North Star about 12,000 years ago. It will be again in about 14,000 years!',
+    coolFact: 'Vega spins so fast it bulges at the equator!',
+    extendedFacts: [
+      'Only 25 light-years away',
+      'About 40 times brighter than the Sun',
+      'Rotates in just 12.5 hours (vs Sun\'s 25 days)',
+      'Has a debris disk that may contain planets'
+    ],
+    metric: 'Brilliant',
+    metricLabel: 'Brightness',
+    icon: '💎',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Vega was one of the first stars photographed and one of the first to have its spectrum analyzed. It\'s a nearby stellar neighbor at only 25 light-years and served as the standard reference for measuring stellar brightness. Vega spins incredibly fast - once every 12.5 hours - causing it to bulge at the equator by about 23%. A dust disk surrounds Vega, possibly containing forming planets.'
+  },
+  {
+    id: 'rigel',
+    name: 'Rigel',
+    category: 'stars',
+    type: 'Blue Supergiant',
+    description: 'A brilliant blue star in Orion - 120,000 times brighter than the Sun!',
+    longDescription: 'Rigel is the brightest star in Orion and one of the most luminous stars visible to the naked eye. This massive blue supergiant will eventually explode as a supernova!',
+    coolFact: 'Rigel is about 120,000 times more luminous than our Sun!',
+    extendedFacts: [
+      'Located about 860 light-years away',
+      'About 21 times the Sun\'s mass',
+      'Surface temperature around 12,000°C',
+      'Part of a multiple star system'
+    ],
+    metric: 'Massive',
+    metricLabel: 'Type',
+    icon: '💙',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Rigel marks the foot of Orion the Hunter and dominates the constellation with its brilliant blue-white light. Despite being much farther than many visible stars, its extreme luminosity makes it one of the brightest in our sky. Rigel is a young star - only about 10 million years old - but its immense mass means it burns through fuel rapidly and will explode as a supernova in a few million years.'
+  },
+  {
+    id: 'proxima-centauri',
+    name: 'Proxima Centauri',
+    category: 'stars',
+    type: 'Red Dwarf',
+    description: 'The closest star to our Sun!',
+    longDescription: 'Proxima Centauri is the nearest star to Earth (besides the Sun), a small red dwarf only 4.24 light-years away. It hosts at least one potentially habitable planet!',
+    coolFact: 'Even though it\'s the closest star, Proxima Centauri is too dim to see without a telescope!',
+    extendedFacts: [
+      'Only 4.24 light-years away - the nearest star!',
+      'About 12% of the Sun\'s mass',
+      'Surface temperature only 3,000°C',
+      'Will burn for trillions of years'
+    ],
+    metric: 'Nearest',
+    metricLabel: 'Distance',
+    icon: '🔴',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Proxima Centauri is a red dwarf star and the closest stellar neighbor to our solar system. It\'s part of the Alpha Centauri triple star system. Despite its proximity, it\'s invisible to the naked eye because red dwarfs are so dim. Proxima hosts at least two planets, including Proxima b in the habitable zone. However, the star\'s frequent violent flares may make the planet\'s surface inhospitable to life as we know it.'
+  },
+  {
+    id: 'alpha-centauri',
+    name: 'Alpha Centauri A & B',
+    category: 'stars',
+    type: 'Binary Star System',
+    description: 'Twin Sun-like stars in the closest star system!',
+    longDescription: 'Alpha Centauri A and B are a pair of Sun-like stars orbiting each other, forming the main component of the nearest star system to our solar system!',
+    coolFact: 'Alpha Centauri A is almost identical to our Sun!',
+    extendedFacts: [
+      'Located 4.37 light-years away',
+      'Alpha Centauri A is slightly larger and brighter than the Sun',
+      'The stars orbit each other every 80 years',
+      'Third brightest star in the night sky (combined light)'
+    ],
+    metric: 'Twin',
+    metricLabel: 'System',
+    icon: '☀️☀️',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Alpha Centauri A and B form a beautiful binary system visible from the Southern Hemisphere. Alpha Centauri A is 1.1 times the Sun\'s mass and slightly brighter, while B is smaller and cooler. They orbit each other at distances ranging from 11 to 36 AU (similar to Saturn-Pluto distances in our solar system). Astronomers continue searching for planets around these Sun-like stars, which would be the closest potential targets for interstellar exploration.'
+  },
+  // More Nebulae
+  {
+    id: 'cat-eye-nebula',
+    name: 'Cat\'s Eye Nebula',
+    category: 'nebulas',
+    type: 'Planetary Nebula',
+    description: 'A dying star\'s intricate cosmic eye!',
+    longDescription: 'The Cat\'s Eye Nebula is one of the most structurally complex planetary nebulae known, with shells, jets, and knots of gas creating a stunning pattern around a dying star!',
+    coolFact: 'The Cat\'s Eye has at least 11 concentric shells of gas!',
+    extendedFacts: [
+      'Located about 3,000 light-years away',
+      'The central star is 10,000 times more luminous than the Sun',
+      'Ejections occurred in pulses about every 1,500 years',
+      'First planetary nebula to have its spectrum analyzed'
+    ],
+    metric: 'Complex',
+    metricLabel: 'Structure',
+    icon: '👁️',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Cat\'s Eye Nebula (NGC 6543) is a masterpiece of stellar death. Its complex structure includes concentric rings, high-speed jets, and intricate loops that scientists are still working to explain. One theory suggests the central star may have a companion whose gravitational influence created the patterns. Hubble images revealed at least 11 concentric shells, suggesting periodic ejection events every 1,500 years during the star\'s death throes.'
+  },
+  {
+    id: 'helix-nebula',
+    name: 'Helix Nebula',
+    category: 'nebulas',
+    type: 'Planetary Nebula',
+    description: 'The \'Eye of God\' - one of the closest planetary nebulae!',
+    longDescription: 'The Helix Nebula is one of the nearest planetary nebulae to Earth. Its striking appearance has earned it the nickname "Eye of God" or "Eye of Sauron!"',
+    coolFact: 'The Helix is about 2.5 light-years across - half the distance to the nearest star!',
+    extendedFacts: [
+      'Only about 700 light-years away',
+      'Formed when a Sun-like star shed its outer layers',
+      'The central white dwarf has a surface temperature of 100,000°C',
+      'Contains thousands of comet-like structures'
+    ],
+    metric: 'Nearby',
+    metricLabel: 'Distance',
+    icon: '🌀',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'The Helix Nebula appears large in the sky because of its relative proximity. It shows us the fate of our own Sun - in about 5 billion years, the Sun will shed its outer layers to create a similar structure. The nebula contains fascinating features called "cometary knots" - dense clumps of gas with tails pointing away from the central star. The dying star at the center is now a white dwarf, slowly cooling over billions of years.'
+  },
+  {
+    id: 'tarantula-nebula',
+    name: 'Tarantula Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'The most violent star-forming region in the local universe!',
+    longDescription: 'The Tarantula Nebula is a giant stellar nursery in a nearby galaxy, producing stars at a furious rate. It\'s the most luminous nebula in our cosmic neighborhood!',
+    coolFact: 'If the Tarantula Nebula were as close as the Orion Nebula, it would cast shadows on Earth!',
+    extendedFacts: [
+      'Located in the Large Magellanic Cloud (170,000 light-years away)',
+      'About 600 light-years in diameter',
+      'Contains the heaviest stars ever discovered (up to 200 solar masses)',
+      'Also called 30 Doradus'
+    ],
+    metric: 'Gigantic',
+    metricLabel: 'Size',
+    icon: '🕷️',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Tarantula Nebula is so luminous that if it were as close as the Orion Nebula (1,344 light-years), it would cast shadows at night. Located in the Large Magellanic Cloud, it produces massive stars at a prodigious rate, including some of the heaviest stars known - up to 200 times the Sun\'s mass. The region also contains a supernova remnant from SN 1987A, the closest supernova in modern times.'
+  },
+  // More Galaxies
+  {
+    id: 'triangulum',
+    name: 'Triangulum Galaxy (M33)',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'The third-largest galaxy in our local group!',
+    longDescription: 'The Triangulum Galaxy is the third-largest member of our Local Group of galaxies and the most distant object visible to the naked eye under perfect conditions!',
+    coolFact: 'M33 may be a satellite galaxy of Andromeda!',
+    extendedFacts: [
+      'About 2.73 million light-years away',
+      'Contains about 40 billion stars',
+      'Diameter of about 60,000 light-years',
+      'Visible to the naked eye under dark skies'
+    ],
+    metric: 'Local',
+    metricLabel: 'Group',
+    icon: '🌀',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Triangulum Galaxy is a beautiful face-on spiral smaller than both the Milky Way and Andromeda. It may be gravitationally bound to Andromeda, making it a satellite galaxy. M33 contains the giant HII region NGC 604, one of the largest stellar nurseries known. Under exceptionally dark skies, M33 is the most distant object visible without optical aid, a testament to how bright this starry island truly is.'
+  },
+  {
+    id: 'centaurus-a',
+    name: 'Centaurus A',
+    category: 'galaxies',
+    type: 'Peculiar Galaxy',
+    description: 'A dramatic galaxy with jets shooting from its center!',
+    longDescription: 'Centaurus A is the closest active galaxy to Earth, with a supermassive black hole shooting enormous jets of radio waves and X-rays across thousands of light-years!',
+    coolFact: 'Centaurus A\'s radio-emitting jets extend over a million light-years into space!',
+    extendedFacts: [
+      'About 12 million light-years away',
+      'Result of a merger between two galaxies',
+      'Central black hole is 55 million solar masses',
+      'One of the strongest radio sources in the sky'
+    ],
+    metric: 'Active',
+    metricLabel: 'Nucleus',
+    icon: '💫',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Centaurus A is the nearest example of an active galactic nucleus - a supermassive black hole actively consuming material and producing powerful jets. The galaxy\'s distinctive dark dust lane formed from a merger with a smaller spiral galaxy. Jets of relativistic plasma extend over a million light-years, making Centaurus A one of the brightest radio sources in the sky. It\'s a nearby laboratory for studying how black holes affect their host galaxies.'
+  },
+  {
+    id: 'cartwheel-galaxy',
+    name: 'Cartwheel Galaxy',
+    category: 'galaxies',
+    type: 'Ring Galaxy',
+    description: 'A spectacular cosmic collision frozen in time!',
+    longDescription: 'The Cartwheel Galaxy was created when a smaller galaxy punched through a larger spiral, creating a stunning ring of star formation 150,000 light-years across!',
+    coolFact: 'The blue outer ring is expanding at 200,000 mph!',
+    extendedFacts: [
+      'Located about 500 million light-years away',
+      'The collision occurred about 200-300 million years ago',
+      'The ring contains billions of new stars',
+      'First revealed in detail by James Webb Space Telescope'
+    ],
+    metric: 'Collisional',
+    metricLabel: 'Origin',
+    icon: '🎡',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'The Cartwheel Galaxy is cosmic art created by catastrophe. When a smaller galaxy plunged through the center of a larger spiral, it sent a ripple of gas outward like a rock dropped in water. This wave triggered massive star formation, creating the bright blue outer ring. James Webb Space Telescope images revealed unprecedented detail in the inner structures, showing spokes of gas connecting the nucleus to the outer ring.'
+  },
+  // More phenomena
+  {
+    id: 'magnetar',
+    name: 'Magnetars',
+    category: 'other',
+    type: 'Neutron Star',
+    description: 'The universe\'s most powerful magnets!',
+    longDescription: 'Magnetars are neutron stars with incredibly powerful magnetic fields - trillions of times stronger than Earth\'s! They can produce the most energetic flares in the known universe!',
+    coolFact: 'A magnetar\'s magnetic field would erase all credit cards on Earth from halfway to the Moon!',
+    extendedFacts: [
+      'Magnetic field 1,000 trillion times stronger than Earth\'s',
+      'Only about 30 known magnetars in our galaxy',
+      'Their flares can affect Earth\'s atmosphere from across the galaxy',
+      'They spin down quickly, becoming inactive in about 10,000 years'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Magnetism',
+    icon: '🧲',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Magnetars are neutron stars with the strongest magnetic fields in the universe. These ultra-magnetic objects form when massive stars collapse and somehow generate field strengths of 10^15 Gauss (Earth\'s is about 0.5 Gauss). Magnetar starquakes cause gamma-ray flares so powerful that one in 2004 (SGR 1806-20) affected Earth\'s ionosphere from 50,000 light-years away. Magnetars are thought to power some mysterious fast radio bursts.'
+  },
+  {
+    id: 'pulsar',
+    name: 'Pulsars',
+    category: 'other',
+    type: 'Neutron Star',
+    description: 'Cosmic lighthouses spinning faster than a blender!',
+    longDescription: 'Pulsars are rapidly spinning neutron stars that beam radiation like lighthouses. Some rotate hundreds of times per second with incredible precision!',
+    coolFact: 'Some pulsars keep time more accurately than atomic clocks!',
+    extendedFacts: [
+      'First discovered in 1967 (initially called "LGM" for Little Green Men)',
+      'The fastest spin over 700 times per second',
+      'Used to detect gravitational waves indirectly',
+      'The first exoplanets were discovered around a pulsar'
+    ],
+    metric: 'Precise',
+    metricLabel: 'Timing',
+    icon: '💫',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Pulsars are neutron stars with beams of radio waves shooting from their magnetic poles. As they spin, these beams sweep across Earth like lighthouse beams. When first discovered, their regular pulses were so precise that astronomers half-jokingly named them "LGM" (Little Green Men). Millisecond pulsars rival atomic clocks in precision and are used to search for gravitational waves. The Vela Pulsar flashes 11 times per second and is visible in optical light.'
+  },
+  {
+    id: 'fast-radio-burst',
+    name: 'Fast Radio Bursts',
+    category: 'other',
+    type: 'Mysterious Phenomenon',
+    description: 'Powerful millisecond blasts from across the cosmos!',
+    longDescription: 'Fast Radio Bursts (FRBs) are mysterious flashes of radio waves lasting just milliseconds but releasing as much energy as the Sun does in 80 years!',
+    coolFact: 'The first FRB was discovered in archived data from 2001 - we nearly missed it!',
+    extendedFacts: [
+      'First identified in 2007 from data recorded in 2001',
+      'Some FRBs repeat, others appear once',
+      'Likely caused by magnetars',
+      'We detect thousands per day across the sky'
+    ],
+    metric: 'Mysterious',
+    metricLabel: 'Origin',
+    icon: '📡',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Fast Radio Bursts remain one of astronomy\'s hottest mysteries. These millisecond blasts of radio waves come from billions of light-years away and release extraordinary energy. In 2020, we finally caught one from within our galaxy - a magnetar called SGR 1935+2154 - suggesting magnetars produce at least some FRBs. However, the diversity of FRBs suggests multiple sources may be responsible. FRBs are now being used to map the universe\'s missing matter.'
+  },
+  {
+    id: 'cosmic-web',
+    name: 'The Cosmic Web',
+    category: 'other',
+    type: 'Large Scale Structure',
+    description: 'The universe\'s skeleton made of galaxy filaments!',
+    longDescription: 'The Cosmic Web is the largest known structure in the universe - a vast network of galaxy filaments and walls surrounding enormous voids, stretching across billions of light-years!',
+    coolFact: 'The cosmic web looks remarkably similar to neurons in a brain!',
+    extendedFacts: [
+      'Formed from tiny density variations after the Big Bang',
+      'Filaments can stretch hundreds of millions of light-years',
+      'Clusters form at filament intersections',
+      'Dark matter provides the scaffolding'
+    ],
+    metric: 'Cosmic',
+    metricLabel: 'Scale',
+    icon: '🕸️',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Cosmic Web is the largest pattern in existence. Galaxies aren\'t randomly scattered but arranged in filaments and walls surrounding vast empty voids. This structure emerged from tiny quantum fluctuations in the early universe, amplified by dark matter gravity. Dense clusters of thousands of galaxies form at filament intersections. Remarkably, the cosmic web\'s structure resembles the neural networks in our brains - a cosmic coincidence that has fascinated scientists.'
+  },
+  {
+    id: 'laniakea',
+    name: 'Laniakea Supercluster',
+    category: 'other',
+    type: 'Supercluster',
+    description: 'Our cosmic home - a supercluster containing 100,000 galaxies!',
+    longDescription: 'Laniakea is the supercluster containing our Milky Way galaxy along with about 100,000 other galaxies, spanning 520 million light-years!',
+    coolFact: 'Laniakea means "immense heaven" in Hawaiian!',
+    extendedFacts: [
+      'Contains about 100,000 galaxies',
+      'Spans 520 million light-years',
+      'The Great Attractor lies near its center',
+      'Discovered/mapped in 2014'
+    ],
+    metric: 'Home',
+    metricLabel: 'Address',
+    icon: '🏠',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'Laniakea Supercluster is our cosmic address beyond the Milky Way. Defined in 2014, it encompasses the Virgo Cluster (which contains our Local Group), the Great Attractor region, and numerous other galaxy clusters. All these galaxies flow toward the gravitational center. Laniakea is just one of millions of superclusters in the observable universe, and it may itself be part of an even larger structure called the Shapley Concentration.'
+  },
+  {
+    id: 'quasar',
+    name: 'Quasars',
+    category: 'galaxies',
+    type: 'Active Galactic Nucleus',
+    description: 'The brightest objects in the universe!',
+    longDescription: 'Quasars are incredibly luminous galactic cores powered by supermassive black holes consuming enormous amounts of matter. They can outshine entire galaxies!',
+    coolFact: 'Some quasars are brighter than a trillion Suns!',
+    extendedFacts: [
+      'Can be seen billions of light-years away',
+      'Powered by black holes billions of solar masses',
+      'Most common in the early universe',
+      'First discovered in 1963'
+    ],
+    metric: 'Luminous',
+    metricLabel: 'Brightness',
+    icon: '⚡',
+    color: 'star',
+    distance: 'far',
+    readMoreContent: 'Quasars are the brilliant hearts of distant galaxies where supermassive black holes are actively feeding. Matter spiraling into the black hole heats to extreme temperatures, outshining the combined light of 100 billion stars. Quasars were more common in the early universe when galaxies had more gas to fuel them. The most distant quasar known existed just 670 million years after the Big Bang, showing supermassive black holes formed remarkably early.'
+  },
+  {
+    id: 'gamma-ray-burst',
+    name: 'Gamma-Ray Bursts',
+    category: 'other',
+    type: 'Cosmic Explosion',
+    description: 'The most powerful explosions since the Big Bang!',
+    longDescription: 'Gamma-Ray Bursts (GRBs) are the most energetic events in the universe since the Big Bang, releasing more energy in seconds than the Sun will produce in its entire lifetime!',
+    coolFact: 'A nearby GRB could potentially trigger a mass extinction on Earth!',
+    extendedFacts: [
+      'Two types: long (massive star collapse) and short (neutron star mergers)',
+      'Release energy equivalent to converting the Sun\'s mass to energy',
+      'Beamed in narrow jets - we see only a fraction',
+      'First detected by satellites watching for nuclear tests'
+    ],
+    metric: 'Cataclysmic',
+    metricLabel: 'Energy',
+    icon: '💥',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Gamma-Ray Bursts are the universe\'s most powerful explosions. Long-duration GRBs (lasting more than 2 seconds) occur when massive stars collapse into black holes. Short-duration GRBs happen when neutron stars merge. The energy is focused into narrow jets - if we\'re in the beam path, we see the burst. A GRB within a few thousand light-years could strip Earth\'s ozone layer. Fortunately, the nearest candidates are tens of thousands of light-years away.'
+  },
+  {
+    id: 'trappist-1',
+    name: 'TRAPPIST-1 System',
+    category: 'other',
+    type: 'Planetary System',
+    description: 'Seven Earth-sized planets around one small star!',
+    longDescription: 'TRAPPIST-1 is an ultra-cool dwarf star hosting seven Earth-sized rocky planets, three of which are in the habitable zone! It\'s one of the best places to search for life!',
+    coolFact: 'All seven TRAPPIST-1 planets could fit inside Mercury\'s orbit!',
+    extendedFacts: [
+      'Located only 40 light-years away',
+      'The star is barely larger than Jupiter',
+      'Planets named b through h',
+      'Prime target for James Webb Space Telescope'
+    ],
+    metric: 'Packed',
+    metricLabel: 'System',
+    icon: '🪐',
+    color: 'planet',
+    distance: 'far',
+    readMoreContent: 'TRAPPIST-1 is a remarkable planetary system discovered in 2017. This tiny, cool red dwarf hosts seven Earth-sized planets in compact orbits - the entire system would fit inside Mercury\'s orbit around our Sun. Three planets (e, f, and g) lie in the habitable zone. The James Webb Space Telescope is studying their atmospheres for signs of water and potential biosignatures. TRAPPIST-1 represents our best near-term hope for finding life beyond Earth.'
+  },
+  {
+    id: 'wolf-rayet',
+    name: 'Wolf-Rayet Stars',
+    category: 'stars',
+    type: 'Massive Star',
+    description: 'Dying giants blowing themselves apart!',
+    longDescription: 'Wolf-Rayet stars are extremely hot, massive stars shedding their outer layers in powerful stellar winds before they explode as supernovae!',
+    coolFact: 'Wolf-Rayet winds blow at up to 2,000 km per second!',
+    extendedFacts: [
+      'Surface temperatures of 30,000-200,000°C',
+      'Losing mass at 10 million times the Sun\'s rate',
+      'Usually the final stage before supernova',
+      'Create beautiful nebulae around themselves'
+    ],
+    metric: 'Extreme',
+    metricLabel: 'Winds',
+    icon: '🌟',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Wolf-Rayet stars represent the violent final chapter of the most massive stars\' lives. Having exhausted their hydrogen, they shed outer layers at tremendous rates, revealing their hot cores. Winds reach speeds of 2,000 km/s, creating beautiful nebulae as they collide with surrounding material. WR 104, about 8,000 light-years away, will eventually produce a supernova and possibly a gamma-ray burst - fortunately, its jets aren\'t pointed at Earth.'
+  },
+  {
+    id: 'brown-dwarf',
+    name: 'Brown Dwarfs',
+    category: 'other',
+    type: 'Failed Star',
+    description: 'Objects too big to be planets, too small to be stars!',
+    longDescription: 'Brown dwarfs are objects between 13-80 times Jupiter\'s mass - too small to sustain hydrogen fusion like stars, but too massive to be called planets!',
+    coolFact: 'Some brown dwarfs have weather patterns and clouds of iron and silicates!',
+    extendedFacts: [
+      'Temperature range from 300°C to 2,000°C',
+      'Can fuse deuterium but not hydrogen',
+      'Emit infrared radiation but little visible light',
+      'The closest known brown dwarf is only 6.5 light-years away'
+    ],
+    metric: 'In-Between',
+    metricLabel: 'Type',
+    icon: '🟤',
+    color: 'muted',
+    distance: 'far',
+    readMoreContent: 'Brown dwarfs occupy the gray zone between planets and stars. Lacking enough mass for sustained hydrogen fusion, they slowly cool over billions of years. They have atmospheres with clouds of exotic materials like iron droplets and silicate grains. Weather patterns include violent storms and lightning. The WISE survey discovered thousands of brown dwarfs, including the nearby binary Luhman 16 just 6.5 light-years away.'
+  },
+  {
+    id: 'stellar-nursery',
+    name: 'Stellar Nurseries',
+    category: 'nebulas',
+    type: 'Star-Forming Region',
+    description: 'Cosmic cradles where new stars are born!',
+    longDescription: 'Stellar nurseries are regions of dense gas and dust where gravity causes clouds to collapse and ignite as new stars. They\'re some of the most beautiful objects in space!',
+    coolFact: 'About 3 new stars are born in the Milky Way every year!',
+    extendedFacts: [
+      'Require cold, dense molecular clouds to form stars',
+      'Produce stars in clusters, rarely alone',
+      'Newborn stars often have protoplanetary disks',
+      'Radiation from new stars eventually destroys the nursery'
+    ],
+    metric: 'Creative',
+    metricLabel: 'Process',
+    icon: '👶',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'Stellar nurseries are giant molecular clouds where new stars form. Gravity causes dense regions to collapse and heat up until hydrogen fusion ignites. Stars typically form in clusters, with massive stars emerging first. Their radiation and stellar winds then erode the remaining cloud, sculpting pillars and revealing newborn stars. Famous stellar nurseries include the Orion Nebula, the Carina Nebula, and the Eagle Nebula\'s Pillars of Creation.'
+  },
+  {
+    id: 'crab-nebula',
+    name: 'Crab Nebula',
+    category: 'nebulas',
+    type: 'Supernova Remnant',
+    description: 'The remains of a supernova seen by humans in 1054 AD!',
+    longDescription: 'The Crab Nebula is the expanding debris from a supernova explosion witnessed by Chinese and Arab astronomers in 1054 AD. At its center spins a pulsar flashing 30 times per second!',
+    coolFact: 'The 1054 supernova was visible in daylight for 23 days!',
+    extendedFacts: [
+      'Located about 6,500 light-years away',
+      'Still expanding at 1,500 km per second',
+      'The central pulsar is only 30 km across',
+      'One of the first celestial radio sources identified'
+    ],
+    metric: 'Historic',
+    metricLabel: 'Observation',
+    icon: '🦀',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Crab Nebula is astronomy\'s Rosetta Stone - a supernova remnant we can correlate with historical records. Chinese astronomers recorded a "guest star" in 1054 that was visible in daylight. The expanding cloud of gas is now about 11 light-years across. At the center, the Crab Pulsar spins 30 times per second, beaming energy that lights up the surrounding nebula. The Crab is one of the most studied objects in astronomy.'
   }
 ];
 
