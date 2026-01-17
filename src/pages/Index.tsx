@@ -6,6 +6,7 @@ import SpaceTimeline from '@/components/SpaceTimeline';
 import DailyFactWidget from '@/components/DailyFactWidget';
 import SpaceQnA from '@/components/SpaceQnA';
 import ConstellationViewer from '@/components/ConstellationViewer';
+import CourseSection from '@/components/CourseSection';
 import LibrarySection from '@/components/LibrarySection';
 import GamesSection from '@/components/GamesSection';
 import FunFactsSection from '@/components/FunFactsSection';
@@ -25,6 +26,7 @@ const Index = () => {
         <CelestialExplorer />
         <SpaceTimeline />
         <ConstellationViewer />
+        <CourseSection />
         <LibrarySection />
         <GamesSection />
         <FunFactsSection />
