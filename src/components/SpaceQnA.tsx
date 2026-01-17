@@ -12,154 +12,219 @@ interface QnAEntry {
 
 const spaceQnADatabase: QnAEntry[] = [
   {
-    keywords: ['sky', 'blue', 'color'],
+    keywords: ['sky', 'blue', 'color', 'atmosphere'],
     question: "Why is the sky blue?",
-    answer: "The sky looks blue because of how sunlight interacts with our atmosphere! When sunlight enters Earth's atmosphere, it collides with gas molecules and gets scattered in all directions. Blue light has a shorter wavelength and gets scattered more than other colors, so we see blue when we look up! 🌤️"
+    answer: "The sky looks blue because of Rayleigh scattering! When sunlight enters Earth's atmosphere, it collides with gas molecules. Blue light has a shorter wavelength (around 450-490nm) and scatters more easily than other colors. This scattered blue light reaches your eyes from all directions, making the sky appear blue! At sunset, light travels through more atmosphere, scattering away blue light and leaving red/orange. 🌤️"
   },
   {
-    keywords: ['moon', 'far', 'distance', 'away'],
+    keywords: ['moon', 'far', 'distance', 'away', 'close'],
     question: "How far is the Moon?",
-    answer: "The Moon is about 238,855 miles (384,400 km) away from Earth! That's like driving around Earth almost 10 times. It takes about 3 days for a spacecraft to travel there. Astronauts first walked on the Moon in 1969! 🌙"
+    answer: "The Moon averages 238,855 miles (384,400 km) from Earth - about 30 Earth diameters away! Light takes 1.3 seconds to travel there. Apollo astronauts took about 3 days to reach it. Fun fact: the Moon is slowly drifting away at 3.8 cm per year due to tidal interactions! 🌙"
   },
   {
-    keywords: ['black', 'hole'],
+    keywords: ['black', 'hole', 'holes', 'gravity', 'singularity'],
     question: "What is a black hole?",
-    answer: "A black hole is a region in space where gravity is SO strong that nothing can escape from it - not even light! They form when massive stars collapse at the end of their lives. The nearest known black hole is about 1,000 light-years away, so don't worry - we're safe! 🕳️"
+    answer: "A black hole is a region where gravity is so intense that nothing - not even light - can escape! They form when massive stars (at least 3x the Sun's mass) collapse. The boundary is called the event horizon. The nearest known black hole, Gaia BH1, is about 1,560 light-years away. Supermassive black holes, millions to billions of solar masses, exist at galaxy centers! 🕳️"
   },
   {
-    keywords: ['sun', 'hot', 'temperature', 'heat'],
+    keywords: ['sun', 'hot', 'temperature', 'heat', 'warm', 'surface'],
     question: "How hot is the Sun?",
-    answer: "The Sun's surface is about 10,000°F (5,500°C), but its core is even hotter - around 27 million°F (15 million°C)! That's hot enough to power nuclear fusion, which is what makes the Sun shine and keeps our planet warm. ☀️"
+    answer: "The Sun's surface (photosphere) is about 5,500°C (9,932°F). But the core reaches 15 million°C (27 million°F) - hot enough for hydrogen fusion! Surprisingly, the corona (outer atmosphere) is 1-3 million°C, hotter than the surface - a mystery scientists are still solving! ☀️"
   },
   {
-    keywords: ['star', 'stars', 'twinkle', 'flicker', 'sparkle'],
+    keywords: ['star', 'stars', 'twinkle', 'flicker', 'sparkle', 'shimmer'],
     question: "Why do stars twinkle?",
-    answer: "Stars twinkle because of Earth's atmosphere! As starlight travels through layers of air with different temperatures, it gets bent and bounced around, making stars appear to flicker. In space, astronauts see stars that don't twinkle at all! ✨"
+    answer: "Stars twinkle due to atmospheric turbulence! Starlight passes through layers of air at different temperatures and densities, causing refraction (bending). This makes stars appear to shift position and brightness rapidly. Planets twinkle less because they appear larger (they're closer), averaging out the effect. In space, stars shine steadily! ✨"
   },
   {
-    keywords: ['mars', 'red', 'planet', 'made'],
-    question: "What is Mars made of?",
-    answer: "Mars is a rocky planet made of iron, magnesium, and other minerals. Its famous red color comes from iron oxide (rust) on its surface! Mars has the largest volcano in the solar system called Olympus Mons, which is about 3 times taller than Mount Everest! 🔴"
+    keywords: ['mars', 'red', 'planet', 'rusty', 'iron', 'oxide'],
+    question: "Why is Mars red?",
+    answer: "Mars appears red due to iron oxide (rust) covering its surface! Billions of years ago, iron in Martian rocks oxidized when exposed to trace oxygen and water. The fine rust dust gets suspended in the thin CO2 atmosphere, making even the sky appear pinkish. Mars has the largest volcano (Olympus Mons, 72,000 ft) and deepest canyon (Valles Marineris, 4 miles deep)! 🔴"
   },
   {
-    keywords: ['how', 'many', 'planets', 'number', 'count'],
-    question: "How many planets are there?",
-    answer: "There are 8 planets in our solar system: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. Mercury is closest to the Sun, and Neptune is the farthest. Pluto was reclassified as a 'dwarf planet' in 2006. 🪐"
+    keywords: ['how', 'many', 'planets', 'number', 'count', 'solar', 'system'],
+    question: "How many planets are in our solar system?",
+    answer: "There are 8 planets in our solar system: Mercury, Venus, Earth, Mars (rocky/terrestrial), Jupiter, Saturn (gas giants), Uranus, and Neptune (ice giants). Pluto was reclassified as a dwarf planet in 2006 because it hasn't 'cleared its orbital neighborhood.' There are 5 recognized dwarf planets: Pluto, Eris, Haumea, Makemake, and Ceres! 🪐"
   },
   {
-    keywords: ['galaxy', 'galaxies', 'milky', 'way'],
+    keywords: ['galaxy', 'galaxies', 'milky', 'way', 'andromeda'],
     question: "What is a galaxy?",
-    answer: "A galaxy is a huge collection of stars, planets, gas, and dust held together by gravity. Our galaxy, the Milky Way, contains over 200 billion stars! There are billions of galaxies in the universe, each with their own stars and planets. 🌌"
+    answer: "A galaxy is a gravitationally bound system of stars, gas, dust, and dark matter. Our Milky Way contains 100-400 billion stars and is 100,000 light-years across! There are trillions of galaxies in the observable universe. The nearest major galaxy, Andromeda (M31), is 2.5 million light-years away and will merge with us in 4.5 billion years! 🌌"
   },
   {
-    keywords: ['space', 'dark', 'darkness', 'night'],
+    keywords: ['space', 'dark', 'darkness', 'night', 'empty', 'vacuum'],
     question: "Why is space dark?",
-    answer: "Space is dark because there's no atmosphere to scatter light like on Earth. Even though the Sun shines brightly, light travels in straight lines through the vacuum of space without bouncing around. That's why space appears black between the stars! 🌑"
+    answer: "Space is dark because it's essentially empty - there's no atmosphere to scatter light. This is Olbers' Paradox: if infinite stars existed, the sky should be bright. But the universe has a finite age (13.8 billion years), so light from distant stars hasn't reached us. Also, cosmic expansion redshifts ancient light beyond visibility! 🌑"
   },
   {
-    keywords: ['universe', 'old', 'age', 'born', 'created'],
+    keywords: ['universe', 'old', 'age', 'born', 'created', 'big', 'bang'],
     question: "How old is the universe?",
-    answer: "The universe is about 13.8 billion years old! Scientists figured this out by studying the oldest light in the universe, called the Cosmic Microwave Background. The Big Bang created all space, time, and matter in that instant! 💫"
+    answer: "The universe is 13.8 billion years old! Scientists determined this by measuring the Cosmic Microwave Background (leftover light from 380,000 years after the Big Bang) and observing the expansion rate. For context: Earth formed 4.5 billion years ago, humans appeared only 300,000 years ago - we're cosmic newcomers! 💫"
   },
   {
-    keywords: ['comet', 'comets', 'tail'],
+    keywords: ['comet', 'comets', 'tail', 'halley', 'dirty', 'snowball'],
     question: "What is a comet?",
-    answer: "A comet is like a giant dirty snowball made of ice, rock, and dust! When comets get close to the Sun, the ice melts and creates a beautiful glowing tail that can stretch millions of miles across space. Famous comets include Halley's Comet, which visits us every 76 years! ☄️"
+    answer: "A comet is a 'dirty snowball' - a nucleus of ice, rock, and organic compounds from the outer solar system. When approaching the Sun, ice vaporizes, creating a glowing coma and two tails: a dust tail (curved, yellow) and an ion tail (straight, blue, always pointing away from the Sun due to solar wind). Halley's Comet returns every 76 years! ☄️"
   },
   {
-    keywords: ['sound', 'hear', 'noise', 'silent', 'quiet'],
+    keywords: ['sound', 'hear', 'noise', 'silent', 'quiet', 'vacuum'],
     question: "Can you hear sound in space?",
-    answer: "No, space is completely silent! This is because space is a vacuum - there's no air or other material for sound waves to travel through. Astronauts have to use radio waves to communicate with each other when outside the spacecraft. 🤫"
+    answer: "No - space is a near-perfect vacuum with no medium for sound waves to travel through! Sound requires particles (air, water, solid) to vibrate. However, NASA has 'sonified' data from space phenomena. In dense gas clouds or planetary atmospheres, sound could technically exist. Astronauts communicate via radio waves, which are electromagnetic, not mechanical! 🤫"
   },
   {
-    keywords: ['biggest', 'largest', 'jupiter', 'giant'],
+    keywords: ['biggest', 'largest', 'jupiter', 'giant', 'massive', 'planet'],
     question: "What is the biggest planet?",
-    answer: "Jupiter is the biggest planet in our solar system! It's so huge that over 1,300 Earths could fit inside it. Jupiter is a 'gas giant' made mostly of hydrogen and helium. It has a famous storm called the Great Red Spot that has been raging for hundreds of years! 🟠"
+    answer: "Jupiter is the largest planet - 86,881 miles (139,822 km) in diameter, 11x Earth's width! It contains 2.5x the mass of all other planets combined. Made of hydrogen and helium, it has no solid surface. The Great Red Spot is a storm 1.3x Earth's size, raging for 350+ years! Jupiter has 95 known moons, including Europa with a subsurface ocean! 🟠"
   },
   {
-    keywords: ['astronaut', 'astronauts', 'sleep', 'sleeping'],
+    keywords: ['astronaut', 'astronauts', 'sleep', 'sleeping', 'rest'],
     question: "How do astronauts sleep in space?",
-    answer: "Astronauts sleep in special sleeping bags attached to the wall so they don't float around! In microgravity, there's no up or down, so they can sleep in any direction. They also wear eye masks because the Sun rises every 90 minutes on the International Space Station! 😴"
+    answer: "Astronauts sleep in special sleeping bags tethered to walls in small crew quarters. Without gravity, they'd drift around! The ISS orbits every 90 minutes, causing 16 sunrises daily, so astronauts use eye masks and stick to scheduled sleep periods. Sleeping in microgravity is actually comfortable - no pressure points! Some report the most restful sleep ever. 😴"
   },
   {
-    keywords: ['supernova', 'explode', 'explosion', 'exploding'],
+    keywords: ['supernova', 'explode', 'explosion', 'exploding', 'stellar', 'death'],
     question: "What is a supernova?",
-    answer: "A supernova is a giant explosion that happens when a massive star dies! It can be brighter than an entire galaxy for a short time. The explosion spreads elements like gold, silver, and iron throughout space - the iron in your blood came from ancient supernovas! 💥"
+    answer: "A supernova is a massive stellar explosion occurring when a star exhausts fuel (Type II) or when a white dwarf accretes too much mass (Type Ia). They can briefly outshine entire galaxies! Supernovae create and disperse heavy elements - the calcium in your bones and iron in your blood were forged in ancient supernovae. The last visible one in our galaxy was in 1604 (Kepler's Supernova)! 💥"
   },
   {
-    keywords: ['gravity', 'float', 'floating', 'weightless'],
+    keywords: ['gravity', 'float', 'floating', 'weightless', 'microgravity', 'zero'],
     question: "Why do astronauts float in space?",
-    answer: "Astronauts float because they're in 'free fall' around Earth! The space station and astronauts are constantly falling toward Earth, but moving sideways fast enough that they keep missing it. This creates the feeling of weightlessness called microgravity. 🧑‍🚀"
+    answer: "Astronauts experience 'microgravity' because they're in continuous free-fall around Earth! The ISS orbits at 17,500 mph - falling toward Earth but moving sideways fast enough to keep missing it. Gravity at ISS altitude (250 miles) is still 90% of surface gravity. It's not 'zero gravity' - it's perpetual falling while moving forward! 🧑‍🚀"
   },
   {
-    keywords: ['light', 'year', 'years', 'travel'],
+    keywords: ['light', 'year', 'years', 'travel', 'speed', 'distance'],
     question: "What is a light year?",
-    answer: "A light year is the distance that light travels in one year - about 5.88 trillion miles (9.46 trillion km)! It's used to measure huge distances in space. For example, the nearest star to our Sun (Proxima Centauri) is about 4.24 light years away. 🌟"
+    answer: "A light year is the distance light travels in one year: 5.88 trillion miles (9.46 trillion km)! Light moves at 186,282 miles per second. Proxima Centauri (nearest star) is 4.24 light-years away. The observable universe is 93 billion light-years across. When you see Andromeda, you see it as it was 2.5 million years ago! 🌟"
   },
   {
-    keywords: ['earth', 'round', 'sphere', 'shape'],
+    keywords: ['earth', 'round', 'sphere', 'shape', 'ball', 'spherical'],
     question: "Why is Earth round?",
-    answer: "Earth is round because of gravity! When Earth formed 4.5 billion years ago, gravity pulled all the material toward the center equally from all directions. This created a sphere shape. All planets, moons, and stars are round for the same reason! 🌍"
+    answer: "Earth is round due to gravity! When Earth formed 4.5 billion years ago, gravity pulled matter toward the center from all directions equally, creating a sphere - the shape with minimum surface area for a given volume. Earth isn't perfectly round though - it bulges at the equator due to rotation (21km wider at equator than pole-to-pole)! 🌍"
   },
   {
-    keywords: ['rocket', 'rockets', 'work', 'fly', 'launch'],
+    keywords: ['rocket', 'rockets', 'work', 'fly', 'launch', 'thrust', 'propulsion'],
     question: "How do rockets work?",
-    answer: "Rockets work by pushing gas out of their engines at very high speed! This is called Newton's Third Law - for every action, there's an equal and opposite reaction. When hot gas shoots down, it pushes the rocket up. Rockets carry their own fuel and oxygen, so they can work in the vacuum of space! 🚀"
+    answer: "Rockets work via Newton's Third Law: action-reaction! Burning fuel creates hot gas expelled at high speed downward; the rocket moves upward with equal momentum. Unlike jets, rockets carry both fuel AND oxidizer, so they work in the vacuum of space. The Saturn V produced 7.5 million pounds of thrust - enough to lift 130 tons to the Moon! 🚀"
   },
   {
-    keywords: ['saturn', 'rings', 'ring'],
+    keywords: ['saturn', 'rings', 'ring', 'ice', 'gaps'],
     question: "What are Saturn's rings made of?",
-    answer: "Saturn's beautiful rings are made of billions of pieces of ice and rock! They range in size from tiny grains to chunks as big as houses. The rings are actually very thin - only about 30 feet thick in most places, but they stretch out for thousands of miles! 🪐"
+    answer: "Saturn's rings are 99.9% water ice with traces of rock and dust! Particles range from tiny grains to house-sized chunks. The rings span 175,000 miles but are only 30-300 feet thick. Gaps like the Cassini Division are created by moon gravitational resonances. The rings may be only 100 million years old - young compared to Saturn (4.5 billion years)! 🪐"
   },
   {
-    keywords: ['meteor', 'meteors', 'shooting', 'falling'],
+    keywords: ['meteor', 'meteors', 'shooting', 'falling', 'star', 'meteorite'],
     question: "What is a shooting star?",
-    answer: "A 'shooting star' is actually a meteor - a small piece of space rock burning up in Earth's atmosphere! When space debris enters our atmosphere at high speed, it creates friction and heats up, producing that beautiful streak of light. Most meteors are only the size of a grain of sand! 🌠"
+    answer: "A 'shooting star' is a meteor - space debris burning up in Earth's atmosphere at 25,000-160,000 mph! Most are grain-sized, vaporizing 50-80 miles up. Meteoroids that survive and hit Earth become meteorites. Meteor showers (like Perseids in August) occur when Earth passes through comet debris trails. About 48 tons of meteoric material falls daily! 🌠"
   },
   {
-    keywords: ['iss', 'station', 'international', 'space station'],
+    keywords: ['iss', 'station', 'international', 'space station', 'orbit'],
     question: "What is the International Space Station?",
-    answer: "The International Space Station (ISS) is a large spacecraft orbiting Earth where astronauts live and work! It's about the size of a football field and travels at 17,500 mph, orbiting Earth every 90 minutes. Astronauts from many countries work together there doing science experiments! 🛸"
+    answer: "The ISS is a habitable spacecraft orbiting Earth at 250 miles altitude, moving at 17,500 mph (circling Earth every 90 minutes)! It's the largest human-made structure in space: 357 ft long, weighing 420 tons. Built by 15 nations since 1998, it hosts 6-7 astronauts conducting research in microgravity. You can see it from Earth without a telescope! 🛸"
   },
   {
-    keywords: ['oxygen', 'breathe', 'breathing', 'air'],
+    keywords: ['oxygen', 'breathe', 'breathing', 'air', 'spacesuit'],
     question: "Can you breathe in space?",
-    answer: "No, you cannot breathe in space without a spacesuit! Space is a vacuum with no air or oxygen. Astronauts must wear special suits with life support systems that provide oxygen and remove carbon dioxide. The ISS has systems that create oxygen from water! 🌬️"
+    answer: "No! Space is a near-vacuum - exposure without a suit causes unconsciousness in 15 seconds and death within 1-2 minutes. Spacesuits provide pressurized oxygen, temperature regulation, and radiation protection. The ISS generates oxygen through electrolysis (splitting water) and scrubs CO2 using chemical absorbers. A spacesuit is essentially a personal spacecraft! 🌬️"
   },
   {
-    keywords: ['nebula', 'nebulas', 'nebulae', 'cloud', 'clouds'],
+    keywords: ['nebula', 'nebulas', 'nebulae', 'cloud', 'clouds', 'gas', 'dust'],
     question: "What is a nebula?",
-    answer: "A nebula is a giant cloud of gas and dust in space! Some nebulae are 'stellar nurseries' where new stars are born. Others are the remains of exploded stars. The beautiful colors come from different gases glowing - hydrogen glows red, oxygen glows green and blue! 🌈"
+    answer: "A nebula is a giant cloud of gas and dust in space! Types include: emission nebulae (glowing from nearby star radiation), reflection nebulae (reflecting starlight), dark nebulae (blocking background light), and planetary nebulae (expelled from dying stars). The Orion Nebula, 1,344 light-years away, is visible to the naked eye and is a stellar nursery birthing new stars! 🌈"
   },
   {
-    keywords: ['telescope', 'telescopes', 'see', 'hubble', 'james', 'webb'],
+    keywords: ['telescope', 'telescopes', 'see', 'hubble', 'james', 'webb', 'observe'],
     question: "How do telescopes work?",
-    answer: "Telescopes collect and focus light to make distant objects appear closer and brighter! The Hubble Space Telescope orbits Earth above the atmosphere for clearer views. The James Webb Space Telescope uses infrared light to see through cosmic dust and observe the earliest galaxies! 🔭"
+    answer: "Telescopes gather and focus light to reveal distant objects. Refractors use lenses, reflectors use mirrors. The Hubble Space Telescope (1990-present) orbits above atmospheric distortion, capturing visible/UV/infrared light. The James Webb Space Telescope (2022) uses a 21-foot gold-coated mirror to see infrared light from 13.5 billion years ago - the earliest galaxies! 🔭"
   },
   {
-    keywords: ['alien', 'aliens', 'life', 'extraterrestrial', 'exist'],
+    keywords: ['alien', 'aliens', 'life', 'extraterrestrial', 'exist', 'et'],
     question: "Are there aliens?",
-    answer: "We haven't found proof of alien life yet, but scientists are actively searching! With billions of galaxies and trillions of planets in the universe, many scientists think it's likely life exists somewhere else. We're looking for signs of life on Mars, Europa, and planets around other stars! 👽"
+    answer: "We don't know yet! With 100-400 billion stars in our galaxy and trillions of galaxies, the probability seems high (Drake Equation). NASA searches for biosignatures on Mars, Europa, and Enceladus. SETI scans for radio signals. The Fermi Paradox asks: if aliens exist, where are they? We've confirmed 5,000+ exoplanets, many in habitable zones! 👽"
   },
   {
-    keywords: ['venus', 'hottest', 'greenhouse'],
-    question: "Why is Venus the hottest planet?",
-    answer: "Venus is the hottest planet (even hotter than Mercury!) because of its thick atmosphere of carbon dioxide. This creates a super-strong greenhouse effect that traps heat. Venus's surface temperature is about 900°F (475°C) - hot enough to melt lead! 🔥"
+    keywords: ['venus', 'hottest', 'greenhouse', 'earth', 'twin'],
+    question: "Why is Venus so hot?",
+    answer: "Venus is the hottest planet (465°C/869°F) due to an extreme greenhouse effect! Its atmosphere is 96% CO2, 90x Earth's surface pressure. Sunlight penetrates the clouds but infrared radiation can't escape, trapping heat. Though Mercury is closer to the Sun, Venus's thick atmosphere makes it hotter. Venus also rotates backward and has 243-Earth-day-long days! 🔥"
   },
   {
-    keywords: ['pluto', 'dwarf', 'not', 'planet'],
-    question: "Why isn't Pluto a planet anymore?",
-    answer: "In 2006, scientists created a new definition of 'planet' that Pluto doesn't meet. A planet must: orbit the Sun, be round, AND have 'cleared' its orbit of other objects. Pluto shares its orbit with other icy objects, so it's now called a 'dwarf planet.' It's still an amazing world! ❄️"
+    keywords: ['pluto', 'dwarf', 'not', 'planet', 'demotion', 'classification'],
+    question: "Why isn't Pluto a planet?",
+    answer: "In 2006, the IAU defined 'planet' as a body that: (1) orbits the Sun, (2) has enough mass for gravity to make it round, and (3) has 'cleared its orbital neighborhood.' Pluto fails criterion 3 - it shares its orbit with Kuiper Belt objects. Pluto is now a 'dwarf planet' - still a fascinating world with 5 moons, nitrogen glaciers, and a heart-shaped feature! ❄️"
   },
   {
-    keywords: ['day', 'night', 'rotate', 'rotation', 'spin'],
+    keywords: ['day', 'night', 'rotate', 'rotation', 'spin', 'turning'],
     question: "Why do we have day and night?",
-    answer: "We have day and night because Earth rotates (spins) on its axis once every 24 hours! The side of Earth facing the Sun experiences daytime, while the opposite side is in darkness (nighttime). As Earth continues to spin, different areas move from day to night and back again! 🌓"
+    answer: "Day and night occur because Earth rotates on its axis once every 23 hours 56 minutes (a sidereal day)! The side facing the Sun experiences day; the opposite side experiences night. Earth rotates west to east, making the Sun appear to rise in the east. At the equator, Earth's surface moves at about 1,000 mph! 🌓"
   },
   {
-    keywords: ['season', 'seasons', 'winter', 'summer', 'tilt'],
+    keywords: ['season', 'seasons', 'winter', 'summer', 'tilt', 'spring', 'fall', 'autumn'],
     question: "Why do we have seasons?",
-    answer: "We have seasons because Earth is tilted on its axis by about 23.5 degrees! As Earth orbits the Sun, different parts of the planet receive more direct sunlight at different times of year. When your hemisphere tilts toward the Sun, it's summer; when it tilts away, it's winter! 🍂"
+    answer: "Seasons occur because Earth's axis is tilted 23.5° relative to its orbital plane! When your hemisphere tilts toward the Sun, you get longer days and more direct sunlight (summer). Six months later, it tilts away (winter). The equator experiences minimal seasonal change. It's NOT about Earth-Sun distance - Earth is actually closest to the Sun in January! 🍂"
+  },
+  {
+    keywords: ['constellation', 'constellations', 'pattern', 'patterns', 'orion', 'zodiac'],
+    question: "What are constellations?",
+    answer: "Constellations are patterns of stars as seen from Earth, used for navigation and storytelling for millennia! The 88 official constellations cover the entire sky. Stars in a constellation aren't physically close - they just appear aligned from our viewpoint. Orion's Belt stars are 800-2,000 light-years away at varying distances! 🌟"
+  },
+  {
+    keywords: ['eclipse', 'eclipses', 'solar', 'lunar', 'shadow', 'block'],
+    question: "What causes eclipses?",
+    answer: "A solar eclipse occurs when the Moon passes between Earth and Sun, casting a shadow on Earth. A lunar eclipse occurs when Earth blocks sunlight from reaching the Moon. Solar eclipses are rarer at any location because the Moon's shadow is small. Total solar eclipses are cosmic coincidences - the Moon is 400x smaller than the Sun but 400x closer! 🌑"
+  },
+  {
+    keywords: ['asteroid', 'asteroids', 'belt', 'rock', 'impact', 'dinosaur'],
+    question: "What is an asteroid?",
+    answer: "Asteroids are rocky remnants from the solar system's formation 4.6 billion years ago! Most orbit in the asteroid belt between Mars and Jupiter. They range from 3 feet to 329 miles (Vesta) across. The Chicxulub asteroid (6 miles wide) caused the dinosaur extinction 66 million years ago. NASA's DART mission successfully deflected asteroid Dimorphos in 2022! ☄️"
+  },
+  {
+    keywords: ['satellite', 'satellites', 'orbit', 'artificial', 'gps', 'communication'],
+    question: "What is a satellite?",
+    answer: "A satellite is any object orbiting another body. The Moon is Earth's natural satellite. Artificial satellites (since Sputnik, 1957) orbit Earth for communication, GPS, weather monitoring, and science. About 7,000 active satellites orbit Earth! Geostationary satellites at 22,236 miles orbit in sync with Earth's rotation, appearing stationary in the sky. 📡"
+  },
+  {
+    keywords: ['exoplanet', 'exoplanets', 'other', 'worlds', 'kepler', 'habitable'],
+    question: "What is an exoplanet?",
+    answer: "An exoplanet is a planet orbiting a star other than our Sun! We've confirmed 5,500+ exoplanets since the first discovery in 1992. Detection methods include transit (dimming as planet passes star) and radial velocity (star wobble). Types include hot Jupiters, super-Earths, and potentially habitable worlds like Proxima Centauri b (4.24 light-years away)! 🌍"
+  },
+  {
+    keywords: ['neutron', 'star', 'dense', 'pulsar', 'magnetar'],
+    question: "What is a neutron star?",
+    answer: "A neutron star is the ultra-dense remnant of a massive star after supernova! With 1.4-2 solar masses compressed into a 12-mile sphere, a teaspoon would weigh 6 billion tons! They spin incredibly fast (up to 716 times/second) and have intense magnetic fields. Pulsars are neutron stars beaming radiation like cosmic lighthouses! ⭐"
+  },
+  {
+    keywords: ['red', 'giant', 'star', 'sun', 'future', 'expand'],
+    question: "What is a red giant?",
+    answer: "A red giant is an aging star that has exhausted its core hydrogen and expanded enormously! Our Sun will become a red giant in ~5 billion years, swelling to engulf Mercury, Venus, and possibly Earth. Despite being cooler (hence red), they're incredibly luminous due to their huge size. Betelgeuse in Orion is a famous red supergiant! 🔴"
+  },
+  {
+    keywords: ['white', 'dwarf', 'star', 'dead', 'remnant', 'fate'],
+    question: "What is a white dwarf?",
+    answer: "A white dwarf is the dense core left after a Sun-like star sheds its outer layers! About Earth-sized but with the Sun's mass, they're extremely dense. No longer fusing atoms, they slowly cool over billions of years. Our Sun's fate is to become a white dwarf in ~7-8 billion years. The nearest is Sirius B, 8.6 light-years away! ⚪"
+  },
+  {
+    keywords: ['dark', 'matter', 'invisible', 'mass', 'mystery'],
+    question: "What is dark matter?",
+    answer: "Dark matter is invisible matter that doesn't emit or absorb light but exerts gravitational effects! It makes up ~27% of the universe (normal matter is only 5%). We detect it through galaxy rotation curves and gravitational lensing. Despite decades of searching, we don't know what it's made of - WIMPs and axions are leading candidates! 🌑"
+  },
+  {
+    keywords: ['dark', 'energy', 'expansion', 'accelerating', 'universe'],
+    question: "What is dark energy?",
+    answer: "Dark energy is the mysterious force causing the universe's expansion to accelerate! Discovered in 1998 via distant supernovae, it comprises ~68% of the universe. Its nature is unknown - possibly the cosmological constant (vacuum energy) or a dynamic field called quintessence. Dark energy will eventually push galaxies beyond our observable horizon! 🌌"
+  },
+  {
+    keywords: ['wormhole', 'wormholes', 'shortcut', 'tunnel', 'travel'],
+    question: "What is a wormhole?",
+    answer: "A wormhole is a theoretical tunnel through spacetime connecting distant points! Predicted by Einstein's relativity, they could enable faster-than-light travel. However, they'd require exotic matter with negative energy density to stay open - which may not exist. No wormholes have been observed, and traversable ones may be physically impossible. They remain fascinating science fiction! 🕳️"
+  },
+  {
+    keywords: ['milky', 'way', 'galaxy', 'home', 'center', 'shape'],
+    question: "What is the Milky Way?",
+    answer: "The Milky Way is our home galaxy - a barred spiral 100,000 light-years across containing 100-400 billion stars! Our Sun orbits the galactic center (where a 4-million-solar-mass black hole resides) every 225 million years. We're located in the Orion Arm, about 26,000 light-years from the center. The name comes from its milky appearance in the night sky! 🌌"
+  },
+  {
+    keywords: ['speed', 'light', 'fast', 'fastest', 'limit', 'velocity'],
+    question: "How fast is the speed of light?",
+    answer: "Light travels at 299,792,458 meters per second (186,282 miles/second) in a vacuum - the cosmic speed limit! Nothing with mass can reach this speed. At light speed: you'd circle Earth 7.5 times per second, reach the Moon in 1.3 seconds, and the Sun in 8.3 minutes. Time dilation means time slows as you approach this speed! 💫"
   }
 ];
 
