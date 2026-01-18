@@ -2876,6 +2876,490 @@ export const celestialBodies: CelestialBody[] = [
     color: 'destructive',
     distance: 'far',
     readMoreContent: 'The Crab Nebula is astronomy\'s Rosetta Stone - a supernova remnant we can correlate with historical records. Chinese astronomers recorded a "guest star" in 1054 that was visible in daylight. The expanding cloud of gas is now about 11 light-years across. At the center, the Crab Pulsar spins 30 times per second, beaming energy that lights up the surrounding nebula. The Crab is one of the most studied objects in astronomy.'
+  },
+  // NEW CELESTIAL BODIES
+  {
+    id: 'callisto',
+    name: 'Callisto',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Jupiter\'s most cratered moon and the third largest moon in the solar system!',
+    longDescription: 'Callisto is the outermost of Jupiter\'s four Galilean moons. Its ancient, heavily cratered surface tells the story of billions of years of asteroid impacts.',
+    coolFact: 'Callisto\'s surface is the oldest in the solar system - about 4 billion years old!',
+    extendedFacts: [
+      'Almost as large as Mercury',
+      'May have a subsurface ocean',
+      'Has very low radiation levels',
+      'Could be a good base for exploring Jupiter system'
+    ],
+    metric: '4.8 billion',
+    metricLabel: 'years old',
+    icon: '🌑',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Callisto is one of the most heavily cratered objects in the solar system. Unlike the other Galilean moons, Callisto orbits far enough from Jupiter to avoid intense radiation. This makes it a potential site for a future human outpost. Scientists believe it may have a liquid water ocean beneath its icy crust, though this is less certain than for Europa.'
+  },
+  {
+    id: 'miranda',
+    name: 'Miranda',
+    category: 'solar-system',
+    type: 'Moon',
+    description: 'Uranus\'s strangest moon with cliffs 12 times higher than the Grand Canyon!',
+    longDescription: 'Miranda is a small moon of Uranus with one of the most bizarre landscapes in the solar system. Its surface looks like a patchwork of different terrains smashed together.',
+    coolFact: 'Verona Rupes on Miranda is the tallest known cliff in the solar system - 20 km high!',
+    extendedFacts: [
+      'Only 472 km in diameter',
+      'May have been shattered and reassembled',
+      'Has three unique chevron-shaped features',
+      'Surface temperature is -187°C'
+    ],
+    metric: '20 km',
+    metricLabel: 'cliff height',
+    icon: '🧩',
+    color: 'secondary',
+    distance: 'near',
+    readMoreContent: 'Miranda\'s fractured appearance puzzled scientists. One theory suggests it was shattered by a massive impact and gravitationally reassembled. Another theory proposes intense tidal heating created convection patterns. Its coronae - large oval features surrounded by ridges - are unlike anything else in the solar system.'
+  },
+  {
+    id: 'ceres',
+    name: 'Ceres',
+    category: 'solar-system',
+    type: 'Dwarf Planet',
+    description: 'The largest object in the asteroid belt and the closest dwarf planet to the Sun!',
+    longDescription: 'Ceres is a dwarf planet in the asteroid belt between Mars and Jupiter. NASA\'s Dawn spacecraft revealed bright spots and an ice volcano on its surface.',
+    coolFact: 'Ceres has bright spots that are salt deposits from a subsurface ocean!',
+    extendedFacts: [
+      'Contains about one-third of the asteroid belt\'s mass',
+      'Has a diameter of 940 km',
+      'May have more fresh water than Earth',
+      'Has a mountain called Ahuna Mons that might be an ice volcano'
+    ],
+    metric: '940 km',
+    metricLabel: 'diameter',
+    icon: '🪨',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Ceres was the first asteroid discovered in 1801 and was reclassified as a dwarf planet in 2006. NASA\'s Dawn mission revealed mysterious bright spots in Occator Crater - salt deposits from a subsurface ocean that seeped to the surface. Ahuna Mons is a possible cryovolcano that erupts water and ammonia instead of lava.'
+  },
+  {
+    id: 'makemake',
+    name: 'Makemake',
+    category: 'solar-system',
+    type: 'Dwarf Planet',
+    description: 'A reddish dwarf planet in the Kuiper Belt named after a creation deity!',
+    longDescription: 'Makemake is one of the largest known objects in the Kuiper Belt. Its surface is covered in frozen methane, ethane, and nitrogen that gives it a reddish-brown color.',
+    coolFact: 'Makemake has no known atmosphere despite being large enough for one!',
+    extendedFacts: [
+      'Takes 310 years to orbit the Sun',
+      'Named after the creation god of the Rapa Nui people',
+      'Has one known moon called MK2',
+      'Surface temperature is about -243°C'
+    ],
+    metric: '310',
+    metricLabel: 'year orbit',
+    icon: '🟤',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Makemake was discovered in 2005 and is the third-largest dwarf planet. Unlike Pluto, it has no significant atmosphere. Its moon MK2 was discovered in 2016 and is very dark, contrasting with Makemake\'s bright surface. Makemake is named after the chief god of the Rapa Nui (Easter Island) culture.'
+  },
+  {
+    id: 'haumea',
+    name: 'Haumea',
+    category: 'solar-system',
+    type: 'Dwarf Planet',
+    description: 'An egg-shaped dwarf planet that spins faster than any other large object!',
+    longDescription: 'Haumea is a uniquely elongated dwarf planet in the Kuiper Belt. Its rapid 4-hour rotation has stretched it into an egg shape. It even has its own ring system!',
+    coolFact: 'Haumea is one of the fastest rotating large objects in the solar system!',
+    extendedFacts: [
+      'Has two moons: Hi\'iaka and Namaka',
+      'Discovered to have rings in 2017',
+      'Rotates once every 4 hours',
+      'Named after the Hawaiian goddess of fertility'
+    ],
+    metric: '4 hours',
+    metricLabel: 'day length',
+    icon: '🥚',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Haumea\'s extreme rotation is thought to result from a massive collision billions of years ago. This impact also created its two moons and a family of smaller Kuiper Belt objects. In 2017, scientists discovered that Haumea has a ring system - the first ring system found around a trans-Neptunian object.'
+  },
+  {
+    id: 'eris',
+    name: 'Eris',
+    category: 'solar-system',
+    type: 'Dwarf Planet',
+    description: 'The most massive dwarf planet that caused Pluto to lose its planet status!',
+    longDescription: 'Eris is more massive than Pluto and its discovery in 2005 sparked the debate that led to the creation of the "dwarf planet" category. It\'s one of the most distant known objects in our solar system.',
+    coolFact: 'Eris caused so much controversy it was named after the goddess of discord!',
+    extendedFacts: [
+      '27% more massive than Pluto',
+      'Has one moon called Dysnomia',
+      'Takes 558 years to orbit the Sun',
+      'Currently about 96 AU from the Sun'
+    ],
+    metric: '558',
+    metricLabel: 'year orbit',
+    icon: '⚪',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'Eris was initially nicknamed "Xena" after the TV warrior princess. Its discovery forced astronomers to either make Eris the 10th planet or reclassify Pluto. They chose the latter, creating the dwarf planet category in 2006. Eris is so far away that even traveling at the speed of light, it would take about 13 hours to reach it.'
+  },
+  {
+    id: 'sedna',
+    name: 'Sedna',
+    category: 'solar-system',
+    type: 'Trans-Neptunian Object',
+    description: 'One of the most distant known objects in our solar system with a mysterious orbit!',
+    longDescription: 'Sedna has one of the longest known orbital periods - taking 11,400 years to orbit the Sun. Its extremely elongated orbit takes it from 76 AU to 937 AU from the Sun.',
+    coolFact: 'Sedna\'s orbit is so distant that the Sun would look like just a bright star!',
+    extendedFacts: [
+      'Named after the Inuit goddess of the sea',
+      'Surface temperature is about -240°C',
+      'Takes 11,400 years to complete one orbit',
+      'May hint at a distant Planet Nine'
+    ],
+    metric: '11,400',
+    metricLabel: 'year orbit',
+    icon: '❄️',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Sedna\'s extremely elongated orbit puzzles scientists. Something must have pulled it into this unusual path - perhaps a passing star, the gravity of a hidden planet, or influences from the Sun\'s original stellar nursery. Sedna is so far away at aphelion that the Sun would appear as just a bright point of light.'
+  },
+  {
+    id: 'sirius',
+    name: 'Sirius',
+    category: 'stars',
+    type: 'Binary Star System',
+    description: 'The brightest star in Earth\'s night sky, also known as the Dog Star!',
+    longDescription: 'Sirius is actually a binary star system - a bright white main-sequence star (Sirius A) and a faint white dwarf companion (Sirius B). It\'s only 8.6 light-years away.',
+    coolFact: 'Sirius is so bright because it\'s one of Earth\'s closest stellar neighbors!',
+    extendedFacts: [
+      'About 25 times more luminous than the Sun',
+      'Sirius B is one of the most massive known white dwarfs',
+      'The name means "glowing" in Greek',
+      'Important in many ancient cultures\' calendars'
+    ],
+    metric: '8.6',
+    metricLabel: 'light-years',
+    icon: '💎',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'Sirius has been important to many civilizations. Ancient Egyptians used its appearance to predict the annual Nile flooding. Sirius B, discovered in 1862, was the first white dwarf ever found. Despite being roughly the size of Earth, Sirius B contains nearly the mass of the Sun!'
+  },
+  {
+    id: 'antares',
+    name: 'Antares',
+    category: 'stars',
+    type: 'Red Supergiant',
+    description: 'A massive red supergiant 700 times larger than our Sun!',
+    longDescription: 'Antares is the heart of the constellation Scorpius. This red supergiant is so large that if placed at the center of our solar system, it would extend beyond the orbit of Mars.',
+    coolFact: 'Antares means "rival of Mars" because of its similar red color!',
+    extendedFacts: [
+      'About 550 light-years away',
+      'Will likely explode as a supernova',
+      'Has a companion blue star',
+      '10,000 times brighter than the Sun'
+    ],
+    metric: '700x',
+    metricLabel: 'Sun\'s size',
+    icon: '🔴',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'Antares is one of the brightest stars in the night sky and marks the heart of Scorpius the Scorpion. Like Betelgeuse, Antares is a red supergiant nearing the end of its life. It will eventually explode as a supernova, though this could be thousands or millions of years in the future.'
+  },
+  {
+    id: 'canopus',
+    name: 'Canopus',
+    category: 'stars',
+    type: 'Yellow-White Supergiant',
+    description: 'The second brightest star in the night sky, 10,000 times brighter than the Sun!',
+    longDescription: 'Canopus is a yellow-white supergiant star located about 310 light-years away. It\'s the brightest star in the constellation Carina and serves as a navigation beacon for spacecraft.',
+    coolFact: 'Spacecraft use Canopus as a reference point for navigation!',
+    extendedFacts: [
+      'Named after a mythological Greek navigator',
+      '71 times the Sun\'s diameter',
+      'Visible from southern latitudes',
+      'Used for spacecraft navigation since the 1960s'
+    ],
+    metric: '10,000x',
+    metricLabel: 'Sun\'s brightness',
+    icon: '⭐',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Canopus has been used for spacecraft navigation since the early Space Age. Its brightness and position make it ideal for star trackers to determine spacecraft orientation. Ancient Egyptians and Greeks knew Canopus, and it was an important star for sailors navigating the Mediterranean and beyond.'
+  },
+  {
+    id: 'arcturus',
+    name: 'Arcturus',
+    category: 'stars',
+    type: 'Red Giant',
+    description: 'The brightest star in the northern celestial hemisphere!',
+    longDescription: 'Arcturus is an aging red giant star about 37 light-years away. It\'s moving through space at unusual speed and may have originated from a different galaxy!',
+    coolFact: 'Arcturus might be an intergalactic visitor from another galaxy!',
+    extendedFacts: [
+      '25 times larger than the Sun',
+      'Only 37 light-years away',
+      'Part of the Arcturus stream of stars',
+      '170 times brighter than the Sun'
+    ],
+    metric: '37',
+    metricLabel: 'light-years',
+    icon: '🟠',
+    color: 'destructive',
+    distance: 'near',
+    readMoreContent: 'Arcturus is one of the easiest stars to find - just follow the arc of the Big Dipper\'s handle. It\'s part of the Arcturus stream, a group of stars moving together through the Milky Way on unusual orbits. Scientists believe these stars may have been captured from a smaller galaxy that merged with ours billions of years ago.'
+  },
+  {
+    id: 'deneb',
+    name: 'Deneb',
+    category: 'stars',
+    type: 'Blue-White Supergiant',
+    description: 'One of the most luminous stars known, shining with the light of 200,000 Suns!',
+    longDescription: 'Deneb is an incredibly luminous blue-white supergiant that marks the tail of Cygnus the Swan. Despite being about 2,600 light-years away, it\'s still one of the brightest stars in our sky.',
+    coolFact: 'Deneb is so bright that if it were as close as Sirius, it would cast shadows!',
+    extendedFacts: [
+      'Part of the Summer Triangle asterism',
+      'About 200,000 times the Sun\'s luminosity',
+      'Will become a supernova someday',
+      '200 times the Sun\'s diameter'
+    ],
+    metric: '200,000x',
+    metricLabel: 'Sun\'s brightness',
+    icon: '💙',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Deneb\'s true luminosity is staggering. Most of the brightest stars we see are nearby - Deneb is exceptional because it\'s genuinely one of the most luminous stars in our galaxy. It\'s one of the largest white stars known and will eventually end its life as a spectacular supernova.'
+  },
+  {
+    id: 'rosette-nebula',
+    name: 'Rosette Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'A stunning rose-shaped stellar nursery 130 light-years across!',
+    longDescription: 'The Rosette Nebula is a beautiful emission nebula that looks like a cosmic rose. At its center is a cluster of young, hot stars whose radiation is sculpting the surrounding gas.',
+    coolFact: 'The hole in the center was carved by radiation from young stars!',
+    extendedFacts: [
+      'Located about 5,000 light-years away',
+      'Contains enough gas to make 10,000 Suns',
+      'The central cluster is only 4 million years old',
+      'Visible with binoculars in the constellation Monoceros'
+    ],
+    metric: '130',
+    metricLabel: 'light-years wide',
+    icon: '🌹',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Rosette Nebula\'s flower-like appearance is created by the interplay of stellar winds and radiation from the young star cluster NGC 2244 at its center. These energetic stars are gradually clearing out a cavity and will eventually disperse the entire nebula, ending star formation in this region.'
+  },
+  {
+    id: 'lagoon-nebula',
+    name: 'Lagoon Nebula',
+    category: 'nebulas',
+    type: 'Emission Nebula',
+    description: 'One of only two star-forming nebulas visible to the naked eye!',
+    longDescription: 'The Lagoon Nebula is a giant interstellar cloud in the constellation Sagittarius. It\'s one of the brightest nebulas in the sky and contains the Hourglass Nebula at its heart.',
+    coolFact: 'The Lagoon is visible to the naked eye as a fuzzy patch near the Milky Way!',
+    extendedFacts: [
+      'About 4,100 light-years away',
+      '110 by 50 light-years in size',
+      'Contains hot young stars and dark dust lanes',
+      'Named for the dark lane that looks like a lagoon'
+    ],
+    metric: '110',
+    metricLabel: 'light-years wide',
+    icon: '🏝️',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Lagoon Nebula has been known since the 1600s and remains a favorite target for astronomers. The dark lane that gives it its name is actually a cold, dense cloud of dust blocking light from behind. The nebula contains many Bok globules - small, dark clouds that may be collapsing to form new stars.'
+  },
+  {
+    id: 'sombrero-galaxy',
+    name: 'Sombrero Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'A stunning galaxy with a brilliant nucleus and a prominent dust lane!',
+    longDescription: 'The Sombrero Galaxy gets its name from its resemblance to a Mexican hat. Its bright nucleus and distinctive dust lane make it one of the most photogenic galaxies in the sky.',
+    coolFact: 'The Sombrero has a supermassive black hole 1 billion times the Sun\'s mass!',
+    extendedFacts: [
+      'About 28 million light-years away',
+      'Has an unusually large central bulge',
+      'Contains about 2,000 globular clusters',
+      'May be an elliptical galaxy with a disk'
+    ],
+    metric: '1 billion',
+    metricLabel: 'solar mass black hole',
+    icon: '🎩',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Sombrero Galaxy\'s unique appearance comes from its large, bright nucleus surrounded by a prominent dust lane when viewed edge-on. It has an unusually rich system of globular clusters - about 10 times as many as the Milky Way. Its central black hole is one of the most massive found in nearby galaxies.'
+  },
+  {
+    id: 'pinwheel-galaxy',
+    name: 'Pinwheel Galaxy',
+    category: 'galaxies',
+    type: 'Spiral Galaxy',
+    description: 'A magnificent face-on spiral galaxy showcasing perfect spiral structure!',
+    longDescription: 'The Pinwheel Galaxy (M101) is a grand design spiral galaxy seen face-on from Earth. Its beautiful spiral arms are filled with star-forming regions and young blue stars.',
+    coolFact: 'The Pinwheel Galaxy is 70% larger than our Milky Way!',
+    extendedFacts: [
+      'About 21 million light-years away',
+      'Contains over 1 trillion stars',
+      'Has asymmetric spiral arms',
+      'Several supernovas observed here'
+    ],
+    metric: '170,000',
+    metricLabel: 'light-years wide',
+    icon: '🌀',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The Pinwheel Galaxy is one of the best examples of a grand design spiral galaxy. Its asymmetric appearance suggests gravitational interactions with neighboring galaxies. Several supernovas have been observed in M101, including SN 2023ixf in 2023, one of the closest and brightest supernovas in recent decades.'
+  },
+  {
+    id: 'cigar-galaxy',
+    name: 'Cigar Galaxy',
+    category: 'galaxies',
+    type: 'Starburst Galaxy',
+    description: 'A galaxy producing new stars 10 times faster than the Milky Way!',
+    longDescription: 'The Cigar Galaxy (M82) is undergoing an intense burst of star formation triggered by a close encounter with the nearby galaxy M81. Superheated gas streams out from its core.',
+    coolFact: 'The Cigar Galaxy is blowing superheated gas into space at 2 million mph!',
+    extendedFacts: [
+      'About 12 million light-years away',
+      'Producing stars 10 times faster than normal',
+      'Interacting with nearby M81 galaxy',
+      'Has a powerful galactic wind'
+    ],
+    metric: '10x',
+    metricLabel: 'star formation rate',
+    icon: '💨',
+    color: 'destructive',
+    distance: 'far',
+    readMoreContent: 'The Cigar Galaxy\'s starburst was triggered by a close gravitational encounter with M81 about 300 million years ago. The intense star formation is concentrated in the galaxy\'s core, where conditions resemble the early universe. Strong galactic winds carry gas and dust thousands of light-years into intergalactic space.'
+  },
+  {
+    id: 'solar-wind',
+    name: 'Solar Wind',
+    category: 'other',
+    type: 'Space Weather',
+    description: 'A constant stream of charged particles flowing from the Sun at 1 million mph!',
+    longDescription: 'The solar wind is a continuous flow of electrically charged particles (plasma) released from the Sun\'s corona. It shapes the heliosphere and interacts with planetary magnetic fields.',
+    coolFact: 'The solar wind creates beautiful auroras when it hits Earth\'s magnetic field!',
+    extendedFacts: [
+      'Travels at 250-750 km/s',
+      'Creates the heliosphere',
+      'Pushes comet tails away from the Sun',
+      'Affects satellite communications'
+    ],
+    metric: '1 million',
+    metricLabel: 'mph speed',
+    icon: '💨',
+    color: 'primary',
+    distance: 'near',
+    readMoreContent: 'The solar wind defines our heliosphere - the bubble of space dominated by the Sun\'s influence. When solar wind particles hit Earth\'s magnetic field, they can create geomagnetic storms and beautiful auroras. The solar wind also pushes comet tails to always point away from the Sun, regardless of the comet\'s direction of travel.'
+  },
+  {
+    id: 'kuiper-belt',
+    name: 'Kuiper Belt',
+    category: 'other',
+    type: 'Disk Region',
+    description: 'A vast disk of icy bodies beyond Neptune containing millions of objects!',
+    longDescription: 'The Kuiper Belt is a ring of icy objects extending from Neptune\'s orbit (30 AU) to about 50 AU from the Sun. It\'s home to dwarf planets Pluto, Eris, Makemake, and Haumea.',
+    coolFact: 'The Kuiper Belt contains more mass than the asteroid belt!',
+    extendedFacts: [
+      'Contains trillions of icy objects',
+      'Source of short-period comets',
+      'Extends 30-50 AU from the Sun',
+      'Discovered in 1992'
+    ],
+    metric: 'Trillions',
+    metricLabel: 'of objects',
+    icon: '💫',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'The Kuiper Belt was theoretical until 1992 when the first Kuiper Belt Object (other than Pluto) was discovered. It\'s the source of short-period comets that take less than 200 years to orbit the Sun. New Horizons became the first spacecraft to explore the Kuiper Belt when it flew by Pluto in 2015 and Arrokoth in 2019.'
+  },
+  {
+    id: 'oort-cloud',
+    name: 'Oort Cloud',
+    category: 'other',
+    type: 'Spherical Shell',
+    description: 'A hypothetical shell of trillions of icy objects at the edge of our solar system!',
+    longDescription: 'The Oort Cloud is believed to be a vast spherical shell of icy bodies extending from 2,000 to 100,000 AU from the Sun. It\'s thought to be the source of long-period comets.',
+    coolFact: 'The Oort Cloud is so far away that even Voyager 1 won\'t reach it for 300 years!',
+    extendedFacts: [
+      'May contain trillions of objects',
+      'Extends nearly halfway to the nearest star',
+      'No spacecraft has ever visited it',
+      'Named after astronomer Jan Oort'
+    ],
+    metric: '100,000',
+    metricLabel: 'AU distance',
+    icon: '☁️',
+    color: 'secondary',
+    distance: 'far',
+    readMoreContent: 'The Oort Cloud has never been directly observed - it\'s inferred from the orbits of long-period comets. These comets can take millions of years to orbit the Sun. The Oort Cloud marks the true edge of the Sun\'s gravitational influence. Passing stars occasionally disturb Oort Cloud objects, sending them toward the inner solar system as comets.'
+  },
+  {
+    id: 'exoplanet-kepler-22b',
+    name: 'Kepler-22b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'The first planet found in the habitable zone of a Sun-like star!',
+    longDescription: 'Kepler-22b orbits in the habitable zone of its star, where liquid water could exist. It\'s about 2.4 times Earth\'s size and might be a water world or a mini-Neptune.',
+    coolFact: 'Kepler-22b receives about the same amount of light as Earth from our Sun!',
+    extendedFacts: [
+      'About 600 light-years away',
+      '290-day orbital period',
+      'First habitable zone planet from Kepler mission',
+      'Star is slightly smaller and cooler than our Sun'
+    ],
+    metric: '600',
+    metricLabel: 'light-years away',
+    icon: '🌍',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'Kepler-22b was a landmark discovery - the first planet found orbiting in the habitable zone of a Sun-like star. Its size suggests it might be a "super-Earth" or "mini-Neptune." We don\'t know if it has a rocky surface or is a water world, but its location makes it a prime target for future observations.'
+  },
+  {
+    id: 'proxima-b',
+    name: 'Proxima Centauri b',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'The closest known exoplanet to Earth, orbiting our nearest stellar neighbor!',
+    longDescription: 'Proxima b is a potentially rocky planet orbiting Proxima Centauri, just 4.24 light-years away. It orbits in the habitable zone and could possibly have liquid water.',
+    coolFact: 'Proxima b is so close that future spacecraft might actually visit it!',
+    extendedFacts: [
+      'Orbits in just 11.2 days',
+      'About 1.3 times Earth\'s mass',
+      'May be tidally locked to its star',
+      'Target of the Breakthrough Starshot project'
+    ],
+    metric: '4.24',
+    metricLabel: 'light-years',
+    icon: '🪐',
+    color: 'accent',
+    distance: 'far',
+    readMoreContent: 'Proxima b\'s proximity makes it the most exciting exoplanet for potential future exploration. The Breakthrough Starshot project aims to send tiny spacecraft to Proxima Centauri. However, Proxima Centauri is a red dwarf star prone to violent flares, which might strip away any atmosphere the planet has.'
+  },
+  {
+    id: 'trappist-1e',
+    name: 'TRAPPIST-1e',
+    category: 'other',
+    type: 'Exoplanet',
+    description: 'The most Earth-like planet in the famous TRAPPIST-1 system!',
+    longDescription: 'TRAPPIST-1e is one of seven Earth-sized planets orbiting the ultracool dwarf star TRAPPIST-1. It\'s the most likely of the seven to have conditions suitable for life.',
+    coolFact: 'TRAPPIST-1e receives almost the same amount of energy as Earth does from the Sun!',
+    extendedFacts: [
+      'About 40 light-years away',
+      'Orbits in just 6.1 days',
+      'Similar size and density to Earth',
+      'Part of a seven-planet system'
+    ],
+    metric: '6.1',
+    metricLabel: 'day year',
+    icon: '🌎',
+    color: 'primary',
+    distance: 'far',
+    readMoreContent: 'The TRAPPIST-1 system is remarkable - seven Earth-sized planets orbiting so close that they would all fit inside Mercury\'s orbit. Three or four are in the habitable zone. TRAPPIST-1e is the most promising for habitability, with similar size and stellar heating to Earth. The James Webb Space Telescope is studying these worlds for signs of atmospheres.'
   }
 ];
 
