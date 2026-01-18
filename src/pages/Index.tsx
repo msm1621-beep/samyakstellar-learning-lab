@@ -12,6 +12,7 @@ import GamesSection from '@/components/GamesSection';
 import FunFactsSection from '@/components/FunFactsSection';
 import AboutSection from '@/components/AboutSection';
 import Footer from '@/components/Footer';
+import CosmoAssistant from '@/components/CosmoAssistant';
 
 const Index = () => {
   return (
@@ -34,6 +35,7 @@ const Index = () => {
       </main>
       
       <Footer />
+      <CosmoAssistant />
     </div>
   );
 };
