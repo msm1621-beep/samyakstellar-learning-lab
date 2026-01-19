@@ -280,6 +280,121 @@ export const books: Book[] = [
       { title: 'The Milky Way', content: 'From a truly dark location, you can see the Milky Way - a glowing band of light arching across the sky. You\'re looking into the disk of our galaxy, seeing the combined light of billions of distant stars. It\'s one of the most beautiful sights in nature!' }
     ]
   },
+  // NEW BOOKS - Rockets, Astronauts, Space Missions
+  {
+    id: 'b15',
+    title: 'Heroes of Space: Famous Astronauts',
+    author: 'Mission Control Academy',
+    ageRange: '7-12',
+    description: 'Meet the brave men and women who ventured into the unknown and made history!',
+    cover: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&h=400&fit=crop',
+    tags: ['Astronauts', 'Space Exploration', 'History', 'Beginner'],
+    type: 'book',
+    fullContent: 'Space exploration wouldn\'t be possible without the brave astronauts who risked their lives to explore the unknown. Let\'s meet some of the most famous space heroes!',
+    chapters: [
+      { title: 'Yuri Gagarin - First Human in Space', content: 'On April 12, 1961, Yuri Gagarin became the first human ever to travel to space! The Soviet cosmonaut orbited Earth once in his Vostok 1 spacecraft, a journey of 108 minutes that changed history forever. Gagarin became an instant hero and proved that humans could survive in space. His famous words were "Poyekhali!" meaning "Let\'s go!"' },
+      { title: 'Neil Armstrong - First on the Moon', content: 'Neil Armstrong made history on July 20, 1969, when he became the first human to walk on the Moon. As commander of Apollo 11, he spoke the famous words: "That\'s one small step for man, one giant leap for mankind." Armstrong was a test pilot before becoming an astronaut and later became a professor after retiring from NASA.' },
+      { title: 'Valentina Tereshkova - First Woman in Space', content: 'Valentina Tereshkova became the first woman in space on June 16, 1963, aboard Vostok 6. She orbited Earth 48 times over nearly three days! Tereshkova was a textile factory worker and amateur parachutist before being selected for the cosmonaut program. She remains an inspiration to women in science worldwide.' },
+      { title: 'Mae Jemison - Breaking Barriers', content: 'Dr. Mae Jemison became the first African American woman in space in 1992 aboard Space Shuttle Endeavour. She was a doctor before becoming an astronaut and conducted experiments on weightlessness and motion sickness in space. Jemison said she was inspired by Lt. Uhura from Star Trek!' },
+      { title: 'Chris Hadfield - The Singing Astronaut', content: 'Canadian astronaut Chris Hadfield became famous for sharing the wonders of space with millions through social media. He recorded a cover of David Bowie\'s "Space Oddity" aboard the ISS that went viral! Hadfield served as commander of the International Space Station and helped inspire a new generation of space explorers.' },
+      { title: 'Modern Space Heroes', content: 'Today\'s astronauts continue to inspire us! Peggy Whitson holds the record for most time in space by an American. Christina Koch and Jessica Meir performed the first all-female spacewalk. Scott Kelly spent a year in space while his twin brother stayed on Earth to help scientists study the effects of long-term space travel!' }
+    ]
+  },
+  {
+    id: 'b16',
+    title: 'The History of Rockets',
+    author: 'Rocket Science Academy',
+    ageRange: '8-13',
+    description: 'From ancient fireworks to SpaceX - discover the amazing evolution of rockets!',
+    cover: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?w=300&h=400&fit=crop',
+    tags: ['Rockets', 'History', 'Space Exploration', 'Intermediate'],
+    type: 'book',
+    fullContent: 'Rockets have taken us from simple fireworks to landing humans on the Moon and beyond. Let\'s explore their incredible journey through history!',
+    chapters: [
+      { title: 'Ancient Rockets', content: 'The first rockets were invented in China over 1,000 years ago! They were powered by gunpowder and used for fireworks and weapons. These early rockets were simple tubes filled with explosive powder. Legend says the Chinese inventor Wan Hu tried to fly to the Moon using rockets attached to a chair - though this probably didn\'t end well!' },
+      { title: 'Robert Goddard - Father of Rocketry', content: 'American scientist Robert Goddard launched the first liquid-fueled rocket on March 16, 1926. It flew for just 2.5 seconds and reached 41 feet high - but it proved rockets could work! Many laughed at Goddard\'s ideas, but he was right. Today he\'s called the "Father of Modern Rocketry."' },
+      { title: 'The V-2 and Space Race', content: 'Germany\'s V-2 rocket, designed by Wernher von Braun, was the first to reach space in 1944. After World War II, both the US and Soviet Union recruited German rocket scientists. This led to the Space Race - a competition to be first in space. The Soviets won by launching Sputnik in 1957 and putting Yuri Gagarin in orbit in 1961.' },
+      { title: 'Saturn V - The Moon Rocket', content: 'The Saturn V remains the most powerful rocket ever successfully flown! Standing 363 feet tall (taller than the Statue of Liberty), it could lift 130 tons to orbit. The Saturn V launched all the Apollo Moon missions. The sound of its five F-1 engines was so loud it could be heard 100 miles away!' },
+      { title: 'Space Shuttle Era', content: 'The Space Shuttle (1981-2011) was the first reusable spacecraft. It launched like a rocket, orbited like a spacecraft, and landed like a glider. Five shuttles flew 135 missions, building the ISS and launching the Hubble telescope. Sadly, we lost Challenger in 1986 and Columbia in 2003, reminding us how dangerous space travel can be.' },
+      { title: 'SpaceX and the Future', content: 'SpaceX, founded by Elon Musk, revolutionized rockets by making them reusable! Watching a Falcon 9 booster land on a drone ship is like seeing science fiction become real. SpaceX\'s Starship is designed to carry 100 people to Mars! Other companies like Blue Origin and Rocket Lab are also innovating, making space more accessible than ever.' }
+    ]
+  },
+  {
+    id: 'b17',
+    title: 'Famous Space Missions',
+    author: 'Space History Team',
+    ageRange: '9-14',
+    description: 'Relive the most incredible missions that pushed the boundaries of human exploration!',
+    cover: 'https://images.unsplash.com/photo-1457364559154-aa2644600ebb?w=300&h=400&fit=crop',
+    tags: ['Space Missions', 'History', 'Advanced'],
+    type: 'guide',
+    fullContent: 'From the first satellites to rovers on Mars, space missions have revealed the wonders of our universe. Let\'s explore the missions that changed everything!',
+    chapters: [
+      { title: 'Sputnik - The Space Age Begins', content: 'On October 4, 1957, the Soviet Union launched Sputnik 1 - the first artificial satellite! This beach ball-sized spacecraft orbited Earth every 96 minutes, beeping a radio signal that could be heard worldwide. Sputnik shocked the world and started the Space Age. The US responded by creating NASA and launching Explorer 1 in 1958.' },
+      { title: 'Apollo 11 - Moon Landing', content: 'Apollo 11 achieved President Kennedy\'s goal of landing humans on the Moon before 1970. On July 20, 1969, Neil Armstrong and Buzz Aldrin landed the lunar module Eagle while Michael Collins orbited above. They spent 2.5 hours walking on the Moon, collecting samples and planting the American flag. Over 600 million people watched on TV!' },
+      { title: 'Apollo 13 - Successful Failure', content: 'Apollo 13 is called a "successful failure." An oxygen tank exploded on the way to the Moon, and the crew had to use the lunar module as a lifeboat. With limited power, water, and oxygen, Mission Control worked with the astronauts to solve problems and get them home safely. It was an incredible story of teamwork and ingenuity!' },
+      { title: 'Voyager - The Grand Tour', content: 'Launched in 1977, Voyagers 1 and 2 explored Jupiter, Saturn, Uranus, and Neptune. They sent back stunning images and discoveries - active volcanoes on Io, geysers on Triton, rings around Jupiter! Both Voyagers are still operating, now in interstellar space. They carry Golden Records with sounds and images from Earth, just in case aliens find them!' },
+      { title: 'Hubble Space Telescope', content: 'Launched in 1990, the Hubble Space Telescope has transformed our understanding of the universe. From its orbit above Earth\'s atmosphere, Hubble has captured breathtaking images of nebulas, galaxies, and distant stars. It discovered that the universe\'s expansion is accelerating and helped determine the age of the universe!' },
+      { title: 'Mars Rovers', content: 'NASA has sent several rovers to explore Mars! Spirit and Opportunity (2004) found evidence of ancient water. Curiosity (2012) discovered Mars once had conditions suitable for life. Perseverance (2021) is collecting samples to eventually return to Earth and looking for signs of ancient life. Its helicopter, Ingenuity, made the first powered flight on another planet!' }
+    ]
+  },
+  {
+    id: 'b18',
+    title: 'Life on the Space Station',
+    author: 'ISS Crew',
+    ageRange: '6-11',
+    description: 'Discover what daily life is like for astronauts living and working in space!',
+    cover: 'https://images.unsplash.com/photo-1446941611757-91d2c3bd3d45?w=300&h=400&fit=crop',
+    tags: ['ISS', 'Astronauts', 'Daily Life', 'Beginner'],
+    type: 'book',
+    fullContent: 'The International Space Station is a home in space where astronauts live for months at a time. Let\'s see what a day in space is really like!',
+    chapters: [
+      { title: 'Waking Up in Space', content: 'Astronauts sleep in small cabins, zipped into sleeping bags attached to the wall so they don\'t float away! They wake up at 6 AM to an alarm. There\'s no shower - astronauts use wet wipes and rinse-free shampoo. Brushing teeth is tricky too - you can\'t spit, so you swallow the toothpaste!' },
+      { title: 'Space Food', content: 'Space food comes in special packages that won\'t crumble or spill. Astronauts add water to rehydrate freeze-dried meals and use tortillas instead of bread (no crumbs floating around!). Hot sauce is popular because taste is dulled in microgravity. Astronauts get treats like cookies and space coffee, and occasionally fresh fruit from supply ships!' },
+      { title: 'Working in Space', content: 'Astronauts work about 10 hours a day doing science experiments, maintaining the station, and communicating with Earth. They might study how plants grow in microgravity, test new medicines, or observe Earth and space. Sometimes they go on spacewalks to make repairs - floating outside with Earth below is an incredible experience!' },
+      { title: 'Exercising Every Day', content: 'In zero gravity, muscles and bones get weaker, so astronauts MUST exercise 2 hours every day! They use special equipment: a treadmill with bungee cords to hold them down, a bike with no seat (you don\'t need one when floating!), and a resistance machine for strength training. Exercise is crucial for staying healthy in space.' },
+      { title: 'Having Fun in Space', content: 'Astronauts have free time too! They love looking out the Cupola window at Earth - watching storms, city lights at night, and auroras. They play music, watch movies, read books, and call their families. Some astronauts have played soccer with floating objects and even made zero-G somersaults! They also share photos and videos on social media.' },
+      { title: 'Coming Home', content: 'After months in space, astronauts return to Earth in a Soyuz or Crew Dragon capsule. Reentry is intense - they experience 4-5 times normal gravity after months of weightlessness! Once back on Earth, it takes time to readjust. Walking feels strange, and they might drop things expecting them to float. But they bring back amazing science and unforgettable memories!' }
+    ]
+  },
+  {
+    id: 'b19',
+    title: 'Building Rockets: An Engineer\'s Guide',
+    author: 'Junior Aerospace Team',
+    ageRange: '10-14',
+    description: 'Learn how engineers design and build the incredible machines that take us to space!',
+    cover: 'https://images.unsplash.com/photo-1518364538800-6bae3c2ea0f2?w=300&h=400&fit=crop',
+    tags: ['Rockets', 'Engineering', 'Advanced'],
+    type: 'guide',
+    fullContent: 'Ever wondered how rockets are actually built? Engineers use incredible science and technology to create these amazing machines!',
+    chapters: [
+      { title: 'Rocket Parts', content: 'A rocket has several main parts: the payload (what it\'s carrying - a satellite, spacecraft, or cargo), the guidance system (the rocket\'s "brain"), fuel tanks (huge containers for propellant), engines (where the magic happens!), and sometimes boosters for extra power. Each part must work perfectly or the mission fails!' },
+      { title: 'Rocket Engines', content: 'Rocket engines are marvels of engineering! Liquid engines mix fuel (like kerosene or hydrogen) with an oxidizer (liquid oxygen) and ignite them. The Raptor engine on SpaceX\'s Starship uses methane and oxygen. Solid rocket boosters use a pre-mixed solid fuel. Both create thrust by shooting hot gases out at incredible speeds!' },
+      { title: 'Materials Science', content: 'Rockets must be light but incredibly strong. Engineers use aluminum alloys, titanium, and carbon fiber composites. The engine bells must withstand 3,500°C while the fuel tanks store liquids at -253°C (colder than Neptune!). Special heat shields protect spacecraft during reentry when temperatures can exceed 1,650°C!' },
+      { title: 'Testing, Testing, Testing', content: 'Engineers test everything multiple times! Engines are fired on test stands. Fuel tanks are pressurized until they burst (on purpose!) to find their limits. Computers run millions of simulations. Every bolt and wire is inspected. When you\'re sending astronauts to space, failure is not an option!' },
+      { title: 'Launch Day', content: 'Launching a rocket is an incredibly complex operation! Days before launch, teams check weather, load fuel, and run final tests. On launch day, hundreds of engineers monitor thousands of systems. The countdown includes multiple "holds" - checkpoints where they verify everything is perfect. When the countdown reaches zero... LIFTOFF!' },
+      { title: 'Reusability Revolution', content: 'The biggest innovation in rocket engineering is reusability! SpaceX lands their boosters on drone ships and launches them again, reducing costs by millions. Engineers had to solve huge challenges: precisely controlling descent, surviving the heat of reentry, and landing with pinpoint accuracy. This technology is making space more accessible!' }
+    ]
+  },
+  {
+    id: 'b20',
+    title: 'Women in Space',
+    author: 'Space Pioneers Foundation',
+    ageRange: '8-12',
+    description: 'Celebrate the incredible women who broke barriers and reached for the stars!',
+    cover: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=300&h=400&fit=crop',
+    tags: ['Astronauts', 'Women', 'History', 'Beginner'],
+    type: 'book',
+    fullContent: 'Women have been making history in space since the very beginning of the Space Age. Let\'s celebrate these amazing pioneers!',
+    chapters: [
+      { title: 'The Mercury 13', content: 'In 1960, 13 American women passed the same tests as the Mercury astronauts - some scoring even better! Called the "Mercury 13," they proved women could handle spaceflight. Sadly, NASA didn\'t accept women then. These pioneers, including Jerrie Cobb and Wally Funk, kept advocating for women in space. Wally Funk finally flew to space in 2021 at age 82 with Blue Origin!' },
+      { title: 'Valentina Tereshkova', content: 'Soviet cosmonaut Valentina Tereshkova became the first woman in space on June 16, 1963, beating American women by 20 years! She orbited Earth 48 times aboard Vostok 6. Tereshkova was a textile worker and parachutist before becoming a cosmonaut. She proved women could handle the rigors of spaceflight.' },
+      { title: 'Sally Ride - America\'s First', content: 'On June 18, 1983, Sally Ride became the first American woman in space. She was a physicist who joined NASA in 1978. Ride flew on the Space Shuttle twice and later dedicated her life to encouraging kids, especially girls, to study science. The Sally Ride Science program continues her legacy today!' },
+      { title: 'Pioneering Missions', content: 'Women have achieved many space firsts! Kathryn Sullivan became the first American woman to spacewalk (1984). Eileen Collins was the first female shuttle pilot (1995) and commander (1999). Peggy Whitson commanded the ISS twice and holds the record for most spacewalks by a woman. In 2019, Christina Koch and Jessica Meir performed the first all-female spacewalk!' },
+      { title: 'International Space Women', content: 'Women from around the world have explored space! Svetlana Savitskaya (USSR) was the first woman to spacewalk. Chiaki Mukai (Japan), Roberta Bondar (Canada), and Samantha Cristoforetti (Italy) made their nations proud. Yi So-yeon became South Korea\'s first astronaut. These women prove space exploration is for everyone!' },
+      { title: 'The Future is Female', content: 'NASA\'s Artemis program will land the first woman on the Moon! The astronaut corps is more diverse than ever. Companies like SpaceX are training more female astronauts. Young women today can dream of commanding missions to Mars! The barriers are breaking down, and the sky is no longer the limit.' }
+    ]
+  },
   // AUDIOBOOKS - Space Theories
   {
     id: 'ab1',
