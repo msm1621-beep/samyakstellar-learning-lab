@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy, X, ChevronLeft, Pause, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { Slider } from '@/components/ui/slider';
 import { courses, Course } from '@/data/courses';
 import { videos } from '@/data/videos';
-import { books } from '@/data/books';
+import { books, Book } from '@/data/books';
 import CourseCertificate from './CourseCertificate';
 
 interface CourseProgress {
@@ -28,6 +29,19 @@ const CourseSection = () => {
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
   const [showCertificate, setShowCertificate] = useState<{ course: Course; date: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'videos' | 'books' | 'audiobooks' | 'plan'>('plan');
+  
+  // Book reading state
+  const [readingBook, setReadingBook] = useState<Book | null>(null);
+  const [currentChapter, setCurrentChapter] = useState(0);
+  
+  // Audiobook playback state
+  const [playingAudiobook, setPlayingAudiobook] = useState<Book | null>(null);
+  const [audioChapter, setAudioChapter] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechRate, setSpeechRate] = useState(1);
+  const [speechVolume, setSpeechVolume] = useState(1);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const currentTextRef = useRef<string>('');
 
   // Load progress from localStorage
   useEffect(() => {
@@ -45,6 +59,13 @@ const CourseSection = () => {
   useEffect(() => {
     localStorage.setItem('completedCourses', JSON.stringify(completedCourses));
   }, [completedCourses]);
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const getProgress = (courseId: string): CourseProgress | undefined => {
     return courseProgress.find(p => p.courseId === courseId);
@@ -135,6 +156,93 @@ const CourseSection = () => {
       case 'intermediate': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
       case 'advanced': return 'bg-red-500/20 text-red-400 border-red-500/30';
       default: return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+    }
+  };
+
+  // Book reading functions
+  const openBook = (book: Book) => {
+    setReadingBook(book);
+    setCurrentChapter(0);
+  };
+
+  const closeBook = () => {
+    setReadingBook(null);
+    setCurrentChapter(0);
+  };
+
+  const nextChapter = () => {
+    if (readingBook && currentChapter < readingBook.chapters.length - 1) {
+      setCurrentChapter(prev => prev + 1);
+    }
+  };
+
+  const prevChapter = () => {
+    if (currentChapter > 0) {
+      setCurrentChapter(prev => prev - 1);
+    }
+  };
+
+  // Text-to-Speech functions
+  const speak = (text: string) => {
+    window.speechSynthesis.cancel();
+    currentTextRef.current = text;
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = speechRate;
+    utterance.pitch = 1;
+    utterance.volume = speechVolume;
+    
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+    if (englishVoice) {
+      utterance.voice = englishVoice;
+    }
+    
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+  };
+
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
+
+  const togglePlayPause = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.pause();
+      setIsSpeaking(false);
+    } else if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsSpeaking(true);
+    } else if (playingAudiobook) {
+      const chapter = playingAudiobook.chapters[audioChapter];
+      speak(chapter.content);
+    }
+  };
+
+  const openAudiobook = (book: Book) => {
+    stopSpeaking();
+    setPlayingAudiobook(book);
+    setAudioChapter(0);
+    setTimeout(() => {
+      speak(book.fullContent);
+    }, 100);
+  };
+
+  const closeAudiobook = () => {
+    stopSpeaking();
+    setPlayingAudiobook(null);
+    setAudioChapter(0);
+  };
+
+  const playAudioChapter = (chapterIndex: number) => {
+    if (playingAudiobook) {
+      setAudioChapter(chapterIndex);
+      speak(playingAudiobook.chapters[chapterIndex].content);
     }
   };
 
@@ -341,14 +449,23 @@ const CourseSection = () => {
                         <img src={book.cover} alt={book.title} className="w-full h-40 object-cover rounded-lg mb-3" />
                         <h5 className="text-white font-medium text-sm line-clamp-2 mb-1">{book.title}</h5>
                         <p className="text-white/60 text-xs mb-3">by {book.author}</p>
-                        <Button
-                          size="sm"
-                          variant={isCompleted ? 'default' : 'outline'}
-                          onClick={() => toggleItemComplete(selectedCourse.id, bookId, 'book')}
-                          className={`w-full ${isCompleted ? 'bg-green-600 hover:bg-green-700' : 'border-white/20 text-white'}`}
-                        >
-                          {isCompleted ? <><Check className="w-4 h-4 mr-1" /> Completed</> : 'Mark Complete'}
-                        </Button>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => openBook(book)}
+                            className="w-full bg-space-nebula hover:bg-space-nebula/80"
+                          >
+                            <BookOpen className="w-4 h-4 mr-1" /> Read Now
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant={isCompleted ? 'default' : 'outline'}
+                            onClick={() => toggleItemComplete(selectedCourse.id, bookId, 'book')}
+                            className={`w-full ${isCompleted ? 'bg-green-600 hover:bg-green-700' : 'border-white/20 text-white'}`}
+                          >
+                            {isCompleted ? <><Check className="w-4 h-4 mr-1" /> Completed</> : 'Mark Complete'}
+                          </Button>
+                        </div>
                       </div>
                     );
                   })}
@@ -376,14 +493,23 @@ const CourseSection = () => {
                         {audiobook.duration && (
                           <p className="text-purple-400 text-xs mb-3">{audiobook.duration}</p>
                         )}
-                        <Button
-                          size="sm"
-                          variant={isCompleted ? 'default' : 'outline'}
-                          onClick={() => toggleItemComplete(selectedCourse.id, abId, 'audiobook')}
-                          className={`w-full ${isCompleted ? 'bg-green-600 hover:bg-green-700' : 'border-white/20 text-white'}`}
-                        >
-                          {isCompleted ? <><Check className="w-4 h-4 mr-1" /> Completed</> : 'Mark Complete'}
-                        </Button>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => openAudiobook(audiobook)}
+                            className="w-full bg-purple-600 hover:bg-purple-700"
+                          >
+                            <Play className="w-4 h-4 mr-1" /> Listen Now
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant={isCompleted ? 'default' : 'outline'}
+                            onClick={() => toggleItemComplete(selectedCourse.id, abId, 'audiobook')}
+                            className={`w-full ${isCompleted ? 'bg-green-600 hover:bg-green-700' : 'border-white/20 text-white'}`}
+                          >
+                            {isCompleted ? <><Check className="w-4 h-4 mr-1" /> Completed</> : 'Mark Complete'}
+                          </Button>
+                        </div>
                       </div>
                     );
                   })}
@@ -530,6 +656,187 @@ const CourseSection = () => {
           completedDate={showCertificate.date}
           onClose={() => setShowCertificate(null)}
         />
+      )}
+
+      {/* Book Reader Modal */}
+      {readingBook && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-space-deep to-space-nebula/30 border border-white/20 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div>
+                <h3 className="text-xl font-bold text-white">{readingBook.title}</h3>
+                <p className="text-white/60 text-sm">by {readingBook.author}</p>
+              </div>
+              <Button variant="ghost" size="icon" onClick={closeBook} className="text-white/70 hover:text-white">
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+            
+            {/* Chapter Navigation */}
+            <div className="flex items-center gap-2 p-4 border-b border-white/10 overflow-x-auto">
+              {readingBook.chapters.map((chapter, idx) => (
+                <Button
+                  key={idx}
+                  size="sm"
+                  variant={currentChapter === idx ? 'default' : 'outline'}
+                  onClick={() => setCurrentChapter(idx)}
+                  className={`whitespace-nowrap ${
+                    currentChapter === idx 
+                      ? 'bg-space-gold text-space-deep' 
+                      : 'border-white/20 text-white hover:bg-white/10'
+                  }`}
+                >
+                  Ch. {idx + 1}
+                </Button>
+              ))}
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <h4 className="text-2xl font-bold text-space-gold mb-4">
+                Chapter {currentChapter + 1}: {readingBook.chapters[currentChapter].title}
+              </h4>
+              <p className="text-white/90 text-lg leading-relaxed whitespace-pre-wrap">
+                {readingBook.chapters[currentChapter].content}
+              </p>
+            </div>
+            
+            {/* Footer Navigation */}
+            <div className="flex items-center justify-between p-4 border-t border-white/10">
+              <Button
+                variant="outline"
+                onClick={prevChapter}
+                disabled={currentChapter === 0}
+                className="border-white/20 text-white hover:bg-white/10 disabled:opacity-50"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" /> Previous
+              </Button>
+              <span className="text-white/60">
+                {currentChapter + 1} of {readingBook.chapters.length}
+              </span>
+              <Button
+                variant="outline"
+                onClick={nextChapter}
+                disabled={currentChapter === readingBook.chapters.length - 1}
+                className="border-white/20 text-white hover:bg-white/10 disabled:opacity-50"
+              >
+                Next <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Audiobook Player Modal */}
+      {playingAudiobook && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-purple-900/80 to-space-deep border border-purple-500/30 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-purple-500/20">
+              <div className="flex items-center gap-4">
+                <img
+                  src={playingAudiobook.cover}
+                  alt={playingAudiobook.title}
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-white">{playingAudiobook.title}</h3>
+                  <p className="text-white/60 text-sm">by {playingAudiobook.author}</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" onClick={closeAudiobook} className="text-white/70 hover:text-white">
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+            
+            {/* Controls */}
+            <div className="p-6 space-y-6">
+              {/* Play/Pause Button */}
+              <div className="flex justify-center">
+                <Button
+                  size="lg"
+                  onClick={togglePlayPause}
+                  className="w-20 h-20 rounded-full bg-purple-600 hover:bg-purple-700"
+                >
+                  {isSpeaking ? (
+                    <Pause className="w-10 h-10" />
+                  ) : (
+                    <Play className="w-10 h-10 ml-1" />
+                  )}
+                </Button>
+              </div>
+              
+              {/* Speed Control */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm text-white/70">
+                  <span>Speed</span>
+                  <span>{speechRate}x</span>
+                </div>
+                <Slider
+                  value={[speechRate]}
+                  onValueChange={([value]) => setSpeechRate(value)}
+                  min={0.5}
+                  max={2}
+                  step={0.25}
+                  className="w-full"
+                />
+              </div>
+              
+              {/* Volume Control */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm text-white/70">
+                  <span className="flex items-center gap-2">
+                    {speechVolume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                    Volume
+                  </span>
+                  <span>{Math.round(speechVolume * 100)}%</span>
+                </div>
+                <Slider
+                  value={[speechVolume]}
+                  onValueChange={([value]) => setSpeechVolume(value)}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  className="w-full"
+                />
+              </div>
+            </div>
+            
+            {/* Chapters */}
+            <div className="flex-1 overflow-y-auto border-t border-purple-500/20">
+              <div className="p-4">
+                <h4 className="text-white/60 text-sm font-medium mb-3">Chapters</h4>
+                <div className="space-y-2">
+                  {playingAudiobook.chapters.map((chapter, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => playAudioChapter(idx)}
+                      className={`w-full text-left p-3 rounded-lg transition-colors ${
+                        audioChapter === idx && isSpeaking
+                          ? 'bg-purple-600/50 border border-purple-500'
+                          : 'bg-white/5 hover:bg-white/10 border border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                          audioChapter === idx && isSpeaking ? 'bg-purple-500' : 'bg-white/10'
+                        }`}>
+                          {audioChapter === idx && isSpeaking ? (
+                            <Headphones className="w-4 h-4 text-white" />
+                          ) : (
+                            <span className="text-white/70 text-sm">{idx + 1}</span>
+                          )}
+                        </div>
+                        <span className="text-white font-medium">{chapter.title}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
