@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy, X, ChevronLeft, Pause, Volume2, VolumeX } from 'lucide-react';
+import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy, X, ChevronLeft, Pause, Volume2, VolumeX, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -7,6 +7,7 @@ import { courses, Course } from '@/data/courses';
 import { videos } from '@/data/videos';
 import { books, Book } from '@/data/books';
 import CourseCertificate from './CourseCertificate';
+import CourseQuiz from './CourseQuiz';
 
 interface CourseProgress {
   courseId: string;
@@ -28,6 +29,7 @@ const CourseSection = () => {
   const [completedCourses, setCompletedCourses] = useState<CompletedCourse[]>([]);
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
   const [showCertificate, setShowCertificate] = useState<{ course: Course; date: string } | null>(null);
+  const [showQuiz, setShowQuiz] = useState<Course | null>(null);
   const [activeTab, setActiveTab] = useState<'videos' | 'books' | 'audiobooks' | 'plan'>('plan');
   
   // Book reading state
@@ -287,6 +289,13 @@ const CourseSection = () => {
                     <Award className="w-4 h-4 mr-2" /> Claim Certificate
                   </Button>
                 )}
+                <Button
+                  onClick={() => setShowQuiz(selectedCourse)}
+                  variant="outline"
+                  className="border-primary/30 text-primary hover:bg-primary/10"
+                >
+                  <HelpCircle className="w-4 h-4 mr-2" /> Take Quiz
+                </Button>
                 {isCourseCompleted(selectedCourse.id) && (
                   <Button
                     variant="outline"

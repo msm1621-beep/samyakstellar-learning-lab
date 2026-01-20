@@ -1,10 +1,10 @@
-import { useRef, useState, useCallback, Suspense } from 'react';
+import { useRef, useState, useCallback, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Text, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Send, MessageCircle } from 'lucide-react';
+import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
@@ -234,6 +234,47 @@ const AlienDoom = () => {
   ]);
   const [input, setInput] = useState('');
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  // Initialize speech synthesis voices
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
+
+  // Voice synthesis function
+  const speak = useCallback((text: string, speaker: 'mr' | 'mrs') => {
+    if (!voiceEnabled || !('speechSynthesis' in window)) return;
+    
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Different voice settings for Mr. and Mrs. Doom
+    if (speaker === 'mr') {
+      utterance.pitch = 0.8;
+      utterance.rate = 0.9;
+    } else {
+      utterance.pitch = 1.3;
+      utterance.rate = 1.0;
+    }
+    
+    const voices = window.speechSynthesis.getVoices();
+    if (speaker === 'mr') {
+      const maleVoice = voices.find(v => v.name.includes('Daniel') || v.name.includes('Alex') || v.name.includes('Google UK English Male'));
+      if (maleVoice) utterance.voice = maleVoice;
+    } else {
+      const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Google UK English Female'));
+      if (femaleVoice) utterance.voice = femaleVoice;
+    }
+    
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    
+    window.speechSynthesis.speak(utterance);
+  }, [voiceEnabled]);
 
   const handleSend = useCallback(() => {
     if (!input.trim()) return;
@@ -251,35 +292,62 @@ const AlienDoom = () => {
         setSpeakingAlien(resp.speaker);
         setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.response }]);
         
+        // Speak the response
+        speak(resp.response, resp.speaker);
+        
         setTimeout(() => setSpeakingAlien(null), 2000);
       }, (index + 1) * 1500);
     });
-  }, [input]);
+  }, [input, speak]);
+
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
 
   return (
     <>
       {/* Floating button to open alien chat */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-24 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
         aria-label="Chat with Mr & Mrs Doom"
       >
         <span className="text-2xl">👽</span>
-        <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs text-white animate-pulse">
+        <span className="absolute -top-2 -right-2 w-5 h-5 bg-destructive rounded-full flex items-center justify-center text-xs text-destructive-foreground animate-pulse">
           2
         </span>
       </button>
 
       {/* Alien chat modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl h-[80vh] bg-gradient-to-b from-slate-900 to-purple-950 rounded-2xl border border-purple-500/30 shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl h-[80vh] bg-gradient-to-b from-background to-primary/20 rounded-2xl border border-primary/30 shadow-2xl overflow-hidden">
             {/* Close button */}
             <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              onClick={() => {
+                setIsOpen(false);
+                stopSpeaking();
+              }}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
             >
-              <X className="w-5 h-5 text-white" />
+              <X className="w-5 h-5 text-foreground" />
+            </button>
+
+            {/* Voice toggle */}
+            <button
+              onClick={() => {
+                setVoiceEnabled(!voiceEnabled);
+                if (voiceEnabled) stopSpeaking();
+              }}
+              className="absolute top-4 left-4 z-10 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
+              aria-label={voiceEnabled ? "Disable voice" : "Enable voice"}
+            >
+              {voiceEnabled ? (
+                <Volume2 className="w-5 h-5 text-primary" />
+              ) : (
+                <VolumeX className="w-5 h-5 text-muted-foreground" />
+              )}
             </button>
             
             {/* 3D Canvas with aliens */}
@@ -302,10 +370,10 @@ const AlienDoom = () => {
                     <div
                       className={`max-w-[80%] px-4 py-2 rounded-2xl ${
                         msg.speaker === 'user'
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary text-primary-foreground'
                           : msg.speaker === 'mr'
-                          ? 'bg-purple-600/80 text-white'
-                          : 'bg-cyan-600/80 text-white'
+                          ? 'bg-secondary text-secondary-foreground'
+                          : 'bg-accent text-accent-foreground'
                       }`}
                     >
                       {msg.speaker !== 'user' && (
@@ -326,9 +394,9 @@ const AlienDoom = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask Mr & Mrs Doom about space..."
-                  className="flex-1 bg-white/10 border-purple-500/30 text-white placeholder:text-white/50"
+                  className="flex-1 bg-muted/50 border-primary/30 text-foreground placeholder:text-muted-foreground"
                 />
-                <Button onClick={handleSend} className="bg-purple-600 hover:bg-purple-700">
+                <Button onClick={handleSend} className="bg-primary hover:bg-primary/90">
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
