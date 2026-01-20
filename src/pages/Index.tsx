@@ -1,4 +1,4 @@
-import StarField from '@/components/StarField';
+import EnhancedStarField from '@/components/EnhancedStarField';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 import CelestialExplorer from '@/components/CelestialExplorer';
@@ -13,11 +13,13 @@ import FunFactsSection from '@/components/FunFactsSection';
 import AboutSection from '@/components/AboutSection';
 import Footer from '@/components/Footer';
 import CosmoAssistant from '@/components/CosmoAssistant';
+import AlienDoom from '@/components/AlienDoom';
+import SpaceAmbience from '@/components/SpaceAmbience';
 
 const Index = () => {
   return (
     <div className="relative min-h-screen">
-      <StarField />
+      <EnhancedStarField />
       <Navigation />
       
       <main className="relative z-10">
@@ -36,6 +38,8 @@ const Index = () => {
       
       <Footer />
       <CosmoAssistant />
+      <AlienDoom />
+      <SpaceAmbience />
     </div>
   );
 };
