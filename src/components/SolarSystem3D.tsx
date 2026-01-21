@@ -1,8 +1,10 @@
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, Sphere, Ring, Html, Stars } from '@react-three/drei';
 import { useRef, useState, Suspense, useMemo } from 'react';
 import * as THREE from 'three';
-import { Rocket, Info, X } from 'lucide-react';
+import { TextureLoader } from 'three';
+import { Rocket, Info, X, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 interface CelestialData {
   name: string;
@@ -17,22 +19,38 @@ interface CelestialData {
   funFact: string;
   emoji: string;
   type: 'planet' | 'dwarf-planet';
+  textureUrl?: string;
 }
 
+// NASA texture URLs (public domain)
+const NASA_TEXTURES = {
+  Sun: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Map_of_the_full_sun.jpg',
+  Mercury: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Mercury_Globe-MESSENGER_mosance_centered_at_0degN-0degE.jpg',
+  Venus: 'https://upload.wikimedia.org/wikipedia/commons/1/1c/Solarsystemscope_texture_8k_venus_surface.jpg',
+  Earth: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Solarsystemscope_texture_8k_earth_daymap.jpg',
+  Mars: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Mars_color_8k.jpg',
+  Jupiter: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter_8k.jpg',
+  Saturn: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_8k_saturn.jpg',
+  Uranus: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Solarsystemscope_texture_2k_uranus.jpg',
+  Neptune: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_2k_neptune.jpg',
+  Pluto: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Pluto_in_True_Color_-_High-Res.jpg',
+  Ceres: 'https://upload.wikimedia.org/wikipedia/commons/7/76/Ceres_-_RC3_-_Haulani_Crater_%2822381131691%29_%28cropped%29.jpg',
+};
+
 const planetsData: CelestialData[] = [
-  { name: 'Mercury', radius: 0.2, distance: 4, color: '#b5b5b5', orbitSpeed: 0.8, rotationSpeed: 0.01, funFact: 'Mercury is the fastest planet, zooming around the Sun in just 88 days!', emoji: '☿️', type: 'planet' },
-  { name: 'Venus', radius: 0.35, distance: 6, color: '#e6c87a', orbitSpeed: 0.6, rotationSpeed: 0.008, funFact: 'Venus spins backwards! The Sun rises in the west there.', emoji: '♀️', type: 'planet' },
-  { name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moons: 1, funFact: 'Earth is the only planet not named after a god!', emoji: '🌍', type: 'planet' },
-  { name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moons: 2, funFact: 'Mars has the tallest volcano in our solar system - Olympus Mons!', emoji: '♂️', type: 'planet' },
-  { name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moons: 95, funFact: 'Jupiter is so big that 1,300 Earths could fit inside it!', emoji: '♃', type: 'planet' },
-  { name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moons: 146, funFact: 'Saturn would float in water because it\'s less dense than water!', emoji: '🪐', type: 'planet' },
-  { name: 'Uranus', radius: 0.6, distance: 26, color: '#c9eeff', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moons: 28, funFact: 'Uranus rotates on its side like a rolling ball!', emoji: '⛢', type: 'planet' },
-  { name: 'Neptune', radius: 0.55, distance: 31, color: '#5b5ddf', orbitSpeed: 0.08, rotationSpeed: 0.022, moons: 16, funFact: 'Neptune has the strongest winds in the solar system - up to 1,200 mph!', emoji: '♆', type: 'planet' },
+  { name: 'Mercury', radius: 0.2, distance: 4, color: '#b5b5b5', orbitSpeed: 0.8, rotationSpeed: 0.01, funFact: 'Mercury is the fastest planet, zooming around the Sun in just 88 days!', emoji: '☿️', type: 'planet', textureUrl: NASA_TEXTURES.Mercury },
+  { name: 'Venus', radius: 0.35, distance: 6, color: '#e6c87a', orbitSpeed: 0.6, rotationSpeed: 0.008, funFact: 'Venus spins backwards! The Sun rises in the west there.', emoji: '♀️', type: 'planet', textureUrl: NASA_TEXTURES.Venus },
+  { name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moons: 1, funFact: 'Earth is the only planet not named after a god!', emoji: '🌍', type: 'planet', textureUrl: NASA_TEXTURES.Earth },
+  { name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moons: 2, funFact: 'Mars has the tallest volcano in our solar system - Olympus Mons!', emoji: '♂️', type: 'planet', textureUrl: NASA_TEXTURES.Mars },
+  { name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moons: 95, funFact: 'Jupiter is so big that 1,300 Earths could fit inside it!', emoji: '♃', type: 'planet', textureUrl: NASA_TEXTURES.Jupiter },
+  { name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moons: 146, funFact: 'Saturn would float in water because it\'s less dense than water!', emoji: '🪐', type: 'planet', textureUrl: NASA_TEXTURES.Saturn },
+  { name: 'Uranus', radius: 0.6, distance: 26, color: '#c9eeff', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moons: 28, funFact: 'Uranus rotates on its side like a rolling ball!', emoji: '⛢', type: 'planet', textureUrl: NASA_TEXTURES.Uranus },
+  { name: 'Neptune', radius: 0.55, distance: 31, color: '#5b5ddf', orbitSpeed: 0.08, rotationSpeed: 0.022, moons: 16, funFact: 'Neptune has the strongest winds in the solar system - up to 1,200 mph!', emoji: '♆', type: 'planet', textureUrl: NASA_TEXTURES.Neptune },
 ];
 
 const dwarfPlanetsData: CelestialData[] = [
-  { name: 'Ceres', radius: 0.12, distance: 12.5, color: '#8c8c8c', orbitSpeed: 0.35, rotationSpeed: 0.015, funFact: 'Ceres is the largest object in the asteroid belt and has water ice!', emoji: '🪨', type: 'dwarf-planet' },
-  { name: 'Pluto', radius: 0.15, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moons: 5, funFact: 'Pluto has a heart-shaped glacier made of nitrogen ice!', emoji: '💜', type: 'dwarf-planet' },
+  { name: 'Ceres', radius: 0.12, distance: 12.5, color: '#8c8c8c', orbitSpeed: 0.35, rotationSpeed: 0.015, funFact: 'Ceres is the largest object in the asteroid belt and has water ice!', emoji: '🪨', type: 'dwarf-planet', textureUrl: NASA_TEXTURES.Ceres },
+  { name: 'Pluto', radius: 0.15, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moons: 5, funFact: 'Pluto has a heart-shaped glacier made of nitrogen ice!', emoji: '💜', type: 'dwarf-planet', textureUrl: NASA_TEXTURES.Pluto },
   { name: 'Haumea', radius: 0.13, distance: 38, color: '#f5f5f5', orbitSpeed: 0.035, rotationSpeed: 0.05, moons: 2, funFact: 'Haumea is shaped like an egg because it spins so fast!', emoji: '🥚', type: 'dwarf-planet' },
   { name: 'Makemake', radius: 0.14, distance: 41, color: '#c4a882', orbitSpeed: 0.03, rotationSpeed: 0.012, moons: 1, funFact: 'Makemake is named after the Rapa Nui god of fertility!', emoji: '🗿', type: 'dwarf-planet' },
   { name: 'Eris', radius: 0.16, distance: 45, color: '#e8e8e8', orbitSpeed: 0.025, rotationSpeed: 0.008, moons: 1, funFact: 'Eris is more massive than Pluto and caused Pluto to be reclassified!', emoji: '⚪', type: 'dwarf-planet' },
@@ -40,8 +58,73 @@ const dwarfPlanetsData: CelestialData[] = [
 
 const allCelestialBodies = [...planetsData, ...dwarfPlanetsData];
 
+// Textured planet component - separate components for textured vs non-textured
+const TexturedPlanetMesh = ({ data, onClick, isSelected, hovered }: { 
+  data: CelestialData & { textureUrl: string }; 
+  onClick: () => void; 
+  isSelected: boolean;
+  hovered: boolean;
+}) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const texture = useLoader(TextureLoader, data.textureUrl);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += data.rotationSpeed;
+    }
+  });
+
+  return (
+    <mesh 
+      ref={meshRef} 
+      onClick={onClick}
+      scale={hovered || isSelected ? 1.3 : 1}
+    >
+      <Sphere args={[data.radius, 64, 64]}>
+        <meshStandardMaterial 
+          map={texture}
+          emissive={isSelected ? new THREE.Color(data.color) : new THREE.Color('#000000')}
+          emissiveIntensity={isSelected ? 0.3 : 0}
+        />
+      </Sphere>
+    </mesh>
+  );
+};
+
+const ColoredPlanetMesh = ({ data, onClick, isSelected, hovered }: { 
+  data: CelestialData; 
+  onClick: () => void; 
+  isSelected: boolean;
+  hovered: boolean;
+}) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += data.rotationSpeed;
+    }
+  });
+
+  return (
+    <mesh 
+      ref={meshRef} 
+      onClick={onClick}
+      scale={hovered || isSelected ? 1.3 : 1}
+    >
+      <Sphere args={[data.radius, 32, 32]}>
+        <meshStandardMaterial 
+          color={data.color} 
+          emissive={isSelected ? data.color : '#000000'}
+          emissiveIntensity={isSelected ? 0.4 : 0}
+        />
+      </Sphere>
+    </mesh>
+  );
+};
+
 const Sun = ({ onClick }: { onClick: () => void }) => {
   const sunRef = useRef<THREE.Mesh>(null);
+  const texture = useLoader(TextureLoader, NASA_TEXTURES.Sun);
   
   useFrame(() => {
     if (sunRef.current) {
@@ -52,8 +135,8 @@ const Sun = ({ onClick }: { onClick: () => void }) => {
   return (
     <group>
       <mesh ref={sunRef} onClick={onClick}>
-        <Sphere args={[2, 32, 32]}>
-          <meshBasicMaterial color="#fdb813" />
+        <Sphere args={[2, 64, 64]}>
+          <meshBasicMaterial map={texture} />
         </Sphere>
         <pointLight intensity={2} distance={100} decay={0.5} />
       </mesh>
@@ -155,7 +238,6 @@ const KuiperBelt = () => {
 
 const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onClick: () => void; isSelected: boolean }) => {
   const bodyRef = useRef<THREE.Group>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   const isDwarf = data.type === 'dwarf-planet';
@@ -166,9 +248,6 @@ const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onC
       const t = clock.getElapsedTime() * data.orbitSpeed;
       bodyRef.current.position.x = Math.cos(t) * data.distance;
       bodyRef.current.position.z = Math.sin(t) * data.distance;
-    }
-    if (meshRef.current) {
-      meshRef.current.rotation.y += data.rotationSpeed;
     }
   });
 
@@ -185,22 +264,34 @@ const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onC
         />
       </mesh>
       
-      <group ref={bodyRef}>
-        <mesh 
-          ref={meshRef} 
-          onClick={onClick}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-          scale={hovered || isSelected ? 1.3 : 1}
-        >
-          <Sphere args={[data.radius, 32, 32]}>
-            <meshStandardMaterial 
-              color={data.color} 
-              emissive={isSelected ? data.color : '#000000'}
-              emissiveIntensity={isSelected ? 0.4 : 0}
+      <group 
+        ref={bodyRef}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        {data.textureUrl ? (
+          <Suspense fallback={
+            <mesh onClick={onClick} scale={hovered || isSelected ? 1.3 : 1}>
+              <Sphere args={[data.radius, 32, 32]}>
+                <meshStandardMaterial color={data.color} />
+              </Sphere>
+            </mesh>
+          }>
+            <TexturedPlanetMesh 
+              data={data as CelestialData & { textureUrl: string }} 
+              onClick={onClick} 
+              isSelected={isSelected}
+              hovered={hovered}
             />
-          </Sphere>
-        </mesh>
+          </Suspense>
+        ) : (
+          <ColoredPlanetMesh 
+            data={data} 
+            onClick={onClick} 
+            isSelected={isSelected}
+            hovered={hovered}
+          />
+        )}
         
         {/* Saturn-like rings */}
         {data.hasRings && (
@@ -258,6 +349,26 @@ const Scene = ({ onSelectBody, selectedBody }: { onSelectBody: (body: CelestialD
 const SolarSystem3D = () => {
   const [selectedBody, setSelectedBody] = useState<CelestialData | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredBodies = useMemo(() => {
+    if (!searchQuery.trim()) return allCelestialBodies;
+    return allCelestialBodies.filter(body => 
+      body.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim()) {
+      const match = allCelestialBodies.find(body => 
+        body.name.toLowerCase() === query.toLowerCase()
+      );
+      if (match) {
+        setSelectedBody(match);
+      }
+    }
+  };
 
   return (
     <section id="solar-system-3d" className="py-16 px-4 relative">
@@ -270,9 +381,41 @@ const SolarSystem3D = () => {
           <h2 className="text-4xl md:text-5xl font-fredoka font-bold text-white mb-4">
             🚀 Explore Our Solar System in 3D!
           </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Drag to rotate, scroll to zoom, and click on planets to learn amazing facts! Now with asteroid belt, Kuiper belt, and dwarf planets!
+          <p className="text-lg text-white/70 max-w-2xl mx-auto mb-6">
+            Drag to rotate, scroll to zoom, and click on planets to learn amazing facts! Now with realistic NASA textures!
           </p>
+          
+          {/* Search Bar */}
+          <div className="max-w-md mx-auto relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+            <Input
+              type="text"
+              placeholder="Search planets, dwarf planets..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="pl-10 bg-space-dark/80 border-cosmic-purple/30 text-white placeholder:text-white/40 focus:border-cosmic-purple"
+            />
+            {searchQuery && filteredBodies.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-space-dark/95 border border-cosmic-purple/30 rounded-lg overflow-hidden z-50 backdrop-blur-md">
+                {filteredBodies.map(body => (
+                  <button
+                    key={body.name}
+                    onClick={() => {
+                      setSelectedBody(body);
+                      setSearchQuery('');
+                    }}
+                    className="w-full px-4 py-2 text-left hover:bg-cosmic-purple/20 flex items-center gap-2 transition-colors"
+                  >
+                    <span>{body.emoji}</span>
+                    <span className="text-white font-medium">{body.name}</span>
+                    {body.type === 'dwarf-planet' && (
+                      <span className="text-purple-400 text-xs bg-purple-500/20 px-2 py-0.5 rounded-full ml-auto">Dwarf</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
