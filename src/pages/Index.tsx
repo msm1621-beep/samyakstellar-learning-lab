@@ -1,6 +1,7 @@
 import EnhancedStarField from '@/components/EnhancedStarField';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
+import SolarSystem3D from '@/components/SolarSystem3D';
 import CelestialExplorer from '@/components/CelestialExplorer';
 import SpaceTimeline from '@/components/SpaceTimeline';
 import DailyFactWidget from '@/components/DailyFactWidget';
@@ -24,6 +25,7 @@ const Index = () => {
       
       <main className="relative z-10">
         <HeroSection />
+        <SolarSystem3D />
         <DailyFactWidget />
         <SpaceQnA />
         <CelestialExplorer />
