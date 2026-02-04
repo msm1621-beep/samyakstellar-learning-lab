@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, VolumeX, Award, CheckCircle, Square } from 'lucide-react';
+import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, VolumeX, Award, CheckCircle, Square, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
@@ -29,6 +30,8 @@ const LibrarySection = () => {
   
   const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
   const currentTextRef = useRef<string>('');
+  
+  const { addCoins } = useCoins();
 
   // Load completed books from localStorage
   useEffect(() => {
@@ -68,6 +71,9 @@ const LibrarySection = () => {
   const handleMarkComplete = (book: Book) => {
     saveCompletion(book);
     setShowCertificate(book);
+    const isAudiobook = book.type === 'audiobook';
+    addCoins(isAudiobook ? COIN_REWARDS.AUDIOBOOK_COMPLETE : COIN_REWARDS.BOOK_COMPLETE, 
+      `Finished: ${book.title}`);
   };
 
   const regularBooks = books.filter(b => b.type !== 'audiobook');

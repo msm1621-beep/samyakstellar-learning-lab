@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, Play, Rocket, Star, Zap } from 'lucide-react';
+import { RotateCcw, Play, Rocket, Star, Zap, Coins } from 'lucide-react';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface MathProblem {
   num1: number;
@@ -21,6 +22,8 @@ const RocketMathGame = () => {
   const [problemCount, setProblemCount] = useState(0);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [coinsAwarded, setCoinsAwarded] = useState(false);
+  const { addCoins } = useCoins();
 
   const generateProblem = useCallback((): MathProblem => {
     const operators: ('+' | '-' | '×')[] = ['+', '-', '×'];
@@ -74,6 +77,7 @@ const RocketMathGame = () => {
     setProblemCount(0);
     setFeedback(null);
     setTimeLeft(60);
+    setCoinsAwarded(false);
     setGameState('playing');
   }, [generateProblem]);
 
@@ -133,6 +137,13 @@ const RocketMathGame = () => {
 
   if (gameState === 'finished') {
     const rank = getRank();
+    const coinReward = score >= 100 ? COIN_REWARDS.GAME_WIN : score >= 50 ? 25 : 10;
+    
+    if (!coinsAwarded) {
+      addCoins(coinReward, 'Rocket Math Mission!');
+      setCoinsAwarded(true);
+    }
+    
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
         <div className="text-5xl mb-4">{rank.emoji}</div>
@@ -146,6 +157,13 @@ const RocketMathGame = () => {
           <div className="bg-primary/20 rounded-lg px-3 py-2">
             <div className="text-2xl font-bold">{problemCount}</div>
             <div className="text-xs text-muted-foreground">Problems</div>
+          </div>
+          <div className="bg-yellow-500/20 rounded-lg px-3 py-2">
+            <div className="text-2xl font-bold flex items-center gap-1">
+              <Coins className="w-4 h-4 text-yellow-400" />
+              <span className="text-yellow-400">+{coinReward}</span>
+            </div>
+            <div className="text-xs text-muted-foreground">Coins</div>
           </div>
         </div>
         <Button onClick={startGame} className="gap-2">

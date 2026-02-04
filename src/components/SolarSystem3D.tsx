@@ -4,6 +4,14 @@ import { useRef, useState, Suspense, useMemo } from 'react';
 import * as THREE from 'three';
 import { Rocket, Info, X } from 'lucide-react';
 
+interface MoonData {
+  name: string;
+  radius: number;
+  distance: number;
+  color: string;
+  orbitSpeed: number;
+}
+
 interface CelestialData {
   name: string;
   radius: number;
@@ -14,6 +22,7 @@ interface CelestialData {
   hasRings?: boolean;
   ringColor?: string;
   moons?: number;
+  moonData?: MoonData[];
   funFact: string;
   emoji: string;
   type: 'planet' | 'dwarf-planet';
@@ -22,20 +31,86 @@ interface CelestialData {
 const planetsData: CelestialData[] = [
   { name: 'Mercury', radius: 0.2, distance: 4, color: '#b5b5b5', orbitSpeed: 0.8, rotationSpeed: 0.01, funFact: 'Mercury is the fastest planet, zooming around the Sun in just 88 days!', emoji: '☿️', type: 'planet' },
   { name: 'Venus', radius: 0.35, distance: 6, color: '#e6c87a', orbitSpeed: 0.6, rotationSpeed: 0.008, funFact: 'Venus spins backwards! The Sun rises in the west there.', emoji: '♀️', type: 'planet' },
-  { name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moons: 1, funFact: 'Earth is the only planet not named after a god!', emoji: '🌍', type: 'planet' },
-  { name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moons: 2, funFact: 'Mars has the tallest volcano in our solar system - Olympus Mons!', emoji: '♂️', type: 'planet' },
-  { name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moons: 95, funFact: 'Jupiter is so big that 1,300 Earths could fit inside it!', emoji: '♃', type: 'planet' },
-  { name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moons: 146, funFact: 'Saturn would float in water because it\'s less dense than water!', emoji: '🪐', type: 'planet' },
-  { name: 'Uranus', radius: 0.6, distance: 26, color: '#c9eeff', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moons: 28, funFact: 'Uranus rotates on its side like a rolling ball!', emoji: '⛢', type: 'planet' },
-  { name: 'Neptune', radius: 0.55, distance: 31, color: '#5b5ddf', orbitSpeed: 0.08, rotationSpeed: 0.022, moons: 16, funFact: 'Neptune has the strongest winds in the solar system - up to 1,200 mph!', emoji: '♆', type: 'planet' },
+  { 
+    name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moons: 1, 
+    moonData: [{ name: 'Moon', radius: 0.1, distance: 0.8, color: '#c0c0c0', orbitSpeed: 2 }],
+    funFact: 'Earth is the only planet not named after a god!', emoji: '🌍', type: 'planet' 
+  },
+  { 
+    name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moons: 2,
+    moonData: [
+      { name: 'Phobos', radius: 0.04, distance: 0.5, color: '#8b7355', orbitSpeed: 4 },
+      { name: 'Deimos', radius: 0.03, distance: 0.7, color: '#a08060', orbitSpeed: 2.5 },
+    ],
+    funFact: 'Mars has the tallest volcano in our solar system - Olympus Mons!', emoji: '♂️', type: 'planet' 
+  },
+  { 
+    name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moons: 95,
+    moonData: [
+      { name: 'Io', radius: 0.1, distance: 1.8, color: '#f4d03f', orbitSpeed: 3 },
+      { name: 'Europa', radius: 0.09, distance: 2.2, color: '#e8dcc8', orbitSpeed: 2.5 },
+      { name: 'Ganymede', radius: 0.15, distance: 2.7, color: '#a89080', orbitSpeed: 2 },
+      { name: 'Callisto', radius: 0.13, distance: 3.2, color: '#706050', orbitSpeed: 1.5 },
+    ],
+    funFact: 'Jupiter is so big that 1,300 Earths could fit inside it!', emoji: '♃', type: 'planet' 
+  },
+  { 
+    name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moons: 146,
+    moonData: [
+      { name: 'Titan', radius: 0.14, distance: 2, color: '#d4a574', orbitSpeed: 2 },
+      { name: 'Rhea', radius: 0.06, distance: 2.5, color: '#c8c8c8', orbitSpeed: 2.5 },
+      { name: 'Enceladus', radius: 0.04, distance: 1.5, color: '#ffffff', orbitSpeed: 3.5 },
+    ],
+    funFact: 'Saturn would float in water because it\'s less dense than water!', emoji: '🪐', type: 'planet' 
+  },
+  { 
+    name: 'Uranus', radius: 0.6, distance: 26, color: '#c9eeff', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moons: 28,
+    moonData: [
+      { name: 'Titania', radius: 0.06, distance: 1.2, color: '#b0a090', orbitSpeed: 2.5 },
+      { name: 'Oberon', radius: 0.05, distance: 1.5, color: '#908070', orbitSpeed: 2 },
+    ],
+    funFact: 'Uranus rotates on its side like a rolling ball!', emoji: '⛢', type: 'planet' 
+  },
+  { 
+    name: 'Neptune', radius: 0.55, distance: 31, color: '#5b5ddf', orbitSpeed: 0.08, rotationSpeed: 0.022, moons: 16,
+    moonData: [
+      { name: 'Triton', radius: 0.08, distance: 1.2, color: '#d0e0f0', orbitSpeed: 2.5 },
+    ],
+    funFact: 'Neptune has the strongest winds in the solar system - up to 1,200 mph!', emoji: '♆', type: 'planet' 
+  },
 ];
 
 const dwarfPlanetsData: CelestialData[] = [
   { name: 'Ceres', radius: 0.12, distance: 12.5, color: '#8c8c8c', orbitSpeed: 0.35, rotationSpeed: 0.015, funFact: 'Ceres is the largest object in the asteroid belt and has water ice!', emoji: '🪨', type: 'dwarf-planet' },
-  { name: 'Pluto', radius: 0.15, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moons: 5, funFact: 'Pluto has a heart-shaped glacier made of nitrogen ice!', emoji: '💜', type: 'dwarf-planet' },
-  { name: 'Haumea', radius: 0.13, distance: 38, color: '#f5f5f5', orbitSpeed: 0.035, rotationSpeed: 0.05, moons: 2, funFact: 'Haumea is shaped like an egg because it spins so fast!', emoji: '🥚', type: 'dwarf-planet' },
-  { name: 'Makemake', radius: 0.14, distance: 41, color: '#c4a882', orbitSpeed: 0.03, rotationSpeed: 0.012, moons: 1, funFact: 'Makemake is named after the Rapa Nui god of fertility!', emoji: '🗿', type: 'dwarf-planet' },
-  { name: 'Eris', radius: 0.16, distance: 45, color: '#e8e8e8', orbitSpeed: 0.025, rotationSpeed: 0.008, moons: 1, funFact: 'Eris is more massive than Pluto and caused Pluto to be reclassified!', emoji: '⚪', type: 'dwarf-planet' },
+  { 
+    name: 'Pluto', radius: 0.15, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moons: 5,
+    moonData: [
+      { name: 'Charon', radius: 0.07, distance: 0.5, color: '#808080', orbitSpeed: 2 },
+      { name: 'Nix', radius: 0.02, distance: 0.7, color: '#c0c0c0', orbitSpeed: 3 },
+    ],
+    funFact: 'Pluto has a heart-shaped glacier made of nitrogen ice!', emoji: '💜', type: 'dwarf-planet' 
+  },
+  { 
+    name: 'Haumea', radius: 0.13, distance: 38, color: '#f5f5f5', orbitSpeed: 0.035, rotationSpeed: 0.05, moons: 2,
+    moonData: [
+      { name: "Hi'iaka", radius: 0.02, distance: 0.5, color: '#d0d0d0', orbitSpeed: 2.5 },
+    ],
+    funFact: 'Haumea is shaped like an egg because it spins so fast!', emoji: '🥚', type: 'dwarf-planet' 
+  },
+  { 
+    name: 'Makemake', radius: 0.14, distance: 41, color: '#c4a882', orbitSpeed: 0.03, rotationSpeed: 0.012, moons: 1,
+    moonData: [
+      { name: 'MK2', radius: 0.02, distance: 0.4, color: '#505050', orbitSpeed: 3 },
+    ],
+    funFact: 'Makemake is named after the Rapa Nui god of fertility!', emoji: '🗿', type: 'dwarf-planet' 
+  },
+  { 
+    name: 'Eris', radius: 0.16, distance: 45, color: '#e8e8e8', orbitSpeed: 0.025, rotationSpeed: 0.008, moons: 1,
+    moonData: [
+      { name: 'Dysnomia', radius: 0.03, distance: 0.5, color: '#a0a0a0', orbitSpeed: 2 },
+    ],
+    funFact: 'Eris is more massive than Pluto and caused Pluto to be reclassified!', emoji: '⚪', type: 'dwarf-planet' 
+  },
 ];
 
 const allCelestialBodies = [...planetsData, ...dwarfPlanetsData];
@@ -153,6 +228,28 @@ const KuiperBelt = () => {
   );
 };
 
+// Moon component that orbits around a planet
+const Moon = ({ moon, parentRef }: { moon: MoonData; parentRef: React.RefObject<THREE.Group> }) => {
+  const moonRef = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (moonRef.current && parentRef.current) {
+      const t = clock.getElapsedTime() * moon.orbitSpeed;
+      moonRef.current.position.x = Math.cos(t) * moon.distance;
+      moonRef.current.position.z = Math.sin(t) * moon.distance;
+      moonRef.current.position.y = Math.sin(t * 0.5) * 0.1; // Slight vertical wobble
+    }
+  });
+
+  return (
+    <mesh ref={moonRef}>
+      <Sphere args={[moon.radius, 16, 16]}>
+        <meshStandardMaterial color={moon.color} />
+      </Sphere>
+    </mesh>
+  );
+};
+
 const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onClick: () => void; isSelected: boolean }) => {
   const bodyRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
@@ -209,6 +306,11 @@ const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onC
           </Ring>
         )}
         
+        {/* Moons orbiting the planet */}
+        {data.moonData && data.moonData.map((moon, index) => (
+          <Moon key={`${data.name}-moon-${index}`} moon={moon} parentRef={bodyRef} />
+        ))}
+        
         {/* Always visible label */}
         <Html distanceFactor={12} position={[0, data.radius + 0.6, 0]}>
           <div className={`${labelColor} px-2 py-0.5 rounded-full whitespace-nowrap transition-all ${
@@ -216,6 +318,9 @@ const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onC
           }`}>
             <span className="text-white text-xs font-fredoka">{data.emoji} {data.name}</span>
             {isDwarf && <span className="text-white/70 text-[10px] ml-1">(dwarf)</span>}
+            {data.moonData && data.moonData.length > 0 && (
+              <span className="text-white/60 text-[10px] ml-1">🌙{data.moons}</span>
+            )}
           </div>
         </Html>
       </group>

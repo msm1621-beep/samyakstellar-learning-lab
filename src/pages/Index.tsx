@@ -16,12 +16,14 @@ import Footer from '@/components/Footer';
 import CosmoAssistant from '@/components/CosmoAssistant';
 import AlienDoom from '@/components/AlienDoom';
 import SpaceAmbience from '@/components/SpaceAmbience';
+import CoinDisplay from '@/components/CoinDisplay';
 
 const Index = () => {
   return (
     <div className="relative min-h-screen">
       <EnhancedStarField />
       <Navigation />
+      <CoinDisplay />
       
       <main className="relative z-10">
         <HeroSection />

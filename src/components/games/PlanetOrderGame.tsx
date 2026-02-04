@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, Play, CheckCircle, Trophy } from 'lucide-react';
+import { RotateCcw, Play, CheckCircle, Trophy, Coins } from 'lucide-react';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface Planet {
   id: string;
@@ -30,6 +31,8 @@ const PlanetOrderGame = () => {
   const [availablePlanets, setAvailablePlanets] = useState<Planet[]>([]);
   const [draggedPlanet, setDraggedPlanet] = useState<Planet | null>(null);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [coinsAwarded, setCoinsAwarded] = useState(false);
+  const { addCoins } = useCoins();
 
   const startGame = useCallback(() => {
     const shuffled = [...planets].sort(() => Math.random() - 0.5);
@@ -37,6 +40,7 @@ const PlanetOrderGame = () => {
     setAvailablePlanets(shuffled);
     setSelectedSlots(Array(8).fill(null));
     setIsCorrect(false);
+    setCoinsAwarded(false);
     setGameState('playing');
   }, []);
 
@@ -107,6 +111,12 @@ const PlanetOrderGame = () => {
   }
 
   if (gameState === 'finished') {
+    // Award coins for winning
+    if (isCorrect && !coinsAwarded) {
+      addCoins(COIN_REWARDS.GAME_WIN, 'Planet Order Victory!');
+      setCoinsAwarded(true);
+    }
+    
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
         <div className="text-5xl mb-4">{isCorrect ? '🎉' : '🌟'}</div>
@@ -122,6 +132,8 @@ const PlanetOrderGame = () => {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Trophy className="w-5 h-5 text-yellow-400" />
             <span className="font-bold">Solar System Expert!</span>
+            <Coins className="w-4 h-4 text-yellow-400 ml-2" />
+            <span className="text-yellow-400 font-bold">+{COIN_REWARDS.GAME_WIN}</span>
           </div>
         )}
         <Button onClick={startGame} className="gap-2">

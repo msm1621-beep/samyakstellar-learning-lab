@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, Play, Trophy, Star, Clock } from 'lucide-react';
+import { RotateCcw, Play, Trophy, Star, Clock, Coins } from 'lucide-react';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface Card {
   id: number;
@@ -31,6 +32,8 @@ const MemoryMatchGame = () => {
   const [matches, setMatches] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
+  const [coinsAwarded, setCoinsAwarded] = useState(false);
+  const { addCoins } = useCoins();
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -59,6 +62,7 @@ const MemoryMatchGame = () => {
     setMatches(0);
     setTimer(0);
     setIsLocked(false);
+    setCoinsAwarded(false);
     setGameState('playing');
   }, []);
 
@@ -147,6 +151,14 @@ const MemoryMatchGame = () => {
 
   if (gameState === 'finished') {
     const stars = getStarRating();
+    const coinReward = stars === 3 ? COIN_REWARDS.GAME_WIN : stars === 2 ? 30 : 15;
+    
+    // Award coins only once
+    if (!coinsAwarded) {
+      addCoins(coinReward, 'Memory Match Complete!');
+      setCoinsAwarded(true);
+    }
+    
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
         <div className="text-5xl mb-4">🎉</div>
@@ -167,6 +179,10 @@ const MemoryMatchGame = () => {
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4 text-primary" />
             <span>{formatTime(timer)}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Coins className="w-4 h-4 text-yellow-400" />
+            <span className="text-yellow-400 font-bold">+{coinReward}</span>
           </div>
         </div>
         <Button onClick={startGame} className="gap-2">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy, X, ChevronLeft, Pause, Volume2, VolumeX, HelpCircle } from 'lucide-react';
+import { GraduationCap, BookOpen, Video, Headphones, ChevronRight, Star, Clock, Award, Check, Play, RotateCcw, Trophy, X, ChevronLeft, Pause, Volume2, VolumeX, HelpCircle, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -8,6 +8,7 @@ import { videos } from '@/data/videos';
 import { books, Book } from '@/data/books';
 import CourseCertificate from './CourseCertificate';
 import CourseQuiz from './CourseQuiz';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface CourseProgress {
   courseId: string;
@@ -44,6 +45,8 @@ const CourseSection = () => {
   const [speechVolume, setSpeechVolume] = useState(1);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const currentTextRef = useRef<string>('');
+  
+  const { addCoins } = useCoins();
 
   // Load progress from localStorage
   useEffect(() => {
@@ -134,6 +137,7 @@ const CourseSection = () => {
     
     setCompletedCourses(prev => [...prev, { courseId: course.id, completedAt }]);
     setShowCertificate({ course, date: completedAt });
+    addCoins(COIN_REWARDS.COURSE_COMPLETE, `Completed: ${course.title}`);
   };
 
   const restartCourse = (courseId: string) => {
