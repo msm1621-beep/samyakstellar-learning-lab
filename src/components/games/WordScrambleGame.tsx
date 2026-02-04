@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, Play, Lightbulb, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
+import { RotateCcw, Play, Lightbulb, CheckCircle, XCircle, ArrowRight, Coins } from 'lucide-react';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface SpaceWord {
   word: string;
@@ -35,6 +36,8 @@ const WordScrambleGame = () => {
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [gameWords, setGameWords] = useState<SpaceWord[]>([]);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [coinsAwarded, setCoinsAwarded] = useState(false);
+  const { addCoins } = useCoins();
 
   const scrambleWord = (word: string): string => {
     const arr = word.split('');
@@ -60,6 +63,7 @@ const WordScrambleGame = () => {
     setShowHint(false);
     setFeedback(null);
     setHintsUsed(0);
+    setCoinsAwarded(false);
     setGameState('playing');
   }, []);
 
@@ -117,6 +121,12 @@ const WordScrambleGame = () => {
   if (gameState === 'finished') {
     const maxScore = gameWords.length * 2;
     const percentage = Math.round((score / maxScore) * 100);
+    const coinReward = percentage >= 80 ? COIN_REWARDS.GAME_WIN : percentage >= 50 ? 25 : 10;
+    
+    if (!coinsAwarded) {
+      addCoins(coinReward, 'Word Scramble Complete!');
+      setCoinsAwarded(true);
+    }
     
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
@@ -125,6 +135,10 @@ const WordScrambleGame = () => {
         </div>
         <h3 className="text-xl font-display font-bold mb-2">Game Complete!</h3>
         <p className="text-2xl font-bold text-primary mb-2">{score}/{maxScore} points</p>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Coins className="w-5 h-5 text-yellow-400" />
+          <span className="text-yellow-400 font-bold text-lg">+{coinReward} coins!</span>
+        </div>
         <p className="text-sm text-muted-foreground mb-4">
           {hintsUsed === 0 
             ? 'Amazing! You did it without any hints!' 

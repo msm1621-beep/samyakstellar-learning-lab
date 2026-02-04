@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { quizQuestions, badges, difficultyConfig, QuizQuestion } from '@/data/quizQuestions';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle, Trophy, RotateCcw, Play, Star } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy, RotateCcw, Play, Star, Coins } from 'lucide-react';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 type Difficulty = 'easy' | 'medium' | 'hard' | 'mixed';
 type GameState = 'start' | 'playing' | 'finished';
@@ -13,6 +14,8 @@ const QuizGame = () => {
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [coinsAwarded, setCoinsAwarded] = useState(false);
+  const { addCoins } = useCoins();
 
   const gameQuestions = useMemo(() => {
     let filtered: QuizQuestion[];
@@ -60,6 +63,7 @@ const QuizGame = () => {
     setScore(0);
     setSelectedAnswer(null);
     setShowFeedback(false);
+    setCoinsAwarded(false);
   };
 
   const handleStartGame = () => {
@@ -68,6 +72,7 @@ const QuizGame = () => {
     setScore(0);
     setSelectedAnswer(null);
     setShowFeedback(false);
+    setCoinsAwarded(false);
   };
 
   const getBadge = () => {
@@ -121,6 +126,14 @@ const QuizGame = () => {
   // Finished Screen
   if (gameState === 'finished') {
     const badge = getBadge();
+    const isPerfect = score === gameQuestions.length;
+    const coinReward = isPerfect ? COIN_REWARDS.QUIZ_PERFECT : score >= 3 ? COIN_REWARDS.QUIZ_GOOD : 10;
+    
+    if (!coinsAwarded) {
+      addCoins(coinReward, isPerfect ? 'Perfect Quiz!' : 'Quiz Complete!');
+      setCoinsAwarded(true);
+    }
+    
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-8 border border-primary/20 text-center">
         <div className="text-6xl mb-4 animate-bounce">{badge.emoji}</div>
@@ -128,7 +141,7 @@ const QuizGame = () => {
         <p className="text-xl mb-4">
           You earned the <span className="text-primary font-bold">{badge.name}</span> badge!
         </p>
-        <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex items-center justify-center gap-2 mb-4">
           <Trophy className="w-6 h-6 text-yellow-400" />
           <span className="text-2xl font-bold">{score} / {gameQuestions.length}</span>
           <span className={`text-sm px-2 py-1 rounded-full ${
@@ -137,6 +150,10 @@ const QuizGame = () => {
           }`}>
             {selectedDifficulty === 'mixed' ? '🌈 Mixed' : difficultyConfig[selectedDifficulty].emoji + ' ' + difficultyConfig[selectedDifficulty].label}
           </span>
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Coins className="w-5 h-5 text-yellow-400" />
+          <span className="text-yellow-400 font-bold text-lg">+{coinReward} coins!</span>
         </div>
         <Button onClick={handleRestart} className="gap-2">
           <RotateCcw className="w-4 h-4" />
