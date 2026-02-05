@@ -23,7 +23,18 @@ import { Subscription, getSubscriptionById } from '@/data/subscriptions';
   canClaimDailyBonus: boolean;
  }
  
- const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
+  const SubscriptionContext = createContext<SubscriptionContextType>({
+    activeSubscription: null,
+    currentSubscription: null,
+    purchaseSubscription: () => false,
+    daysRemaining: 0,
+    isExpired: true,
+    coinBonus: 0,
+    dailyBonus: 0,
+    badge: null,
+    claimDailyBonus: () => false,
+    canClaimDailyBonus: false,
+  });
  
  const SUBSCRIPTION_DURATION_DAYS = 30;
  
@@ -172,9 +183,5 @@ import { Subscription, getSubscriptionById } from '@/data/subscriptions';
  };
  
  export const useSubscription = () => {
-   const context = useContext(SubscriptionContext);
-   if (context === undefined) {
-     throw new Error('useSubscription must be used within a SubscriptionProvider');
-   }
-   return context;
+    return useContext(SubscriptionContext);
  };
