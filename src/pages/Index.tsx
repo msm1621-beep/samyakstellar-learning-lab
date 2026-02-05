@@ -18,6 +18,7 @@ import AlienDoom from '@/components/AlienDoom';
 import SpaceAmbience from '@/components/SpaceAmbience';
 import CoinDisplay from '@/components/CoinDisplay';
  import SubscriptionSection from '@/components/SubscriptionSection';
+ import AccountBar from '@/components/AccountBar';
 
 const Index = () => {
   return (
@@ -25,6 +26,7 @@ const Index = () => {
       <EnhancedStarField />
       <Navigation />
       <CoinDisplay />
+       <AccountBar />
       
       <main className="relative z-10">
         <HeroSection />
