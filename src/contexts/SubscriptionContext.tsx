@@ -1,5 +1,5 @@
- import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
- import { Subscription, subscriptions, getSubscriptionById } from '@/data/subscriptions';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { Subscription, getSubscriptionById } from '@/data/subscriptions';
  import { useCoins } from './CoinsContext';
  import { useToast } from '@/hooks/use-toast';
  
@@ -7,16 +7,20 @@
    subscriptionId: string;
    purchasedAt: string;
    expiresAt: string;
+  lastDailyBonusClaimed: string | null;
  }
  
  interface SubscriptionContextType {
    activeSubscription: ActiveSubscription | null;
    currentSubscription: Subscription | null;
    purchaseSubscription: (subscriptionId: string) => boolean;
-   hasVideoAccess: (videoId: string) => boolean;
-   getAccessibleVideoIds: () => string[];
    daysRemaining: number;
    isExpired: boolean;
+  coinBonus: number;
+  dailyBonus: number;
+  badge: string | null;
+  claimDailyBonus: () => boolean;
+  canClaimDailyBonus: boolean;
  }
  
  const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -62,6 +66,48 @@
      ? new Date(activeSubscription.expiresAt) <= new Date()
      : true;
  
+  const coinBonus = currentSubscription && !isExpired ? currentSubscription.coinBonus : 0;
+  const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
+  const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
+
+  // Check if daily bonus can be claimed
+  const canClaimDailyBonus = useCallback(() => {
+    if (!activeSubscription || isExpired || !currentSubscription) return false;
+    
+    if (!activeSubscription.lastDailyBonusClaimed) return true;
+    
+    const lastClaimed = new Date(activeSubscription.lastDailyBonusClaimed);
+    const today = new Date();
+    return lastClaimed.toDateString() !== today.toDateString();
+  }, [activeSubscription, isExpired, currentSubscription]);
+
+  const claimDailyBonus = (): boolean => {
+    if (!canClaimDailyBonus() || !currentSubscription) {
+      toast({
+        title: "Already Claimed!",
+        description: "Come back tomorrow for your next daily bonus! 🌟",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    addCoins(currentSubscription.dailyBonus, `Daily ${currentSubscription.name} bonus`);
+    
+    const updated = {
+      ...activeSubscription!,
+      lastDailyBonusClaimed: new Date().toISOString()
+    };
+    setActiveSubscription(updated);
+    localStorage.setItem('spaceSubscription', JSON.stringify(updated));
+
+    toast({
+      title: `🎁 Daily Bonus Claimed!`,
+      description: `+${currentSubscription.dailyBonus} coins from your ${currentSubscription.name} subscription!`,
+    });
+
+    return true;
+  };
+
    const purchaseSubscription = (subscriptionId: string): boolean => {
      const subscription = getSubscriptionById(subscriptionId);
      if (!subscription) {
@@ -92,7 +138,8 @@
      const newSubscription: ActiveSubscription = {
        subscriptionId,
        purchasedAt: now.toISOString(),
-       expiresAt: expiresAt.toISOString()
+      expiresAt: expiresAt.toISOString(),
+      lastDailyBonusClaimed: null
      };
  
      setActiveSubscription(newSubscription);
@@ -100,20 +147,10 @@
  
      toast({
        title: `🎉 ${subscription.icon} Subscription Activated!`,
-       description: `Welcome to ${subscription.name}! Enjoy for 30 days.`,
+      description: `Welcome to ${subscription.name}! Enjoy ${subscription.coinBonus}% bonus coins for 30 days!`,
      });
  
      return true;
-   };
- 
-   const hasVideoAccess = (videoId: string): boolean => {
-     if (!currentSubscription || isExpired) return false;
-     return currentSubscription.videoAccess.includes(videoId);
-   };
- 
-   const getAccessibleVideoIds = (): string[] => {
-     if (!currentSubscription || isExpired) return [];
-     return currentSubscription.videoAccess;
    };
  
    return (
@@ -121,10 +158,13 @@
        activeSubscription,
        currentSubscription,
        purchaseSubscription,
-       hasVideoAccess,
-       getAccessibleVideoIds,
        daysRemaining,
-       isExpired
+      isExpired,
+      coinBonus,
+      dailyBonus,
+      badge,
+      claimDailyBonus,
+      canClaimDailyBonus: canClaimDailyBonus()
      }}>
        {children}
      </SubscriptionContext.Provider>

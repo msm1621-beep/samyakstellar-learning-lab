@@ -1,5 +1,5 @@
- import { useState } from 'react';
- import { Crown, Lock, Check, Sparkles, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { Crown, Lock, Check, Sparkles, Clock, Gift, Percent, Coins } from 'lucide-react';
  import { Button } from '@/components/ui/button';
  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
  import { subscriptions, Subscription } from '@/data/subscriptions';
@@ -14,7 +14,7 @@
  } from '@/components/ui/dialog';
  
  const SubscriptionSection = () => {
-   const { currentSubscription, purchaseSubscription, daysRemaining, isExpired } = useSubscription();
+  const { currentSubscription, purchaseSubscription, daysRemaining, isExpired, claimDailyBonus, canClaimDailyBonus, coinBonus, dailyBonus, badge } = useSubscription();
    const { coins } = useCoins();
    const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
    const [showConfirm, setShowConfirm] = useState(false);
@@ -42,19 +42,37 @@
              🎫 Space Subscriptions
            </h2>
            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-             Unlock exclusive video content with your earned coins! Each subscription lasts 30 days.
+            Get VIP perks, bonus coins, and exclusive badges! All videos are FREE - subscriptions give you special rewards! 🌟
            </p>
            
            {/* Current subscription status */}
            {currentSubscription && !isExpired && (
-             <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r ${currentSubscription.color} text-white font-semibold shadow-lg`}>
-               <span className="text-2xl">{currentSubscription.icon}</span>
-               <span>{currentSubscription.name}</span>
-               {currentSubscription.isVIP && <Crown className="w-5 h-5" />}
-               <span className="flex items-center gap-1 text-sm opacity-90">
-                 <Clock className="w-4 h-4" />
-                 {daysRemaining} days left
-               </span>
+            <div className="space-y-4">
+              <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r ${currentSubscription.color} text-white font-semibold shadow-lg`}>
+                <span className="text-2xl">{badge}</span>
+                <span>{currentSubscription.name}</span>
+                {currentSubscription.isVIP && <Crown className="w-5 h-5" />}
+                <span className="flex items-center gap-1 text-sm opacity-90">
+                  <Clock className="w-4 h-4" />
+                  {daysRemaining} days left
+                </span>
+              </div>
+              
+              {/* Perks display and daily bonus */}
+              <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500/20 text-yellow-400">
+                  <Percent className="w-4 h-4" />
+                  <span className="font-semibold">+{coinBonus}% Bonus Coins</span>
+                </div>
+                <Button 
+                  onClick={() => claimDailyBonus()}
+                  disabled={!canClaimDailyBonus}
+                  className={`flex items-center gap-2 ${canClaimDailyBonus ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' : 'bg-muted'}`}
+                >
+                  <Gift className="w-4 h-4" />
+                  {canClaimDailyBonus ? `Claim ${dailyBonus} Daily Coins!` : 'Daily Bonus Claimed ✓'}
+                </Button>
+              </div>
              </div>
            )}
          </div>
@@ -88,7 +106,7 @@
  
                  <CardHeader className="pb-2">
                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${sub.color} flex items-center justify-center text-3xl mx-auto mb-2 shadow-lg`}>
-                     {sub.icon}
+                    {sub.badge}
                    </div>
                    <CardTitle className="text-center text-lg">{sub.name}</CardTitle>
                    <CardDescription className="text-center">
@@ -102,7 +120,7 @@
  
                  <CardContent className="pt-2">
                    <div className="text-xs text-center text-muted-foreground mb-3">
-                     Tier {sub.tier} • {sub.videoAccess.length} videos
+                    Tier {sub.tier} • +{sub.coinBonus}% bonus • {sub.dailyBonus}/day
                    </div>
                    
                    <ul className="space-y-1 mb-4">
