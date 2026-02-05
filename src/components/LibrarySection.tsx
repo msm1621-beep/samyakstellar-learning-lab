@@ -5,8 +5,6 @@ import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
- import { useSubscription } from '@/contexts/SubscriptionContext';
- import { Lock, Crown } from 'lucide-react';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
@@ -34,7 +32,6 @@ const LibrarySection = () => {
   const currentTextRef = useRef<string>('');
   
   const { addCoins } = useCoins();
-   const { hasVideoAccess, currentSubscription, isExpired } = useSubscription();
 
   // Load completed books from localStorage
   useEffect(() => {
@@ -92,13 +89,10 @@ const LibrarySection = () => {
       ? allBookTags 
       : allAudiobookTags;
 
-   // Filter videos based on subscription access
-   const accessibleVideos = videos.filter(v => hasVideoAccess(v.id));
-   const lockedVideos = videos.filter(v => !hasVideoAccess(v.id));
-   
-   const filteredAccessibleVideos = selectedTag === 'all' 
-     ? accessibleVideos 
-     : accessibleVideos.filter((v) => v.tags.includes(selectedTag));
+  // All videos are now free for everyone
+  const filteredVideos = selectedTag === 'all' 
+    ? videos 
+    : videos.filter((v) => v.tags.includes(selectedTag));
 
   const filteredBooks = selectedTag === 'all'
     ? regularBooks
@@ -301,44 +295,10 @@ const LibrarySection = () => {
         {/* Videos Grid */}
         {activeTab === 'videos' && (
           <div>
-            {/* Subscription status banner */}
-            {currentSubscription && !isExpired ? (
-              <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{currentSubscription.icon}</span>
-                  <div>
-                    <p className="font-semibold flex items-center gap-2">
-                      {currentSubscription.name}
-                      {currentSubscription.isVIP && <Crown className="w-4 h-4 text-yellow-400" />}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {filteredAccessibleVideos.length} videos available
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="mb-6 p-4 rounded-xl bg-muted/50 border border-muted text-center">
-                <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="font-semibold">No Active Subscription</p>
-                <p className="text-sm text-muted-foreground">
-                  Purchase a subscription to unlock videos!
-                </p>
-                <Button 
-                  variant="default" 
-                  size="sm" 
-                  className="mt-3"
-                  onClick={() => document.getElementById('subscriptions')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  View Subscriptions
-                </Button>
-              </div>
-            )}
-
-            {/* Accessible Videos */}
-            {filteredAccessibleVideos.length > 0 ? (
+            {/* All Videos - Free for everyone! */}
+            {filteredVideos.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAccessibleVideos.map((video) => (
+                {filteredVideos.map((video) => (
                   <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                     <div className="relative aspect-video">
                       {playingVideo === video.id ? (
@@ -409,12 +369,10 @@ const LibrarySection = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                <Play className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="text-lg font-semibold mb-2">No Videos Available</p>
                 <p className="text-muted-foreground">
-                  {currentSubscription && !isExpired 
-                    ? "No videos match your filter in this subscription."
-                    : "Purchase a subscription to start watching!"}
+                  No videos match your current filter.
                 </p>
               </div>
             )}
