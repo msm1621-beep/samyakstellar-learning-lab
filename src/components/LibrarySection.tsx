@@ -5,6 +5,8 @@ import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+ import { useSubscription } from '@/contexts/SubscriptionContext';
+ import { Lock, Crown } from 'lucide-react';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
@@ -32,6 +34,7 @@ const LibrarySection = () => {
   const currentTextRef = useRef<string>('');
   
   const { addCoins } = useCoins();
+   const { hasVideoAccess, currentSubscription, isExpired } = useSubscription();
 
   // Load completed books from localStorage
   useEffect(() => {
@@ -89,9 +92,13 @@ const LibrarySection = () => {
       ? allBookTags 
       : allAudiobookTags;
 
-  const filteredVideos = selectedTag === 'all' 
-    ? videos 
-    : videos.filter((v) => v.tags.includes(selectedTag));
+   // Filter videos based on subscription access
+   const accessibleVideos = videos.filter(v => hasVideoAccess(v.id));
+   const lockedVideos = videos.filter(v => !hasVideoAccess(v.id));
+   
+   const filteredAccessibleVideos = selectedTag === 'all' 
+     ? accessibleVideos 
+     : accessibleVideos.filter((v) => v.tags.includes(selectedTag));
 
   const filteredBooks = selectedTag === 'all'
     ? regularBooks
@@ -293,75 +300,124 @@ const LibrarySection = () => {
 
         {/* Videos Grid */}
         {activeTab === 'videos' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredVideos.map((video) => (
-              <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
-                <div className="relative aspect-video">
-                  {playingVideo === video.id ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`}
-                      title={video.title}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <>
-                      <img 
-                        src={video.thumbnail} 
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <button 
-                        onClick={() => setPlayingVideo(video.id)}
-                        className="absolute inset-0 bg-background/40 flex items-center justify-center group-hover:bg-background/60 transition-colors"
-                      >
-                        <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow transform group-hover:scale-110 transition-transform">
-                          <Play className="w-8 h-8 text-primary-foreground ml-1" />
-                        </div>
-                      </button>
-                      <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
-                        {video.duration}
-                      </span>
-                    </>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-display font-bold mb-1 group-hover:text-primary transition-colors">
-                    {video.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">{video.description}</p>
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {video.tags.map((tag) => (
-                      <span key={tag} className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
-                        {tag}
-                      </span>
-                    ))}
+          <div>
+            {/* Subscription status banner */}
+            {currentSubscription && !isExpired ? (
+              <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{currentSubscription.icon}</span>
+                  <div>
+                    <p className="font-semibold flex items-center gap-2">
+                      {currentSubscription.name}
+                      {currentSubscription.isVIP && <Crown className="w-4 h-4 text-yellow-400" />}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {filteredAccessibleVideos.length} videos available
+                    </p>
                   </div>
-                  {playingVideo === video.id ? (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => setPlayingVideo(null)}
-                    >
-                      <X className="w-4 h-4 mr-2" />
-                      Close Video
-                    </Button>
-                  ) : (
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => setPlayingVideo(video.id)}
-                    >
-                      <Play className="w-4 h-4 mr-2" />
-                      Watch Now
-                    </Button>
-                  )}
                 </div>
               </div>
-            ))}
+            ) : (
+              <div className="mb-6 p-4 rounded-xl bg-muted/50 border border-muted text-center">
+                <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="font-semibold">No Active Subscription</p>
+                <p className="text-sm text-muted-foreground">
+                  Purchase a subscription to unlock videos!
+                </p>
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  className="mt-3"
+                  onClick={() => document.getElementById('subscriptions')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  View Subscriptions
+                </Button>
+              </div>
+            )}
+
+            {/* Accessible Videos */}
+            {filteredAccessibleVideos.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredAccessibleVideos.map((video) => (
+                  <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative aspect-video">
+                      {playingVideo === video.id ? (
+                        <iframe
+                          src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`}
+                          title={video.title}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <>
+                          <img 
+                            src={video.thumbnail} 
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <button 
+                            onClick={() => setPlayingVideo(video.id)}
+                            className="absolute inset-0 bg-background/40 flex items-center justify-center group-hover:bg-background/60 transition-colors"
+                          >
+                            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow transform group-hover:scale-110 transition-transform">
+                              <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                            </div>
+                          </button>
+                          <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
+                            {video.duration}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-display font-bold mb-1 group-hover:text-primary transition-colors">
+                        {video.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-3">{video.description}</p>
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {video.tags.map((tag) => (
+                          <span key={tag} className="px-2 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      {playingVideo === video.id ? (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={() => setPlayingVideo(null)}
+                        >
+                          <X className="w-4 h-4 mr-2" />
+                          Close Video
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="default" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={() => setPlayingVideo(video.id)}
+                        >
+                          <Play className="w-4 h-4 mr-2" />
+                          Watch Now
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-lg font-semibold mb-2">No Videos Available</p>
+                <p className="text-muted-foreground">
+                  {currentSubscription && !isExpired 
+                    ? "No videos match your filter in this subscription."
+                    : "Purchase a subscription to start watching!"}
+                </p>
+              </div>
+            )}
           </div>
         )}
 

@@ -17,6 +17,7 @@ import CosmoAssistant from '@/components/CosmoAssistant';
 import AlienDoom from '@/components/AlienDoom';
 import SpaceAmbience from '@/components/SpaceAmbience';
 import CoinDisplay from '@/components/CoinDisplay';
+ import SubscriptionSection from '@/components/SubscriptionSection';
 
 const Index = () => {
   return (
@@ -36,6 +37,7 @@ const Index = () => {
         <CourseSection />
         <LibrarySection />
         <GamesSection />
+         <SubscriptionSection />
         <FunFactsSection />
         <AboutSection />
       </main>

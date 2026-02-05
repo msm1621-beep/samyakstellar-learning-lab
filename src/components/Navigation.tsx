@@ -9,6 +9,7 @@ const navItems = [
   { name: 'Constellations', href: '#constellations' },
   { name: 'Library', href: '#library' },
   { name: 'Games', href: '#games' },
+   { name: 'Subscriptions', href: '#subscriptions' },
   { name: 'Fun Facts', href: '#facts' },
   { name: 'About', href: '#about' },
 ];

@@ -3,15 +3,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { CoinsProvider } from "@/contexts/CoinsContext";
+ import { CoinsProvider } from "@/contexts/CoinsContext";
+ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <CoinsProvider>
+   <QueryClientProvider client={queryClient}>
+     <CoinsProvider>
+       <SubscriptionProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -22,8 +24,9 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </TooltipProvider>
-    </CoinsProvider>
+         </TooltipProvider>
+       </SubscriptionProvider>
+     </CoinsProvider>
   </QueryClientProvider>
 );
 
