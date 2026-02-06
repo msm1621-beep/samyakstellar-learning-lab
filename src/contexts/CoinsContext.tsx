@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 interface CoinsContextType {
   coins: number;
   addCoins: (amount: number, reason: string) => void;
+  removeCoins: (amount: number) => boolean;
   totalEarned: number;
   recentReward: { amount: number; reason: string } | null;
   clearRecentReward: () => void;
@@ -51,12 +52,20 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
     }, 3000);
   };
 
+  const removeCoins = (amount: number): boolean => {
+    if (coins >= amount) {
+      setCoins(prev => prev - amount);
+      return true;
+    }
+    return false;
+  };
+
   const clearRecentReward = () => {
     setRecentReward(null);
   };
 
   return (
-    <CoinsContext.Provider value={{ coins, addCoins, totalEarned, recentReward, clearRecentReward }}>
+    <CoinsContext.Provider value={{ coins, addCoins, removeCoins, totalEarned, recentReward, clearRecentReward }}>
       {children}
     </CoinsContext.Provider>
   );
