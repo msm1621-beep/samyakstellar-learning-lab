@@ -17,8 +17,10 @@ import CosmoAssistant from '@/components/CosmoAssistant';
 import AlienDoom from '@/components/AlienDoom';
 import SpaceAmbience from '@/components/SpaceAmbience';
 import CoinDisplay from '@/components/CoinDisplay';
- import SubscriptionSection from '@/components/SubscriptionSection';
- import AccountBar from '@/components/AccountBar';
+import SubscriptionSection from '@/components/SubscriptionSection';
+import AccountBar from '@/components/AccountBar';
+import GamePassSection from '@/components/GamePassSection';
+import CertificateShowcase from '@/components/CertificateShowcase';
 
 const Index = () => {
   return (
@@ -26,7 +28,7 @@ const Index = () => {
       <EnhancedStarField />
       <Navigation />
       <CoinDisplay />
-       <AccountBar />
+      <AccountBar />
       
       <main className="relative z-10">
         <HeroSection />
@@ -39,7 +41,9 @@ const Index = () => {
         <CourseSection />
         <LibrarySection />
         <GamesSection />
-         <SubscriptionSection />
+        <GamePassSection />
+        <CertificateShowcase />
+        <SubscriptionSection />
         <FunFactsSection />
         <AboutSection />
       </main>
