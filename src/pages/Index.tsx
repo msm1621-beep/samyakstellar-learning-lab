@@ -21,6 +21,8 @@ import SubscriptionSection from '@/components/SubscriptionSection';
 import AccountBar from '@/components/AccountBar';
 import GamePassSection from '@/components/GamePassSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
+import FeaturedShop from '@/components/FeaturedShop';
+import QuickAccessToolbar from '@/components/QuickAccessToolbar';
 
 const Index = () => {
   return (
@@ -29,6 +31,7 @@ const Index = () => {
       <Navigation />
       <CoinDisplay />
       <AccountBar />
+      <QuickAccessToolbar />
       
       <main className="relative z-10">
         <HeroSection />
@@ -42,6 +45,7 @@ const Index = () => {
         <LibrarySection />
         <GamesSection />
         <GamePassSection />
+        <FeaturedShop />
         <CertificateShowcase />
         <SubscriptionSection />
         <FunFactsSection />
