@@ -97,6 +97,20 @@ const PlanetOrderGame = () => {
 
   const allSlotsFilled = selectedSlots.every(slot => slot !== null);
 
+  // Award coins and achievement when game finishes with correct answer
+  useEffect(() => {
+    if (gameState === 'finished' && isCorrect && !coinsAwarded) {
+      addCoins(COIN_REWARDS.GAME_WIN, 'Planet Order Victory!');
+      addAchievement({
+        type: 'game',
+        name: 'Planet Order Master',
+        icon: '🪐',
+        description: 'Arranged all planets in the correct order from the Sun!'
+      });
+      setCoinsAwarded(true);
+    }
+  }, [gameState, isCorrect, coinsAwarded, addCoins, addAchievement]);
+
   if (gameState === 'start') {
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
@@ -113,17 +127,6 @@ const PlanetOrderGame = () => {
   }
 
   if (gameState === 'finished') {
-    // Award coins and achievement for winning
-    if (isCorrect && !coinsAwarded) {
-      addCoins(COIN_REWARDS.GAME_WIN, 'Planet Order Victory!');
-      addAchievement({
-        type: 'game',
-        name: 'Planet Order Master',
-        icon: '🪐',
-        description: 'Arranged all planets in the correct order from the Sun!'
-      });
-      setCoinsAwarded(true);
-    }
     
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">

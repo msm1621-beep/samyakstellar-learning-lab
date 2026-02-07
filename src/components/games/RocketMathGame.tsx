@@ -122,6 +122,23 @@ const RocketMathGame = () => {
     return { name: 'Space Beginner', emoji: '🌟' };
   };
 
+  // Award coins and achievement when game finishes
+  useEffect(() => {
+    if (gameState === 'finished' && !coinsAwarded) {
+      const rank = score >= 200 ? 'Space Commander' : score >= 150 ? 'Star Pilot' : score >= 100 ? 'Rocket Cadet' : score >= 50 ? 'Space Trainee' : 'Space Beginner';
+      const emoji = score >= 200 ? '🎖️' : score >= 150 ? '✨' : score >= 100 ? '🚀' : score >= 50 ? '⭐' : '🌟';
+      const coinReward = score >= 100 ? COIN_REWARDS.GAME_WIN : score >= 50 ? 25 : 10;
+      addCoins(coinReward, 'Rocket Math Mission!');
+      addAchievement({
+        type: 'game',
+        name: rank,
+        icon: emoji,
+        description: `Scored ${score} points and completed ${problemCount} problems in Rocket Math!`
+      });
+      setCoinsAwarded(true);
+    }
+  }, [gameState, coinsAwarded, score, problemCount, addCoins, addAchievement]);
+
   if (gameState === 'start') {
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
@@ -140,17 +157,6 @@ const RocketMathGame = () => {
   if (gameState === 'finished') {
     const rank = getRank();
     const coinReward = score >= 100 ? COIN_REWARDS.GAME_WIN : score >= 50 ? 25 : 10;
-    
-    if (!coinsAwarded) {
-      addCoins(coinReward, 'Rocket Math Mission!');
-      addAchievement({
-        type: 'game',
-        name: rank.name,
-        icon: rank.emoji,
-        description: `Scored ${score} points and completed ${problemCount} problems in Rocket Math!`
-      });
-      setCoinsAwarded(true);
-    }
     
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">

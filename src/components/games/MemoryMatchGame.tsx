@@ -136,6 +136,22 @@ const MemoryMatchGame = () => {
     return 1;
   };
 
+  // Award coins and achievement when game finishes
+  useEffect(() => {
+    if (gameState === 'finished' && !coinsAwarded) {
+      const stars = moves <= 10 ? 3 : moves <= 15 ? 2 : 1;
+      const coinReward = stars === 3 ? COIN_REWARDS.GAME_WIN : stars === 2 ? 30 : 15;
+      addCoins(coinReward, 'Memory Match Complete!');
+      addAchievement({
+        type: 'game',
+        name: 'Memory Match Champion',
+        icon: '🧠',
+        description: `Completed Memory Match with ${stars} stars in ${moves} moves!`
+      });
+      setCoinsAwarded(true);
+    }
+  }, [gameState, coinsAwarded, addCoins, addAchievement, moves]);
+
   if (gameState === 'start') {
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
@@ -154,18 +170,6 @@ const MemoryMatchGame = () => {
   if (gameState === 'finished') {
     const stars = getStarRating();
     const coinReward = stars === 3 ? COIN_REWARDS.GAME_WIN : stars === 2 ? 30 : 15;
-    
-    // Award coins and achievement only once
-    if (!coinsAwarded) {
-      addCoins(coinReward, 'Memory Match Complete!');
-      addAchievement({
-        type: 'game',
-        name: 'Memory Match Champion',
-        icon: '🧠',
-        description: `Completed Memory Match with ${stars} stars in ${moves} moves!`
-      });
-      setCoinsAwarded(true);
-    }
     
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
