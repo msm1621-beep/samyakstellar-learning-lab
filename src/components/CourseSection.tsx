@@ -9,6 +9,7 @@ import { books, Book } from '@/data/books';
 import CourseCertificate from './CourseCertificate';
 import CourseQuiz from './CourseQuiz';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 interface CourseProgress {
   courseId: string;
@@ -47,6 +48,7 @@ const CourseSection = () => {
   const currentTextRef = useRef<string>('');
   
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   // Load progress from localStorage
   useEffect(() => {
@@ -138,6 +140,14 @@ const CourseSection = () => {
     setCompletedCourses(prev => [...prev, { courseId: course.id, completedAt }]);
     setShowCertificate({ course, date: completedAt });
     addCoins(COIN_REWARDS.COURSE_COMPLETE, `Completed: ${course.title}`);
+    
+    // Add achievement for course completion
+    addAchievement({
+      type: 'course',
+      name: course.title,
+      icon: '🎓',
+      description: `Successfully completed the ${course.title} course on ${completedAt}!`
+    });
   };
 
   const restartCourse = (courseId: string) => {

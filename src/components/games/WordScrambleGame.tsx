@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Lightbulb, CheckCircle, XCircle, ArrowRight, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 interface SpaceWord {
   word: string;
@@ -38,6 +39,7 @@ const WordScrambleGame = () => {
   const [hintsUsed, setHintsUsed] = useState(0);
   const [coinsAwarded, setCoinsAwarded] = useState(false);
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   const scrambleWord = (word: string): string => {
     const arr = word.split('');
@@ -125,6 +127,12 @@ const WordScrambleGame = () => {
     
     if (!coinsAwarded) {
       addCoins(coinReward, 'Word Scramble Complete!');
+      addAchievement({
+        type: 'game',
+        name: 'Word Wizard',
+        icon: '🔤',
+        description: `Scored ${score}/${maxScore} points in Word Scramble${hintsUsed === 0 ? ' without hints!' : '!'}`
+      });
       setCoinsAwarded(true);
     }
     

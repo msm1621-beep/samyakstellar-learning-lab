@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Rocket, Star, Zap, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 interface MathProblem {
   num1: number;
@@ -24,6 +25,7 @@ const RocketMathGame = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [coinsAwarded, setCoinsAwarded] = useState(false);
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   const generateProblem = useCallback((): MathProblem => {
     const operators: ('+' | '-' | '×')[] = ['+', '-', '×'];
@@ -141,6 +143,12 @@ const RocketMathGame = () => {
     
     if (!coinsAwarded) {
       addCoins(coinReward, 'Rocket Math Mission!');
+      addAchievement({
+        type: 'game',
+        name: rank.name,
+        icon: rank.emoji,
+        description: `Scored ${score} points and completed ${problemCount} problems in Rocket Math!`
+      });
       setCoinsAwarded(true);
     }
     

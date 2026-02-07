@@ -47,7 +47,7 @@ const toolbarItems: ToolbarItem[] = [
 ];
 
 const QuickAccessToolbar = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const scrollToSection = (href: string) => {
