@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Lightbulb, CheckCircle, XCircle, ArrowRight, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
@@ -105,6 +105,23 @@ const WordScrambleGame = () => {
     }
   };
 
+  // Award coins and achievement when game finishes
+  useEffect(() => {
+    if (gameState === 'finished' && !coinsAwarded && gameWords.length > 0) {
+      const maxScore = gameWords.length * 2;
+      const percentage = Math.round((score / maxScore) * 100);
+      const coinReward = percentage >= 80 ? COIN_REWARDS.GAME_WIN : percentage >= 50 ? 25 : 10;
+      addCoins(coinReward, 'Word Scramble Complete!');
+      addAchievement({
+        type: 'game',
+        name: 'Word Wizard',
+        icon: '🔤',
+        description: `Scored ${score}/${maxScore} points in Word Scramble${hintsUsed === 0 ? ' without hints!' : '!'}`
+      });
+      setCoinsAwarded(true);
+    }
+  }, [gameState, coinsAwarded, gameWords.length, score, hintsUsed, addCoins, addAchievement]);
+
   if (gameState === 'start') {
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
@@ -124,17 +141,6 @@ const WordScrambleGame = () => {
     const maxScore = gameWords.length * 2;
     const percentage = Math.round((score / maxScore) * 100);
     const coinReward = percentage >= 80 ? COIN_REWARDS.GAME_WIN : percentage >= 50 ? 25 : 10;
-    
-    if (!coinsAwarded) {
-      addCoins(coinReward, 'Word Scramble Complete!');
-      addAchievement({
-        type: 'game',
-        name: 'Word Wizard',
-        icon: '🔤',
-        description: `Scored ${score}/${maxScore} points in Word Scramble${hintsUsed === 0 ? ' without hints!' : '!'}`
-      });
-      setCoinsAwarded(true);
-    }
     
     return (
       <div className="bg-card/30 backdrop-blur-md rounded-2xl p-6 border border-primary/20 text-center">
