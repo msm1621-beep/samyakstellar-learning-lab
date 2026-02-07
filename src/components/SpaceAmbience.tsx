@@ -5,7 +5,7 @@ import { Slider } from '@/components/ui/slider';
 const SpaceAmbience = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.3);
-  const [showControls, setShowControls] = useState(false);
+  const [showControls, setShowControls] = useState(true);
   const audioContextRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
   const oscillatorsRef = useRef<OscillatorNode[]>([]);

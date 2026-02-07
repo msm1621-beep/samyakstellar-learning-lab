@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Trophy, RotateCcw, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useAchievements } from '@/contexts/AchievementsContext';
+import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 
 interface QuizQuestion {
   question: string;
@@ -93,6 +95,9 @@ const CourseQuiz = ({ courseId, courseTitle, onClose }: CourseQuizProps) => {
   const [score, setScore] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(new Array(questions.length).fill(false));
+  const [achievementAwarded, setAchievementAwarded] = useState(false);
+  const { addAchievement } = useAchievements();
+  const { addCoins } = useCoins();
 
   const handleAnswerSelect = (index: number) => {
     if (showResult) return;
@@ -153,6 +158,21 @@ const CourseQuiz = ({ courseId, courseTitle, onClose }: CourseQuizProps) => {
 
   if (quizComplete) {
     const { emoji, message } = getScoreMessage();
+    const isPerfect = score === questions.length;
+    
+    // Award achievement and coins only once
+    if (!achievementAwarded) {
+      const coinReward = isPerfect ? COIN_REWARDS.QUIZ_PERFECT : score >= 3 ? COIN_REWARDS.QUIZ_GOOD : 10;
+      addCoins(coinReward, `${courseTitle} Quiz`);
+      addAchievement({
+        type: 'quiz',
+        name: `${courseTitle} Quiz`,
+        icon: emoji,
+        description: `Scored ${score}/${questions.length} on the ${courseTitle} course quiz!`
+      });
+      setAchievementAwarded(true);
+    }
+    
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
         <div className="glass-card max-w-lg w-full rounded-2xl p-8 text-center">

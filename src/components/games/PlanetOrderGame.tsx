@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, CheckCircle, Trophy, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 interface Planet {
   id: string;
@@ -33,6 +34,7 @@ const PlanetOrderGame = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [coinsAwarded, setCoinsAwarded] = useState(false);
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   const startGame = useCallback(() => {
     const shuffled = [...planets].sort(() => Math.random() - 0.5);
@@ -111,9 +113,15 @@ const PlanetOrderGame = () => {
   }
 
   if (gameState === 'finished') {
-    // Award coins for winning
+    // Award coins and achievement for winning
     if (isCorrect && !coinsAwarded) {
       addCoins(COIN_REWARDS.GAME_WIN, 'Planet Order Victory!');
+      addAchievement({
+        type: 'game',
+        name: 'Planet Order Master',
+        icon: '🪐',
+        description: 'Arranged all planets in the correct order from the Sun!'
+      });
       setCoinsAwarded(true);
     }
     

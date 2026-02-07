@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Play, Trophy, Star, Clock, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 interface Card {
   id: number;
@@ -34,6 +35,7 @@ const MemoryMatchGame = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [coinsAwarded, setCoinsAwarded] = useState(false);
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -153,9 +155,15 @@ const MemoryMatchGame = () => {
     const stars = getStarRating();
     const coinReward = stars === 3 ? COIN_REWARDS.GAME_WIN : stars === 2 ? 30 : 15;
     
-    // Award coins only once
+    // Award coins and achievement only once
     if (!coinsAwarded) {
       addCoins(coinReward, 'Memory Match Complete!');
+      addAchievement({
+        type: 'game',
+        name: 'Memory Match Champion',
+        icon: '🧠',
+        description: `Completed Memory Match with ${stars} stars in ${moves} moves!`
+      });
       setCoinsAwarded(true);
     }
     

@@ -3,6 +3,7 @@ import { quizQuestions, badges, difficultyConfig, QuizQuestion } from '@/data/qu
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Trophy, RotateCcw, Play, Star, Coins } from 'lucide-react';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 type Difficulty = 'easy' | 'medium' | 'hard' | 'mixed';
 type GameState = 'start' | 'playing' | 'finished';
@@ -16,6 +17,7 @@ const QuizGame = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [coinsAwarded, setCoinsAwarded] = useState(false);
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   const gameQuestions = useMemo(() => {
     let filtered: QuizQuestion[];
@@ -131,6 +133,12 @@ const QuizGame = () => {
     
     if (!coinsAwarded) {
       addCoins(coinReward, isPerfect ? 'Perfect Quiz!' : 'Quiz Complete!');
+      addAchievement({
+        type: 'quiz',
+        name: isPerfect ? 'Quiz Master' : 'Quiz Challenger',
+        icon: isPerfect ? '🌟' : '⭐',
+        description: `Scored ${score}/${gameQuestions.length} on ${selectedDifficulty} difficulty quiz!`
+      });
       setCoinsAwarded(true);
     }
     
