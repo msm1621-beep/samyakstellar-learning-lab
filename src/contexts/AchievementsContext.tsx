@@ -2,11 +2,12 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 export interface Achievement {
   id: string;
-  type: 'course' | 'game' | 'quiz' | 'book' | 'audiobook';
+  type: 'course' | 'game' | 'quiz' | 'book' | 'audiobook' | 'shop' | 'gamepass' | 'subscription';
   name: string;
   earnedAt: string;
   icon: string;
   description?: string;
+  category?: string; // For shop items: 'boost', 'cosmetic', 'utility'
 }
 
 interface AchievementsContextType {

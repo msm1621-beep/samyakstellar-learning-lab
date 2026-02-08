@@ -10,6 +10,7 @@ import ConstellationViewer from '@/components/ConstellationViewer';
 import CourseSection from '@/components/CourseSection';
 import LibrarySection from '@/components/LibrarySection';
 import GamesSection from '@/components/GamesSection';
+import PremiumGamesSection from '@/components/PremiumGamesSection';
 import FunFactsSection from '@/components/FunFactsSection';
 import AboutSection from '@/components/AboutSection';
 import Footer from '@/components/Footer';
@@ -44,6 +45,7 @@ const Index = () => {
         <CourseSection />
         <LibrarySection />
         <GamesSection />
+        <PremiumGamesSection />
         <GamePassSection />
         <FeaturedShop />
         <CertificateShowcase />

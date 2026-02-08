@@ -1,23 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Crown, Lock, Check, Sparkles, Clock, Gift, Percent, Coins } from 'lucide-react';
- import { Button } from '@/components/ui/button';
- import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
- import { subscriptions, Subscription } from '@/data/subscriptions';
- import { useSubscription } from '@/contexts/SubscriptionContext';
- import { useCoins } from '@/contexts/CoinsContext';
- import {
-   Dialog,
-   DialogContent,
-   DialogDescription,
-   DialogHeader,
-   DialogTitle,
- } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { subscriptions, Subscription } from '@/data/subscriptions';
+import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
  
- const SubscriptionSection = () => {
-  const { currentSubscription, purchaseSubscription, daysRemaining, isExpired, claimDailyBonus, canClaimDailyBonus, coinBonus, dailyBonus, badge } = useSubscription();
-   const { coins } = useCoins();
-   const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
-   const [showConfirm, setShowConfirm] = useState(false);
+const SubscriptionSection = () => {
+  const { currentSubscription, purchaseSubscription, daysRemaining, isExpired, claimDailyBonus, canClaimDailyBonus, coinBonus, dailyBonus, badge, activeSubscription } = useSubscription();
+  const { coins } = useCoins();
+  const { addAchievement, hasAchievement } = useAchievements();
+  const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const previousSubRef = useRef<string | null>(null);
+
+  // Track subscription changes and add achievements
+  useEffect(() => {
+    if (currentSubscription && !isExpired && previousSubRef.current !== currentSubscription.id) {
+      if (!hasAchievement(currentSubscription.name, 'subscription')) {
+        addAchievement({
+          type: 'subscription',
+          name: currentSubscription.name,
+          icon: currentSubscription.icon,
+          description: `${currentSubscription.isVIP ? 'VIP ' : ''}Tier ${currentSubscription.tier} subscription with ${currentSubscription.coinBonus}% bonus coins`
+        });
+      }
+      previousSubRef.current = currentSubscription.id;
+    }
+  }, [currentSubscription, isExpired, addAchievement, hasAchievement]);
  
    const handlePurchase = () => {
      if (selectedSub) {
