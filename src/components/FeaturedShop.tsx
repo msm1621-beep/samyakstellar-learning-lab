@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Sparkles, Palette, Rocket, Star, Zap, Gift, Crown, Heart, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCoins } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
 
 interface ShopItem {
@@ -102,10 +103,27 @@ const categoryConfig = {
 
 const FeaturedShop = () => {
   const { coins, removeCoins } = useCoins();
+  const { addAchievement, hasAchievement } = useAchievements();
   const [purchasedItems, setPurchasedItems] = React.useState<string[]>(() => {
     const saved = localStorage.getItem('purchasedShopItems');
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Add achievements for previously purchased items on mount
+  useEffect(() => {
+    purchasedItems.forEach(itemId => {
+      const item = shopItems.find(i => i.id === itemId);
+      if (item && !hasAchievement(item.name, 'shop')) {
+        addAchievement({
+          type: 'shop',
+          name: item.name,
+          icon: item.icon,
+          description: item.description,
+          category: item.category
+        });
+      }
+    });
+  }, []); // Only run on mount
 
   const handlePurchase = (item: ShopItem) => {
     if (coins < item.price) {
@@ -117,6 +135,16 @@ const FeaturedShop = () => {
     const newPurchased = [...purchasedItems, item.id];
     setPurchasedItems(newPurchased);
     localStorage.setItem('purchasedShopItems', JSON.stringify(newPurchased));
+    
+    // Add achievement for shop purchase
+    addAchievement({
+      type: 'shop',
+      name: item.name,
+      icon: item.icon,
+      description: item.description,
+      category: item.category
+    });
+    
     toast.success(`${item.name} purchased! ${item.icon}`, {
       description: item.description,
     });

@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Gamepad2, Clock, Zap, Crown, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { gamePasses } from '@/data/gamePasses';
 import { useGamePass } from '@/contexts/GamePassContext';
 import { useCoins } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 const GamePassSection = () => {
-  const { hasPass, purchasePass, getPassExpiry, extraLives } = useGamePass();
+  const { hasPass, purchasePass, getPassExpiry, extraLives, activePasses } = useGamePass();
   const { coins } = useCoins();
+  const { addAchievement, hasAchievement } = useAchievements();
+  const previousPassesRef = useRef<string[]>([]);
+
+  // Track newly purchased passes and add achievements
+  useEffect(() => {
+    const currentPassIds = activePasses.map(p => p.passId);
+    
+    // Find newly added passes
+    currentPassIds.forEach(passId => {
+      if (!previousPassesRef.current.includes(passId)) {
+        const pass = gamePasses.find(p => p.id === passId);
+        if (pass && !hasAchievement(pass.name, 'gamepass')) {
+          addAchievement({
+            type: 'gamepass',
+            name: pass.name,
+            icon: pass.icon,
+            description: pass.description
+          });
+        }
+      }
+    });
+    
+    previousPassesRef.current = currentPassIds;
+  }, [activePasses, addAchievement, hasAchievement]);
 
   const formatTimeRemaining = (expiry: Date | null) => {
     if (!expiry) return null;

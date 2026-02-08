@@ -5,6 +5,7 @@ import { videos } from '@/data/videos';
 import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
+import { useAchievements } from '@/contexts/AchievementsContext';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
@@ -32,6 +33,7 @@ const LibrarySection = () => {
   const currentTextRef = useRef<string>('');
   
   const { addCoins } = useCoins();
+  const { addAchievement } = useAchievements();
 
   // Load completed books from localStorage
   useEffect(() => {
@@ -74,6 +76,14 @@ const LibrarySection = () => {
     const isAudiobook = book.type === 'audiobook';
     addCoins(isAudiobook ? COIN_REWARDS.AUDIOBOOK_COMPLETE : COIN_REWARDS.BOOK_COMPLETE, 
       `Finished: ${book.title}`);
+    
+    // Add achievement for book/audiobook completion
+    addAchievement({
+      type: isAudiobook ? 'audiobook' : 'book',
+      name: book.title,
+      icon: isAudiobook ? '🎧' : '📚',
+      description: `Completed "${book.title}" by ${book.author}`
+    });
   };
 
   const regularBooks = books.filter(b => b.type !== 'audiobook');

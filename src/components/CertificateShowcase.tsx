@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calendar } from 'lucide-react';
+import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calendar, ShoppingBag, Ticket, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAchievements, Achievement } from '@/contexts/AchievementsContext';
 
@@ -10,6 +10,9 @@ const typeConfig = {
   quiz: { icon: Award, color: 'from-amber-500 to-orange-500', label: 'Quizzes' },
   book: { icon: BookOpen, color: 'from-green-500 to-emerald-500', label: 'Books' },
   audiobook: { icon: Headphones, color: 'from-pink-500 to-rose-500', label: 'Audiobooks' },
+  shop: { icon: ShoppingBag, color: 'from-fuchsia-500 to-pink-500', label: 'Shop Items' },
+  gamepass: { icon: Ticket, color: 'from-cyan-400 to-teal-500', label: 'Game Passes' },
+  subscription: { icon: Crown, color: 'from-yellow-500 to-amber-500', label: 'Subscriptions' },
 };
 
 const CertificateShowcase = () => {
