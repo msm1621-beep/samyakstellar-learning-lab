@@ -861,6 +861,15 @@ const CourseSection = () => {
           </div>
         </div>
       )}
+
+      {/* Course Quiz Modal */}
+      {showQuiz && (
+        <CourseQuiz
+          courseId={showQuiz.id}
+          courseTitle={showQuiz.title}
+          onClose={() => setShowQuiz(null)}
+        />
+      )}
     </section>
   );
 };
