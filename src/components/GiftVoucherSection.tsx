@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Gift, Sparkles, Star, Coins, ShoppingBag, Ticket, Crown, RotateCcw } from 'lucide-react';
+import { Gift, Sparkles, Star, Coins, ShoppingBag, Ticket, Crown } from 'lucide-react';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from '@/hooks/use-toast';
@@ -61,8 +61,8 @@ const getRandomReward = (): VoucherReward => {
   return pool[Math.floor(Math.random() * pool.length)];
 };
 
-const COOLDOWN_KEY = 'giftVoucherLastClaim';
-const COOLDOWN_MS = 4 * 60 * 60 * 1000; // 4 hours
+const VOUCHERS_KEY = 'giftVouchersAvailable';
+const SCRATCHED_KEY = 'giftVouchersScratched';
 
 const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: VoucherReward }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -76,7 +76,6 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Draw scratch surface
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#4a1d96');
     gradient.addColorStop(0.5, '#1e1b4b');
@@ -84,7 +83,6 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Add stars pattern
     for (let i = 0; i < 30; i++) {
       ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.5 + 0.2})`;
       ctx.beginPath();
@@ -92,7 +90,6 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
       ctx.fill();
     }
 
-    // Text
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.font = 'bold 16px sans-serif';
     ctx.textAlign = 'center';
@@ -113,7 +110,6 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
     scratchedRef.current += 1;
     if (scratchedRef.current > 40 && !revealed) {
       setRevealed(true);
-      // Clear remaining
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       onRevealed();
     }
@@ -137,15 +133,13 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
 
   return (
     <div className="relative w-[260px] h-[160px] rounded-xl overflow-hidden shadow-lg mx-auto">
-      {/* Reward underneath */}
       <div className={`absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br ${RARITY_COLORS[reward.rarity]} p-4`}>
         <span className="text-4xl mb-1">{reward.icon}</span>
         <p className="text-white font-bold text-base">{reward.name}</p>
-        <span className={`text-xs px-2 py-0.5 rounded-full mt-1 bg-white/20 text-white font-medium`}>
+        <span className="text-xs px-2 py-0.5 rounded-full mt-1 bg-white/20 text-white font-medium">
           {RARITY_LABELS[reward.rarity]}
         </span>
       </div>
-      {/* Scratch layer */}
       <canvas
         ref={canvasRef}
         width={260}
@@ -166,49 +160,34 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
 const GiftVoucherSection = () => {
   const { addCoins } = useCoins();
   const { addAchievement } = useAchievements();
+  const [availableVouchers, setAvailableVouchers] = useState(0);
+  const [totalScratched, setTotalScratched] = useState(0);
   const [currentReward, setCurrentReward] = useState<VoucherReward | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
-  const [cooldownEnd, setCooldownEnd] = useState<number>(0);
-  const [timeLeft, setTimeLeft] = useState('');
 
-  // Check cooldown
+  // Sync voucher count from localStorage (set by CourseSection on completion)
   useEffect(() => {
-    const last = localStorage.getItem(COOLDOWN_KEY);
-    if (last) {
-      const end = parseInt(last, 10) + COOLDOWN_MS;
-      if (Date.now() < end) {
-        setCooldownEnd(end);
-      }
-    }
+    const syncVouchers = () => {
+      const count = parseInt(localStorage.getItem(VOUCHERS_KEY) || '0', 10);
+      const scratched = parseInt(localStorage.getItem(SCRATCHED_KEY) || '0', 10);
+      setAvailableVouchers(count);
+      setTotalScratched(scratched);
+    };
+    syncVouchers();
+
+    // Listen for storage changes (from CourseSection)
+    window.addEventListener('storage', syncVouchers);
+    // Also poll since same-tab storage events don't fire
+    const interval = setInterval(syncVouchers, 1000);
+    return () => {
+      window.removeEventListener('storage', syncVouchers);
+      clearInterval(interval);
+    };
   }, []);
 
-  // Countdown timer
-  useEffect(() => {
-    if (!cooldownEnd || Date.now() >= cooldownEnd) {
-      setTimeLeft('');
-      return;
-    }
-    const interval = setInterval(() => {
-      const diff = cooldownEnd - Date.now();
-      if (diff <= 0) {
-        setTimeLeft('');
-        setCooldownEnd(0);
-        clearInterval(interval);
-        return;
-      }
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      setTimeLeft(`${h}h ${m}m ${s}s`);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [cooldownEnd]);
-
-  const isOnCooldown = cooldownEnd > Date.now();
-
   const startScratch = () => {
-    if (isOnCooldown) return;
+    if (availableVouchers <= 0) return;
     setCurrentReward(getRandomReward());
     setIsRevealed(false);
     setIsClaimed(false);
@@ -223,22 +202,24 @@ const GiftVoucherSection = () => {
     if (!currentReward || isClaimed) return;
     setIsClaimed(true);
 
-    // Set cooldown
-    localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
-    setCooldownEnd(Date.now() + COOLDOWN_MS);
+    // Consume one voucher
+    const newCount = Math.max(0, availableVouchers - 1);
+    const newScratched = totalScratched + 1;
+    localStorage.setItem(VOUCHERS_KEY, newCount.toString());
+    localStorage.setItem(SCRATCHED_KEY, newScratched.toString());
+    setAvailableVouchers(newCount);
+    setTotalScratched(newScratched);
 
     // Apply reward
     if (currentReward.type === 'coins' && currentReward.coinValue) {
       addCoins(currentReward.coinValue, `Gift Voucher: ${currentReward.name}`);
     } else if (currentReward.type === 'shop_item') {
-      // Grant free shop item
       const owned = JSON.parse(localStorage.getItem('ownedItems') || '{}');
       const itemKey = currentReward.name.toLowerCase().replace(/\s+/g, '-');
       owned[itemKey] = (owned[itemKey] || 0) + 1;
       localStorage.setItem('ownedItems', JSON.stringify(owned));
       addCoins(0, `Free item: ${currentReward.name}`);
     } else if (currentReward.type === 'game_pass') {
-      // Grant short game pass
       const saved = JSON.parse(localStorage.getItem('spaceGamePasses') || '[]');
       const passMap: Record<string, string> = {
         'Warp Drive (1 Day)': 'skip-cooldowns',
@@ -255,7 +236,6 @@ const GiftVoucherSection = () => {
         localStorage.setItem('spaceGamePasses', JSON.stringify(existing));
       }
     } else if (currentReward.type === 'subscription') {
-      // Grant 1-day VIP
       const now = new Date();
       const expires = new Date(now.getTime() + 24 * 60 * 60 * 1000);
       localStorage.setItem('subscriptionTier', JSON.stringify({
@@ -265,22 +245,30 @@ const GiftVoucherSection = () => {
       }));
     }
 
-    addAchievement({
-      type: 'shop',
-      name: 'Lucky Scratcher',
-      description: 'Scratched your first gift voucher!',
-      icon: '🎁',
-    });
+    if (newScratched === 1) {
+      addAchievement({
+        type: 'shop',
+        name: 'Lucky Scratcher',
+        description: 'Scratched your first gift voucher!',
+        icon: '🎁',
+      });
+    }
 
     toast({
       title: `🎁 ${currentReward.icon} Reward Claimed!`,
       description: currentReward.description,
     });
+
+    // Reset card after short delay so user can scratch another
+    setTimeout(() => {
+      setCurrentReward(null);
+      setIsRevealed(false);
+      setIsClaimed(false);
+    }, 2500);
   };
 
   return (
     <section className="py-16 px-4 relative overflow-hidden">
-      {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl" />
@@ -301,12 +289,26 @@ const GiftVoucherSection = () => {
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>
           <p className="text-white/60 text-sm max-w-md mx-auto">
-            Scratch to reveal your cosmic reward! New voucher available every 4 hours.
+            Complete free courses to earn scratch vouchers! Each course rewards you a voucher with surprise prizes.
           </p>
         </motion.div>
 
         <div className="flex flex-col items-center gap-6">
-          {/* Voucher card area */}
+          {/* Voucher count */}
+          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/10">
+            <div className="flex items-center gap-2">
+              <Gift className="w-5 h-5 text-amber-400" />
+              <span className="text-white font-bold text-lg">{availableVouchers}</span>
+              <span className="text-white/50 text-sm">voucher{availableVouchers !== 1 ? 's' : ''} available</span>
+            </div>
+            <div className="w-px h-6 bg-white/10" />
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-amber-400/60" />
+              <span className="text-white/40 text-sm">{totalScratched} scratched</span>
+            </div>
+          </div>
+
+          {/* Scratch area */}
           {!currentReward ? (
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -316,15 +318,12 @@ const GiftVoucherSection = () => {
             >
               <div className="w-[260px] h-[160px] rounded-xl border-2 border-dashed border-amber-500/40 bg-white/5 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
                 <Gift className="w-12 h-12 text-amber-400/60" />
-                <p className="text-white/40 text-sm">Your voucher awaits!</p>
+                <p className="text-white/40 text-sm">
+                  {availableVouchers > 0 ? 'Ready to scratch!' : 'Complete a course to earn one!'}
+                </p>
               </div>
 
-              {isOnCooldown ? (
-                <div className="text-center">
-                  <p className="text-white/50 text-sm">Next voucher in</p>
-                  <p className="text-amber-400 font-mono font-bold text-lg">{timeLeft}</p>
-                </div>
-              ) : (
+              {availableVouchers > 0 ? (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -332,8 +331,10 @@ const GiftVoucherSection = () => {
                   className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold rounded-xl shadow-lg shadow-amber-500/30 flex items-center gap-2"
                 >
                   <Gift className="w-5 h-5" />
-                  Get Voucher
+                  Scratch a Voucher
                 </motion.button>
+              ) : (
+                <p className="text-white/30 text-sm italic">🎓 Complete courses above to earn vouchers</p>
               )}
             </motion.div>
           ) : (
@@ -370,8 +371,7 @@ const GiftVoucherSection = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center"
                   >
-                    <p className="text-green-400 font-bold text-lg mb-1">✅ Claimed!</p>
-                    <p className="text-white/50 text-sm">Next voucher in {timeLeft || 'a few hours'}</p>
+                    <p className="text-green-400 font-bold text-lg">✅ Claimed!</p>
                   </motion.div>
                 )}
               </AnimatePresence>

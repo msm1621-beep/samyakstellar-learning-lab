@@ -141,6 +141,10 @@ const CourseSection = () => {
     setShowCertificate({ course, date: completedAt });
     addCoins(COIN_REWARDS.COURSE_COMPLETE, `Completed: ${course.title}`);
     
+    // Grant a gift voucher
+    const currentVouchers = parseInt(localStorage.getItem('giftVouchersAvailable') || '0', 10);
+    localStorage.setItem('giftVouchersAvailable', (currentVouchers + 1).toString());
+    
     // Add achievement for course completion
     addAchievement({
       type: 'course',
