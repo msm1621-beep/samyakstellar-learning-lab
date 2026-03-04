@@ -24,6 +24,7 @@ import GamePassSection from '@/components/GamePassSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
 import QuickAccessToolbar from '@/components/QuickAccessToolbar';
+import GiftVoucherSection from '@/components/GiftVoucherSection';
 
 const Index = () => {
   return (
@@ -43,6 +44,7 @@ const Index = () => {
         <SpaceTimeline />
         <ConstellationViewer />
         <CourseSection />
+        <GiftVoucherSection />
         <LibrarySection />
         <GamesSection />
         <PremiumGamesSection />
