@@ -23,8 +23,8 @@ import AccountBar from '@/components/AccountBar';
 import GamePassSection from '@/components/GamePassSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
-import QuickAccessToolbar from '@/components/QuickAccessToolbar';
 import GiftVoucherSection from '@/components/GiftVoucherSection';
+import ManuscriptsSection from '@/components/ManuscriptsSection';
 
 const Index = () => {
   return (
