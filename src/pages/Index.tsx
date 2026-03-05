@@ -44,7 +44,7 @@ const Index = () => {
         <ConstellationViewer />
         <CourseSection />
         <GiftVoucherSection />
-        <LibrarySection />
+        <ManuscriptsSection />
         <GamesSection />
         <PremiumGamesSection />
         <GamePassSection />
