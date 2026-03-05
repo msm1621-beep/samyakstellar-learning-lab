@@ -45,6 +45,7 @@ const Index = () => {
         <CourseSection />
         <GiftVoucherSection />
         <ManuscriptsSection />
+        <LibrarySection />
         <GamesSection />
         <PremiumGamesSection />
         <GamePassSection />
