@@ -33,7 +33,6 @@ const Index = () => {
       <Navigation />
       <CoinDisplay />
       <AccountBar />
-      <QuickAccessToolbar />
       
       <main className="relative z-10">
         <HeroSection />
