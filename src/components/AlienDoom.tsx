@@ -161,70 +161,7 @@ const AlienScene = ({
   );
 };
 
-// Space knowledge for Mr & Mrs Doom
-const alienResponses: Record<string, { speaker: 'mr' | 'mrs'; response: string }[]> = {
-  default: [
-    { speaker: 'mr', response: "Greetings, young Earthling! I'm Mr. Doom, and this is my lovely partner Mrs. Doom. We've traveled across galaxies to share space knowledge with you!" },
-    { speaker: 'mrs', response: "We come from the Andromeda galaxy! Ask us anything about space, planets, stars, or the mysteries of the universe!" }
-  ],
-  planet: [
-    { speaker: 'mr', response: "Ah, planets! On our home world, we have 7 moons and purple oceans. Your solar system has 8 magnificent planets - Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune!" },
-    { speaker: 'mrs', response: "Jupiter is my favorite! It's so massive that 1,300 Earths could fit inside it. The Great Red Spot is a storm bigger than your entire planet!" }
-  ],
-  star: [
-    { speaker: 'mrs', response: "Stars are giant balls of hot glowing gas! Your Sun is a yellow dwarf star, but we've seen blue giants 100 times larger on our journeys!" },
-    { speaker: 'mr', response: "Fun fact: When you look at stars, you're seeing the past! The light from distant stars takes years to reach Earth!" }
-  ],
-  moon: [
-    { speaker: 'mr', response: "Your Moon is quite special! It's the 5th largest moon in the solar system. On our travels, we've seen moons with underground oceans like Europa!" },
-    { speaker: 'mrs', response: "The Moon has no atmosphere, so astronaut footprints stay there forever! Isn't that fascinating?" }
-  ],
-  alien: [
-    { speaker: 'mrs', response: "We're proof that aliens exist! *giggles* The universe is so vast - with billions of galaxies, it would be strange if Earth was the only place with life!" },
-    { speaker: 'mr', response: "Scientists are always searching for signs of life on other planets. Mars and Europa are top candidates for finding microbial life!" }
-  ],
-  galaxy: [
-    { speaker: 'mr', response: "Galaxies are like cosmic cities of stars! Your Milky Way has over 200 billion stars. We've visited many galaxies in our travels!" },
-    { speaker: 'mrs', response: "The Andromeda galaxy, our home, is actually moving toward the Milky Way! But don't worry, the merger won't happen for 4 billion years!" }
-  ],
-  blackhole: [
-    { speaker: 'mrs', response: "Black holes are regions where gravity is SO strong that not even light can escape! We always steer our spacecraft far away from them!" },
-    { speaker: 'mr', response: "There's a supermassive black hole at the center of the Milky Way called Sagittarius A*. It's 4 million times more massive than your Sun!" }
-  ],
-  rocket: [
-    { speaker: 'mr', response: "Your human rockets are quite impressive for a young civilization! The Saturn V that took astronauts to the Moon remains one of the most powerful rockets ever built!" },
-    { speaker: 'mrs', response: "Rockets work by pushing gas out one end very fast, which propels the rocket forward. It's Newton's third law - for every action, there's an equal and opposite reaction!" }
-  ],
-  astronaut: [
-    { speaker: 'mrs', response: "Astronauts are so brave! They float in microgravity, eat freeze-dried food, and work in a space station orbiting Earth at 17,500 miles per hour!" },
-    { speaker: 'mr', response: "Yuri Gagarin was the first human in space in 1961, and Neil Armstrong was first to walk on the Moon in 1969. We watched from afar - very exciting times!" }
-  ],
-  sun: [
-    { speaker: 'mr', response: "Your Sun is about 4.6 billion years old and is in the middle of its life! It's so hot that its core reaches 27 million degrees Fahrenheit!" },
-    { speaker: 'mrs', response: "The Sun makes up 99.86% of all the mass in your solar system! Without it, life on Earth wouldn't exist. Cherish your star!" }
-  ],
-  mars: [
-    { speaker: 'mrs', response: "Mars is called the Red Planet because of iron oxide (rust) on its surface! It has the largest volcano in the solar system - Olympus Mons!" },
-    { speaker: 'mr', response: "We've picnicked on Mars! It's cold there - averaging minus 80°F. Humans might live there someday with the right technology!" }
-  ]
-};
-
-const getAlienResponse = (question: string): { speaker: 'mr' | 'mrs'; response: string }[] => {
-  const lowerQ = question.toLowerCase();
-  
-  if (lowerQ.includes('planet')) return alienResponses.planet;
-  if (lowerQ.includes('star')) return alienResponses.star;
-  if (lowerQ.includes('moon')) return alienResponses.moon;
-  if (lowerQ.includes('alien') || lowerQ.includes('life')) return alienResponses.alien;
-  if (lowerQ.includes('galaxy') || lowerQ.includes('milky')) return alienResponses.galaxy;
-  if (lowerQ.includes('black hole')) return alienResponses.blackhole;
-  if (lowerQ.includes('rocket') || lowerQ.includes('spacecraft')) return alienResponses.rocket;
-  if (lowerQ.includes('astronaut') || lowerQ.includes('space travel')) return alienResponses.astronaut;
-  if (lowerQ.includes('sun') || lowerQ.includes('solar')) return alienResponses.sun;
-  if (lowerQ.includes('mars') || lowerQ.includes('red planet')) return alienResponses.mars;
-  
-  return alienResponses.default;
-};
+const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
 const AlienDoom = () => {
   const [isOpen, setIsOpen] = useState(false);
