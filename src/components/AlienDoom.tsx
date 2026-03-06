@@ -213,29 +213,63 @@ const AlienDoom = () => {
     window.speechSynthesis.speak(utterance);
   }, [voiceEnabled]);
 
-  const handleSend = useCallback(() => {
-    if (!input.trim()) return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
+
+  const handleSend = useCallback(async () => {
+    if (!input.trim() || isLoading) return;
     
     const userMessage = input.trim();
     setInput('');
     setMessages(prev => [...prev, { speaker: 'user', text: userMessage }]);
-    
-    // Get responses from aliens
-    const responses = getAlienResponse(userMessage);
-    
-    // Add responses with delay for speaking animation
-    responses.forEach((resp, index) => {
-      setTimeout(() => {
-        setSpeakingAlien(resp.speaker);
-        setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.response }]);
-        
-        // Speak the response
-        speak(resp.response, resp.speaker);
-        
-        setTimeout(() => setSpeakingAlien(null), 2000);
-      }, (index + 1) * 1500);
-    });
-  }, [input, speak]);
+    setIsLoading(true);
+
+    const newHistory = [...conversationHistory, { role: 'user', content: userMessage }];
+
+    try {
+      const resp = await fetch(ALIEN_CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: newHistory.slice(-10) }),
+      });
+
+      if (!resp.ok) {
+        const errData = await resp.json();
+        throw new Error(errData.error || 'Failed to get response');
+      }
+
+      const data = await resp.json();
+      let parsed: { speaker: 'mr' | 'mrs'; text: string }[];
+      
+      try {
+        const raw = data.content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        parsed = JSON.parse(raw);
+      } catch {
+        parsed = [{ speaker: 'mr', text: data.content }];
+      }
+
+      const assistantContent = parsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
+      setConversationHistory([...newHistory, { role: 'assistant', content: assistantContent }]);
+
+      parsed.forEach((resp, index) => {
+        setTimeout(() => {
+          setSpeakingAlien(resp.speaker);
+          setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.text }]);
+          const cleanText = resp.text.replace(/[\u{1F600}-\u{1F9FF}]/gu, '').replace(/[*#_~`]/g, '');
+          speak(cleanText, resp.speaker);
+          setTimeout(() => setSpeakingAlien(null), 2000);
+        }, (index + 1) * 1500);
+      });
+    } catch (e) {
+      console.error('Alien chat error:', e);
+      setMessages(prev => [...prev, { speaker: 'mr', text: "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸" }]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [input, speak, isLoading, conversationHistory]);
 
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
