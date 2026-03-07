@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import QuizGame from './QuizGame';
 import SizeComparison from './SizeComparison';
-import PlanetOrderGame from './games/PlanetOrderGame';
+import SpaceRocketShooter from './games/SpaceRocketShooter';
 import MemoryMatchGame from './games/MemoryMatchGame';
 import WordScrambleGame from './games/WordScrambleGame';
 import RocketMathGame from './games/RocketMathGame';
