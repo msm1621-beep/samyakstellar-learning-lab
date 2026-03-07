@@ -103,6 +103,72 @@ const manuscripts: Manuscript[] = [
     fullDescription: 'The James Webb Space Telescope, the most powerful space telescope ever built, released its first full-color images on July 12, 2022. The $10 billion observatory, positioned at the second Lagrange point about 1.5 million km from Earth, captured the deepest and sharpest infrared image of the distant universe ever taken — Webb\'s First Deep Field showing galaxy cluster SMACS 0723 as it appeared 4.6 billion years ago. The telescope\'s 6.5-meter gold-plated mirror and infrared instruments can peer through cosmic dust to see the first galaxies formed after the Big Bang, study the atmospheres of exoplanets for signs of habitability, and observe star formation in unprecedented detail. JWST has already discovered galaxies from just 300 million years after the Big Bang.',
     significance: 'Opened a new era of astronomy by revealing the earliest galaxies, analyzing exoplanet atmospheres, and providing unprecedented views of cosmic phenomena invisible to previous telescopes.'
   },
+  {
+    id: 'm9',
+    title: 'First Space Walk',
+    year: 'March 18, 1965',
+    location: 'Low Earth Orbit',
+    pioneer: 'Alexei Leonov',
+    thumbnail: 'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?w=400&h=300&fit=crop',
+    summary: 'Alexei Leonov floated outside his spacecraft for 12 minutes, becoming the first human to walk in space.',
+    fullDescription: 'On March 18, 1965, Soviet cosmonaut Alexei Leonov exited the Voskhod 2 spacecraft and floated freely in the vacuum of space for approximately 12 minutes, connected only by a 5.35-meter tether. His spacesuit inflated unexpectedly in the vacuum, making it extremely difficult to re-enter the airlock. Leonov had to partially deflate his suit to squeeze back inside, risking decompression sickness. The mission nearly ended in disaster when the automatic re-entry system failed and the crew had to land manually, ending up in a dense forest in the Ural Mountains where they spent two nights in freezing temperatures before rescue. Despite the dangers, Leonov\'s spacewalk proved humans could work outside a spacecraft.',
+    significance: 'Demonstrated that astronauts could survive and function outside a spacecraft, paving the way for all future spacewalks essential to satellite repairs, space station construction, and lunar surface exploration.'
+  },
+  {
+    id: 'm10',
+    title: 'Cassini-Huygens at Saturn',
+    year: 'July 1, 2004',
+    location: 'Saturn System',
+    pioneer: 'NASA, ESA & ASI',
+    thumbnail: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400&h=300&fit=crop',
+    summary: 'Cassini orbited Saturn for 13 years, revealing stunning rings and ocean moons.',
+    fullDescription: 'The Cassini-Huygens mission was a collaboration between NASA, ESA, and the Italian Space Agency that studied Saturn and its system of rings and moons for over 13 years. Launched in 1997, Cassini arrived at Saturn in 2004 and the Huygens probe landed on Titan in January 2005 — the first landing in the outer solar system. Cassini discovered that Enceladus, one of Saturn\'s moons, has a global subsurface ocean with hydrothermal vents shooting plumes of water ice into space, making it a prime candidate for extraterrestrial life. The spacecraft also revealed Titan\'s methane lakes and rivers, discovered seven new moons, and captured breathtaking images of Saturn\'s rings in unprecedented detail. The mission ended in September 2017 with a deliberate plunge into Saturn\'s atmosphere.',
+    significance: 'Revealed Saturn\'s moons Enceladus and Titan as potential harbors for life, achieved the first landing in the outer solar system, and transformed our understanding of giant planet systems.'
+  },
+  {
+    id: 'm11',
+    title: 'First Woman in Space',
+    year: 'June 16, 1963',
+    location: 'Baikonur Cosmodrome, USSR',
+    pioneer: 'Valentina Tereshkova',
+    thumbnail: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?w=400&h=300&fit=crop',
+    summary: 'Valentina Tereshkova orbited Earth 48 times, proving women could fly in space.',
+    fullDescription: 'On June 16, 1963, Soviet cosmonaut Valentina Vladimirovna Tereshkova launched aboard Vostok 6 and became the first woman to fly in space. Over the course of nearly three days, she orbited the Earth 48 times, spending more time in space than all American astronauts combined at that point. Tereshkova was selected from over 400 applicants and underwent 18 months of rigorous training including weightlessness flights, isolation tests, and parachute jumps. She maintained a detailed flight log and took photographs of the horizon that were later used to identify aerosol layers in the atmosphere. Despite experiencing nausea and physical discomfort, she completed her mission successfully. It would be 19 years before another woman, Svetlana Savitskaya, flew to space.',
+    significance: 'Shattered gender barriers in spaceflight and inspired generations of women to pursue careers in science, technology, engineering, and space exploration.'
+  },
+  {
+    id: 'm12',
+    title: 'New Horizons Reaches Pluto',
+    year: 'July 14, 2015',
+    location: 'Pluto System',
+    pioneer: 'NASA / APL / SwRI',
+    thumbnail: 'https://images.unsplash.com/photo-1545156521-77bd85671d30?w=400&h=300&fit=crop',
+    summary: 'New Horizons flew past Pluto, revealing a surprisingly complex and active world.',
+    fullDescription: 'After a nine-and-a-half-year journey covering over 5 billion kilometers, NASA\'s New Horizons spacecraft made its closest approach to Pluto on July 14, 2015, passing within 12,500 km of the dwarf planet\'s surface. The flyby revealed Pluto to be far more complex and geologically active than anyone had expected. The spacecraft discovered a vast heart-shaped glacier of nitrogen ice (Tombaugh Regio), towering mountains of water ice up to 3,500 meters high, a thin but hazy atmosphere with multiple layers, and evidence of possible cryovolcanism. Pluto\'s largest moon Charon was found to have a massive canyon system and a dark reddish polar cap. New Horizons later flew past the Kuiper Belt object Arrokoth in 2019, the most distant object ever visited by a spacecraft.',
+    significance: 'Completed the initial reconnaissance of the classical solar system, revealed Pluto as a geologically active world, and opened exploration of the Kuiper Belt.'
+  },
+  {
+    id: 'm13',
+    title: 'SpaceX Falcon 9 First Landing',
+    year: 'December 21, 2015',
+    location: 'Cape Canaveral, Florida',
+    pioneer: 'SpaceX / Elon Musk',
+    thumbnail: 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=400&h=300&fit=crop',
+    summary: 'SpaceX successfully landed a Falcon 9 rocket booster, ushering in the era of reusable rockets.',
+    fullDescription: 'On December 21, 2015, SpaceX achieved a historic milestone by successfully landing the first stage of a Falcon 9 rocket at Landing Zone 1 at Cape Canaveral after delivering 11 ORBCOMM satellites to orbit. This was the first time an orbital-class rocket booster had ever been landed vertically after a mission. The achievement came after years of development and several failed landing attempts on drone ships at sea. The reusable rocket technology dramatically reduced the cost of access to space — previously, rocket boosters worth tens of millions of dollars were discarded after a single use. SpaceX has since reflown boosters over 300 times, with some individual boosters flying more than 20 missions. This breakthrough fundamentally changed the economics of spaceflight.',
+    significance: 'Revolutionized spaceflight economics by proving orbital rockets could be reused, dramatically reducing launch costs and making space more accessible for scientific and commercial missions.'
+  },
+  {
+    id: 'm14',
+    title: 'First Photo of a Black Hole',
+    year: 'April 10, 2019',
+    location: 'Galaxy M87',
+    pioneer: 'Event Horizon Telescope Team',
+    thumbnail: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop',
+    summary: 'Scientists captured the first-ever image of a black hole\'s shadow, confirming Einstein\'s predictions.',
+    fullDescription: 'On April 10, 2019, the Event Horizon Telescope (EHT) collaboration released the first-ever direct image of a black hole, specifically the supermassive black hole at the center of the galaxy Messier 87, located 55 million light-years from Earth. The image showed a bright ring of superheated gas and plasma swirling around the black hole\'s shadow — a dark region where light cannot escape the enormous gravitational pull. The achievement required linking eight radio telescopes across four continents to create a virtual Earth-sized telescope. The resulting data — over 5 petabytes — took two years to process using advanced algorithms. The image spectacularly confirmed predictions made by Einstein\'s general theory of relativity over a century earlier about how light behaves around extreme gravitational fields.',
+    significance: 'Provided the first visual evidence of black holes, confirmed Einstein\'s general relativity in extreme gravity, and demonstrated the power of global scientific collaboration.'
+  },
 ];
 
 const ManuscriptsSection = () => {
