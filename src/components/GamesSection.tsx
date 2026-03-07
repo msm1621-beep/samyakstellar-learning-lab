@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import QuizGame from './QuizGame';
 import SizeComparison from './SizeComparison';
-import PlanetOrderGame from './games/PlanetOrderGame';
+import SpaceRocketShooter from './games/SpaceRocketShooter';
 import MemoryMatchGame from './games/MemoryMatchGame';
 import WordScrambleGame from './games/WordScrambleGame';
 import RocketMathGame from './games/RocketMathGame';
@@ -10,7 +10,7 @@ import { Button } from './ui/button';
 const games = [
   { id: 'quiz', label: 'Quiz', emoji: '🧠', component: QuizGame },
   { id: 'size', label: 'Size Compare', emoji: '🔭', component: SizeComparison },
-  { id: 'planets', label: 'Planet Order', emoji: '🪐', component: PlanetOrderGame },
+  { id: 'rocket-shooter', label: 'Rocket Shooter', emoji: '🚀', component: SpaceRocketShooter },
   { id: 'memory', label: 'Memory Match', emoji: '🃏', component: MemoryMatchGame },
   { id: 'scramble', label: 'Word Scramble', emoji: '🔤', component: WordScrambleGame },
   { id: 'math', label: 'Rocket Math', emoji: '🚀', component: RocketMathGame },
