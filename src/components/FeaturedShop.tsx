@@ -59,7 +59,6 @@ const categoryConfig = {
 };
 
 const FeaturedShop = () => {
-  const { t } = useLanguage();
   const { coins, removeCoins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
   const [purchasedItems, setPurchasedItems] = React.useState<string[]>(() => {
