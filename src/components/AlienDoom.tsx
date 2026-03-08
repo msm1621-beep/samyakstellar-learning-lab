@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Text, Html } from '@react-three/drei';
+import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
