@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCoins } from '@/contexts/CoinsContext';
 import { toast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ACCOUNT_ICONS = [
   '🚀', '🌟', '🪐', '🌙', '☄️', '🛸', '👽', '🌌', '🔭', '⭐',
