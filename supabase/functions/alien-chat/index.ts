@@ -46,8 +46,8 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const responseLanguageInstruction = language === "en"
-      ? "Return message text in English."
-      : `IMPORTANT: Keep JSON keys the same, but return all message text in ${targetLanguageName || language}.`;
+      ? "CRITICAL LANGUAGE RULE: Keep JSON keys the same and return all message text ONLY in English."
+      : `CRITICAL LANGUAGE RULE: Keep JSON keys the same and return all message text ONLY in ${targetLanguageName || language} (language code: ${language}). Do not include English translations or mixed-language text.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
