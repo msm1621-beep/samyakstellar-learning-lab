@@ -59,6 +59,10 @@ export const AchievementsProvider = ({ children }: { children: ReactNode }) => {
     setAchievements(prev => [...prev, newAchievement]);
   };
 
+  const removeAchievement = (id: string) => {
+    setAchievements(prev => prev.filter(a => a.id !== id));
+  };
+
   const hasAchievement = (name: string, type: string): boolean => {
     return achievements.some(a => a.name === name && a.type === type);
   };
