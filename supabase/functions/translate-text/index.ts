@@ -117,7 +117,7 @@ const requestTranslation = async ({
       temperature: 0,
       messages: [
         { role: 'system', content: prompt },
-        { role: 'user', content: JSON.stringify({ translations: cleanedTexts }) },
+        { role: 'user', content: JSON.stringify(cleanedTexts) },
       ],
     }),
   });
