@@ -151,7 +151,7 @@ const SpaceQnA = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/60" />
               <Input
                 type="text"
-                placeholder="Ask anything about space... (e.g., What if Earth had two moons?)"
+                placeholder={t('qna.askAnything')}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
