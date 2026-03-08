@@ -18,6 +18,7 @@ const typeConfig = {
 };
 
 const CertificateShowcase = () => {
+  const { t } = useLanguage();
   const { achievements, getAchievementsByType, totalAchievements, removeAchievement } = useAchievements();
   const [selectedType, setSelectedType] = useState<Achievement['type'] | 'all'>('all');
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
