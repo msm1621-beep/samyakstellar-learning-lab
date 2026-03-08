@@ -298,16 +298,10 @@ const AlienDoom = () => {
         parsed = [{ speaker: 'mr', text: data.content }];
       }
 
-      const translatedReplies = await translateTexts(parsed.map((resp) => resp.text), language);
-      const localizedParsed = parsed.map((resp, index) => ({
-        ...resp,
-        text: translatedReplies[index] || resp.text,
-      }));
-
-      const assistantContent = localizedParsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
+      const assistantContent = parsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
       setConversationHistory([...newHistory, { role: 'assistant', content: assistantContent }]);
 
-      localizedParsed.forEach((resp, index) => {
+      parsed.forEach((resp, index) => {
         setTimeout(() => {
           setSpeakingAlien(resp.speaker);
           setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.text }]);
@@ -318,9 +312,7 @@ const AlienDoom = () => {
       });
     } catch (e) {
       console.error('Alien chat error:', e);
-      const fallback = "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸";
-      const [localizedFallback] = await translateTexts([fallback], language);
-      setMessages(prev => [...prev, { speaker: 'mr', text: localizedFallback || fallback }]);
+      setMessages(prev => [...prev, { speaker: 'mr', text: "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸" }]);
     } finally {
       setIsLoading(false);
     }
