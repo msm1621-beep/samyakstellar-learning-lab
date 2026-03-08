@@ -53,7 +53,7 @@ const CertificateShowcase = () => {
           </p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-500/20 px-4 py-2 rounded-full border border-amber-500/30">
             <Trophy className="w-5 h-5 text-amber-400" />
-            <span className="text-amber-300 font-semibold">{totalAchievements} {t('common.totalAchievements')}</span>
+            <span className="text-amber-300 font-semibold">{totalAchievements} Total Achievements</span>
           </div>
         </motion.div>
 
