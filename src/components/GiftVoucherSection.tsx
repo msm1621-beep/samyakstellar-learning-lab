@@ -285,7 +285,7 @@ const GiftVoucherSection = () => {
           <div className="flex items-center justify-center gap-2 mb-3">
             <Gift className="w-8 h-8 text-amber-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent">
-              {t('section.giftVouchers')}
+              Gift Vouchers
             </h2>
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>
