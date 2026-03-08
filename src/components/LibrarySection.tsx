@@ -147,7 +147,6 @@ const LibrarySection = () => {
     utterance.volume = volume;
     
     // Use the selected language voice
-    const { langToSpeechLocale } = require('@/data/translations');
     const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find(v => v.lang.startsWith(locale.split('-')[0])) || voices[0];
