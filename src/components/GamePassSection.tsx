@@ -6,6 +6,7 @@ import { gamePasses } from '@/data/gamePasses';
 import { useGamePass } from '@/contexts/GamePassContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const GamePassSection = () => {
   const { hasPass, purchasePass, getPassExpiry, extraLives, activePasses } = useGamePass();
