@@ -6,7 +6,7 @@ import { subscriptions, Subscription } from '@/data/subscriptions';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+
 import {
   Dialog,
   DialogContent,
