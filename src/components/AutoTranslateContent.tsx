@@ -51,24 +51,32 @@ const AutoTranslateContent = () => {
       return nodes;
     };
 
-    const translateBatch = async (texts: string[], signal: AbortSignal) => {
-      const response = await fetch(TRANSLATE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          texts,
-          targetLanguage: language,
-          targetLanguageName: getLanguageName(language),
-        }),
-        signal,
-      });
+    const translateBatch = async (texts: string[], signal: AbortSignal): Promise<string[]> => {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const response = await fetch(TRANSLATE_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            texts,
+            targetLanguage: language,
+            targetLanguageName: getLanguageName(language),
+          }),
+          signal,
+        });
 
-      if (!response.ok) throw new Error('Translation request failed');
-      const data = await response.json();
-      return Array.isArray(data.translations) ? data.translations : texts;
+        if (response.status === 429) {
+          await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
+          continue;
+        }
+
+        if (!response.ok) throw new Error('Translation request failed');
+        const data = await response.json();
+        return Array.isArray(data.translations) ? data.translations : texts;
+      }
+      return texts; // fallback after retries
     };
 
     const runTranslation = async () => {

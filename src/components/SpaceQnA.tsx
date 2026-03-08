@@ -42,29 +42,44 @@ const SpaceQnA = () => {
     setAnswer('');
     setQuestion('');
 
-    try {
-      const resp = await fetch(SPACE_QNA_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ question: queryToSearch, language, targetLanguageName: getLanguageName(language) }),
-        signal: controller.signal,
-      });
+    const maxRetries = 3;
+    let attempt = 0;
 
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        setAnswer(err.error || "Something went wrong. Try again! 🔧");
-        setIsSearching(false);
-        return;
-      }
+    while (attempt < maxRetries) {
+      try {
+        const resp = await fetch(SPACE_QNA_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ question: queryToSearch, language, targetLanguageName: getLanguageName(language) }),
+          signal: controller.signal,
+        });
 
-      if (!resp.body) {
-        setAnswer("No response received. Try again! 🔧");
-        setIsSearching(false);
-        return;
-      }
+        if (resp.status === 429) {
+          attempt++;
+          if (attempt >= maxRetries) {
+            setAnswer("Too many requests right now — please wait a few seconds and try again! 🚀");
+            setIsSearching(false);
+            return;
+          }
+          await new Promise(r => setTimeout(r, 2000 * attempt));
+          continue;
+        }
+
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          setAnswer(err.error || "Something went wrong. Try again! 🔧");
+          setIsSearching(false);
+          return;
+        }
+
+        if (!resp.body) {
+          setAnswer("No response received. Try again! 🔧");
+          setIsSearching(false);
+          return;
+        }
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -117,14 +132,20 @@ const SpaceQnA = () => {
       }
 
       if (!fullText) setAnswer("Hmm, I couldn't find an answer. Try rephrasing your question! 🤔");
-    } catch (e: any) {
-      if (e.name !== 'AbortError') {
-        console.error("Space Q&A error:", e);
-        setAnswer("Something went wrong. Please try again! 🔧");
+        break; // success — exit retry loop
+      } catch (e: any) {
+        if (e.name === 'AbortError') break;
+        attempt++;
+        if (attempt >= maxRetries) {
+          console.error("Space Q&A error:", e);
+          setAnswer("Something went wrong. Please try again! 🔧");
+        } else {
+          await new Promise(r => setTimeout(r, 2000 * attempt));
+        }
       }
-    } finally {
-      setIsSearching(false);
     }
+
+    setIsSearching(false);
   };
 
   const handleSuggestedClick = (q: string) => {
