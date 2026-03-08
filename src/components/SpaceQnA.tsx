@@ -42,7 +42,7 @@ const SpaceQnA = () => {
     setAnswer('');
     setQuestion('');
 
-    const maxRetries = 3;
+    const maxRetries = 4;
     let attempt = 0;
 
     while (attempt < maxRetries) {
@@ -64,7 +64,7 @@ const SpaceQnA = () => {
             setIsSearching(false);
             return;
           }
-          await new Promise(r => setTimeout(r, 2000 * attempt));
+          await new Promise(r => setTimeout(r, 3000 + 2000 * attempt));
           continue;
         }
 
