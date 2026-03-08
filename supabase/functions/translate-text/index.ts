@@ -112,9 +112,31 @@ const requestTranslation = async ({
   targetLanguageName?: string;
   mode: 'base' | 'rescue';
 }): Promise<string[] | null> => {
-  const prompt = mode === 'rescue'
-    ? `You are a strict UI localization engine. Previous translation left source-language text unchanged. Translate each input item into ${targetLanguageName || targetLanguage} (${targetLanguage}). Rules: (1) Keep exact order and array length. (2) Keep emoji, punctuation and numbers. (3) Keep only true proper nouns/astronomical names unchanged when needed, but translate all normal UI words and sentences. (4) Return ONLY JSON: {"translations":["..."]}`
-    : `You are a UI localization translator. Translate each input item into ${targetLanguageName || targetLanguage} (${targetLanguage}). Keep exact order and array length. Keep emoji, punctuation and numbers. Return ONLY JSON: {"translations":["..."]}`;
+  const lang = targetLanguageName || targetLanguage;
+  const basePrompt = `You are a children's space education website translator. Translate EVERY input item from English into ${lang} (${lang}). 
+
+CRITICAL RULES:
+1. Translate ALL text including planet names, star names, moon names, celestial object names, and scientific terms into ${lang}. For example: "Mercury" → the ${lang} name for Mercury, "Planet" → the ${lang} word for planet, "Star" → the ${lang} word for star, "Dwarf Planet" → the ${lang} term.
+2. Translate ALL descriptions and sentences fully into ${lang}. Nothing should remain in English.
+3. Keep exact array order and length (${texts.length} items in, ${texts.length} items out).
+4. Keep emoji, punctuation, numbers, and formatting.
+5. Proper nouns that have well-known translations in ${lang} MUST be translated (e.g. Mercury, Venus, Jupiter, Saturn, Milky Way, Orion, etc.).
+6. Only keep untranslated: brand names like "NASA", "NEOWISE", "TRAPPIST-1", "Kepler", "WASP-76b".
+7. Return ONLY valid JSON: {"translations":["..."]}
+
+DO NOT return any input unchanged unless it is a brand name.`;
+
+  const rescuePrompt = `MANDATORY TRANSLATION: The previous attempt returned English text unchanged. You MUST translate every single item below into ${lang} (${lang}). This is a children's educational space website.
+
+RULES:
+1. EVERY item must be translated. Do NOT return English text.
+2. Planet names like Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto MUST be translated to their ${lang} equivalents.
+3. Words like "Planet", "Star", "Moon", "Dwarf Planet", "Nebula", "Galaxy", "Comet", "Asteroid" MUST be translated.
+4. All descriptions and sentences MUST be fully translated.
+5. Keep emoji, punctuation, numbers. Keep array order and length (${texts.length} items).
+6. Return ONLY JSON: {"translations":["..."]}`;
+
+  const prompt = mode === 'rescue' ? rescuePrompt : basePrompt;
 
   const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
@@ -124,7 +146,7 @@ const requestTranslation = async ({
     },
     body: JSON.stringify({
       model: 'google/gemini-2.5-flash',
-      temperature: 0,
+      temperature: 0.1,
       messages: [
         { role: 'system', content: prompt },
         { role: 'user', content: JSON.stringify(texts) },
