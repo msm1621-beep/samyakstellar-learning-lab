@@ -174,9 +174,18 @@ const AutoTranslateContent = () => {
           if (!originalTextRef.current.has(node)) {
             originalTextRef.current.set(node, current);
           }
+
           const original = originalTextRef.current.get(node) ?? current;
           const cacheKey = keyFor(original);
-          if (!translationCacheRef.current.has(cacheKey) && !missingTexts.includes(original)) {
+
+          if (translationCacheRef.current.has(cacheKey)) return;
+
+          if (!shouldTranslateText(original, language)) {
+            translationCacheRef.current.set(cacheKey, original);
+            return;
+          }
+
+          if (!missingTexts.includes(original)) {
             missingTexts.push(original);
           }
         });
@@ -190,7 +199,15 @@ const AutoTranslateContent = () => {
 
           const original = elementAttributes.get(name) ?? value;
           const cacheKey = keyFor(original);
-          if (!translationCacheRef.current.has(cacheKey) && !missingTexts.includes(original)) {
+
+          if (translationCacheRef.current.has(cacheKey)) return;
+
+          if (!shouldTranslateText(original, language)) {
+            translationCacheRef.current.set(cacheKey, original);
+            return;
+          }
+
+          if (!missingTexts.includes(original)) {
             missingTexts.push(original);
           }
         });
