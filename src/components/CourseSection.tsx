@@ -306,7 +306,7 @@ const CourseSection = () => {
                     onClick={() => completeCourse(selectedCourse)}
                     className="bg-gradient-to-r from-space-gold to-yellow-500 text-space-deep hover:from-yellow-400"
                   >
-                    <Award className="w-4 h-4 mr-2" /> Claim Certificate
+                    <Award className="w-4 h-4 mr-2" /> {t('courses.claimCertificate')}
                   </Button>
                 )}
                 <Button
