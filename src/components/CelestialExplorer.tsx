@@ -57,7 +57,7 @@ const CelestialExplorer = () => {
                     : 'glass-card hover:border-secondary/50'
                 }`}
               >
-                {dist === 'all' ? '📍 Any Distance' : dist === 'near' ? '🏠 Near' : '🚀 Far'}
+                {dist === 'all' ? t('explorer.anyDistance') : dist === 'near' ? t('explorer.near') : t('explorer.far')}
               </button>
             ))}
           </div>
