@@ -319,10 +319,13 @@ const CosmoAssistant = () => {
   };
 
   // Open with greeting
-  const handleOpen = () => {
+  const handleOpen = async () => {
     setIsOpen(true);
     if (messages.length === 0) {
-      const greeting = "Hello, young explorer! I'm Cosmo, your AI-powered space assistant! 🚀✨ I can answer ANY question about space, science, and everything on this website. Ask me about planets, stars, black holes, rockets, astronauts, our courses, games, library — literally anything! What cosmic mystery shall we explore today? 🌌";
+      const baseGreeting = "Hello, young explorer! I'm Cosmo, your AI-powered space assistant! 🚀✨ I can answer ANY question about space, science, and everything on this website. Ask me about planets, stars, black holes, rockets, astronauts, our courses, games, library — literally anything! What cosmic mystery shall we explore today? 🌌";
+      const [localizedGreeting] = await translateTexts([baseGreeting], language);
+      const greeting = localizedGreeting || baseGreeting;
+
       const cosmoMessage: Message = { role: 'cosmo', content: greeting, timestamp: new Date() };
       setMessages([cosmoMessage]);
       setTimeout(() => speak(greeting), 500);
