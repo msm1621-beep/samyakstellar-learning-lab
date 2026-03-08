@@ -179,6 +179,12 @@ const AutoTranslateContent = () => {
           const original = originalTextRef.current.get(node) ?? current;
           const cacheKey = keyFor(original);
 
+          const dictionaryOverride = getDictionaryOverride(original, language);
+          if (dictionaryOverride) {
+            translationCacheRef.current.set(cacheKey, dictionaryOverride);
+            return;
+          }
+
           if (translationCacheRef.current.has(cacheKey)) return;
 
           if (!shouldTranslateText(original, language)) {
