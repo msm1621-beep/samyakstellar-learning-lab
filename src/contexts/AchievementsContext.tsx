@@ -22,6 +22,7 @@ interface AchievementsContextType {
 const AchievementsContext = createContext<AchievementsContextType>({
   achievements: [],
   addAchievement: () => {},
+  removeAchievement: () => {},
   hasAchievement: () => false,
   getAchievementsByType: () => [],
   totalAchievements: 0,
