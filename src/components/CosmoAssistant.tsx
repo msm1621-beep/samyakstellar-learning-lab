@@ -55,18 +55,29 @@ async function streamChat({
   onDone: () => void;
   onError: (error: string) => void;
 }) {
-  const resp = await fetch(CHAT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-    },
-    body: JSON.stringify({ messages, language, targetLanguageName }),
-  });
+  let resp: Response | null = null;
 
-  if (!resp.ok) {
-    const errorData = await resp.json().catch(() => ({ error: "Failed to connect to Cosmo" }));
-    onError(errorData.error || "Something went wrong");
+  for (let attempt = 0; attempt < 3; attempt++) {
+    resp = await fetch(CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({ messages, language, targetLanguageName }),
+    });
+
+    if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
+      await wait(1200 * (attempt + 1));
+      continue;
+    }
+
+    break;
+  }
+
+  if (!resp || !resp.ok) {
+    const errorData = await resp?.json().catch(() => ({ error: "Failed to connect to Cosmo" }));
+    onError(errorData?.error || "Something went wrong");
     return;
   }
 
