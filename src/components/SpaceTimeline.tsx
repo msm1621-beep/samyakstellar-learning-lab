@@ -5,6 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const SpaceTimeline = () => {
   const [selectedCategory, setSelectedCategory] = useState<TimelineEvent['category'] | 'all'>('all');
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const categories = ['all', 'universe', 'solar-system', 'earth', 'exploration'] as const;
 
