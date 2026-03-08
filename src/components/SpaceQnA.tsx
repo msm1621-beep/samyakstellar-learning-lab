@@ -3,6 +3,7 @@ import { Search, Sparkles, Rocket, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { languages } from '@/data/translations';
 
 const SPACE_QNA_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/space-qna`;
 
@@ -17,13 +18,15 @@ const suggestedQuestions = [
   "Why is Venus the hottest planet?"
 ];
 
+const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
 const SpaceQnA = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
@@ -46,7 +49,7 @@ const SpaceQnA = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ question: queryToSearch }),
+        body: JSON.stringify({ question: queryToSearch, language, targetLanguageName: getLanguageName(language) }),
         signal: controller.signal,
       });
 

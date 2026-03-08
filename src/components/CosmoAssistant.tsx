@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { languages, langToSpeechLocale } from '@/data/translations';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -35,13 +37,19 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
+const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
 async function streamChat({
   messages,
+  language,
+  targetLanguageName,
   onDelta,
   onDone,
   onError,
 }: {
   messages: { role: string; content: string }[];
+  language: string;
+  targetLanguageName: string;
   onDelta: (deltaText: string) => void;
   onDone: () => void;
   onError: (error: string) => void;
@@ -52,7 +60,7 @@ async function streamChat({
       "Content-Type": "application/json",
       Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ messages, language, targetLanguageName }),
   });
 
   if (!resp.ok) {
@@ -133,6 +141,9 @@ const CosmoAssistant = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const speechLocale = langToSpeechLocale[language];
+  const targetLanguageName = getLanguageName(language);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -141,7 +152,7 @@ const CosmoAssistant = () => {
       recognitionRef.current = new SpeechRecognitionAPI();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = speechLocale;
 
       recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
@@ -157,7 +168,7 @@ const CosmoAssistant = () => {
       if (recognitionRef.current) recognitionRef.current.abort();
       window.speechSynthesis.cancel();
     };
-  }, []);
+  }, [speechLocale]);
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -180,10 +191,11 @@ const CosmoAssistant = () => {
     utterance.pitch = 1.1;
     utterance.volume = 1;
 
+    utterance.lang = speechLocale;
+
     const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => 
-      v.name.includes('Daniel') || v.name.includes('Samantha') || v.name.includes('Alex') || v.lang === 'en-US'
-    );
+    const localePrefix = speechLocale.split('-')[0].toLowerCase();
+    const preferredVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
     if (preferredVoice) utterance.voice = preferredVoice;
 
     utterance.onstart = () => setIsSpeaking(true);
@@ -222,6 +234,8 @@ const CosmoAssistant = () => {
     try {
       await streamChat({
         messages: history,
+        language,
+        targetLanguageName,
         onDelta: (chunk) => upsertAssistant(chunk),
         onDone: () => {
           setIsLoading(false);

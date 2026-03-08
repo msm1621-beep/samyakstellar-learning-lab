@@ -61,9 +61,13 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
+    const { messages, language = "en", targetLanguageName } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const responseLanguageInstruction = language === "en"
+      ? "Respond in English."
+      : `IMPORTANT: Respond entirely in ${targetLanguageName || language}. Keep the same playful style.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -75,6 +79,7 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: responseLanguageInstruction },
           ...messages,
         ],
         stream: true,

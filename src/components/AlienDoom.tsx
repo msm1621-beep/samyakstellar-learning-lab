@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { languages, langToSpeechLocale } from '@/data/translations';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
@@ -163,6 +165,8 @@ const AlienScene = ({
 
 const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
+const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
 const AlienDoom = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ speaker: 'user' | 'mr' | 'mrs'; text: string }[]>([
@@ -173,6 +177,9 @@ const AlienDoom = () => {
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const { language } = useLanguage();
+  const speechLocale = langToSpeechLocale[language];
+  const targetLanguageName = getLanguageName(language);
 
   // Initialize speech synthesis voices
   useEffect(() => {
@@ -188,6 +195,7 @@ const AlienDoom = () => {
     window.speechSynthesis.cancel();
     
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = speechLocale;
     
     // Different voice settings for Mr. and Mrs. Doom
     if (speaker === 'mr') {
@@ -199,11 +207,14 @@ const AlienDoom = () => {
     }
     
     const voices = window.speechSynthesis.getVoices();
+    const localePrefix = speechLocale.split('-')[0].toLowerCase();
+    const localeVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
+
     if (speaker === 'mr') {
-      const maleVoice = voices.find(v => v.name.includes('Daniel') || v.name.includes('Alex') || v.name.includes('Google UK English Male'));
+      const maleVoice = localeVoices.find((voice) => /male|daniel|alex/i.test(voice.name)) || localeVoices[0];
       if (maleVoice) utterance.voice = maleVoice;
     } else {
-      const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Google UK English Female'));
+      const femaleVoice = localeVoices.find((voice) => /female|samantha|victoria/i.test(voice.name)) || localeVoices[0];
       if (femaleVoice) utterance.voice = femaleVoice;
     }
     
@@ -211,7 +222,7 @@ const AlienDoom = () => {
     utterance.onend = () => setIsSpeaking(false);
     
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled]);
+  }, [voiceEnabled, speechLocale]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
@@ -233,7 +244,7 @@ const AlienDoom = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: newHistory.slice(-10) }),
+        body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
       });
 
       if (!resp.ok) {
@@ -269,7 +280,7 @@ const AlienDoom = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [input, speak, isLoading, conversationHistory]);
+  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName]);
 
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
