@@ -168,7 +168,7 @@ const CosmoAssistant = () => {
       if (recognitionRef.current) recognitionRef.current.abort();
       window.speechSynthesis.cancel();
     };
-  }, []);
+  }, [speechLocale]);
 
   // Scroll to bottom of messages
   useEffect(() => {
