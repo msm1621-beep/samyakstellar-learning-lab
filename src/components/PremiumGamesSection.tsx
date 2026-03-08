@@ -8,6 +8,7 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const difficultyConfig = {
   easy: { color: 'text-green-400', bg: 'bg-green-500/20', label: 'Easy' },
