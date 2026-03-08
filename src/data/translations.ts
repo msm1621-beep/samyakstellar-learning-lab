@@ -1,6 +1,7 @@
 export type LanguageCode = 
   | 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'zh' | 'ja' | 'ko'
-  | 'hi' | 'ar' | 'tr' | 'nl' | 'pl' | 'sv' | 'th' | 'vi' | 'id' | 'el';
+  | 'hi' | 'ar' | 'tr' | 'nl' | 'pl' | 'sv' | 'th' | 'vi' | 'id' | 'el'
+  | 'uk' | 'he' | 'bn' | 'ms';
 
 export interface Language {
   code: LanguageCode;
