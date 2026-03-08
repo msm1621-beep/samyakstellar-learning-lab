@@ -165,6 +165,8 @@ const AlienScene = ({
 
 const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
+const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
 const AlienDoom = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ speaker: 'user' | 'mr' | 'mrs'; text: string }[]>([
