@@ -13,6 +13,8 @@ const AutoTranslateContent = () => {
   const originalTextRef = useRef(new WeakMap<Text, string>());
   const translationCacheRef = useRef(new Map<string, string>());
   const isApplyingRef = useRef(false);
+  const isTranslatingRef = useRef(false);
+  const pendingRerunRef = useRef(false);
   const debounceRef = useRef<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
