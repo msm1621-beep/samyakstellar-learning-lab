@@ -254,7 +254,7 @@ type TranslationKeys = {
 
 export type TranslationKey = keyof TranslationKeys;
 
-const translations: Record<LanguageCode, TranslationKeys> = {
+const translations: Record<string, TranslationKeys> = {
   en: {
     'nav.home': 'Home', 'nav.solarSystem': 'Solar System', 'nav.timeline': 'Timeline', 'nav.constellations': 'Constellations', 'nav.library': 'Library', 'nav.games': 'Games', 'nav.subscriptions': 'Subscriptions', 'nav.funFacts': 'Fun Facts', 'nav.about': 'About', 'nav.startJourney': 'Start Your Journey', 'nav.cosmicClassroom': 'Cosmic Classroom',
     'hero.badge': 'For young explorers ages 7-13', 'hero.welcome': 'Welcome to', 'hero.cosmicClassroom': 'Cosmic Classroom', 'hero.subtitle': 'Explore Every Corner of the Universe! 🚀 Learn about planets, stars, nebulas, galaxies, and so much more!', 'hero.startJourney': 'Start Your Space Journey', 'hero.takeQuiz': 'Take a Quiz',
