@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { languages, langToSpeechLocale } from '@/data/translations';
+import { translateTexts } from '@/lib/translateText';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -219,6 +220,7 @@ const CosmoAssistant = () => {
     }));
 
     let assistantSoFar = "";
+    let hadStreamError = false;
 
     const upsertAssistant = (nextChunk: string) => {
       assistantSoFar += nextChunk;
@@ -237,29 +239,59 @@ const CosmoAssistant = () => {
         language,
         targetLanguageName,
         onDelta: (chunk) => upsertAssistant(chunk),
-        onDone: () => {
-          setIsLoading(false);
-          if (assistantSoFar) speak(assistantSoFar);
-        },
+        onDone: () => undefined,
         onError: (error) => {
-          setIsLoading(false);
-          const errorMsg: Message = {
-            role: 'cosmo',
-            content: `Oops! ${error} Try asking again! 🚀`,
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, errorMsg]);
+          hadStreamError = true;
+          translateTexts([`Oops! ${error} Try asking again! 🚀`], language)
+            .then(([localizedError]) => {
+              const errorMsg: Message = {
+                role: 'cosmo',
+                content: localizedError || `Oops! ${error} Try asking again! 🚀`,
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, errorMsg]);
+            })
+            .catch(() => {
+              const errorMsg: Message = {
+                role: 'cosmo',
+                content: `Oops! ${error} Try asking again! 🚀`,
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, errorMsg]);
+            });
+
           toast({ title: "Cosmo Error", description: error, variant: "destructive" });
         },
       });
+
+      if (!hadStreamError && assistantSoFar) {
+        const [localizedReply] = await translateTexts([assistantSoFar], language);
+        const finalReply = localizedReply || assistantSoFar;
+
+        if (finalReply !== assistantSoFar) {
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+            if (lastIndex >= 0 && updated[lastIndex].role === 'cosmo') {
+              updated[lastIndex] = { ...updated[lastIndex], content: finalReply };
+            }
+            return updated;
+          });
+        }
+
+        speak(finalReply);
+      }
     } catch (e) {
-      setIsLoading(false);
+      const fallback = "Sorry, I had a little space glitch! 🛸 Please try asking again.";
+      const [localizedFallback] = await translateTexts([fallback], language);
       const errorMsg: Message = {
         role: 'cosmo',
-        content: "Sorry, I had a little space glitch! 🛸 Please try asking again.",
+        content: localizedFallback || fallback,
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -287,10 +319,13 @@ const CosmoAssistant = () => {
   };
 
   // Open with greeting
-  const handleOpen = () => {
+  const handleOpen = async () => {
     setIsOpen(true);
     if (messages.length === 0) {
-      const greeting = "Hello, young explorer! I'm Cosmo, your AI-powered space assistant! 🚀✨ I can answer ANY question about space, science, and everything on this website. Ask me about planets, stars, black holes, rockets, astronauts, our courses, games, library — literally anything! What cosmic mystery shall we explore today? 🌌";
+      const baseGreeting = "Hello, young explorer! I'm Cosmo, your AI-powered space assistant! 🚀✨ I can answer ANY question about space, science, and everything on this website. Ask me about planets, stars, black holes, rockets, astronauts, our courses, games, library — literally anything! What cosmic mystery shall we explore today? 🌌";
+      const [localizedGreeting] = await translateTexts([baseGreeting], language);
+      const greeting = localizedGreeting || baseGreeting;
+
       const cosmoMessage: Message = { role: 'cosmo', content: greeting, timestamp: new Date() };
       setMessages([cosmoMessage]);
       setTimeout(() => speak(greeting), 500);
