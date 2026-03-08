@@ -132,7 +132,7 @@ const FeaturedShop = () => {
             <Sparkles className="w-8 h-8 text-purple-400" />
           </div>
           <p className="text-white/60 max-w-2xl mx-auto mb-4">
-            {t('shop.desc')}
+            Spend your coins on amazing boosts, cosmetics, and utilities!
           </p>
           <div className="flex justify-center gap-2 flex-wrap">
             <Button
