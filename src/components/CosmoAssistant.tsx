@@ -41,11 +41,15 @@ const getLanguageName = (code: string) => languages.find((lang) => lang.code ===
 
 async function streamChat({
   messages,
+  language,
+  targetLanguageName,
   onDelta,
   onDone,
   onError,
 }: {
   messages: { role: string; content: string }[];
+  language: string;
+  targetLanguageName: string;
   onDelta: (deltaText: string) => void;
   onDone: () => void;
   onError: (error: string) => void;
