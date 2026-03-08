@@ -220,6 +220,7 @@ const CosmoAssistant = () => {
     }));
 
     let assistantSoFar = "";
+    let hadStreamError = false;
 
     const upsertAssistant = (nextChunk: string) => {
       assistantSoFar += nextChunk;
@@ -238,29 +239,59 @@ const CosmoAssistant = () => {
         language,
         targetLanguageName,
         onDelta: (chunk) => upsertAssistant(chunk),
-        onDone: () => {
-          setIsLoading(false);
-          if (assistantSoFar) speak(assistantSoFar);
-        },
+        onDone: () => undefined,
         onError: (error) => {
-          setIsLoading(false);
-          const errorMsg: Message = {
-            role: 'cosmo',
-            content: `Oops! ${error} Try asking again! 🚀`,
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, errorMsg]);
+          hadStreamError = true;
+          translateTexts([`Oops! ${error} Try asking again! 🚀`], language)
+            .then(([localizedError]) => {
+              const errorMsg: Message = {
+                role: 'cosmo',
+                content: localizedError || `Oops! ${error} Try asking again! 🚀`,
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, errorMsg]);
+            })
+            .catch(() => {
+              const errorMsg: Message = {
+                role: 'cosmo',
+                content: `Oops! ${error} Try asking again! 🚀`,
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, errorMsg]);
+            });
+
           toast({ title: "Cosmo Error", description: error, variant: "destructive" });
         },
       });
+
+      if (!hadStreamError && assistantSoFar) {
+        const [localizedReply] = await translateTexts([assistantSoFar], language);
+        const finalReply = localizedReply || assistantSoFar;
+
+        if (finalReply !== assistantSoFar) {
+          setMessages(prev => {
+            const updated = [...prev];
+            const lastIndex = updated.length - 1;
+            if (lastIndex >= 0 && updated[lastIndex].role === 'cosmo') {
+              updated[lastIndex] = { ...updated[lastIndex], content: finalReply };
+            }
+            return updated;
+          });
+        }
+
+        speak(finalReply);
+      }
     } catch (e) {
-      setIsLoading(false);
+      const fallback = "Sorry, I had a little space glitch! 🛸 Please try asking again.";
+      const [localizedFallback] = await translateTexts([fallback], language);
       const errorMsg: Message = {
         role: 'cosmo',
-        content: "Sorry, I had a little space glitch! 🛸 Please try asking again.",
+        content: localizedFallback || fallback,
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
