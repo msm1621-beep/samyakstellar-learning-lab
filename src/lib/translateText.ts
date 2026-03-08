@@ -120,9 +120,6 @@ const KEY_OVERRIDES: Record<string, TranslationKey> = {
   'Stars & Nebulas': 'about.starsNebulas',
   'Galaxies': 'about.galaxies',
   'Books & Videos': 'about.booksVideos',
-
-  // Library tabs
-  'Audiobooks': 'library.audiobooks',
 };
 
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
