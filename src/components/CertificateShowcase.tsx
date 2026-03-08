@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calendar, ShoppingBag, Ticket, Crown } from 'lucide-react';
+import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calendar, ShoppingBag, Ticket, Crown, Lock, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAchievements, Achievement } from '@/contexts/AchievementsContext';
+import { toast } from 'sonner';
 
 const typeConfig = {
   course: { icon: GraduationCap, color: 'from-purple-500 to-violet-500', label: 'Courses' },
