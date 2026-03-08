@@ -195,6 +195,7 @@ const AlienDoom = () => {
     window.speechSynthesis.cancel();
     
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = speechLocale;
     
     // Different voice settings for Mr. and Mrs. Doom
     if (speaker === 'mr') {
@@ -206,11 +207,14 @@ const AlienDoom = () => {
     }
     
     const voices = window.speechSynthesis.getVoices();
+    const localePrefix = speechLocale.split('-')[0].toLowerCase();
+    const localeVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
+
     if (speaker === 'mr') {
-      const maleVoice = voices.find(v => v.name.includes('Daniel') || v.name.includes('Alex') || v.name.includes('Google UK English Male'));
+      const maleVoice = localeVoices.find((voice) => /male|daniel|alex/i.test(voice.name)) || localeVoices[0];
       if (maleVoice) utterance.voice = maleVoice;
     } else {
-      const femaleVoice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Google UK English Female'));
+      const femaleVoice = localeVoices.find((voice) => /female|samantha|victoria/i.test(voice.name)) || localeVoices[0];
       if (femaleVoice) utterance.voice = femaleVoice;
     }
     
