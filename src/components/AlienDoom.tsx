@@ -175,10 +175,7 @@ const ALIEN_INTRO_MESSAGES: { speaker: 'mr' | 'mrs'; text: string }[] = [
 
 const AlienDoom = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ speaker: 'user' | 'mr' | 'mrs'; text: string }[]>([
-    { speaker: 'mr', text: "Greetings, young Earthling! I'm Mr. Doom!" },
-    { speaker: 'mrs', text: "And I'm Mrs. Doom! We're here from the Andromeda galaxy to teach you about space! Ask us anything!" }
-  ]);
+  const [messages, setMessages] = useState<{ speaker: 'user' | 'mr' | 'mrs'; text: string }[]>([]);
   const [input, setInput] = useState('');
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -197,12 +194,12 @@ const AlienDoom = () => {
   // Voice synthesis function
   const speak = useCallback((text: string, speaker: 'mr' | 'mrs') => {
     if (!voiceEnabled || !('speechSynthesis' in window)) return;
-    
+
     window.speechSynthesis.cancel();
-    
+
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = speechLocale;
-    
+
     // Different voice settings for Mr. and Mrs. Doom
     if (speaker === 'mr') {
       utterance.pitch = 0.8;
@@ -211,7 +208,7 @@ const AlienDoom = () => {
       utterance.pitch = 1.3;
       utterance.rate = 1.0;
     }
-    
+
     const voices = window.speechSynthesis.getVoices();
     const localePrefix = speechLocale.split('-')[0].toLowerCase();
     const localeVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
@@ -223,19 +220,35 @@ const AlienDoom = () => {
       const femaleVoice = localeVoices.find((voice) => /female|samantha|victoria/i.test(voice.name)) || localeVoices[0];
       if (femaleVoice) utterance.voice = femaleVoice;
     }
-    
+
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
-    
+
     window.speechSynthesis.speak(utterance);
   }, [voiceEnabled, speechLocale]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
 
+  const initializeIntroMessages = useCallback(async () => {
+    if (messages.length > 0) return;
+
+    const localizedTexts = await translateTexts(
+      ALIEN_INTRO_MESSAGES.map((msg) => msg.text),
+      language,
+    );
+
+    setMessages(
+      ALIEN_INTRO_MESSAGES.map((msg, index) => ({
+        speaker: msg.speaker,
+        text: localizedTexts[index] || msg.text,
+      })),
+    );
+  }, [messages.length, language]);
+
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
-    
+
     const userMessage = input.trim();
     setInput('');
     setMessages(prev => [...prev, { speaker: 'user', text: userMessage }]);
@@ -260,7 +273,7 @@ const AlienDoom = () => {
 
       const data = await resp.json();
       let parsed: { speaker: 'mr' | 'mrs'; text: string }[];
-      
+
       try {
         const raw = data.content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
         parsed = JSON.parse(raw);
@@ -268,10 +281,16 @@ const AlienDoom = () => {
         parsed = [{ speaker: 'mr', text: data.content }];
       }
 
-      const assistantContent = parsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
+      const translatedReplies = await translateTexts(parsed.map((resp) => resp.text), language);
+      const localizedParsed = parsed.map((resp, index) => ({
+        ...resp,
+        text: translatedReplies[index] || resp.text,
+      }));
+
+      const assistantContent = localizedParsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
       setConversationHistory([...newHistory, { role: 'assistant', content: assistantContent }]);
 
-      parsed.forEach((resp, index) => {
+      localizedParsed.forEach((resp, index) => {
         setTimeout(() => {
           setSpeakingAlien(resp.speaker);
           setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.text }]);
@@ -282,7 +301,9 @@ const AlienDoom = () => {
       });
     } catch (e) {
       console.error('Alien chat error:', e);
-      setMessages(prev => [...prev, { speaker: 'mr', text: "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸" }]);
+      const fallback = "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸";
+      const [localizedFallback] = await translateTexts([fallback], language);
+      setMessages(prev => [...prev, { speaker: 'mr', text: localizedFallback || fallback }]);
     } finally {
       setIsLoading(false);
     }
@@ -291,6 +312,11 @@ const AlienDoom = () => {
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
+  };
+
+  const handleOpen = async () => {
+    setIsOpen(true);
+    await initializeIntroMessages();
   };
 
   return (
