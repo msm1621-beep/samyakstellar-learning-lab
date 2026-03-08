@@ -45,7 +45,7 @@ const CertificateShowcase = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Trophy className="w-8 h-8 text-amber-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 text-transparent bg-clip-text">
-              {t('section.trophyCabinet')}
+              Trophy Cabinet
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
