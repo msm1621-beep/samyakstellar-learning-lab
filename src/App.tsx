@@ -7,6 +7,7 @@ import { CoinsProvider } from "@/contexts/CoinsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { GamePassProvider } from "@/contexts/GamePassContext";
 import { AchievementsProvider } from "@/contexts/AchievementsContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
