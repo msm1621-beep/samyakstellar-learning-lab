@@ -314,7 +314,7 @@ const CourseSection = () => {
                   variant="outline"
                   className="border-primary/30 text-primary hover:bg-primary/10"
                 >
-                  <HelpCircle className="w-4 h-4 mr-2" /> Take Quiz
+                  <HelpCircle className="w-4 h-4 mr-2" /> {t('courses.takeQuiz')}
                 </Button>
                 {isCourseCompleted(selectedCourse.id) && (
                   <Button
