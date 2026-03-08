@@ -53,10 +53,10 @@ const DailyFactWidget = () => {
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
             <Sparkles className="w-8 h-8 text-yellow-400" />
-            Daily Space Fact
+            {t('section.dailyFact')}
             <Sparkles className="w-8 h-8 text-yellow-400" />
           </h2>
-          <p className="text-purple-200">Something new to learn every day!</p>
+          <p className="text-purple-200">{t('dailyFact.subtitle')}</p>
         </div>
 
         <div
