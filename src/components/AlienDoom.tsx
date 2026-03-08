@@ -286,18 +286,29 @@ const AlienDoom = () => {
     const newHistory = [...conversationHistory, { role: 'user', content: userMessage }];
 
     try {
-      const resp = await fetch(ALIEN_CHAT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
-      });
+      let resp: Response | null = null;
 
-      if (!resp.ok) {
-        const errData = await resp.json();
-        throw new Error(errData.error || 'Failed to get response');
+      for (let attempt = 0; attempt < 3; attempt++) {
+        resp = await fetch(ALIEN_CHAT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
+        });
+
+        if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
+          await wait(1200 * (attempt + 1));
+          continue;
+        }
+
+        break;
+      }
+
+      if (!resp || !resp.ok) {
+        const errData = await resp?.json().catch(() => ({}));
+        throw new Error(errData?.error || 'Failed to get response');
       }
 
       const data = await resp.json();
