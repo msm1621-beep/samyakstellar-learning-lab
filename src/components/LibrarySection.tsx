@@ -136,7 +136,7 @@ const LibrarySection = () => {
     }
   };
 
-  // Text-to-Speech functions
+  // Text-to-Speech functions - uses selected language
   const speak = useCallback((text: string) => {
     window.speechSynthesis.cancel();
     
@@ -145,15 +145,13 @@ const LibrarySection = () => {
     utterance.pitch = 1;
     utterance.volume = volume;
     
-    // Try to get a good voice
+    // Use the selected language voice
+    const { langToSpeechLocale } = require('@/data/translations');
+    const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => 
-      v.lang.startsWith('en') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google'))
-    ) || voices.find(v => v.lang.startsWith('en'));
-    
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
+    const voice = voices.find(v => v.lang.startsWith(locale.split('-')[0])) || voices[0];
+    if (voice) utterance.voice = voice;
+    utterance.lang = locale;
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => {

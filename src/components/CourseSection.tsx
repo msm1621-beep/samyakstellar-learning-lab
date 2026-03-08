@@ -204,7 +204,7 @@ const CourseSection = () => {
     }
   };
 
-  // Text-to-Speech functions
+  // Text-to-Speech functions - uses selected language
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     currentTextRef.current = text;
@@ -214,11 +214,12 @@ const CourseSection = () => {
     utterance.pitch = 1;
     utterance.volume = speechVolume;
     
+    const { langToSpeechLocale } = require('@/data/translations');
+    const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
-    if (englishVoice) {
-      utterance.voice = englishVoice;
-    }
+    const voice = voices.find((v: SpeechSynthesisVoice) => v.lang.startsWith(locale.split('-')[0])) || voices[0];
+    if (voice) utterance.voice = voice;
+    utterance.lang = locale;
     
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
