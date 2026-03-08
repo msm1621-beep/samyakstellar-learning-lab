@@ -21,10 +21,10 @@ const CelestialExplorer = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            🔭 Universe Explorer
+            {t('explorer.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Click on any celestial body to see images, read about it, or ask Cosmo!
+            {t('explorer.desc')}
           </p>
         </div>
 
