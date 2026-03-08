@@ -1,4 +1,5 @@
 import translations, { languages, type LanguageCode, type TranslationKey } from '@/data/translations';
+import { getExtendedTranslation } from '@/data/extendedTranslations';
 
 const TRANSLATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate-text`;
 
