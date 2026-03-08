@@ -132,14 +132,20 @@ const SpaceQnA = () => {
       }
 
       if (!fullText) setAnswer("Hmm, I couldn't find an answer. Try rephrasing your question! 🤔");
-    } catch (e: any) {
-      if (e.name !== 'AbortError') {
-        console.error("Space Q&A error:", e);
-        setAnswer("Something went wrong. Please try again! 🔧");
+        break; // success — exit retry loop
+      } catch (e: any) {
+        if (e.name === 'AbortError') break;
+        attempt++;
+        if (attempt >= maxRetries) {
+          console.error("Space Q&A error:", e);
+          setAnswer("Something went wrong. Please try again! 🔧");
+        } else {
+          await new Promise(r => setTimeout(r, 2000 * attempt));
+        }
       }
-    } finally {
-      setIsSearching(false);
     }
+
+    setIsSearching(false);
   };
 
   const handleSuggestedClick = (q: string) => {
