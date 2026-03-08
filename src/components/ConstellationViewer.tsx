@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const ConstellationViewer = () => {
   const [selectedConstellation, setSelectedConstellation] = useState<Constellation | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   return (
     <section id="constellations" className="py-20 px-4 relative">
