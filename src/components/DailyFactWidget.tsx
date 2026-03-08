@@ -8,6 +8,7 @@ const DailyFactWidget = () => {
   const [currentFact, setCurrentFact] = useState(dailyFacts[0]);
   const [isFlipping, setIsFlipping] = useState(false);
   const [factIndex, setFactIndex] = useState(0);
+  const { t } = useLanguage();
 
   // Get today's fact based on day of year
   useEffect(() => {
