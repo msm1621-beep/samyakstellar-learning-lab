@@ -27,6 +27,7 @@ interface AccountData {
 }
 
 const AccountBar = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
