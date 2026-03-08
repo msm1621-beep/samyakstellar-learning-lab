@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ShopItem {
   id: string;
