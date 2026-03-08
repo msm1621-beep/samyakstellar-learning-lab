@@ -13,6 +13,7 @@ export interface Achievement {
 interface AchievementsContextType {
   achievements: Achievement[];
   addAchievement: (achievement: Omit<Achievement, 'id' | 'earnedAt'>) => void;
+  removeAchievement: (id: string) => void;
   hasAchievement: (name: string, type: string) => boolean;
   getAchievementsByType: (type: Achievement['type']) => Achievement[];
   totalAchievements: number;
