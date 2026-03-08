@@ -48,7 +48,7 @@ const SpaceQnA = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ question: queryToSearch }),
+        body: JSON.stringify({ question: queryToSearch, language, targetLanguageName: getLanguageName(language) }),
         signal: controller.signal,
       });
 

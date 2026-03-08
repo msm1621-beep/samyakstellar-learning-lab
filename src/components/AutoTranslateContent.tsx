@@ -150,6 +150,12 @@ const AutoTranslateContent = () => {
 
     const observer = new MutationObserver(() => {
       if (language === 'en' || isApplyingRef.current) return;
+
+      if (isTranslatingRef.current) {
+        pendingRerunRef.current = true;
+        return;
+      }
+
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
       debounceRef.current = window.setTimeout(() => {
         void runTranslation();
