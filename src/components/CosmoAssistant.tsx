@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { languages, langToSpeechLocale } from '@/data/translations';
+import { translateTexts } from '@/lib/translateText';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
