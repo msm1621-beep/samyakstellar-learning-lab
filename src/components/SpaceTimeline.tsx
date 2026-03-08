@@ -19,10 +19,10 @@ const SpaceTimeline = () => {
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 flex items-center justify-center gap-3">
             <span className="text-5xl">🚀</span>
-            Journey Through Time
+            {t('timeline.title')}
           </h2>
           <p className="text-xl text-purple-200 max-w-2xl mx-auto">
-            Travel from the Big Bang to today! Explore the most amazing moments in cosmic history.
+            {t('timeline.desc')}
           </p>
         </div>
 
