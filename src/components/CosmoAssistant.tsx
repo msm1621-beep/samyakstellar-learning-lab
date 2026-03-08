@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { languages, langToSpeechLocale } from '@/data/translations';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {

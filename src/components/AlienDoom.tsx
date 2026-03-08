@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { languages, langToSpeechLocale } from '@/data/translations';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
