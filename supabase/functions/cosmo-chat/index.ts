@@ -76,12 +76,14 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "system", content: responseLanguageInstruction },
+          { role: "system", content: `Selected UI language is ${targetLanguageName || language} (${language}). Always answer in that language only.` },
           ...messages,
         ],
+        temperature: 0.2,
         stream: true,
       }),
     });
