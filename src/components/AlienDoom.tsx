@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Text, Html } from '@react-three/drei';
+import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -131,15 +131,9 @@ const AlienScene = ({
           eyeColor="#f43f5e"
           isSpeaking={speakingAlien === 'mr'}
         />
-        <Text
-          position={[-1, 1.5, 0]}
-          fontSize={0.15}
-          color="#a855f7"
-          anchorX="center"
-          anchorY="middle"
-        >
-          Mr. Doom
-        </Text>
+        <Html position={[-1, 1.5, 0]} center>
+          <span className="text-xs font-semibold text-primary whitespace-nowrap">Mr. Doom</span>
+        </Html>
       </Float>
       
       <Float speed={2.5} rotationIntensity={0.2} floatIntensity={0.5}>
@@ -149,15 +143,9 @@ const AlienScene = ({
           eyeColor="#facc15"
           isSpeaking={speakingAlien === 'mrs'}
         />
-        <Text
-          position={[1, 1.5, 0]}
-          fontSize={0.15}
-          color="#06b6d4"
-          anchorX="center"
-          anchorY="middle"
-        >
-          Mrs. Doom
-        </Text>
+        <Html position={[1, 1.5, 0]} center>
+          <span className="text-xs font-semibold text-accent whitespace-nowrap">Mrs. Doom</span>
+        </Html>
       </Float>
     </>
   );
