@@ -86,7 +86,7 @@ const DailyFactWidget = () => {
               className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 hover:scale-105 group"
             >
               <RefreshCw className={`w-5 h-5 transition-transform ${isFlipping ? 'animate-spin' : 'group-hover:rotate-180'}`} />
-              <span>New Fact</span>
+              <span>{t('dailyFact.newFact')}</span>
             </button>
             <button
               onClick={shareFact}
