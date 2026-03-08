@@ -253,7 +253,7 @@ const CosmoAssistant = () => {
           hadStreamError = true;
           const errorMsg: Message = {
             role: 'cosmo',
-            content: `Oops! ${error} Try asking again! 🚀`,
+            content: error,
             timestamp: new Date(),
           };
           setMessages(prev => [...prev, errorMsg]);
