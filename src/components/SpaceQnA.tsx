@@ -23,6 +23,7 @@ const SpaceQnA = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
+  const { t } = useLanguage();
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
