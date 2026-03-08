@@ -207,7 +207,7 @@ const CertificateShowcase = () => {
                   
                   <div className="mt-6 flex items-center justify-center gap-2 text-white/40">
                     <Calendar className="w-4 h-4" />
-                    <span>{t('common.earnedOn')} {formatDate(selectedAchievement.earnedAt)}</span>
+                    <span>Earned on {formatDate(selectedAchievement.earnedAt)}</span>
                   </div>
                 </div>
               </motion.div>

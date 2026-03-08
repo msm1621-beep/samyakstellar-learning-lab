@@ -62,7 +62,7 @@ const GamePassSection = () => {
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
-            {t('gamePass.desc')}
+            Unlock special game powers and bonuses!
           </p>
           {extraLives > 0 && (
             <motion.div

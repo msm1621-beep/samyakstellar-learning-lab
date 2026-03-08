@@ -290,7 +290,7 @@ const GiftVoucherSection = () => {
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>
           <p className="text-white/60 text-sm max-w-md mx-auto">
-            {t('giftVoucher.desc')}
+            Scratch your gift vouchers to reveal rewards!
           </p>
         </motion.div>
 
