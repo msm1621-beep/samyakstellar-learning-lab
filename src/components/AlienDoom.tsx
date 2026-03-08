@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { languages, langToSpeechLocale } from '@/data/translations';
-import { translateTexts } from '@/lib/translateText';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
