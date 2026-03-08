@@ -27,6 +27,7 @@ interface CompletedCourse {
 }
 
 const CourseSection = () => {
+  const { t } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [completedCourses, setCompletedCourses] = useState<CompletedCourse[]>([]);
