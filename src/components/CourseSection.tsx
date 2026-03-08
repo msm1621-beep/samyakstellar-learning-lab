@@ -10,6 +10,7 @@ import CourseCertificate from './CourseCertificate';
 import CourseQuiz from './CourseQuiz';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CourseProgress {
   courseId: string;
