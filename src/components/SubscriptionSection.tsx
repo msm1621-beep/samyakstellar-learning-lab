@@ -58,11 +58,11 @@ const SubscriptionSection = () => {
      <section id="subscriptions" className="py-20 relative">
        <div className="container mx-auto px-4">
          <div className="text-center mb-12">
-           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-             🎫 Space Subscriptions
-           </h2>
-           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-            Get VIP perks, bonus coins, and exclusive badges! All videos are FREE - subscriptions give you special rewards! 🌟
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+              🎫 {t('section.subscriptions')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+             {t('subscription.desc')}
            </p>
            
            {/* Current subscription status */}
