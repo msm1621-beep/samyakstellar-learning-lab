@@ -45,6 +45,10 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    const responseLanguageInstruction = language === "en"
+      ? "Return message text in English."
+      : `IMPORTANT: Keep JSON keys the same, but return all message text in ${targetLanguageName || language}.`;
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
