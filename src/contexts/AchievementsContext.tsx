@@ -13,6 +13,7 @@ export interface Achievement {
 interface AchievementsContextType {
   achievements: Achievement[];
   addAchievement: (achievement: Omit<Achievement, 'id' | 'earnedAt'>) => void;
+  removeAchievement: (id: string) => void;
   hasAchievement: (name: string, type: string) => boolean;
   getAchievementsByType: (type: Achievement['type']) => Achievement[];
   totalAchievements: number;
@@ -21,6 +22,7 @@ interface AchievementsContextType {
 const AchievementsContext = createContext<AchievementsContextType>({
   achievements: [],
   addAchievement: () => {},
+  removeAchievement: () => {},
   hasAchievement: () => false,
   getAchievementsByType: () => [],
   totalAchievements: 0,
@@ -57,6 +59,10 @@ export const AchievementsProvider = ({ children }: { children: ReactNode }) => {
     setAchievements(prev => [...prev, newAchievement]);
   };
 
+  const removeAchievement = (id: string) => {
+    setAchievements(prev => prev.filter(a => a.id !== id));
+  };
+
   const hasAchievement = (name: string, type: string): boolean => {
     return achievements.some(a => a.name === name && a.type === type);
   };
@@ -69,6 +75,7 @@ export const AchievementsProvider = ({ children }: { children: ReactNode }) => {
     <AchievementsContext.Provider value={{
       achievements,
       addAchievement,
+      removeAchievement,
       hasAchievement,
       getAchievementsByType,
       totalAchievements: achievements.length
