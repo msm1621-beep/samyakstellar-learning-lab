@@ -1,6 +1,7 @@
 export type LanguageCode = 
   | 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'zh' | 'ja' | 'ko'
-  | 'hi' | 'ar' | 'tr' | 'nl' | 'pl' | 'sv' | 'th' | 'vi' | 'id' | 'el';
+  | 'hi' | 'ar' | 'tr' | 'nl' | 'pl' | 'sv' | 'th' | 'vi' | 'id' | 'el'
+  | 'uk' | 'he' | 'bn' | 'ms';
 
 export interface Language {
   code: LanguageCode;
@@ -30,6 +31,10 @@ export const languages: Language[] = [
   { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳' },
   { code: 'id', name: 'Indonesian', nativeName: 'Bahasa Indonesia', flag: '🇮🇩' },
   { code: 'el', name: 'Greek', nativeName: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'uk', name: 'Ukrainian', nativeName: 'Українська', flag: '🇺🇦' },
+  { code: 'he', name: 'Hebrew', nativeName: 'עברית', flag: '🇮🇱' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇧🇩' },
+  { code: 'ms', name: 'Malay', nativeName: 'Bahasa Melayu', flag: '🇲🇾' },
 ];
 
 // Language to speech synthesis locale mapping
@@ -37,7 +42,7 @@ export const langToSpeechLocale: Record<LanguageCode, string> = {
   en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', it: 'it-IT', pt: 'pt-BR',
   ru: 'ru-RU', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR', hi: 'hi-IN', ar: 'ar-SA',
   tr: 'tr-TR', nl: 'nl-NL', pl: 'pl-PL', sv: 'sv-SE', th: 'th-TH', vi: 'vi-VN',
-  id: 'id-ID', el: 'el-GR',
+  id: 'id-ID', el: 'el-GR', uk: 'uk-UA', he: 'he-IL', bn: 'bn-BD', ms: 'ms-MY',
 };
 
 type TranslationKeys = {
@@ -249,7 +254,7 @@ type TranslationKeys = {
 
 export type TranslationKey = keyof TranslationKeys;
 
-const translations: Record<LanguageCode, TranslationKeys> = {
+const translations: Record<string, TranslationKeys> = {
   en: {
     'nav.home': 'Home', 'nav.solarSystem': 'Solar System', 'nav.timeline': 'Timeline', 'nav.constellations': 'Constellations', 'nav.library': 'Library', 'nav.games': 'Games', 'nav.subscriptions': 'Subscriptions', 'nav.funFacts': 'Fun Facts', 'nav.about': 'About', 'nav.startJourney': 'Start Your Journey', 'nav.cosmicClassroom': 'Cosmic Classroom',
     'hero.badge': 'For young explorers ages 7-13', 'hero.welcome': 'Welcome to', 'hero.cosmicClassroom': 'Cosmic Classroom', 'hero.subtitle': 'Explore Every Corner of the Universe! 🚀 Learn about planets, stars, nebulas, galaxies, and so much more!', 'hero.startJourney': 'Start Your Space Journey', 'hero.takeQuiz': 'Take a Quiz',

@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { languages, langToSpeechLocale } from '@/data/translations';
-import { translateTexts } from '@/lib/translateText';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
@@ -233,18 +232,36 @@ const AlienDoom = () => {
   const initializeIntroMessages = useCallback(async () => {
     if (messages.length > 0) return;
 
-    const localizedTexts = await translateTexts(
-      ALIEN_INTRO_MESSAGES.map((msg) => msg.text),
-      language,
-    );
+    try {
+      const resp = await fetch(ALIEN_CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: 'Give a short greeting in 2 lines introducing Mr. Doom and Mrs. Doom to a kid.' }],
+          language,
+          targetLanguageName,
+        }),
+      });
 
-    setMessages(
-      ALIEN_INTRO_MESSAGES.map((msg, index) => ({
-        speaker: msg.speaker,
-        text: localizedTexts[index] || msg.text,
-      })),
-    );
-  }, [messages.length, language]);
+      if (!resp.ok) throw new Error('Failed to initialize greeting');
+
+      const data = await resp.json();
+      const raw = (data.content || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const parsed = JSON.parse(raw) as { speaker: 'mr' | 'mrs'; text: string }[];
+
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setMessages(parsed.slice(0, 2));
+        return;
+      }
+
+      setMessages(ALIEN_INTRO_MESSAGES);
+    } catch {
+      setMessages(ALIEN_INTRO_MESSAGES);
+    }
+  }, [messages.length, language, targetLanguageName]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
@@ -281,16 +298,10 @@ const AlienDoom = () => {
         parsed = [{ speaker: 'mr', text: data.content }];
       }
 
-      const translatedReplies = await translateTexts(parsed.map((resp) => resp.text), language);
-      const localizedParsed = parsed.map((resp, index) => ({
-        ...resp,
-        text: translatedReplies[index] || resp.text,
-      }));
-
-      const assistantContent = localizedParsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
+      const assistantContent = parsed.map(p => `${p.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${p.text}`).join('\n');
       setConversationHistory([...newHistory, { role: 'assistant', content: assistantContent }]);
 
-      localizedParsed.forEach((resp, index) => {
+      parsed.forEach((resp, index) => {
         setTimeout(() => {
           setSpeakingAlien(resp.speaker);
           setMessages(prev => [...prev, { speaker: resp.speaker, text: resp.text }]);
@@ -301,9 +312,7 @@ const AlienDoom = () => {
       });
     } catch (e) {
       console.error('Alien chat error:', e);
-      const fallback = "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸";
-      const [localizedFallback] = await translateTexts([fallback], language);
-      setMessages(prev => [...prev, { speaker: 'mr', text: localizedFallback || fallback }]);
+      setMessages(prev => [...prev, { speaker: 'mr', text: "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸" }]);
     } finally {
       setIsLoading(false);
     }
