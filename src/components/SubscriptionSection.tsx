@@ -6,7 +6,7 @@ import { subscriptions, Subscription } from '@/data/subscriptions';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+
 import {
   Dialog,
   DialogContent,
@@ -59,10 +59,10 @@ const SubscriptionSection = () => {
        <div className="container mx-auto px-4">
          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-              🎫 {t('section.subscriptions')}
+              🎫 Subscriptions
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-             {t('subscription.desc')}
+             Unlock premium features with a subscription!
            </p>
            
            {/* Current subscription status */}
@@ -74,7 +74,7 @@ const SubscriptionSection = () => {
                 {currentSubscription.isVIP && <Crown className="w-5 h-5" />}
                 <span className="flex items-center gap-1 text-sm opacity-90">
                   <Clock className="w-4 h-4" />
-                  {daysRemaining} {t('subscription.daysLeft')}
+                  {daysRemaining} days left
                 </span>
               </div>
               
@@ -90,7 +90,7 @@ const SubscriptionSection = () => {
                   className={`flex items-center gap-2 ${canClaimDailyBonus ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' : 'bg-muted'}`}
                 >
                   <Gift className="w-4 h-4" />
-                  {canClaimDailyBonus ? `${t('subscription.claimBonus')} ${dailyBonus}!` : `${t('subscription.dailyBonus')} ✓`}
+                  {canClaimDailyBonus ? `Claim Bonus ${dailyBonus}!` : `Daily Bonus ✓`}
                 </Button>
               </div>
              </div>
@@ -171,7 +171,7 @@ const SubscriptionSection = () => {
                        {canAfford ? (
                          <>
                            <Sparkles className="w-4 h-4 mr-2" />
-                           {t('subscription.purchase')}
+                           Purchase
                          </>
                        ) : (
                          <>

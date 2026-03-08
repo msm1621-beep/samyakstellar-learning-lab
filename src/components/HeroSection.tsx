@@ -1,9 +1,7 @@
 import { Rocket, Sparkles, Stars } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
-  const { t } = useLanguage();
   const scrollToExplorer = () => {
     document.querySelector('#explorer')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -24,34 +22,34 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
           <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-sm font-medium text-accent">{t('hero.badge')}</span>
+          <span className="text-sm font-medium text-accent">For young explorers ages 7-13</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6 leading-tight">
-          {t('hero.welcome')}{' '}
-          <span className="gradient-text">{t('hero.cosmicClassroom')}</span>
+          Welcome to{' '}
+          <span className="gradient-text">Cosmic Classroom</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">
-          {t('hero.subtitle')}
+          Explore Every Corner of the Universe! 🚀 Learn about planets, stars, nebulas, galaxies, and so much more!
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <Button size="lg" onClick={scrollToExplorer} className="cosmic-glow text-lg px-8 py-6 font-semibold">
             <Rocket className="w-5 h-5 mr-2" />
-            {t('hero.startJourney')}
+            Start Your Space Journey
           </Button>
           <Button size="lg" variant="outline" onClick={() => document.querySelector('#games')?.scrollIntoView({ behavior: 'smooth' })} className="text-lg px-8 py-6 font-semibold border-primary/50 hover:bg-primary/10">
             <Stars className="w-5 h-5 mr-2" />
-            {t('hero.takeQuiz')}
+            Take a Quiz
           </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {[
-            { title: t('hero.solarSystem'), emoji: '🌞', desc: t('hero.solarSystemDesc'), href: '#explorer' },
-            { title: t('hero.starsNebulas'), emoji: '✨', desc: t('hero.starsNebulasDesc'), href: '#explorer' },
-            { title: t('hero.galaxiesBeyond'), emoji: '🌌', desc: t('hero.galaxiesBeyondDesc'), href: '#explorer' },
+            { title: 'Solar System', emoji: '🌞', desc: 'Explore planets, moons, asteroids & comets', href: '#explorer' },
+            { title: 'Stars & Nebulas', emoji: '✨', desc: 'Discover star types, supernovas & glowing clouds', href: '#explorer' },
+            { title: 'Galaxies & Beyond', emoji: '🌌', desc: 'Journey through galaxies, black holes & exoplanets', href: '#explorer' },
           ].map((category) => (
             <button key={category.title} onClick={() => document.querySelector(category.href)?.scrollIntoView({ behavior: 'smooth' })} className="glass-card p-6 rounded-2xl text-left hover:border-primary/50 transition-all duration-300 group hover:-translate-y-1">
               <div className="text-4xl mb-3">{category.emoji}</div>

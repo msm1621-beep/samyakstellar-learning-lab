@@ -4,7 +4,6 @@ import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calend
 import { Button } from '@/components/ui/button';
 import { useAchievements, Achievement } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 const typeConfig = {
   course: { icon: GraduationCap, color: 'from-purple-500 to-violet-500', label: 'Courses' },
@@ -18,7 +17,6 @@ const typeConfig = {
 };
 
 const CertificateShowcase = () => {
-  const { t } = useLanguage();
   const { achievements, getAchievementsByType, totalAchievements, removeAchievement } = useAchievements();
   const [selectedType, setSelectedType] = useState<Achievement['type'] | 'all'>('all');
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
@@ -47,15 +45,15 @@ const CertificateShowcase = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Trophy className="w-8 h-8 text-amber-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 text-transparent bg-clip-text">
-              {t('section.trophyCabinet')}
+              Trophy Cabinet
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
-            {t('section.trophyCabinetDesc')}
+            Your collection of achievements, certificates, and accomplishments from your space exploration journey!
           </p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-500/20 px-4 py-2 rounded-full border border-amber-500/30">
             <Trophy className="w-5 h-5 text-amber-400" />
-            <span className="text-amber-300 font-semibold">{totalAchievements} {t('common.totalAchievements')}</span>
+            <span className="text-amber-300 font-semibold">{totalAchievements} Total Achievements</span>
           </div>
         </motion.div>
 
@@ -94,8 +92,8 @@ const CertificateShowcase = () => {
             animate={{ opacity: 1 }}
           >
             <Trophy className="w-16 h-16 text-white/20 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white/40 mb-2">{t('common.noAchievements')}</h3>
-            <p className="text-white/30">{t('common.noAchievementsDesc')}</p>
+            <h3 className="text-xl font-semibold text-white/40 mb-2">No Achievements Yet</h3>
+            <p className="text-white/30">Complete courses, games, and quizzes to earn achievements!</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -209,7 +207,7 @@ const CertificateShowcase = () => {
                   
                   <div className="mt-6 flex items-center justify-center gap-2 text-white/40">
                     <Calendar className="w-4 h-4" />
-                    <span>{t('common.earnedOn')} {formatDate(selectedAchievement.earnedAt)}</span>
+                    <span>Earned on {formatDate(selectedAchievement.earnedAt)}</span>
                   </div>
                 </div>
               </motion.div>
