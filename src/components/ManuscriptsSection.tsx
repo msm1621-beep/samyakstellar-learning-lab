@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollText, ChevronRight, Calendar, MapPin, User, X } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Manuscript {
   id: string;
