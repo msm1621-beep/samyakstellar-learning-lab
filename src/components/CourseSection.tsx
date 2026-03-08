@@ -279,11 +279,11 @@ const CourseSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <GraduationCap className="w-10 h-10 text-space-gold" />
             <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-space-gold via-yellow-300 to-space-gold">
-              Space Courses
+              {t('section.courses')}
             </h2>
           </div>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Complete structured courses with videos, books, and audiobooks. Earn certificates when you finish!
+            {t('section.coursesDesc')}
           </p>
         </div>
 
