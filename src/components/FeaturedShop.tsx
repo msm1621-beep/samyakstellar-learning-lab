@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ShopItem {
   id: string;
@@ -58,6 +59,7 @@ const categoryConfig = {
 };
 
 const FeaturedShop = () => {
+  const { t } = useLanguage();
   const { coins, removeCoins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
   const [purchasedItems, setPurchasedItems] = React.useState<string[]>(() => {
@@ -126,12 +128,12 @@ const FeaturedShop = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <ShoppingBag className="w-8 h-8 text-pink-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 text-transparent bg-clip-text">
-              Featured Shop
+              {t('section.shop')}
             </h2>
             <Sparkles className="w-8 h-8 text-purple-400" />
           </div>
           <p className="text-white/60 max-w-2xl mx-auto mb-4">
-            Spend your hard-earned coins on boosts, cosmetics, and special items to enhance your learning journey!
+            {t('shop.desc')}
           </p>
           <div className="flex justify-center gap-2 flex-wrap">
             <Button
@@ -222,7 +224,7 @@ const FeaturedShop = () => {
                     className={`w-full bg-gradient-to-r ${item.color} hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     <Crown className="w-4 h-4 mr-2" />
-                    {canAfford ? (ownCount > 0 ? 'Buy Again' : 'Purchase') : `Need ${item.price - coins} more`}
+                    {canAfford ? (ownCount > 0 ? t('common.buy') : t('common.buy')) : `Need ${item.price - coins} more`}
                   </Button>
                 </div>
               </motion.div>

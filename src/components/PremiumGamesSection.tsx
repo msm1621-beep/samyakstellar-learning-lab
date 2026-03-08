@@ -8,6 +8,7 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const difficultyConfig = {
   easy: { color: 'text-green-400', bg: 'bg-green-500/20', label: 'Easy' },
@@ -364,6 +365,7 @@ const AdventureMinigame = ({ onFinish }: { onFinish: (score: number) => void }) 
 
 // ─── MAIN SECTION ───
 const PremiumGamesSection = () => {
+  const { t } = useLanguage();
   const { coinMultiplier, hasPremiumGames } = useGamePass();
   const { currentSubscription, isExpired } = useSubscription();
   const { addCoins } = useCoins();
@@ -449,7 +451,7 @@ const PremiumGamesSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Crown className="w-8 h-8 text-yellow-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 text-transparent bg-clip-text">
-              Premium Games
+              {t('section.premiumGames')}
             </h2>
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>

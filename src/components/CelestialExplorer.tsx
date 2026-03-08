@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { celestialBodies, categoryLabels, type CelestialCategory, type DistanceFilter } from '@/data/celestialBodies';
 import CelestialCard from './CelestialCard';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CelestialExplorer = () => {
   const [selectedCategory, setSelectedCategory] = useState<CelestialCategory | 'all'>('all');
   const [distanceFilter, setDistanceFilter] = useState<DistanceFilter>('all');
+  const { t } = useLanguage();
 
   const categories: (CelestialCategory | 'all')[] = ['all', 'solar-system', 'stars', 'nebulas', 'galaxies', 'other'];
 
@@ -19,10 +21,10 @@ const CelestialExplorer = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            🔭 Universe Explorer
+            {t('explorer.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Click on any celestial body to see images, read about it, or ask Cosmo!
+            {t('explorer.desc')}
           </p>
         </div>
 
@@ -55,7 +57,7 @@ const CelestialExplorer = () => {
                     : 'glass-card hover:border-secondary/50'
                 }`}
               >
-                {dist === 'all' ? '📍 Any Distance' : dist === 'near' ? '🏠 Near' : '🚀 Far'}
+                {dist === 'all' ? t('explorer.anyDistance') : dist === 'near' ? t('explorer.near') : t('explorer.far')}
               </button>
             ))}
           </div>
@@ -70,8 +72,8 @@ const CelestialExplorer = () => {
 
         {filteredBodies.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
-            <p className="text-lg">No celestial bodies found with these filters.</p>
-            <p className="text-sm">Try adjusting your filters!</p>
+            <p className="text-lg">{t('explorer.noResults')}</p>
+            <p className="text-sm">{t('explorer.adjustFilters')}</p>
           </div>
         )}
       </div>

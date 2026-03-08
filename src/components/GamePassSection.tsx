@@ -6,8 +6,10 @@ import { gamePasses } from '@/data/gamePasses';
 import { useGamePass } from '@/contexts/GamePassContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const GamePassSection = () => {
+  const { t } = useLanguage();
   const { hasPass, purchasePass, getPassExpiry, extraLives, activePasses } = useGamePass();
   const { coins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
@@ -56,11 +58,11 @@ const GamePassSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Gamepad2 className="w-8 h-8 text-cyan-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 text-transparent bg-clip-text">
-              Game Passes
+              {t('section.gamePass')}
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
-            Power up your gaming experience with special passes! Get extra lives, bonus coins, and exclusive access.
+            {t('gamePass.desc')}
           </p>
           {extraLives > 0 && (
             <motion.div

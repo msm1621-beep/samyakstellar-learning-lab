@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { funFacts } from '@/data/funFacts';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FunFactsSection = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [randomFact, setRandomFact] = useState(funFacts[0]);
+  const { t } = useLanguage();
 
   const toggleCard = (id: string) => {
     setFlippedCards((prev) => {
@@ -29,10 +31,10 @@ const FunFactsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            🤯 Fun Space Facts
+            🤯 {t('section.funFacts')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tap the cards to reveal amazing facts about the universe!
+            {t('funFacts.desc')}
           </p>
         </div>
 
@@ -47,7 +49,7 @@ const FunFactsSection = () => {
             <br />
             <Button onClick={getRandomFact} variant="outline" className="border-accent/50 hover:bg-accent/10">
               <Shuffle className="w-4 h-4 mr-2" />
-              Random Fact!
+              {t('funFacts.randomFact')}
             </Button>
           </div>
         </div>
@@ -79,7 +81,7 @@ const FunFactsSection = () => {
                     style={{ backfaceVisibility: 'hidden' }}
                   >
                     <div className="text-4xl mb-2">{fact.emoji}</div>
-                    <p className="text-sm text-muted-foreground">Tap to reveal!</p>
+                    <p className="text-sm text-muted-foreground">{t('funFacts.tapCards')}</p>
                   </div>
                   
                   {/* Back */}

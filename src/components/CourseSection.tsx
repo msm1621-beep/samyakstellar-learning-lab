@@ -10,6 +10,8 @@ import CourseCertificate from './CourseCertificate';
 import CourseQuiz from './CourseQuiz';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { langToSpeechLocale } from '@/data/translations';
 
 interface CourseProgress {
   courseId: string;
@@ -26,6 +28,7 @@ interface CompletedCourse {
 }
 
 const CourseSection = () => {
+  const { t, language } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [completedCourses, setCompletedCourses] = useState<CompletedCourse[]>([]);
@@ -202,7 +205,7 @@ const CourseSection = () => {
     }
   };
 
-  // Text-to-Speech functions
+  // Text-to-Speech functions - uses selected language
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     currentTextRef.current = text;
@@ -212,11 +215,11 @@ const CourseSection = () => {
     utterance.pitch = 1;
     utterance.volume = speechVolume;
     
+    const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
-    if (englishVoice) {
-      utterance.voice = englishVoice;
-    }
+    const voice = voices.find((v: SpeechSynthesisVoice) => v.lang.startsWith(locale.split('-')[0])) || voices[0];
+    if (voice) utterance.voice = voice;
+    utterance.lang = locale;
     
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
@@ -277,11 +280,11 @@ const CourseSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <GraduationCap className="w-10 h-10 text-space-gold" />
             <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-space-gold via-yellow-300 to-space-gold">
-              Space Courses
+              {t('section.courses')}
             </h2>
           </div>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Complete structured courses with videos, books, and audiobooks. Earn certificates when you finish!
+            {t('section.coursesDesc')}
           </p>
         </div>
 
@@ -295,7 +298,7 @@ const CourseSection = () => {
                 onClick={() => setSelectedCourse(null)}
                 className="text-white/70 hover:text-white self-start"
               >
-                ← Back to Courses
+                ← {t('courses.backToCourses')}
               </Button>
               
               <div className="flex items-center gap-3">
@@ -304,7 +307,7 @@ const CourseSection = () => {
                     onClick={() => completeCourse(selectedCourse)}
                     className="bg-gradient-to-r from-space-gold to-yellow-500 text-space-deep hover:from-yellow-400"
                   >
-                    <Award className="w-4 h-4 mr-2" /> Claim Certificate
+                    <Award className="w-4 h-4 mr-2" /> {t('courses.claimCertificate')}
                   </Button>
                 )}
                 <Button
@@ -312,7 +315,7 @@ const CourseSection = () => {
                   variant="outline"
                   className="border-primary/30 text-primary hover:bg-primary/10"
                 >
-                  <HelpCircle className="w-4 h-4 mr-2" /> Take Quiz
+                  <HelpCircle className="w-4 h-4 mr-2" /> {t('courses.takeQuiz')}
                 </Button>
                 {isCourseCompleted(selectedCourse.id) && (
                   <Button
@@ -320,7 +323,7 @@ const CourseSection = () => {
                     onClick={() => restartCourse(selectedCourse.id)}
                     className="border-white/30 text-white hover:bg-white/10"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" /> Restart Course
+                    <RotateCcw className="w-4 h-4 mr-2" /> {t('courses.restartCourse')}
                   </Button>
                 )}
               </div>
@@ -348,7 +351,7 @@ const CourseSection = () => {
                 {/* Progress Bar */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/60">Progress</span>
+                    <span className="text-white/60">{t('courses.progress')}</span>
                     <span className="text-space-gold font-medium">{getProgressPercentage(selectedCourse)}%</span>
                   </div>
                   <Progress value={getProgressPercentage(selectedCourse)} className="h-3" />
@@ -384,7 +387,7 @@ const CourseSection = () => {
                 <div className="space-y-6">
                   <div className="bg-white/5 rounded-xl p-6">
                     <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Star className="w-5 h-5 text-space-gold" /> Learning Goals
+                      <Star className="w-5 h-5 text-space-gold" /> {t('courses.learningGoals')}
                     </h4>
                     <ul className="grid md:grid-cols-2 gap-3">
                       {selectedCourse.learningGoals.map((goal, idx) => (
@@ -397,7 +400,7 @@ const CourseSection = () => {
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-white">Course Plan</h4>
+                    <h4 className="text-lg font-semibold text-white">{t('courses.coursePlan')}</h4>
                     {selectedCourse.plan.map((week, idx) => (
                       <div key={idx} className="bg-white/5 rounded-xl p-4 border-l-4 border-space-gold">
                         <h5 className="text-white font-medium mb-2">Week {week.week}: {week.topic}</h5>

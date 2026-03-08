@@ -6,6 +6,7 @@ import { subscriptions, Subscription } from '@/data/subscriptions';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
  
 const SubscriptionSection = () => {
+  const { t } = useLanguage();
   const { currentSubscription, purchaseSubscription, daysRemaining, isExpired, claimDailyBonus, canClaimDailyBonus, coinBonus, dailyBonus, badge, activeSubscription } = useSubscription();
   const { coins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
@@ -56,11 +58,11 @@ const SubscriptionSection = () => {
      <section id="subscriptions" className="py-20 relative">
        <div className="container mx-auto px-4">
          <div className="text-center mb-12">
-           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-             🎫 Space Subscriptions
-           </h2>
-           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-            Get VIP perks, bonus coins, and exclusive badges! All videos are FREE - subscriptions give you special rewards! 🌟
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+              🎫 {t('section.subscriptions')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+             {t('subscription.desc')}
            </p>
            
            {/* Current subscription status */}
@@ -72,7 +74,7 @@ const SubscriptionSection = () => {
                 {currentSubscription.isVIP && <Crown className="w-5 h-5" />}
                 <span className="flex items-center gap-1 text-sm opacity-90">
                   <Clock className="w-4 h-4" />
-                  {daysRemaining} days left
+                  {daysRemaining} {t('subscription.daysLeft')}
                 </span>
               </div>
               
@@ -88,7 +90,7 @@ const SubscriptionSection = () => {
                   className={`flex items-center gap-2 ${canClaimDailyBonus ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' : 'bg-muted'}`}
                 >
                   <Gift className="w-4 h-4" />
-                  {canClaimDailyBonus ? `Claim ${dailyBonus} Daily Coins!` : 'Daily Bonus Claimed ✓'}
+                  {canClaimDailyBonus ? `${t('subscription.claimBonus')} ${dailyBonus}!` : `${t('subscription.dailyBonus')} ✓`}
                 </Button>
               </div>
              </div>
@@ -169,7 +171,7 @@ const SubscriptionSection = () => {
                        {canAfford ? (
                          <>
                            <Sparkles className="w-4 h-4 mr-2" />
-                           Purchase
+                           {t('subscription.purchase')}
                          </>
                        ) : (
                          <>

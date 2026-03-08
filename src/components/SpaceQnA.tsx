@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Search, Sparkles, Rocket, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SPACE_QNA_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/space-qna`;
 
@@ -22,6 +23,7 @@ const SpaceQnA = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
+  const { t } = useLanguage();
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
@@ -134,11 +136,11 @@ const SpaceQnA = () => {
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3">
             <HelpCircle className="w-10 h-10 text-primary" />
-            Ask a Space Question
+            {t('section.spaceQnA')}
             <Sparkles className="w-10 h-10 text-yellow-400" />
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Powered by AI — ask anything about space, astronomy, or this website!
+            {t('section.spaceQnADesc')}
           </p>
         </div>
 
@@ -149,7 +151,7 @@ const SpaceQnA = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/60" />
               <Input
                 type="text"
-                placeholder="Ask anything about space... (e.g., What if Earth had two moons?)"
+                placeholder={t('qna.askAnything')}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -166,7 +168,7 @@ const SpaceQnA = () => {
               ) : (
                 <>
                   <Search className="w-5 h-5 mr-2" />
-                  Ask
+                   {t('qna.ask')}
                 </>
               )}
             </Button>
@@ -176,7 +178,7 @@ const SpaceQnA = () => {
         {/* Suggested Questions */}
         {!answer && !isSearching && (
           <div className="mb-8">
-            <p className="text-muted-foreground text-sm mb-3 text-center">✨ Try asking:</p>
+            <p className="text-muted-foreground text-sm mb-3 text-center">✨ {t('qna.suggested')}:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {suggestedQuestions.map((q) => (
                 <button

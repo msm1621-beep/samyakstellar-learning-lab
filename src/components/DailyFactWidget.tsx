@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { dailyFacts, getCategoryColor, getCategoryLabel } from '@/data/dailyFacts';
 import { Sparkles, RefreshCw, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const DailyFactWidget = () => {
   const [currentFact, setCurrentFact] = useState(dailyFacts[0]);
   const [isFlipping, setIsFlipping] = useState(false);
   const [factIndex, setFactIndex] = useState(0);
+  const { t } = useLanguage();
 
   // Get today's fact based on day of year
   useEffect(() => {
@@ -51,10 +53,10 @@ const DailyFactWidget = () => {
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
             <Sparkles className="w-8 h-8 text-yellow-400" />
-            Daily Space Fact
+            {t('section.dailyFact')}
             <Sparkles className="w-8 h-8 text-yellow-400" />
           </h2>
-          <p className="text-purple-200">Something new to learn every day!</p>
+          <p className="text-purple-200">{t('dailyFact.subtitle')}</p>
         </div>
 
         <div
@@ -84,14 +86,14 @@ const DailyFactWidget = () => {
               className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 hover:scale-105 group"
             >
               <RefreshCw className={`w-5 h-5 transition-transform ${isFlipping ? 'animate-spin' : 'group-hover:rotate-180'}`} />
-              <span>New Fact</span>
+              <span>{t('dailyFact.newFact')}</span>
             </button>
             <button
               onClick={shareFact}
               className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full transition-all duration-300 hover:scale-105"
             >
               <Share2 className="w-5 h-5" />
-              <span>Share</span>
+              <span>{t('dailyFact.share')}</span>
             </button>
           </div>
 

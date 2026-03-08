@@ -6,6 +6,8 @@ import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { langToSpeechLocale } from '@/data/translations';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
@@ -15,6 +17,7 @@ interface CompletedBook {
 }
 
 const LibrarySection = () => {
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
@@ -134,7 +137,7 @@ const LibrarySection = () => {
     }
   };
 
-  // Text-to-Speech functions
+  // Text-to-Speech functions - uses selected language
   const speak = useCallback((text: string) => {
     window.speechSynthesis.cancel();
     
@@ -143,15 +146,12 @@ const LibrarySection = () => {
     utterance.pitch = 1;
     utterance.volume = volume;
     
-    // Try to get a good voice
+    // Use the selected language voice
+    const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => 
-      v.lang.startsWith('en') && (v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google'))
-    ) || voices.find(v => v.lang.startsWith('en'));
-    
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
+    const voice = voices.find(v => v.lang.startsWith(locale.split('-')[0])) || voices[0];
+    if (voice) utterance.voice = voice;
+    utterance.lang = locale;
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => {
@@ -229,10 +229,10 @@ const LibrarySection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            📚 Celestial Library
+            {t('section.library')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Watch amazing videos, explore space books, and listen to audiobooks about space theories!
+            {t('section.libraryDesc')}
           </p>
         </div>
 
@@ -247,7 +247,7 @@ const LibrarySection = () => {
             }`}
           >
             <Play className="w-4 h-4" />
-            Videos
+            {t('library.videos')}
           </button>
           <button
             onClick={() => { setActiveTab('books'); setSelectedTag('all'); }}
@@ -258,7 +258,7 @@ const LibrarySection = () => {
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            Books
+            {t('library.books')}
           </button>
           <button
             onClick={() => { setActiveTab('audiobooks'); setSelectedTag('all'); }}
@@ -269,8 +269,8 @@ const LibrarySection = () => {
             }`}
           >
             <Headphones className="w-4 h-4" />
-            Audiobooks
-            <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">NEW</span>
+            {t('library.audiobooks')}
+            <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">{t('common.new')}</span>
           </button>
         </div>
 
@@ -370,7 +370,7 @@ const LibrarySection = () => {
                           onClick={() => setPlayingVideo(video.id)}
                         >
                           <Play className="w-4 h-4 mr-2" />
-                          Watch Now
+                          {t('common.watchNow')}
                         </Button>
                       )}
                     </div>
@@ -426,7 +426,7 @@ const LibrarySection = () => {
                       onClick={() => openBook(book)}
                     >
                       <BookOpen className="w-4 h-4 mr-2" />
-                      Read Now
+                      {t('common.readNow')}
                     </Button>
                     {isBookCompleted(book.id) ? (
                       <Button 

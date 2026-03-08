@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import { constellations, Constellation } from '@/data/constellations';
 import { X, Sparkles, Calendar, BookOpen } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ConstellationViewer = () => {
   const [selectedConstellation, setSelectedConstellation] = useState<Constellation | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   return (
     <section id="constellations" className="py-20 px-4 relative">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            ✨ Constellation Viewer ✨
+            {t('constellation.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Click on any constellation to discover its ancient story and see its stars connect!
+            {t('constellation.desc')}
           </p>
         </div>
 
@@ -48,7 +50,7 @@ const ConstellationViewer = () => {
           <div className="relative z-10">
             <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-cosmic-gold" />
-              Interactive Star Map
+              {t('constellation.starMap')}
             </h3>
             
             <div className="relative w-full aspect-[2/1] bg-cosmic-dark/60 rounded-2xl overflow-hidden border border-white/10">
