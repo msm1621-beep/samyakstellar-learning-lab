@@ -166,6 +166,7 @@ const AlienScene = ({
 const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
 const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ALIEN_INTRO_MESSAGES: { speaker: 'mr' | 'mrs'; text: string }[] = [
   { speaker: 'mr', text: "Greetings, young Earthling! I'm Mr. Doom!" },
