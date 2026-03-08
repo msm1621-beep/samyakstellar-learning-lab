@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog';
  
 const SubscriptionSection = () => {
+  const { t } = useLanguage();
   const { currentSubscription, purchaseSubscription, daysRemaining, isExpired, claimDailyBonus, canClaimDailyBonus, coinBonus, dailyBonus, badge, activeSubscription } = useSubscription();
   const { coins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
