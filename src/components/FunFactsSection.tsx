@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { funFacts } from '@/data/funFacts';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FunFactsSection = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
