@@ -4,7 +4,6 @@ import { Trophy, Award, BookOpen, Gamepad2, GraduationCap, Headphones, X, Calend
 import { Button } from '@/components/ui/button';
 import { useAchievements, Achievement } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 const typeConfig = {
   course: { icon: GraduationCap, color: 'from-purple-500 to-violet-500', label: 'Courses' },
