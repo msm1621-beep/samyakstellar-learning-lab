@@ -25,6 +25,7 @@ import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
 import GiftVoucherSection from '@/components/GiftVoucherSection';
 import ManuscriptsSection from '@/components/ManuscriptsSection';
+import LanguageSelector from '@/components/LanguageSelector';
 
 const Index = () => {
   return (
@@ -33,6 +34,7 @@ const Index = () => {
       <Navigation />
       <CoinDisplay />
       <AccountBar />
+      <LanguageSelector />
       
       <main className="relative z-10">
         <HeroSection />
