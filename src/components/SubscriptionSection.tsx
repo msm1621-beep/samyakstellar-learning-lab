@@ -171,7 +171,7 @@ const SubscriptionSection = () => {
                        {canAfford ? (
                          <>
                            <Sparkles className="w-4 h-4 mr-2" />
-                           Purchase
+                           {t('subscription.purchase')}
                          </>
                        ) : (
                          <>

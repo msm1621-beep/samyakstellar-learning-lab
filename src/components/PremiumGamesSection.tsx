@@ -451,7 +451,7 @@ const PremiumGamesSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Crown className="w-8 h-8 text-yellow-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 text-transparent bg-clip-text">
-              Premium Games
+              {t('section.premiumGames')}
             </h2>
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>

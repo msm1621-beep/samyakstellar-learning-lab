@@ -224,7 +224,7 @@ const FeaturedShop = () => {
                     className={`w-full bg-gradient-to-r ${item.color} hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     <Crown className="w-4 h-4 mr-2" />
-                    {canAfford ? (ownCount > 0 ? 'Buy Again' : 'Purchase') : `Need ${item.price - coins} more`}
+                    {canAfford ? (ownCount > 0 ? t('common.buy') : t('common.buy')) : `Need ${item.price - coins} more`}
                   </Button>
                 </div>
               </motion.div>

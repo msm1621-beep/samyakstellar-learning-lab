@@ -399,7 +399,7 @@ const CourseSection = () => {
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-white">Course Plan</h4>
+                    <h4 className="text-lg font-semibold text-white">{t('courses.coursePlan')}</h4>
                     {selectedCourse.plan.map((week, idx) => (
                       <div key={idx} className="bg-white/5 rounded-xl p-4 border-l-4 border-space-gold">
                         <h5 className="text-white font-medium mb-2">Week {week.week}: {week.topic}</h5>

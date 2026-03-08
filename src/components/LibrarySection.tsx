@@ -428,7 +428,7 @@ const LibrarySection = () => {
                       onClick={() => openBook(book)}
                     >
                       <BookOpen className="w-4 h-4 mr-2" />
-                      Read Now
+                      {t('common.readNow')}
                     </Button>
                     {isBookCompleted(book.id) ? (
                       <Button 
