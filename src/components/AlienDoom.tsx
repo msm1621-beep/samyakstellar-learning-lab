@@ -166,6 +166,7 @@ const AlienScene = ({
 const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
 const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ALIEN_INTRO_MESSAGES: { speaker: 'mr' | 'mrs'; text: string }[] = [
   { speaker: 'mr', text: "Greetings, young Earthling! I'm Mr. Doom!" },
@@ -233,20 +234,31 @@ const AlienDoom = () => {
     if (messages.length > 0) return;
 
     try {
-      const resp = await fetch(ALIEN_CHAT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          messages: [{ role: 'user', content: 'Give a short greeting in 2 lines introducing Mr. Doom and Mrs. Doom to a kid.' }],
-          language,
-          targetLanguageName,
-        }),
-      });
+      let resp: Response | null = null;
 
-      if (!resp.ok) throw new Error('Failed to initialize greeting');
+      for (let attempt = 0; attempt < 3; attempt++) {
+        resp = await fetch(ALIEN_CHAT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: 'Give a short greeting in 2 lines introducing Mr. Doom and Mrs. Doom to a kid.' }],
+            language,
+            targetLanguageName,
+          }),
+        });
+
+        if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
+          await wait(1200 * (attempt + 1));
+          continue;
+        }
+
+        break;
+      }
+
+      if (!resp || !resp.ok) throw new Error('Failed to initialize greeting');
 
       const data = await resp.json();
       const raw = (data.content || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
@@ -274,18 +286,29 @@ const AlienDoom = () => {
     const newHistory = [...conversationHistory, { role: 'user', content: userMessage }];
 
     try {
-      const resp = await fetch(ALIEN_CHAT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
-      });
+      let resp: Response | null = null;
 
-      if (!resp.ok) {
-        const errData = await resp.json();
-        throw new Error(errData.error || 'Failed to get response');
+      for (let attempt = 0; attempt < 3; attempt++) {
+        resp = await fetch(ALIEN_CHAT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
+        });
+
+        if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
+          await wait(1200 * (attempt + 1));
+          continue;
+        }
+
+        break;
+      }
+
+      if (!resp || !resp.ok) {
+        const errData = await resp?.json().catch(() => ({}));
+        throw new Error(errData?.error || 'Failed to get response');
       }
 
       const data = await resp.json();
