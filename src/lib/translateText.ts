@@ -129,8 +129,9 @@ export const getDictionaryOverride = (text: string, language: string): string | 
   if (!text || language === 'en') return null;
 
   const value = normalize(text);
-  const key = KEY_OVERRIDES[value];
 
+  // 1. Check KEY_OVERRIDES (maps to translation keys)
+  const key = KEY_OVERRIDES[value];
   if (key) {
     const localized = translations[language as LanguageCode]?.[key];
     if (localized) {
@@ -139,6 +140,11 @@ export const getDictionaryOverride = (text: string, language: string): string | 
     }
   }
 
+  // 2. Check extended dictionary (direct text → translation map)
+  const extended = getExtendedTranslation(value, language);
+  if (extended) return extended;
+
+  // 3. Handle "All (N)" pattern
   const allWithCount = value.match(/^All\s*\((\d+)\)$/i);
   if (allWithCount) {
     const localizedAll = translations[language as LanguageCode]?.['common.all'];
