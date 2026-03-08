@@ -62,7 +62,7 @@ const SubscriptionSection = () => {
               🎫 Subscriptions
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-             {t('subscription.desc')}
+             Unlock premium features with a subscription!
            </p>
            
            {/* Current subscription status */}
