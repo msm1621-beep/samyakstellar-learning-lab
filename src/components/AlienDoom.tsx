@@ -280,7 +280,7 @@ const AlienDoom = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [input, speak, isLoading, conversationHistory]);
+  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName]);
 
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();

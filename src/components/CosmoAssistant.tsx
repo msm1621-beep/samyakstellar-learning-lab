@@ -234,6 +234,8 @@ const CosmoAssistant = () => {
     try {
       await streamChat({
         messages: history,
+        language,
+        targetLanguageName,
         onDelta: (chunk) => upsertAssistant(chunk),
         onDone: () => {
           setIsLoading(false);
