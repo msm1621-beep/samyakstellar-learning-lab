@@ -42,7 +42,7 @@ export const langToSpeechLocale: Record<LanguageCode, string> = {
   en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', it: 'it-IT', pt: 'pt-BR',
   ru: 'ru-RU', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR', hi: 'hi-IN', ar: 'ar-SA',
   tr: 'tr-TR', nl: 'nl-NL', pl: 'pl-PL', sv: 'sv-SE', th: 'th-TH', vi: 'vi-VN',
-  id: 'id-ID', el: 'el-GR',
+  id: 'id-ID', el: 'el-GR', uk: 'uk-UA', he: 'he-IL', bn: 'bn-BD', ms: 'ms-MY',
 };
 
 type TranslationKeys = {
