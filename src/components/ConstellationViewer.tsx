@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { constellations, Constellation } from '@/data/constellations';
 import { X, Sparkles, Calendar, BookOpen } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ConstellationViewer = () => {
   const [selectedConstellation, setSelectedConstellation] = useState<Constellation | null>(null);
