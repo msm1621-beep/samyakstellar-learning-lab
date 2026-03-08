@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Search, Sparkles, Rocket, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SPACE_QNA_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/space-qna`;
 
