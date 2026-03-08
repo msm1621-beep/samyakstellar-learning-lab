@@ -7,23 +7,27 @@ const getLanguageName = (code: string) => languages.find((lang) => lang.code ===
 export const translateTexts = async (texts: string[], language: string): Promise<string[]> => {
   if (language === 'en' || texts.length === 0) return texts;
 
-  const response = await fetch(TRANSLATE_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-    },
-    body: JSON.stringify({
-      texts,
-      targetLanguage: language,
-      targetLanguageName: getLanguageName(language),
-    }),
-  });
+  try {
+    const response = await fetch(TRANSLATE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({
+        texts,
+        targetLanguage: language,
+        targetLanguageName: getLanguageName(language),
+      }),
+    });
 
-  if (!response.ok) return texts;
+    if (!response.ok) return texts;
 
-  const data = await response.json();
-  if (!Array.isArray(data.translations)) return texts;
+    const data = await response.json();
+    if (!Array.isArray(data.translations)) return texts;
 
-  return texts.map((source, index) => data.translations[index] ?? source);
+    return texts.map((source, index) => data.translations[index] ?? source);
+  } catch {
+    return texts;
+  }
 };
