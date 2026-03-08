@@ -179,7 +179,7 @@ const AutoTranslateContent = () => {
           }
         });
 
-        const chunkSize = 100;
+        const chunkSize = 30;
         for (let i = 0; i < missingTexts.length; i += chunkSize) {
           const chunk = missingTexts.slice(i, i + chunkSize);
           const translated = await translateBatch(chunk, controller.signal);
