@@ -215,7 +215,6 @@ const CourseSection = () => {
     utterance.pitch = 1;
     utterance.volume = speechVolume;
     
-    const { langToSpeechLocale } = require('@/data/translations');
     const locale = langToSpeechLocale[language];
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find((v: SpeechSynthesisVoice) => v.lang.startsWith(locale.split('-')[0])) || voices[0];
