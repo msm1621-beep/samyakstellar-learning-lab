@@ -92,8 +92,8 @@ const CertificateShowcase = () => {
             animate={{ opacity: 1 }}
           >
             <Trophy className="w-16 h-16 text-white/20 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white/40 mb-2">{t('common.noAchievements')}</h3>
-            <p className="text-white/30">{t('common.noAchievementsDesc')}</p>
+            <h3 className="text-xl font-semibold text-white/40 mb-2">No Achievements Yet</h3>
+            <p className="text-white/30">Complete courses, games, and quizzes to earn achievements!</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
