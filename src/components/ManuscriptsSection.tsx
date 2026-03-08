@@ -189,11 +189,11 @@ const ManuscriptsSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <ScrollText className="w-10 h-10 text-amber-400" />
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 bg-clip-text text-transparent">
-              Space Manuscripts
+              {t('section.manuscripts')}
             </h2>
           </div>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Explore the greatest achievements in space history — pivotal moments that shaped our understanding of the cosmos.
+            {t('manuscripts.desc')}
           </p>
         </motion.div>
 
