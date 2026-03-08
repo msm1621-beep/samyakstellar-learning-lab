@@ -9,7 +9,23 @@ const TRANSLATABLE_ATTRIBUTES = ['placeholder', 'title', 'aria-label'] as const;
 
 type TranslatableAttribute = (typeof TRANSLATABLE_ATTRIBUTES)[number];
 
+const BASIC_LATIN_TEXT = /[A-Za-z]/;
+const EXTENDED_LATIN_TEXT = /[À-ÖØ-öø-ÿĀ-ž]/;
+const NON_LATIN_SCRIPT_TEXT = /[\u0370-\u03FF\u0400-\u04FF\u0600-\u06FF\u0900-\u097F\u4E00-\u9FFF]/;
+const ENGLISH_HINT_WORD = /\b(the|and|of|to|for|with|your|new|start|journey|play|learn|course|game|shop|pass|subscription|daily|fact|question|answer|click|zoom|planet|star|galaxy|black|hole|buy|need|active|locked|owned|popular|score|round)\b/i;
+
 const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
+const shouldTranslateText = (text: string, language: string) => {
+  if (language === 'en') return false;
+
+  const value = text.trim();
+  if (value.length <= 1 || !BASIC_LATIN_TEXT.test(value)) return false;
+  if (NON_LATIN_SCRIPT_TEXT.test(value)) return false;
+  if (!EXTENDED_LATIN_TEXT.test(value)) return true;
+
+  return ENGLISH_HINT_WORD.test(value);
+};
 
 const AutoTranslateContent = () => {
   const { language } = useLanguage();
