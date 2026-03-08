@@ -105,7 +105,7 @@ const CertificateShowcase = () => {
                 return (
                   <motion.div
                     key={achievement.id}
-                    className={`relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-white/10 rounded-xl p-4 cursor-pointer hover:border-white/30 transition-all`}
+                    className={`relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-white/10 rounded-xl p-4 cursor-pointer hover:border-white/30 transition-all group`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
@@ -115,7 +115,25 @@ const CertificateShowcase = () => {
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-10 rounded-xl`} />
                     
-                    <div className="relative z-10 text-center">
+                    {/* Locked badge */}
+                    <div className="absolute top-2 left-2 z-20 flex items-center gap-1 bg-amber-500/20 px-1.5 py-0.5 rounded-full border border-amber-500/30">
+                      <Lock className="w-2.5 h-2.5 text-amber-400" />
+                      <span className="text-[9px] text-amber-300 font-bold uppercase">Locked</span>
+                    </div>
+
+                    {/* Delete button */}
+                    <button
+                      className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500/20 hover:bg-red-500/40 p-1 rounded-full border border-red-500/30"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeAchievement(achievement.id);
+                        toast.success(`Removed "${achievement.name}" from trophy cabinet`);
+                      }}
+                    >
+                      <Trash2 className="w-3 h-3 text-red-400" />
+                    </button>
+                    
+                    <div className="relative z-10 text-center mt-3">
                       <motion.div
                         className="text-4xl mb-2"
                         animate={{ rotate: [0, 5, -5, 0] }}
