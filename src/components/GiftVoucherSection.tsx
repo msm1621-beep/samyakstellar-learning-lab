@@ -5,7 +5,7 @@ import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
-import { useLanguage } from '@/contexts/LanguageContext';
+
 
 interface VoucherReward {
   type: 'coins' | 'shop_item' | 'game_pass' | 'subscription';
