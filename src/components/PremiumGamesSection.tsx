@@ -365,6 +365,7 @@ const AdventureMinigame = ({ onFinish }: { onFinish: (score: number) => void }) 
 
 // ─── MAIN SECTION ───
 const PremiumGamesSection = () => {
+  const { t } = useLanguage();
   const { coinMultiplier, hasPremiumGames } = useGamePass();
   const { currentSubscription, isExpired } = useSubscription();
   const { addCoins } = useCoins();
