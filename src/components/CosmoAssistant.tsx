@@ -191,10 +191,11 @@ const CosmoAssistant = () => {
     utterance.pitch = 1.1;
     utterance.volume = 1;
 
+    utterance.lang = speechLocale;
+
     const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => 
-      v.name.includes('Daniel') || v.name.includes('Samantha') || v.name.includes('Alex') || v.lang === 'en-US'
-    );
+    const localePrefix = speechLocale.split('-')[0].toLowerCase();
+    const preferredVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
     if (preferredVoice) utterance.voice = preferredVoice;
 
     utterance.onstart = () => setIsSpeaking(true);
