@@ -90,7 +90,7 @@ const SubscriptionSection = () => {
                   className={`flex items-center gap-2 ${canClaimDailyBonus ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700' : 'bg-muted'}`}
                 >
                   <Gift className="w-4 h-4" />
-                  {canClaimDailyBonus ? `${t('subscription.claimBonus')} ${dailyBonus}!` : `${t('subscription.dailyBonus')} ✓`}
+                  {canClaimDailyBonus ? `Claim Bonus ${dailyBonus}!` : `Daily Bonus ✓`}
                 </Button>
               </div>
              </div>
