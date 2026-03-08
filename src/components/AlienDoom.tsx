@@ -222,7 +222,7 @@ const AlienDoom = () => {
     utterance.onend = () => setIsSpeaking(false);
     
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled]);
+  }, [voiceEnabled, speechLocale]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<{ role: string; content: string }[]>([]);
