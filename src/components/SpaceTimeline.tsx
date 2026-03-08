@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { timelineEvents, categoryColors, categoryLabels, TimelineEvent } from '@/data/timelineEvents';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SpaceTimeline = () => {
   const [selectedCategory, setSelectedCategory] = useState<TimelineEvent['category'] | 'all'>('all');
