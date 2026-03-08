@@ -232,18 +232,36 @@ const AlienDoom = () => {
   const initializeIntroMessages = useCallback(async () => {
     if (messages.length > 0) return;
 
-    const localizedTexts = await translateTexts(
-      ALIEN_INTRO_MESSAGES.map((msg) => msg.text),
-      language,
-    );
+    try {
+      const resp = await fetch(ALIEN_CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: 'Give a short greeting in 2 lines introducing Mr. Doom and Mrs. Doom to a kid.' }],
+          language,
+          targetLanguageName,
+        }),
+      });
 
-    setMessages(
-      ALIEN_INTRO_MESSAGES.map((msg, index) => ({
-        speaker: msg.speaker,
-        text: localizedTexts[index] || msg.text,
-      })),
-    );
-  }, [messages.length, language]);
+      if (!resp.ok) throw new Error('Failed to initialize greeting');
+
+      const data = await resp.json();
+      const raw = (data.content || '').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const parsed = JSON.parse(raw) as { speaker: 'mr' | 'mrs'; text: string }[];
+
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setMessages(parsed.slice(0, 2));
+        return;
+      }
+
+      setMessages(ALIEN_INTRO_MESSAGES);
+    } catch {
+      setMessages(ALIEN_INTRO_MESSAGES);
+    }
+  }, [messages.length, language, targetLanguageName]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
