@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const CelestialExplorer = () => {
   const [selectedCategory, setSelectedCategory] = useState<CelestialCategory | 'all'>('all');
   const [distanceFilter, setDistanceFilter] = useState<DistanceFilter>('all');
+  const { t } = useLanguage();
 
   const categories: (CelestialCategory | 'all')[] = ['all', 'solar-system', 'stars', 'nebulas', 'galaxies', 'other'];
 
