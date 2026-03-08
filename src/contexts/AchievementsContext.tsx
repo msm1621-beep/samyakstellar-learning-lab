@@ -75,6 +75,7 @@ export const AchievementsProvider = ({ children }: { children: ReactNode }) => {
     <AchievementsContext.Provider value={{
       achievements,
       addAchievement,
+      removeAchievement,
       hasAchievement,
       getAchievementsByType,
       totalAchievements: achievements.length
