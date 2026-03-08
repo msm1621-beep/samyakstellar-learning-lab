@@ -49,7 +49,7 @@ const CertificateShowcase = () => {
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
-            {t('section.trophyCabinetDesc')}
+            Your collection of achievements, certificates, and accomplishments from your space exploration journey!
           </p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-500/20 px-4 py-2 rounded-full border border-amber-500/30">
             <Trophy className="w-5 h-5 text-amber-400" />
