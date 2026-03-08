@@ -5,8 +5,10 @@ const TRANSLATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/transla
 const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
 
 const KEY_OVERRIDES: Record<string, TranslationKey> = {
+  // Navigation
   'All': 'common.all',
   '🌟 All': 'common.all',
+  'Home': 'nav.home',
   'Solar System': 'nav.solarSystem',
   'Timeline': 'nav.timeline',
   'Constellations': 'nav.constellations',
@@ -16,19 +18,32 @@ const KEY_OVERRIDES: Record<string, TranslationKey> = {
   'Fun Facts': 'nav.funFacts',
   'About': 'nav.about',
   'Start Your Journey': 'nav.startJourney',
+  'Cosmic Classroom': 'nav.cosmicClassroom',
+
+  // Hero
+  'Start Your Space Journey': 'hero.startJourney',
+  'Take a Quiz': 'hero.takeQuiz',
+
+  // Sections
+  'Daily Space Fact': 'section.dailyFact',
+  'Space Q&A': 'section.spaceQnA',
   'Questions & Answers': 'section.spaceQnA',
   'Daily Fact': 'section.dailyFact',
-  'Suggested Questions': 'qna.suggested',
-  'Ask': 'qna.ask',
-  'New Fact': 'dailyFact.newFact',
-  'Share': 'dailyFact.share',
-  'Boosts': 'shop.boosts',
-  'Cosmetics': 'shop.cosmetics',
-  'Popular': 'shop.popular',
+  'Space Courses': 'section.courses',
+  'Gift Vouchers': 'section.giftVouchers',
+  'Space Manuscripts': 'section.manuscripts',
   'Premium Games': 'section.premiumGames',
   'Game Pass': 'section.gamePass',
   'Trophy Cabinet': 'section.trophyCabinet',
   'Space Shop': 'section.shop',
+
+  // Common
+  'Learn': 'common.learn',
+  'Play': 'common.play',
+  'Explore': 'common.explore',
+  'Videos': 'common.videos',
+  'Books': 'common.books',
+  'Audiobooks': 'common.audiobooks',
   'Locked': 'common.locked',
   'Buy': 'common.buy',
   'Purchased': 'common.purchased',
@@ -36,12 +51,78 @@ const KEY_OVERRIDES: Record<string, TranslationKey> = {
   'Back': 'common.back',
   'Next': 'common.next',
   'Previous': 'common.previous',
+  'Read Now': 'common.readNow',
+  'Watch Now': 'common.watchNow',
+  'Listen Now': 'common.listenNow',
+  'Coins': 'common.coins',
+
+  // Explorer
+  '📍 Any Distance': 'explorer.anyDistance',
+  '🏠 Near': 'explorer.near',
+  '🚀 Far': 'explorer.far',
+
+  // Q&A
+  'Suggested Questions': 'qna.suggested',
+  'Ask': 'qna.ask',
+
+  // Daily Fact
+  'New Fact': 'dailyFact.newFact',
+  'Share': 'dailyFact.share',
+
+  // Shop
+  '⚡ Boosts': 'shop.boosts',
+  'Boosts': 'shop.boosts',
+  '🎨 Cosmetics': 'shop.cosmetics',
+  'Cosmetics': 'shop.cosmetics',
+  '🔧 Utilities': 'shop.utilities',
+  'Popular': 'shop.popular',
+
+  // Subscription
+  'Purchase': 'subscription.purchase',
+  'Daily Bonus': 'subscription.dailyBonus',
+  'Claim Bonus': 'subscription.claimBonus',
+  'Expired': 'subscription.expired',
   'Active': 'gamePass.active',
+
+  // Courses
+  '← Back to Courses': 'courses.backToCourses',
+  'Claim Certificate': 'courses.claimCertificate',
+  'Take Quiz': 'courses.takeQuiz',
+  'Restart Course': 'courses.restartCourse',
+  'Progress': 'courses.progress',
+  'Learning Goals': 'courses.learningGoals',
+  'Course Plan': 'courses.coursePlan',
+
+  // Games
+  'Quiz': 'games.quiz',
+  'Size Compare': 'games.sizeCompare',
+  'Rocket Shooter': 'games.rocketShooter',
+  'Memory Match': 'games.memoryMatch',
+  'Word Scramble': 'games.wordScramble',
+  'Rocket Math': 'games.rocketMath',
+
+  // Account
   'Create Account': 'account.createAccount',
   'Guest': 'account.guest',
   'Profile': 'account.profile',
+
+  // TTS
   'Read Aloud': 'tts.readAloud',
   'Stop Reading': 'tts.stopReading',
+
+  // Footer
+  'For Parents & Teachers': 'footer.forParents',
+  'Contact': 'footer.contact',
+  'Privacy Policy': 'footer.privacy',
+
+  // About
+  'Planets & Moons': 'about.planetsMoons',
+  'Stars & Nebulas': 'about.starsNebulas',
+  'Galaxies': 'about.galaxies',
+  'Books & Videos': 'about.booksVideos',
+
+  // Library tabs
+  'Audiobooks': 'library.audiobooks',
 };
 
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
