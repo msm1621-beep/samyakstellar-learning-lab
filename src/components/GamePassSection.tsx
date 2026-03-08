@@ -9,6 +9,7 @@ import { useAchievements } from '@/contexts/AchievementsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const GamePassSection = () => {
+  const { t } = useLanguage();
   const { hasPass, purchasePass, getPassExpiry, extraLives, activePasses } = useGamePass();
   const { coins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
