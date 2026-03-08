@@ -58,7 +58,7 @@ const GamePassSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Gamepad2 className="w-8 h-8 text-cyan-400" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 text-transparent bg-clip-text">
-              {t('section.gamePass')}
+              Game Pass
             </h2>
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
