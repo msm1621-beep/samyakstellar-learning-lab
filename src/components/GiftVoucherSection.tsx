@@ -159,6 +159,7 @@ const ScratchCard = ({ onRevealed, reward }: { onRevealed: () => void; reward: V
 };
 
 const GiftVoucherSection = () => {
+  const { t } = useLanguage();
   const { addCoins } = useCoins();
   const { addAchievement } = useAchievements();
   const [availableVouchers, setAvailableVouchers] = useState(0);
