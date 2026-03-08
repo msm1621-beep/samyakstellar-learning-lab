@@ -113,7 +113,7 @@ const requestTranslation = async ({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash-lite',
+      model: 'openai/gpt-5-mini',
       temperature: 0,
       messages: [
         { role: 'system', content: prompt },
