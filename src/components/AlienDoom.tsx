@@ -168,6 +168,11 @@ const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-
 
 const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
 
+const ALIEN_INTRO_MESSAGES: { speaker: 'mr' | 'mrs'; text: string }[] = [
+  { speaker: 'mr', text: "Greetings, young Earthling! I'm Mr. Doom!" },
+  { speaker: 'mrs', text: "And I'm Mrs. Doom! We're here from the Andromeda galaxy to teach you about space! Ask us anything!" },
+];
+
 const AlienDoom = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ speaker: 'user' | 'mr' | 'mrs'; text: string }[]>([
