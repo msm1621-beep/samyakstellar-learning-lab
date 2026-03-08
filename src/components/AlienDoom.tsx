@@ -323,7 +323,7 @@ const AlienDoom = () => {
     <>
       {/* Floating button to open alien chat */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         className="fixed bottom-24 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
         aria-label="Chat with Mr & Mrs Doom"
       >
