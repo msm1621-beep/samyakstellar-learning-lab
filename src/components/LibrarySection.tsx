@@ -271,8 +271,8 @@ const LibrarySection = () => {
             }`}
           >
             <Headphones className="w-4 h-4" />
-            Audiobooks
-            <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">NEW</span>
+            {t('library.audiobooks')}
+            <span className="px-2 py-0.5 text-xs bg-white/20 rounded-full">{t('common.new')}</span>
           </button>
         </div>
 
