@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { dailyFacts, getCategoryColor, getCategoryLabel } from '@/data/dailyFacts';
 import { Sparkles, RefreshCw, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const DailyFactWidget = () => {
   const [currentFact, setCurrentFact] = useState(dailyFacts[0]);
