@@ -322,7 +322,7 @@ const CourseSection = () => {
                     onClick={() => restartCourse(selectedCourse.id)}
                     className="border-white/30 text-white hover:bg-white/10"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" /> Restart Course
+                    <RotateCcw className="w-4 h-4 mr-2" /> {t('courses.restartCourse')}
                   </Button>
                 )}
               </div>
