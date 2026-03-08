@@ -11,7 +11,7 @@ const LanguageSelector = () => {
   const currentLang = languages.find(l => l.code === language);
 
   return (
-    <div className="fixed top-[4.5rem] right-4 z-[45] flex items-center gap-2">
+    <div data-no-auto-translate="true" className="fixed top-[4.5rem] right-4 z-[45] flex items-center gap-2">
       {/* TTS Button */}
       <button
         onClick={readPageAloud}
