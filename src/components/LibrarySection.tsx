@@ -16,6 +16,7 @@ interface CompletedBook {
 }
 
 const LibrarySection = () => {
+  const { t, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
