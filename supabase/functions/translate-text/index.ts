@@ -72,39 +72,49 @@ const parseModelOutput = (rawOutput: unknown): string[] | null => {
   return null;
 };
 
-const appearsUntranslated = (source: string[], translated: string[]): boolean => {
-  if (source.length === 0 || source.length !== translated.length) return true;
+const normalizeForCompare = (text: string) => text.trim().toLowerCase().replace(/\s+/g, ' ');
+const hasLetters = (text: string) => /\p{L}/u.test(text);
 
-  const hasLetters = (text: string) => /\p{L}/u.test(text);
-  const sourceWithLetters = source.filter(hasLetters);
-  if (sourceWithLetters.length === 0) return false;
+const unchangedIndices = (source: string[], translated: string[]) => {
+  const indexes: number[] = [];
 
-  const unchanged = source.reduce((count, src, index) => {
-    const dst = translated[index] ?? '';
-    const normalizedSrc = src.trim().toLowerCase();
-    const normalizedDst = dst.trim().toLowerCase();
-    return count + (normalizedSrc === normalizedDst ? 1 : 0);
-  }, 0);
+  for (let i = 0; i < source.length; i++) {
+    const src = source[i] ?? '';
+    const dst = translated[i] ?? '';
+    if (!src || !hasLetters(src)) continue;
 
-  return unchanged / source.length >= 0.75;
+    if (normalizeForCompare(src) === normalizeForCompare(dst)) {
+      indexes.push(i);
+    }
+  }
+
+  return indexes;
+};
+
+const alignToSource = (source: string[], candidate: string[] | null): string[] => {
+  if (!candidate) return [...source];
+  return source.map((src, index) => {
+    const dst = candidate[index];
+    return typeof dst === 'string' && dst.trim().length > 0 ? dst : src;
+  });
 };
 
 const requestTranslation = async ({
   key,
-  cleanedTexts,
+  texts,
   targetLanguage,
   targetLanguageName,
-  retryHint,
+  mode,
 }: {
   key: string;
-  cleanedTexts: string[];
+  texts: string[];
   targetLanguage: string;
   targetLanguageName?: string;
-  retryHint: boolean;
+  mode: 'base' | 'rescue';
 }): Promise<string[] | null> => {
-  const prompt = retryHint
-    ? `You failed the previous translation attempt. Translate EVERY item into ${targetLanguageName || targetLanguage} (${targetLanguage}) now. Return EXACTLY this JSON object schema: {"translations":["..."]}. Keep order and length identical.`
-    : `You are a UI localization translator. Translate EVERY string into ${targetLanguageName || targetLanguage} (${targetLanguage}). Return EXACTLY this JSON object schema: {"translations":["..."]}. Keep order and length identical.`;
+  const prompt = mode === 'rescue'
+    ? `You are a strict UI localization engine. Previous translation left source-language text unchanged. Translate each input item into ${targetLanguageName || targetLanguage} (${targetLanguage}). Rules: (1) Keep exact order and array length. (2) Keep emoji, punctuation and numbers. (3) Keep only true proper nouns/astronomical names unchanged when needed, but translate all normal UI words and sentences. (4) Return ONLY JSON: {"translations":["..."]}`
+    : `You are a UI localization translator. Translate each input item into ${targetLanguageName || targetLanguage} (${targetLanguage}). Keep exact order and array length. Keep emoji, punctuation and numbers. Return ONLY JSON: {"translations":["..."]}`;
 
   const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
@@ -113,11 +123,11 @@ const requestTranslation = async ({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'openai/gpt-5-mini',
+      model: 'google/gemini-2.5-flash',
       temperature: 0,
       messages: [
         { role: 'system', content: prompt },
-        { role: 'user', content: JSON.stringify(cleanedTexts) },
+        { role: 'user', content: JSON.stringify(texts) },
       ],
     }),
   });
@@ -125,14 +135,15 @@ const requestTranslation = async ({
   if (!aiResponse.ok) return null;
 
   const aiData = await aiResponse.json();
-  const parsed = parseModelOutput(aiData.choices?.[0]?.message?.content);
-  if (!parsed) return null;
+  return parseModelOutput(aiData.choices?.[0]?.message?.content);
+};
 
-  if (parsed.length !== cleanedTexts.length) {
-    return cleanedTexts.map((text, index) => parsed[index] || text);
+const chunk = <T>(items: T[], size: number): T[][] => {
+  const output: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    output.push(items.slice(i, i + size));
   }
-
-  return parsed;
+  return output;
 };
 
 serve(async (req) => {
@@ -151,9 +162,7 @@ serve(async (req) => {
     }
 
     const cleanedTexts = texts
-      .filter((text) => typeof text === 'string')
-      .map((text) => text.trim())
-      .filter((text) => text.length > 0)
+      .map((text) => (typeof text === 'string' ? text.trim() : ''))
       .slice(0, 120);
 
     if (cleanedTexts.length === 0 || targetLanguage === 'en') {
@@ -167,35 +176,45 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const firstPass = await requestTranslation({
-      key: LOVABLE_API_KEY,
-      cleanedTexts,
-      targetLanguage,
-      targetLanguageName,
-      retryHint: false,
-    });
+    const translated: string[] = [];
+    const groups = chunk(cleanedTexts, 30);
 
-    if (firstPass && !appearsUntranslated(cleanedTexts, firstPass)) {
-      return new Response(JSON.stringify({ translations: firstPass }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    for (const group of groups) {
+      if (group.every((item) => item.length === 0)) {
+        translated.push(...group);
+        continue;
+      }
+
+      const firstPass = alignToSource(group, await requestTranslation({
+        key: LOVABLE_API_KEY,
+        texts: group,
+        targetLanguage,
+        targetLanguageName,
+        mode: 'base',
+      }));
+
+      let merged = [...firstPass];
+      const firstUnchanged = unchangedIndices(group, merged);
+
+      if (firstUnchanged.length > 0) {
+        const rescueSource = firstUnchanged.map((index) => group[index]);
+        const rescuePass = alignToSource(rescueSource, await requestTranslation({
+          key: LOVABLE_API_KEY,
+          texts: rescueSource,
+          targetLanguage,
+          targetLanguageName,
+          mode: 'rescue',
+        }));
+
+        firstUnchanged.forEach((index, i) => {
+          merged[index] = rescuePass[i] ?? merged[index];
+        });
+      }
+
+      translated.push(...merged);
     }
 
-    const secondPass = await requestTranslation({
-      key: LOVABLE_API_KEY,
-      cleanedTexts,
-      targetLanguage,
-      targetLanguageName,
-      retryHint: true,
-    });
-
-    const finalTranslations = secondPass && !appearsUntranslated(cleanedTexts, secondPass)
-      ? secondPass
-      : firstPass && firstPass.length === cleanedTexts.length
-        ? firstPass
-        : cleanedTexts;
-
-    return new Response(JSON.stringify({ translations: finalTranslations }), {
+    return new Response(JSON.stringify({ translations: translated }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
