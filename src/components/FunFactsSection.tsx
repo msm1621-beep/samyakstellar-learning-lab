@@ -49,7 +49,7 @@ const FunFactsSection = () => {
             <br />
             <Button onClick={getRandomFact} variant="outline" className="border-accent/50 hover:bg-accent/10">
               <Shuffle className="w-4 h-4 mr-2" />
-              Random Fact!
+              {t('funFacts.randomFact')}
             </Button>
           </div>
         </div>
