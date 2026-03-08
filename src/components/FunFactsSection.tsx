@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const FunFactsSection = () => {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [randomFact, setRandomFact] = useState(funFacts[0]);
+  const { t } = useLanguage();
 
   const toggleCard = (id: string) => {
     setFlippedCards((prev) => {
