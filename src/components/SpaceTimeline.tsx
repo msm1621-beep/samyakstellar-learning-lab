@@ -38,7 +38,7 @@ const SpaceTimeline = () => {
                   : 'bg-white/10 text-purple-200 hover:bg-white/20 hover:scale-105'
               }`}
             >
-              {cat === 'all' ? '🌟 All Events' : `${cat === 'universe' ? '💥' : cat === 'solar-system' ? '☀️' : cat === 'earth' ? '🌍' : '🚀'} ${categoryLabels[cat as keyof typeof categoryLabels]}`}
+              {cat === 'all' ? t('timeline.allEvents') : `${cat === 'universe' ? '💥' : cat === 'solar-system' ? '☀️' : cat === 'earth' ? '🌍' : '🚀'} ${categoryLabels[cat as keyof typeof categoryLabels]}`}
             </button>
           ))}
         </div>

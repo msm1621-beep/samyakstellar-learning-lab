@@ -50,7 +50,7 @@ const ConstellationViewer = () => {
           <div className="relative z-10">
             <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-cosmic-gold" />
-              Interactive Star Map
+              {t('constellation.starMap')}
             </h3>
             
             <div className="relative w-full aspect-[2/1] bg-cosmic-dark/60 rounded-2xl overflow-hidden border border-white/10">

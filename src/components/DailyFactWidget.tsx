@@ -93,7 +93,7 @@ const DailyFactWidget = () => {
               className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full transition-all duration-300 hover:scale-105"
             >
               <Share2 className="w-5 h-5" />
-              <span>Share</span>
+              <span>{t('dailyFact.share')}</span>
             </button>
           </div>
 

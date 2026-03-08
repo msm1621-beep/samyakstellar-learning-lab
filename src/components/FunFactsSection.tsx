@@ -81,7 +81,7 @@ const FunFactsSection = () => {
                     style={{ backfaceVisibility: 'hidden' }}
                   >
                     <div className="text-4xl mb-2">{fact.emoji}</div>
-                    <p className="text-sm text-muted-foreground">Tap to reveal!</p>
+                    <p className="text-sm text-muted-foreground">{t('funFacts.tapCards')}</p>
                   </div>
                   
                   {/* Back */}

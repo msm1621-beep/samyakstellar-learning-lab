@@ -72,8 +72,8 @@ const CelestialExplorer = () => {
 
         {filteredBodies.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
-            <p className="text-lg">No celestial bodies found with these filters.</p>
-            <p className="text-sm">Try adjusting your filters!</p>
+            <p className="text-lg">{t('explorer.noResults')}</p>
+            <p className="text-sm">{t('explorer.adjustFilters')}</p>
           </div>
         )}
       </div>
