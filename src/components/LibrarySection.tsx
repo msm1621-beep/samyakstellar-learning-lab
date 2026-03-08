@@ -260,7 +260,7 @@ const LibrarySection = () => {
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            Books
+            {t('library.books')}
           </button>
           <button
             onClick={() => { setActiveTab('audiobooks'); setSelectedTag('all'); }}
