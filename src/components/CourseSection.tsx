@@ -350,7 +350,7 @@ const CourseSection = () => {
                 {/* Progress Bar */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/60">Progress</span>
+                    <span className="text-white/60">{t('courses.progress')}</span>
                     <span className="text-space-gold font-medium">{getProgressPercentage(selectedCourse)}%</span>
                   </div>
                   <Progress value={getProgressPercentage(selectedCourse)} className="h-3" />
