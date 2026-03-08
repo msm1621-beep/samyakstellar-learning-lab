@@ -79,6 +79,7 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: responseLanguageInstruction },
           ...messages,
         ],
         stream: true,
