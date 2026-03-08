@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { languages } from '@/data/translations';
+import { getDictionaryOverride } from '@/lib/translateText';
 
 const TRANSLATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate-text`;
 const TRANSLATABLE_TEXT = /[A-Za-zÀ-ž\u0370-\u03FF\u0400-\u04FF\u0600-\u06FF\u0900-\u097F\u4E00-\u9FFF]/;
@@ -178,6 +179,12 @@ const AutoTranslateContent = () => {
           const original = originalTextRef.current.get(node) ?? current;
           const cacheKey = keyFor(original);
 
+          const dictionaryOverride = getDictionaryOverride(original, language);
+          if (dictionaryOverride) {
+            translationCacheRef.current.set(cacheKey, dictionaryOverride);
+            return;
+          }
+
           if (translationCacheRef.current.has(cacheKey)) return;
 
           if (!shouldTranslateText(original, language)) {
@@ -199,6 +206,12 @@ const AutoTranslateContent = () => {
 
           const original = elementAttributes.get(name) ?? value;
           const cacheKey = keyFor(original);
+
+          const dictionaryOverride = getDictionaryOverride(original, language);
+          if (dictionaryOverride) {
+            translationCacheRef.current.set(cacheKey, dictionaryOverride);
+            return;
+          }
 
           if (translationCacheRef.current.has(cacheKey)) return;
 
