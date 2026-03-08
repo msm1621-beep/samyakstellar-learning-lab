@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { celestialBodies, categoryLabels, type CelestialCategory, type DistanceFilter } from '@/data/celestialBodies';
 import CelestialCard from './CelestialCard';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CelestialExplorer = () => {
   const [selectedCategory, setSelectedCategory] = useState<CelestialCategory | 'all'>('all');
