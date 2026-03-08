@@ -17,13 +17,15 @@ const suggestedQuestions = [
   "Why is Venus the hottest planet?"
 ];
 
+const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
+
 const SpaceQnA = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
