@@ -244,7 +244,7 @@ const AlienDoom = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: newHistory.slice(-10) }),
+        body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
       });
 
       if (!resp.ok) {
