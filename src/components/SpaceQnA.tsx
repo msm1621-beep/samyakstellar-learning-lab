@@ -168,7 +168,7 @@ const SpaceQnA = () => {
               ) : (
                 <>
                   <Search className="w-5 h-5 mr-2" />
-                  Ask
+                   {t('qna.ask')}
                 </>
               )}
             </Button>
