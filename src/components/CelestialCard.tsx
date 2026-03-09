@@ -1,49 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Image, BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Loader2 } from 'lucide-react';
+import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import type { CelestialBody } from '@/data/celestialBodies';
 
 interface CelestialCardProps {
   body: CelestialBody;
   onSelect: () => void;
 }
-
-// Realistic image URLs for celestial bodies
-const celestialImages: Record<string, string> = {
-  sun: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=800&h=600&fit=crop',
-  mercury: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&h=600&fit=crop',
-  venus: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop',
-  earth: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&h=600&fit=crop',
-  moon: 'https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?w=800&h=600&fit=crop',
-  mars: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800&h=600&fit=crop',
-  jupiter: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=800&h=600&fit=crop',
-  saturn: 'https://images.unsplash.com/photo-1614732484003-ef9881f25834?w=800&h=600&fit=crop',
-  uranus: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800&h=600&fit=crop',
-  neptune: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=800&h=600&fit=crop',
-  pluto: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800&h=600&fit=crop',
-  // Nebulas
-  orion: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop',
-  crab: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&h=600&fit=crop',
-  eagle: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=800&h=600&fit=crop',
-  helix: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&h=600&fit=crop',
-  // Galaxies
-  milkyway: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=800&h=600&fit=crop',
-  andromeda: 'https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=800&h=600&fit=crop',
-  triangulum: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop',
-  whirlpool: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop',
-  sombrero: 'https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&h=600&fit=crop',
-  // Stars
-  sirius: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop',
-  polaris: 'https://images.unsplash.com/photo-1509773896068-7fd415d91e2e?w=800&h=600&fit=crop',
-  betelgeuse: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&h=600&fit=crop',
-  rigel: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=800&h=600&fit=crop',
-  // Default fallback
-  default: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop'
-};
-
-const getImageForBody = (id: string): string => {
-  return celestialImages[id] || celestialImages.default;
-};
 
 // Cosmo's knowledge base for celestial bodies
 const getCosmoResponse = (bodyName: string): string => {
@@ -69,59 +32,6 @@ const getCosmoResponse = (bodyName: string): string => {
   }
   
   return `What an interesting celestial object! ${bodyName} is truly amazing. The universe is full of wonders waiting to be discovered. Did you know that when you look at stars, you're actually looking back in time? The light takes years to reach us! Keep exploring, young astronomer! 🚀✨`;
-};
-
-interface ImageModalProps {
-  body: CelestialBody;
-  onClose: () => void;
-}
-
-const ImageModal = ({ body, onClose }: ImageModalProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  
-  return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div 
-        className="glass-card max-w-4xl w-full rounded-2xl overflow-hidden relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
-        >
-          <X className="w-5 h-5 text-white" />
-        </button>
-        
-        <div className="relative">
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-muted">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-          )}
-          <img 
-            src={getImageForBody(body.id)} 
-            alt={body.name}
-            className="w-full h-[60vh] object-cover"
-            onLoad={() => setIsLoading(false)}
-          />
-        </div>
-        
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">{body.icon}</span>
-            <div>
-              <h3 className="text-2xl font-display font-bold">{body.name}</h3>
-              <span className="text-sm text-muted-foreground">{body.type}</span>
-            </div>
-          </div>
-          <p className="text-muted-foreground">{body.description}</p>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 interface ReadMoreModalProps {
@@ -308,7 +218,6 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
 };
 
 const CelestialCard = ({ body, onSelect }: CelestialCardProps) => {
-  const [showImageModal, setShowImageModal] = useState(false);
   const [showReadMoreModal, setShowReadMoreModal] = useState(false);
   const [showCosmoModal, setShowCosmoModal] = useState(false);
   
@@ -331,16 +240,7 @@ const CelestialCard = ({ body, onSelect }: CelestialCardProps) => {
         </div>
         
         {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-1.5 mt-3 pt-3 border-t border-muted">
-          <Button 
-            size="sm" 
-            variant="ghost"
-            onClick={() => setShowImageModal(true)}
-            className="flex flex-col items-center gap-0.5 h-auto py-2 px-1 text-xs hover:bg-primary/10"
-          >
-            <Image className="w-4 h-4" />
-            <span className="text-[10px]">Image</span>
-          </Button>
+        <div className="grid grid-cols-2 gap-1.5 mt-3 pt-3 border-t border-muted">
           <Button 
             size="sm" 
             variant="ghost"
@@ -362,9 +262,6 @@ const CelestialCard = ({ body, onSelect }: CelestialCardProps) => {
         </div>
       </div>
       
-      {showImageModal && (
-        <ImageModal body={body} onClose={() => setShowImageModal(false)} />
-      )}
       {showReadMoreModal && (
         <ReadMoreModal body={body} onClose={() => setShowReadMoreModal(false)} />
       )}
