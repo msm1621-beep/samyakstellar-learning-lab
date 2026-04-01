@@ -35,7 +35,6 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
-const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function streamChat({
