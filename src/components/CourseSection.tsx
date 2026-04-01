@@ -282,7 +282,7 @@ const CourseSection = () => {
             </h2>
           </div>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            {t('section.coursesDesc')}
+            Complete structured courses with videos, books, and audiobooks. Earn certificates when you finish!
           </p>
         </div>
 
