@@ -158,7 +158,7 @@ const SpaceQnA = () => {
             <Sparkles className="w-10 h-10 text-yellow-400" />
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {t('section.spaceQnADesc')}
+            Ask anything about space!
           </p>
         </div>
 
