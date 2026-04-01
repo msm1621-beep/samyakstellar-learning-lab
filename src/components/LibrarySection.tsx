@@ -230,7 +230,7 @@ const LibrarySection = () => {
             📚 Celestial Library
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('section.libraryDesc')}
+            Watch amazing videos, explore space books, and listen to audiobooks about space theories!
           </p>
         </div>
 
