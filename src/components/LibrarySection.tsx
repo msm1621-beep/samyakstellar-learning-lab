@@ -368,7 +368,7 @@ const LibrarySection = () => {
                           onClick={() => setPlayingVideo(video.id)}
                         >
                           <Play className="w-4 h-4 mr-2" />
-                          {t('common.watchNow')}
+                          Watch Now
                         </Button>
                       )}
                     </div>
