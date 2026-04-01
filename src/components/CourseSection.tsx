@@ -27,7 +27,6 @@ interface CompletedCourse {
 
 const CourseSection = () => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [completedCourses, setCompletedCourses] = useState<CompletedCourse[]>([]);
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
