@@ -10,8 +10,6 @@ import CourseCertificate from './CourseCertificate';
 import CourseQuiz from './CourseQuiz';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { langToSpeechLocale } from '@/data/translations';
 
 interface CourseProgress {
   courseId: string;
@@ -28,7 +26,6 @@ interface CompletedCourse {
 }
 
 const CourseSection = () => {
-  const { t, language } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
   const [completedCourses, setCompletedCourses] = useState<CompletedCourse[]>([]);
@@ -215,7 +212,7 @@ const CourseSection = () => {
     utterance.pitch = 1;
     utterance.volume = speechVolume;
     
-    const locale = langToSpeechLocale[language];
+    const locale = 'en-US';
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find((v: SpeechSynthesisVoice) => v.lang.startsWith(locale.split('-')[0])) || voices[0];
     if (voice) utterance.voice = voice;
@@ -280,11 +277,11 @@ const CourseSection = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <GraduationCap className="w-10 h-10 text-space-gold" />
             <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-space-gold via-yellow-300 to-space-gold">
-              {t('section.courses')}
+              Space Courses
             </h2>
           </div>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            {t('section.coursesDesc')}
+            Complete structured courses with videos, books, and audiobooks. Earn certificates when you finish!
           </p>
         </div>
 
@@ -298,7 +295,7 @@ const CourseSection = () => {
                 onClick={() => setSelectedCourse(null)}
                 className="text-white/70 hover:text-white self-start"
               >
-                ← {t('courses.backToCourses')}
+                ← Back to Courses
               </Button>
               
               <div className="flex items-center gap-3">
@@ -307,7 +304,7 @@ const CourseSection = () => {
                     onClick={() => completeCourse(selectedCourse)}
                     className="bg-gradient-to-r from-space-gold to-yellow-500 text-space-deep hover:from-yellow-400"
                   >
-                    <Award className="w-4 h-4 mr-2" /> {t('courses.claimCertificate')}
+                    <Award className="w-4 h-4 mr-2" /> Claim Certificate
                   </Button>
                 )}
                 <Button
@@ -315,7 +312,7 @@ const CourseSection = () => {
                   variant="outline"
                   className="border-primary/30 text-primary hover:bg-primary/10"
                 >
-                  <HelpCircle className="w-4 h-4 mr-2" /> {t('courses.takeQuiz')}
+                  <HelpCircle className="w-4 h-4 mr-2" /> Take Quiz
                 </Button>
                 {isCourseCompleted(selectedCourse.id) && (
                   <Button
@@ -323,7 +320,7 @@ const CourseSection = () => {
                     onClick={() => restartCourse(selectedCourse.id)}
                     className="border-white/30 text-white hover:bg-white/10"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" /> {t('courses.restartCourse')}
+                    <RotateCcw className="w-4 h-4 mr-2" /> Restart Course
                   </Button>
                 )}
               </div>
@@ -351,7 +348,7 @@ const CourseSection = () => {
                 {/* Progress Bar */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/60">{t('courses.progress')}</span>
+                    <span className="text-white/60">Progress</span>
                     <span className="text-space-gold font-medium">{getProgressPercentage(selectedCourse)}%</span>
                   </div>
                   <Progress value={getProgressPercentage(selectedCourse)} className="h-3" />
@@ -387,7 +384,7 @@ const CourseSection = () => {
                 <div className="space-y-6">
                   <div className="bg-white/5 rounded-xl p-6">
                     <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Star className="w-5 h-5 text-space-gold" /> {t('courses.learningGoals')}
+                      <Star className="w-5 h-5 text-space-gold" /> Learning Goals
                     </h4>
                     <ul className="grid md:grid-cols-2 gap-3">
                       {selectedCourse.learningGoals.map((goal, idx) => (
@@ -400,7 +397,7 @@ const CourseSection = () => {
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-white">{t('courses.coursePlan')}</h4>
+                    <h4 className="text-lg font-semibold text-white">Course Plan</h4>
                     {selectedCourse.plan.map((week, idx) => (
                       <div key={idx} className="bg-white/5 rounded-xl p-4 border-l-4 border-space-gold">
                         <h5 className="text-white font-medium mb-2">Week {week.week}: {week.topic}</h5>

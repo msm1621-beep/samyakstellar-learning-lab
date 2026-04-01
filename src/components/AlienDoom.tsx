@@ -5,8 +5,6 @@ import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { languages, langToSpeechLocale } from '@/data/translations';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
@@ -153,7 +151,6 @@ const AlienScene = ({
 
 const ALIEN_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/alien-chat`;
 
-const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ALIEN_INTRO_MESSAGES: { speaker: 'mr' | 'mrs'; text: string }[] = [
@@ -168,9 +165,9 @@ const AlienDoom = () => {
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const { language } = useLanguage();
-  const speechLocale = langToSpeechLocale[language];
-  const targetLanguageName = getLanguageName(language);
+  const language = 'en';
+  const speechLocale = 'en-US';
+  const targetLanguageName = 'English';
 
   // Initialize speech synthesis voices
   useEffect(() => {

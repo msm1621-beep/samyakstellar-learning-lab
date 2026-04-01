@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Rocket, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SearchBar from '@/components/SearchBar';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,7 +42,8 @@ const Navigation = () => {
             <button key={item.href} onClick={() => scrollToSection(item.href)} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">{item.name}</button>
           ))}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <SearchBar />
           <Button onClick={() => scrollToSection('#explorer')} className="hidden sm:flex cosmic-glow">Start Your Journey</Button>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden p-2 text-foreground hover:text-primary transition-colors" aria-label="Toggle menu">
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

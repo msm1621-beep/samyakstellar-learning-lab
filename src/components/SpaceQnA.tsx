@@ -2,9 +2,6 @@ import { useState, useRef } from 'react';
 import { Search, Sparkles, Rocket, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { languages } from '@/data/translations';
-
 const SPACE_QNA_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/space-qna`;
 
 const suggestedQuestions = [
@@ -18,15 +15,12 @@ const suggestedQuestions = [
   "Why is Venus the hottest planet?"
 ];
 
-const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
-
 const SpaceQnA = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
-  const { t, language } = useLanguage();
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
@@ -53,7 +47,7 @@ const SpaceQnA = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ question: queryToSearch, language, targetLanguageName: getLanguageName(language) }),
+          body: JSON.stringify({ question: queryToSearch, language: 'en', targetLanguageName: 'English' }),
           signal: controller.signal,
         });
 
@@ -160,11 +154,11 @@ const SpaceQnA = () => {
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3">
             <HelpCircle className="w-10 h-10 text-primary" />
-            {t('section.spaceQnA')}
+            Space Q&A
             <Sparkles className="w-10 h-10 text-yellow-400" />
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {t('section.spaceQnADesc')}
+            Ask anything about space!
           </p>
         </div>
 
@@ -175,7 +169,7 @@ const SpaceQnA = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/60" />
               <Input
                 type="text"
-                placeholder={t('qna.askAnything')}
+                placeholder="Ask anything about space..."
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -192,7 +186,7 @@ const SpaceQnA = () => {
               ) : (
                 <>
                   <Search className="w-5 h-5 mr-2" />
-                   {t('qna.ask')}
+                   Ask
                 </>
               )}
             </Button>
@@ -202,7 +196,7 @@ const SpaceQnA = () => {
         {/* Suggested Questions */}
         {!answer && !isSearching && (
           <div className="mb-8">
-            <p className="text-muted-foreground text-sm mb-3 text-center">✨ {t('qna.suggested')}:</p>
+            <p className="text-muted-foreground text-sm mb-3 text-center">✨ Suggested Questions:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {suggestedQuestions.map((q) => (
                 <button

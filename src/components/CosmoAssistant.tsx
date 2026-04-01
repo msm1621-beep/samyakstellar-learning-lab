@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { languages, langToSpeechLocale } from '@/data/translations';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -37,7 +35,6 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
-const getLanguageName = (code: string) => languages.find((lang) => lang.code === code)?.name ?? 'English';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function streamChat({
@@ -153,9 +150,9 @@ const CosmoAssistant = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
-  const { language } = useLanguage();
-  const speechLocale = langToSpeechLocale[language];
-  const targetLanguageName = getLanguageName(language);
+  const language = 'en';
+  const speechLocale = 'en-US';
+  const targetLanguageName = 'English';
 
   // Initialize speech recognition
   useEffect(() => {

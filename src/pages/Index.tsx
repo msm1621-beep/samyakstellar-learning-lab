@@ -25,6 +25,10 @@ import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
 import GiftVoucherSection from '@/components/GiftVoucherSection';
 import ManuscriptsSection from '@/components/ManuscriptsSection';
+import BackToTop from '@/components/BackToTop';
+import AnimatedSection from '@/components/AnimatedSection';
+import ExplorationProgress from '@/components/ExplorationProgress';
+import StudyPlanner from '@/components/StudyPlanner';
 
 const Index = () => {
   return (
@@ -33,33 +37,74 @@ const Index = () => {
       <Navigation />
       <CoinDisplay />
       <AccountBar />
+      <ExplorationProgress />
       
       <main className="relative z-10">
         <HeroSection />
-        <SolarSystem3D />
-        <DailyFactWidget />
-        <SpaceQnA />
-        <CelestialExplorer />
-        <SpaceTimeline />
-        <ConstellationViewer />
-        <CourseSection />
-        <GiftVoucherSection />
-        <ManuscriptsSection />
-        <LibrarySection />
-        <GamesSection />
-        <PremiumGamesSection />
-        <GamePassSection />
-        <FeaturedShop />
-        <CertificateShowcase />
-        <SubscriptionSection />
-        <FunFactsSection />
-        <AboutSection />
+        <AnimatedSection>
+          <SolarSystem3D />
+        </AnimatedSection>
+        <AnimatedSection>
+          <DailyFactWidget />
+        </AnimatedSection>
+        <AnimatedSection>
+          <SpaceQnA />
+        </AnimatedSection>
+        <AnimatedSection>
+          <CelestialExplorer />
+        </AnimatedSection>
+        <AnimatedSection>
+          <SpaceTimeline />
+        </AnimatedSection>
+        <AnimatedSection>
+          <ConstellationViewer />
+        </AnimatedSection>
+        <AnimatedSection>
+          <CourseSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <StudyPlanner />
+        </AnimatedSection>
+        <AnimatedSection>
+          <GiftVoucherSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <ManuscriptsSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <LibrarySection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <GamesSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <PremiumGamesSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <GamePassSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <FeaturedShop />
+        </AnimatedSection>
+        <AnimatedSection>
+          <CertificateShowcase />
+        </AnimatedSection>
+        <AnimatedSection>
+          <SubscriptionSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <FunFactsSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <AboutSection />
+        </AnimatedSection>
       </main>
       
       <Footer />
       <CosmoAssistant />
       <AlienDoom />
       <SpaceAmbience />
+      <BackToTop />
     </div>
   );
 };

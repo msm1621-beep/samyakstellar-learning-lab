@@ -55,7 +55,7 @@ const RocketMathGame = () => {
   }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (gameState === 'playing' && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(prev => {
