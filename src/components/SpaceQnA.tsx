@@ -154,7 +154,7 @@ const SpaceQnA = () => {
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3">
             <HelpCircle className="w-10 h-10 text-primary" />
-            {t('section.spaceQnA')}
+            Space Q&A
             <Sparkles className="w-10 h-10 text-yellow-400" />
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
