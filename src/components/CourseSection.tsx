@@ -213,7 +213,7 @@ const CourseSection = () => {
     utterance.pitch = 1;
     utterance.volume = speechVolume;
     
-    const locale = langToSpeechLocale[language];
+    const locale = 'en-US';
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find((v: SpeechSynthesisVoice) => v.lang.startsWith(locale.split('-')[0])) || voices[0];
     if (voice) utterance.voice = voice;
