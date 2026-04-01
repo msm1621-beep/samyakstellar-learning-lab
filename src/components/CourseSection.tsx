@@ -296,7 +296,7 @@ const CourseSection = () => {
                 onClick={() => setSelectedCourse(null)}
                 className="text-white/70 hover:text-white self-start"
               >
-                ← {t('courses.backToCourses')}
+                ← Back to Courses
               </Button>
               
               <div className="flex items-center gap-3">
