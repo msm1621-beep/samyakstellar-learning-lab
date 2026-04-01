@@ -38,7 +38,7 @@ const MemoryMatchGame = () => {
   const { addAchievement } = useAchievements();
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (gameState === 'playing') {
       interval = setInterval(() => {
         setTimer(prev => prev + 1);
