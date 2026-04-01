@@ -245,7 +245,7 @@ const LibrarySection = () => {
             }`}
           >
             <Play className="w-4 h-4" />
-            {t('library.videos')}
+            Videos
           </button>
           <button
             onClick={() => { setActiveTab('books'); setSelectedTag('all'); }}
