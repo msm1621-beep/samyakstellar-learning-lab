@@ -372,7 +372,7 @@ const AccountBar = () => {
                 <div>
                   <div className="text-center mb-6">
                     <Sparkles className="w-10 h-10 text-purple-400 mx-auto mb-2" />
-                    <h2 className="text-2xl font-bold text-white">{t('account.createAccount')}</h2>
+                    <h2 className="text-2xl font-bold text-white">Create Account</h2>
                     <p className="text-purple-300 text-sm mt-1">
                       Cost: <span className="text-amber-400 font-bold">{ACCOUNT_COST}</span> coins
                       <span className="text-white/60 ml-2">(You have: {coins})</span>

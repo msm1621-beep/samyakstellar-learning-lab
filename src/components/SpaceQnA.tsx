@@ -196,7 +196,7 @@ const SpaceQnA = () => {
         {/* Suggested Questions */}
         {!answer && !isSearching && (
           <div className="mb-8">
-            <p className="text-muted-foreground text-sm mb-3 text-center">✨ {t('qna.suggested')}:</p>
+            <p className="text-muted-foreground text-sm mb-3 text-center">✨ Suggested Questions:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {suggestedQuestions.map((q) => (
                 <button
