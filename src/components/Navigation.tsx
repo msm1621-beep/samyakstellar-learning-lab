@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Rocket, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SearchBar from '@/components/SearchBar';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
