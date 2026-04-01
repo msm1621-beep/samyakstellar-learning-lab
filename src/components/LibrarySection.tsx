@@ -6,8 +6,6 @@ import { books, type Book } from '@/data/books';
 import CompletionCertificate from './CompletionCertificate';
 import { useCoins, COIN_REWARDS } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { langToSpeechLocale } from '@/data/translations';
 
 type LibraryTab = 'videos' | 'books' | 'audiobooks';
 
