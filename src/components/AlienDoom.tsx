@@ -165,9 +165,9 @@ const AlienDoom = () => {
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const { language } = useLanguage();
-  const speechLocale = langToSpeechLocale[language];
-  const targetLanguageName = getLanguageName(language);
+  const language = 'en';
+  const speechLocale = 'en-US';
+  const targetLanguageName = 'English';
 
   // Initialize speech synthesis voices
   useEffect(() => {

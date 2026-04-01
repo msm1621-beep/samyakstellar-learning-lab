@@ -150,9 +150,9 @@ const CosmoAssistant = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
-  const { language } = useLanguage();
-  const speechLocale = langToSpeechLocale[language];
-  const targetLanguageName = getLanguageName(language);
+  const language = 'en';
+  const speechLocale = 'en-US';
+  const targetLanguageName = 'English';
 
   // Initialize speech recognition
   useEffect(() => {
