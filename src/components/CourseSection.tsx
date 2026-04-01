@@ -385,7 +385,7 @@ const CourseSection = () => {
                 <div className="space-y-6">
                   <div className="bg-white/5 rounded-xl p-6">
                     <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Star className="w-5 h-5 text-space-gold" /> {t('courses.learningGoals')}
+                      <Star className="w-5 h-5 text-space-gold" /> Learning Goals
                     </h4>
                     <ul className="grid md:grid-cols-2 gap-3">
                       {selectedCourse.learningGoals.map((goal, idx) => (
