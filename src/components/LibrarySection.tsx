@@ -16,7 +16,6 @@ interface CompletedBook {
 
 const LibrarySection = () => {
   const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
-  const [activeTab, setActiveTab] = useState<LibraryTab>('videos');
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
   const [readingBook, setReadingBook] = useState<Book | null>(null);
