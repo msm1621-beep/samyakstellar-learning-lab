@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Sparkles, BookOpen, Clock, ChevronRight, Loader2, X, RotateCcw } from 'lucide-react';
+import { Brain, Sparkles, BookOpen, Clock, ChevronRight, Loader2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import LessonDoubtChat from '@/components/LessonDoubtChat';
 
 interface Lesson {
   title: string;
@@ -75,16 +76,15 @@ const StudyPlanner = () => {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
+    <section id="study-planner" className="py-20 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Brain className="w-10 h-10 text-primary" />
             <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-accent">
               AI Study Planner
             </h2>
-            <Sparkles className="w-10 h-10 text-yellow-400" />
+            <Sparkles className="w-10 h-10 text-star" />
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Let AI create a personalized space learning journey just for you! Pick your interests and we'll plan your adventure.
@@ -100,7 +100,6 @@ const StudyPlanner = () => {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-8"
             >
-              {/* Interest Selection */}
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-primary" /> What interests you?
@@ -113,7 +112,7 @@ const StudyPlanner = () => {
                       className={`p-4 rounded-xl border text-left transition-all ${
                         selectedInterests.includes(interest.id)
                           ? 'bg-primary/20 border-primary/50 shadow-lg shadow-primary/10'
-                          : 'bg-card/30 border-primary/10 hover:border-primary/30'
+                          : 'bg-card/30 border-border hover:border-primary/30'
                       }`}
                     >
                       <span className="text-2xl block mb-2">{interest.emoji}</span>
@@ -123,7 +122,6 @@ const StudyPlanner = () => {
                 </div>
               </div>
 
-              {/* Duration Selection */}
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-primary" /> How long do you want to study?
@@ -136,7 +134,7 @@ const StudyPlanner = () => {
                       className={`p-4 rounded-xl border text-left transition-all ${
                         duration === d.id
                           ? 'bg-primary/20 border-primary/50 shadow-lg shadow-primary/10'
-                          : 'bg-card/30 border-primary/10 hover:border-primary/30'
+                          : 'bg-card/30 border-border hover:border-primary/30'
                       }`}
                     >
                       <span className="font-semibold text-foreground">{d.label}</span>
@@ -150,7 +148,6 @@ const StudyPlanner = () => {
                 <div className="text-center text-destructive text-sm">{error}</div>
               )}
 
-              {/* Generate Button */}
               <div className="text-center">
                 <Button
                   onClick={generatePlan}
@@ -179,7 +176,6 @@ const StudyPlanner = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              {/* Plan Header */}
               <div className="bg-gradient-to-br from-primary/20 to-accent/10 border border-primary/30 rounded-2xl p-6 mb-8">
                 <div className="flex items-start justify-between">
                   <div>
@@ -193,7 +189,6 @@ const StudyPlanner = () => {
                 </div>
               </div>
 
-              {/* Lessons */}
               <div className="space-y-4">
                 {plan.lessons.map((lesson, idx) => (
                   <motion.div
@@ -201,18 +196,21 @@ const StudyPlanner = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="bg-card/30 border border-primary/10 rounded-xl p-5 hover:border-primary/30 transition-colors"
+                    className="bg-card/30 border border-border rounded-xl p-5 hover:border-primary/30 transition-colors"
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold shrink-0">
                         {idx + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
                           <h4 className="font-semibold text-foreground">{lesson.title}</h4>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> {lesson.duration}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <LessonDoubtChat lessonTitle={lesson.title} lessonTopics={lesson.topics} />
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Clock className="w-3 h-3" /> {lesson.duration}
+                            </span>
+                          </div>
                         </div>
                         <ul className="space-y-1 mb-3">
                           {lesson.topics.map((topic, tIdx) => (

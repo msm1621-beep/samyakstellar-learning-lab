@@ -68,6 +68,62 @@
     --sidebar-border: 230 25% 20%;
     --sidebar-ring: 195 100% 50%;
   }
+
+  .light {
+    --background: 220 20% 96%;
+    --foreground: 230 25% 15%;
+
+    --card: 220 20% 92%;
+    --card-foreground: 230 25% 15%;
+
+    --popover: 220 20% 95%;
+    --popover-foreground: 230 25% 15%;
+
+    --primary: 220 80% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 50% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 15% 88%;
+    --muted-foreground: 220 10% 40%;
+
+    --accent: 35 90% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 82%;
+    --input: 220 15% 82%;
+    --ring: 220 80% 50%;
+
+    --nebula: 280 60% 50%;
+    --nebula-foreground: 0 0% 100%;
+    --star: 45 90% 45%;
+    --galaxy: 260 70% 55%;
+    --planet: 180 60% 40%;
+    --cosmic-glow: 220 80% 55%;
+
+    --gradient-cosmic: linear-gradient(135deg, hsl(220 20% 96%) 0%, hsl(230 25% 92%) 50%, hsl(220 20% 96%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(220 20% 94% / 0.9) 0%, hsl(220 20% 90% / 0.95) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(220 80% 50%) 0%, hsl(240 70% 55%) 100%);
+    --gradient-hero: radial-gradient(ellipse at center, hsl(230 30% 90%) 0%, hsl(220 20% 96%) 70%);
+
+    --shadow-glow: 0 0 20px hsl(220 80% 50% / 0.2);
+    --shadow-nebula: 0 0 30px hsl(280 60% 50% / 0.2);
+    --shadow-card: 0 4px 16px hsl(0 0% 0% / 0.08);
+    --shadow-star: 0 0 15px hsl(45 90% 45% / 0.3);
+
+    --sidebar-background: 220 20% 94%;
+    --sidebar-foreground: 230 25% 15%;
+    --sidebar-primary: 220 80% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 88%;
+    --sidebar-accent-foreground: 230 25% 15%;
+    --sidebar-border: 220 15% 82%;
+    --sidebar-ring: 220 80% 50%;
+  }
 }
 
 @layer base {
@@ -87,8 +143,8 @@
 }
 
 @layer components {
-  .glass-card {
-    @apply backdrop-blur-xl border border-white/10 shadow-card;
+.glass-card {
+    @apply backdrop-blur-xl border border-border shadow-card;
     background: var(--gradient-card);
   }
 

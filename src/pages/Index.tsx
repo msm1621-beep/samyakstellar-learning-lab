@@ -29,6 +29,7 @@ import BackToTop from '@/components/BackToTop';
 import AnimatedSection from '@/components/AnimatedSection';
 import ExplorationProgress from '@/components/ExplorationProgress';
 import StudyPlanner from '@/components/StudyPlanner';
+import Leaderboard from '@/components/Leaderboard';
 
 const Index = () => {
   return (
@@ -63,10 +64,10 @@ const Index = () => {
           <CourseSection />
         </AnimatedSection>
         <AnimatedSection>
-          <StudyPlanner />
+          <GiftVoucherSection />
         </AnimatedSection>
         <AnimatedSection>
-          <GiftVoucherSection />
+          <StudyPlanner />
         </AnimatedSection>
         <AnimatedSection>
           <ManuscriptsSection />
@@ -82,6 +83,9 @@ const Index = () => {
         </AnimatedSection>
         <AnimatedSection>
           <GamePassSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <Leaderboard />
         </AnimatedSection>
         <AnimatedSection>
           <FeaturedShop />
