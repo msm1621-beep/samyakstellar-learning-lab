@@ -11,6 +11,17 @@ interface LeaderboardEntry {
 }
 
 const Leaderboard = () => {
+  const SAMPLE_ENTRIES: LeaderboardEntry[] = [
+    { display_name: 'StarGazer_99', avatar_emoji: '🌟', courses_completed: 12, total_coins: 2400 },
+    { display_name: 'NebulaNinja', avatar_emoji: '🚀', courses_completed: 10, total_coins: 1850 },
+    { display_name: 'CosmicCoder', avatar_emoji: '👨‍🚀', courses_completed: 8, total_coins: 1600 },
+    { display_name: 'GalaxyQueen', avatar_emoji: '👸', courses_completed: 7, total_coins: 1350 },
+    { display_name: 'OrbitOtter', avatar_emoji: '🦦', courses_completed: 5, total_coins: 900 },
+    { display_name: 'PlanetPanda', avatar_emoji: '🐼', courses_completed: 4, total_coins: 720 },
+    { display_name: 'AstroAce', avatar_emoji: '✨', courses_completed: 3, total_coins: 550 },
+    { display_name: 'MeteorMike', avatar_emoji: '☄️', courses_completed: 2, total_coins: 380 },
+  ];
+
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +32,14 @@ const Leaderboard = () => {
         .select('display_name, avatar_emoji, courses_completed, total_coins')
         .order('courses_completed', { ascending: false })
         .limit(20);
-      if (data) setEntries(data as LeaderboardEntry[]);
+      const dbEntries = (data || []) as LeaderboardEntry[];
+      // Show real users first, fill with samples if fewer than 8
+      const real = dbEntries.filter(e => e.courses_completed > 0);
+      if (real.length >= 5) {
+        setEntries(real);
+      } else {
+        setEntries([...real, ...SAMPLE_ENTRIES.slice(real.length)]);
+      }
       setLoading(false);
     };
     fetchLeaderboard();

@@ -16,6 +16,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
@@ -32,6 +33,11 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
         onClose();
       }
     } else {
+      if (password !== confirmPassword) {
+        toast({ title: '❌ Passwords don\'t match', description: 'Please make sure both passwords are the same.', variant: 'destructive' });
+        setLoading(false);
+        return;
+      }
       const { error } = await signUp(email, password, displayName || 'Space Explorer');
       if (error) {
         toast({ title: '❌ Signup failed', description: error.message, variant: 'destructive' });
@@ -96,17 +102,38 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                 />
               </div>
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Password</label>
+                <label className="text-sm text-muted-foreground mb-1 block">
+                  {mode === 'signup' ? 'Create Your Password' : 'Password'}
+                </label>
                 <Input
                   type="password"
                   required
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder={mode === 'signup' ? 'Create a strong password (min 6 chars)' : 'Enter your password'}
                   className="bg-muted/30 border-border"
                 />
+                {mode === 'signup' && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Choose a password you'll remember — it's your key to unlock the cosmos! 🔑
+                  </p>
+                )}
               </div>
+              {mode === 'signup' && (
+                <div>
+                  <label className="text-sm text-muted-foreground mb-1 block">Confirm Password</label>
+                  <Input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter your password"
+                    className="bg-muted/30 border-border"
+                  />
+                </div>
+              )}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
