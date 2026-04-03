@@ -65,10 +65,10 @@ const SearchBar = () => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/30 border border-primary/20 text-muted-foreground text-sm hover:border-primary/40 transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/30 border border-primary/20 text-muted-foreground text-sm hover:border-primary/40 transition-colors"
       >
         <Search className="w-4 h-4" />
-        <span>Search...</span>
+        <span className="hidden sm:inline">Search...</span>
         <kbd className="hidden md:inline text-xs bg-muted/50 px-1.5 py-0.5 rounded">⌘K</kbd>
       </button>
 
