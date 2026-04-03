@@ -36,31 +36,67 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, fallbackDisplayName?: string) => {
     const { data } = await supabase
       .from('profiles')
       .select('*')
       .eq('user_id', userId)
-      .single();
-    if (data) setProfile(data as Profile);
+      .maybeSingle();
+
+    if (data) {
+      setProfile(data as Profile);
+      return;
+    }
+
+    const { data: createdProfile } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: userId,
+        display_name: fallbackDisplayName || 'Space Explorer',
+        avatar_emoji: '🚀',
+      })
+      .select()
+      .maybeSingle();
+
+    if (createdProfile) setProfile(createdProfile as Profile);
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+
       if (session?.user) {
-        setTimeout(() => fetchProfile(session.user.id), 0);
+        const fallbackName =
+          typeof session.user.user_metadata?.display_name === 'string'
+            ? session.user.user_metadata.display_name
+            : 'Space Explorer';
+
+        setTimeout(() => {
+          void fetchProfile(session.user.id, fallbackName);
+        }, 0);
       } else {
         setProfile(null);
       }
+
       setLoading(false);
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) fetchProfile(session.user.id);
+
+      if (session?.user) {
+        const fallbackName =
+          typeof session.user.user_metadata?.display_name === 'string'
+            ? session.user.user_metadata.display_name
+            : 'Space Explorer';
+
+        void fetchProfile(session.user.id, fallbackName);
+      }
+
       setLoading(false);
     });
 
@@ -68,19 +104,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string, displayName: string) => {
+    const normalizedEmail = email.trim().toLowerCase();
+    const cleanedDisplayName = displayName.trim() || 'Space Explorer';
+
     const { error } = await supabase.auth.signUp({
-      email,
+      email: normalizedEmail,
       password,
       options: {
-        data: { display_name: displayName },
+        data: { display_name: cleanedDisplayName },
         emailRedirectTo: window.location.origin,
       },
     });
+
     return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const normalizedEmail = email.trim().toLowerCase();
+    const { error } = await supabase.auth.signInWithPassword({ email: normalizedEmail, password });
     return { error };
   };
 
