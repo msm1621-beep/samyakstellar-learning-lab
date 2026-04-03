@@ -39,7 +39,7 @@ const Index = () => {
       <CoinDisplay />
       <AccountBar />
       <ExplorationProgress />
-      
+
       <main className="relative z-10">
         <HeroSection />
         <AnimatedSection>
@@ -64,6 +64,9 @@ const Index = () => {
           <CourseSection />
         </AnimatedSection>
         <AnimatedSection>
+          <Leaderboard />
+        </AnimatedSection>
+        <AnimatedSection>
           <GiftVoucherSection />
         </AnimatedSection>
         <AnimatedSection>
@@ -85,9 +88,6 @@ const Index = () => {
           <GamePassSection />
         </AnimatedSection>
         <AnimatedSection>
-          <Leaderboard />
-        </AnimatedSection>
-        <AnimatedSection>
           <FeaturedShop />
         </AnimatedSection>
         <AnimatedSection>
@@ -103,7 +103,7 @@ const Index = () => {
           <AboutSection />
         </AnimatedSection>
       </main>
-      
+
       <Footer />
       <CosmoAssistant />
       <AlienDoom />

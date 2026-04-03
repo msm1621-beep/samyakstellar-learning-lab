@@ -20,32 +20,74 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
+  const resetFields = () => {
+    setEmail('');
+    setPassword('');
+    setDisplayName('');
+    setConfirmPassword('');
+    setLoading(false);
+  };
+
+  const handleClose = () => {
+    resetFields();
+    onClose();
+  };
+
+  const toggleMode = () => {
+    setMode((current) => (current === 'login' ? 'signup' : 'login'));
+    setPassword('');
+    setConfirmPassword('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     if (mode === 'login') {
-      const { error } = await signIn(email, password);
+      const { error } = await signIn(normalizedEmail, password);
+
       if (error) {
-        toast({ title: '❌ Login failed', description: error.message, variant: 'destructive' });
+        const isInvalidCredentials = /invalid login credentials/i.test(error.message || '');
+
+        toast({
+          title: '❌ Login failed',
+          description: isInvalidCredentials
+            ? 'No matching account was found yet. Create an account first, verify your email, then sign in with the same password.'
+            : error.message,
+          variant: 'destructive',
+        });
       } else {
         toast({ title: '🚀 Welcome back, explorer!' });
-        onClose();
+        handleClose();
       }
     } else {
       if (password !== confirmPassword) {
-        toast({ title: '❌ Passwords don\'t match', description: 'Please make sure both passwords are the same.', variant: 'destructive' });
+        toast({
+          title: '❌ Passwords do not match',
+          description: 'Please make sure both password fields are identical.',
+          variant: 'destructive',
+        });
         setLoading(false);
         return;
       }
-      const { error } = await signUp(email, password, displayName || 'Space Explorer');
+
+      const { error } = await signUp(normalizedEmail, password, displayName || 'Space Explorer');
+
       if (error) {
         toast({ title: '❌ Signup failed', description: error.message, variant: 'destructive' });
       } else {
-        toast({ title: '📧 Check your email!', description: 'We sent a verification link to confirm your account.' });
-        onClose();
+        toast({
+          title: '📧 Check your email!',
+          description: 'Your account was created. Verify your email first, then sign in with the same password.',
+        });
+        setMode('login');
+        setPassword('');
+        setConfirmPassword('');
       }
     }
+
     setLoading(false);
   };
 
@@ -64,17 +106,23 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="absolute top-4 right-4 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
+            >
               <X className="w-4 h-4" />
             </button>
 
             <div className="text-center mb-6">
               <Rocket className="w-10 h-10 text-primary mx-auto mb-2" />
               <h2 className="text-2xl font-bold text-foreground">
-                {mode === 'login' ? 'Welcome Back' : 'Join the Mission'}
+                {mode === 'login' ? 'Welcome Back' : 'Create Your Explorer Account'}
               </h2>
               <p className="text-muted-foreground text-sm mt-1">
-                {mode === 'login' ? 'Sign in to continue your journey' : 'Create your space explorer account'}
+                {mode === 'login'
+                  ? 'Use the same email and password you created during sign up.'
+                  : 'Create your login to unlock saved progress and appear on the leaderboard.'}
               </p>
             </div>
 
@@ -90,6 +138,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                   />
                 </div>
               )}
+
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">Email</label>
                 <Input
@@ -101,6 +150,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                   className="bg-muted/30 border-border"
                 />
               </div>
+
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">
                   {mode === 'signup' ? 'Create Your Password' : 'Password'}
@@ -111,15 +161,16 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={mode === 'signup' ? 'Create a strong password (min 6 chars)' : 'Enter your password'}
+                  placeholder={mode === 'signup' ? 'Create a strong password' : 'Enter your password'}
                   className="bg-muted/30 border-border"
                 />
                 {mode === 'signup' && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    Choose a password you'll remember — it's your key to unlock the cosmos! 🔑
+                    Choose a password you will use again to sign in later.
                   </p>
                 )}
               </div>
+
               {mode === 'signup' && (
                 <div>
                   <label className="text-sm text-muted-foreground mb-1 block">Confirm Password</label>
@@ -134,6 +185,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                   />
                 </div>
               )}
+
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -144,14 +196,17 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                 )}
                 {mode === 'login' ? 'Sign In' : 'Create Account'}
               </Button>
+
+              {mode === 'login' && (
+                <p className="text-xs text-center text-muted-foreground">
+                  New here? Create your account first, verify your email, then sign in.
+                </p>
+              )}
             </form>
 
             <div className="mt-4 text-center">
-              <button
-                onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-                className="text-sm text-primary hover:underline"
-              >
-                {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              <button type="button" onClick={toggleMode} className="text-sm text-primary hover:underline">
+                {mode === 'login' ? "Don't have an account? Create one" : 'Already have an account? Sign in'}
               </button>
             </div>
           </motion.div>
