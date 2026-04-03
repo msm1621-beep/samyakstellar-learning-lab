@@ -33,6 +33,11 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
         onClose();
       }
     } else {
+      if (password !== confirmPassword) {
+        toast({ title: '❌ Passwords don\'t match', description: 'Please make sure both passwords are the same.', variant: 'destructive' });
+        setLoading(false);
+        return;
+      }
       const { error } = await signUp(email, password, displayName || 'Space Explorer');
       if (error) {
         toast({ title: '❌ Signup failed', description: error.message, variant: 'destructive' });
