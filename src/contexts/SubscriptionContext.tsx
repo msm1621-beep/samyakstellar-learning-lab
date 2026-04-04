@@ -77,9 +77,14 @@ import { useToast } from '@/hooks/use-toast';
      ? new Date(activeSubscription.expiresAt) <= new Date()
      : true;
  
-  const coinBonus = currentSubscription && !isExpired ? currentSubscription.coinBonus : 0;
-  const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
-  const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
+   const coinBonus = currentSubscription && !isExpired ? currentSubscription.coinBonus : 0;
+   const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
+   const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
+
+   // Sync coin bonus to CoinsContext so earned coins get the bonus applied
+   useEffect(() => {
+     setCoinBonusPercent(coinBonus);
+   }, [coinBonus]);
 
   // Check if daily bonus can be claimed
   const canClaimDailyBonus = useCallback(() => {
