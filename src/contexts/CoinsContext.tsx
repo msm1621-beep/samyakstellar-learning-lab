@@ -22,6 +22,10 @@ const COIN_REWARDS = {
 
 export { COIN_REWARDS };
 
+// We store a coin bonus ref that SubscriptionContext can update
+let _coinBonusPercent = 0;
+export const setCoinBonusPercent = (percent: number) => { _coinBonusPercent = percent; };
+
 export const CoinsProvider = ({ children }: { children: ReactNode }) => {
   const [coins, setCoins] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
@@ -42,9 +46,15 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
   }, [coins, totalEarned]);
 
   const addCoins = (amount: number, reason: string) => {
-    setCoins(prev => prev + amount);
-    setTotalEarned(prev => prev + amount);
-    setRecentReward({ amount, reason });
+    // Apply subscription coin bonus for positive earnings (not purchases)
+    let finalAmount = amount;
+    if (amount > 0 && _coinBonusPercent > 0) {
+      const bonus = Math.floor(amount * _coinBonusPercent / 100);
+      finalAmount = amount + bonus;
+    }
+    setCoins(prev => prev + finalAmount);
+    if (finalAmount > 0) setTotalEarned(prev => prev + finalAmount);
+    setRecentReward({ amount: finalAmount, reason: finalAmount > amount ? `${reason} (+${_coinBonusPercent}% bonus!)` : reason });
     
     // Auto-clear reward notification after 3 seconds
     setTimeout(() => {
