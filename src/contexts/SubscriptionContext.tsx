@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Subscription, getSubscriptionById } from '@/data/subscriptions';
- import { useCoins } from './CoinsContext';
- import { useToast } from '@/hooks/use-toast';
+import { useCoins, setCoinBonusPercent } from './CoinsContext';
+import { useToast } from '@/hooks/use-toast';
  
  interface ActiveSubscription {
    subscriptionId: string;
