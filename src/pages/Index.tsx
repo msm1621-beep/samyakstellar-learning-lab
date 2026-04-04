@@ -28,6 +28,7 @@ import ManuscriptsSection from '@/components/ManuscriptsSection';
 import BackToTop from '@/components/BackToTop';
 import AnimatedSection from '@/components/AnimatedSection';
 import ExplorationProgress from '@/components/ExplorationProgress';
+import PeriodicTableSidebar from '@/components/PeriodicTableSidebar';
 import StudyPlanner from '@/components/StudyPlanner';
 import Leaderboard from '@/components/Leaderboard';
 
@@ -109,6 +110,7 @@ const Index = () => {
       <AlienDoom />
       <SpaceAmbience />
       <BackToTop />
+      <PeriodicTableSidebar />
     </div>
   );
 };
