@@ -110,6 +110,7 @@ const Index = () => {
       <AlienDoom />
       <SpaceAmbience />
       <BackToTop />
+      <PeriodicTableSidebar />
     </div>
   );
 };
