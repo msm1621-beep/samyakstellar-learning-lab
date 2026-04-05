@@ -103,6 +103,12 @@ const PeriodicTableSidebar = () => {
                       <ElementRow key={el.atomicNumber} element={el} onClick={() => setSelectedElement(el)} />
                     ))}
                   </div>
+                ) : viewMode === 'list' ? (
+                  <div className="p-3 space-y-0.5">
+                    {elements.map(el => (
+                      <ElementRow key={el.atomicNumber} element={el} onClick={() => setSelectedElement(el)} />
+                    ))}
+                  </div>
                 ) : (
                   <div className="p-3 space-y-1">
                     {categories.map(cat => {
