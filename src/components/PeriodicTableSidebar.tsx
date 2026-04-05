@@ -10,6 +10,7 @@ const PeriodicTableSidebar = () => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [search, setSearch] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'category'>('list');
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories(prev =>
