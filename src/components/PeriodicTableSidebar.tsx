@@ -66,8 +66,8 @@ const PeriodicTableSidebar = () => {
                 </button>
               </div>
 
-              {/* Search */}
-              <div className="p-3 border-b border-border">
+              {/* Search & View Toggle */}
+              <div className="p-3 border-b border-border space-y-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -76,6 +76,20 @@ const PeriodicTableSidebar = () => {
                     onChange={e => setSearch(e.target.value)}
                     className="pl-9 bg-muted/50 border-border"
                   />
+                </div>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'bg-muted/50 text-muted-foreground hover:bg-muted'}`}
+                  >
+                    All (1–118)
+                  </button>
+                  <button
+                    onClick={() => setViewMode('category')}
+                    className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${viewMode === 'category' ? 'bg-primary text-primary-foreground' : 'bg-muted/50 text-muted-foreground hover:bg-muted'}`}
+                  >
+                    By Category
+                  </button>
                 </div>
               </div>
 
