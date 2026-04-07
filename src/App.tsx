@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CoinsProvider } from "@/contexts/CoinsContext";
-import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+
 import { GamePassProvider } from "@/contexts/GamePassContext";
 import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
