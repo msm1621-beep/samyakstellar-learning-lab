@@ -4,7 +4,7 @@ import { Crown, Gamepad2, Star, Zap, Trophy, X, Play, Sparkles, Lock, ShieldChec
 import { Button } from '@/components/ui/button';
 import { premiumGames, PremiumGame } from '@/data/premiumGames';
 import { useGamePass } from '@/contexts/GamePassContext';
-import { useSubscription } from '@/contexts/SubscriptionContext';
+
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { toast } from 'sonner';
@@ -366,7 +366,7 @@ const AdventureMinigame = ({ onFinish }: { onFinish: (score: number) => void }) 
 // ─── MAIN SECTION ───
 const PremiumGamesSection = () => {
   const { coinMultiplier, hasPremiumGames } = useGamePass();
-  const { currentSubscription, isExpired } = useSubscription();
+  
   const { addCoins } = useCoins();
   const { addAchievement, hasAchievement } = useAchievements();
   const [playingGame, setPlayingGame] = useState<PremiumGame | null>(null);
@@ -374,7 +374,7 @@ const PremiumGamesSection = () => {
   const [finalScore, setFinalScore] = useState(0);
 
   // Access: Galaxy Access pass OR any active subscription
-  const hasAccess = hasPremiumGames || (currentSubscription && !isExpired);
+  const hasAccess = hasPremiumGames;
 
   const startGame = (game: PremiumGame) => {
     if (!hasAccess) {

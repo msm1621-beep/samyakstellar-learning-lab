@@ -18,7 +18,7 @@ import CosmoAssistant from '@/components/CosmoAssistant';
 import AlienDoom from '@/components/AlienDoom';
 import SpaceAmbience from '@/components/SpaceAmbience';
 import CoinDisplay from '@/components/CoinDisplay';
-import SubscriptionSection from '@/components/SubscriptionSection';
+
 import AccountBar from '@/components/AccountBar';
 import GamePassSection from '@/components/GamePassSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
@@ -93,9 +93,6 @@ const Index = () => {
         </AnimatedSection>
         <AnimatedSection>
           <CertificateShowcase />
-        </AnimatedSection>
-        <AnimatedSection>
-          <SubscriptionSection />
         </AnimatedSection>
         <AnimatedSection>
           <FunFactsSection />
