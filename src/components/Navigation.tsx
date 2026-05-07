@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Rocket, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Rocket, Menu, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/components/SearchBar';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -50,6 +51,10 @@ const Navigation = () => {
         <div className="flex items-center gap-2">
           <SearchBar />
           <ThemeToggle />
+
+          <Button asChild variant="outline" className="hidden md:flex">
+            <Link to="/dream-journey"><Sparkles className="w-4 h-4 mr-1" /> Dream Journey</Link>
+          </Button>
 
           <Button onClick={() => scrollToSection('#explorer')} className="hidden md:flex cosmic-glow">
             Start Your Journey

@@ -9,6 +9,7 @@ import { GamePassProvider } from "@/contexts/GamePassContext";
 import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
+import DreamJourney from "./pages/DreamJourney";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/dream-journey" element={<DreamJourney />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
