@@ -52,8 +52,8 @@ const Navigation = () => {
           <SearchBar />
           <ThemeToggle />
 
-          <Button asChild variant="outline" className="hidden md:flex">
-            <Link to="/dream-journey"><Sparkles className="w-4 h-4 mr-1" /> Dream Journey</Link>
+          <Button asChild size="sm" variant="outline" className="cosmic-glow">
+            <Link to="/dream-journey"><Sparkles className="w-4 h-4 sm:mr-1" /><span className="hidden sm:inline"> Dream Journey</span></Link>
           </Button>
 
           <Button onClick={() => scrollToSection('#explorer')} className="hidden md:flex cosmic-glow">

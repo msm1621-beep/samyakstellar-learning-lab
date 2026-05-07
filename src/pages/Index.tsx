@@ -21,6 +21,7 @@ import CoinDisplay from '@/components/CoinDisplay';
 
 import AccountBar from '@/components/AccountBar';
 import GamePassSection from '@/components/GamePassSection';
+import SubscriptionSection from '@/components/SubscriptionSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
 import GiftVoucherSection from '@/components/GiftVoucherSection';
@@ -87,6 +88,9 @@ const Index = () => {
         </AnimatedSection>
         <AnimatedSection>
           <GamePassSection />
+        </AnimatedSection>
+        <AnimatedSection>
+          <SubscriptionSection />
         </AnimatedSection>
         <AnimatedSection>
           <FeaturedShop />
