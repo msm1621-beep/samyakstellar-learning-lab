@@ -384,11 +384,20 @@ const AlienDoom = () => {
             
             {/* 3D Canvas with aliens */}
             <div className="h-[45%] w-full">
-              <Canvas camera={{ position: [0, 0.5, 4], fov: 50 }}>
-                <Suspense fallback={null}>
-                  <AlienScene speakingAlien={speakingAlien} />
-                </Suspense>
-              </Canvas>
+              <WebGLBoundary>
+                <Canvas
+                  camera={{ position: [0, 0.5, 4], fov: 50 }}
+                  dpr={[1, 1.5]}
+                  gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
+                  onCreated={({ gl }) => {
+                    gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault());
+                  }}
+                >
+                  <Suspense fallback={null}>
+                    <AlienScene speakingAlien={speakingAlien} />
+                  </Suspense>
+                </Canvas>
+              </WebGLBoundary>
             </div>
             
             {/* Chat area */}
