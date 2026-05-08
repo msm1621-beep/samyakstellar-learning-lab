@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import WebGLBoundary from './WebGLBoundary';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
