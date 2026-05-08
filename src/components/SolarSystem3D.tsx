@@ -393,7 +393,7 @@ const SolarSystem3D = () => {
           </p>
         </div>
 
-        <div className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
+        <div ref={containerRef} className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
           {/* Instructions overlay */}
           {showInstructions && (
             <div className="absolute top-4 left-4 z-20 bg-space-dark/90 p-4 rounded-xl border border-cosmic-purple/30 max-w-xs animate-fade-in">
