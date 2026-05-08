@@ -363,6 +363,19 @@ const Scene = ({ onSelectBody, selectedBody }: { onSelectBody: (body: CelestialD
 const SolarSystem3D = () => {
   const [selectedBody, setSelectedBody] = useState<CelestialData | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '100px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <section id="solar-system-3d" className="py-16 px-4 relative">
