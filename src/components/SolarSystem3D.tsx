@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, Ring, Html, Stars } from '@react-three/drei';
-import { useRef, useState, Suspense, useMemo } from 'react';
+import { useRef, useState, Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { Rocket, Info, X } from 'lucide-react';
 
@@ -363,6 +363,19 @@ const Scene = ({ onSelectBody, selectedBody }: { onSelectBody: (body: CelestialD
 const SolarSystem3D = () => {
   const [selectedBody, setSelectedBody] = useState<CelestialData | null>(null);
   const [showInstructions, setShowInstructions] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '100px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   return (
     <section id="solar-system-3d" className="py-16 px-4 relative">
@@ -380,7 +393,7 @@ const SolarSystem3D = () => {
           </p>
         </div>
 
-        <div className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
+        <div ref={containerRef} className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
           {/* Instructions overlay */}
           {showInstructions && (
             <div className="absolute top-4 left-4 z-20 bg-space-dark/90 p-4 rounded-xl border border-cosmic-purple/30 max-w-xs animate-fade-in">
@@ -435,18 +448,30 @@ const SolarSystem3D = () => {
             </div>
           )}
 
-          {/* 3D Canvas */}
-          <Suspense fallback={
+          {/* 3D Canvas — only mounted when in view to avoid WebGL context exhaustion */}
+          {inView ? (
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-white font-fredoka text-xl animate-pulse">
+                  🌌 Loading Solar System...
+                </div>
+              </div>
+            }>
+              <Canvas
+                camera={{ position: [0, 20, 40], fov: 60 }}
+                dpr={[1, 1.5]}
+                gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
+              >
+                <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
+              </Canvas>
+            </Suspense>
+          ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-white font-fredoka text-xl animate-pulse">
-                🌌 Loading Solar System...
+                🌌 Scroll to load Solar System...
               </div>
             </div>
-          }>
-            <Canvas camera={{ position: [0, 20, 40], fov: 60 }}>
-              <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
-            </Canvas>
-          </Suspense>
+          )}
 
           {/* Legend */}
           <div className="absolute top-4 right-4 z-20 bg-space-dark/80 p-3 rounded-xl border border-cosmic-purple/20">
