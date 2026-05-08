@@ -448,18 +448,30 @@ const SolarSystem3D = () => {
             </div>
           )}
 
-          {/* 3D Canvas */}
-          <Suspense fallback={
+          {/* 3D Canvas — only mounted when in view to avoid WebGL context exhaustion */}
+          {inView ? (
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-white font-fredoka text-xl animate-pulse">
+                  🌌 Loading Solar System...
+                </div>
+              </div>
+            }>
+              <Canvas
+                camera={{ position: [0, 20, 40], fov: 60 }}
+                dpr={[1, 1.5]}
+                gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
+              >
+                <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
+              </Canvas>
+            </Suspense>
+          ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-white font-fredoka text-xl animate-pulse">
-                🌌 Loading Solar System...
+                🌌 Scroll to load Solar System...
               </div>
             </div>
-          }>
-            <Canvas camera={{ position: [0, 20, 40], fov: 60 }}>
-              <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
-            </Canvas>
-          </Suspense>
+          )}
 
           {/* Legend */}
           <div className="absolute top-4 right-4 z-20 bg-space-dark/80 p-3 rounded-xl border border-cosmic-purple/20">
