@@ -3,6 +3,7 @@ import { OrbitControls, Sphere, Ring, Html, Stars } from '@react-three/drei';
 import { useRef, useState, Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { Rocket, Info, X } from 'lucide-react';
+import WebGLBoundary from './WebGLBoundary';
 
 interface MoonData {
   name: string;
