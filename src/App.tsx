@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,34 +13,40 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import DreamJourney from "./pages/DreamJourney";
 import NotFound from "./pages/NotFound";
+import SplashScreen from "./components/SplashScreen";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <CoinsProvider>
-        <SubscriptionProvider>
-        <GamePassProvider>
-          <AchievementsProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/dream-journey" element={<DreamJourney />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AchievementsProvider>
-        </GamePassProvider>
-        </SubscriptionProvider>
-      </CoinsProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [splashDone, setSplashDone] = useState(false);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CoinsProvider>
+          <SubscriptionProvider>
+            <GamePassProvider>
+              <AchievementsProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/dream-journey" element={<DreamJourney />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </TooltipProvider>
+              </AchievementsProvider>
+            </GamePassProvider>
+          </SubscriptionProvider>
+        </CoinsProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
