@@ -450,21 +450,26 @@ const SolarSystem3D = () => {
 
           {/* 3D Canvas — only mounted when in view to avoid WebGL context exhaustion */}
           {inView ? (
-            <Suspense fallback={
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="text-white font-fredoka text-xl animate-pulse">
-                  🌌 Loading Solar System...
+            <WebGLBoundary>
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-white font-fredoka text-xl animate-pulse">
+                    🌌 Loading Solar System...
+                  </div>
                 </div>
-              </div>
-            }>
-              <Canvas
-                camera={{ position: [0, 20, 40], fov: 60 }}
-                dpr={[1, 1.5]}
-                gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
-              >
-                <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
-              </Canvas>
-            </Suspense>
+              }>
+                <Canvas
+                  camera={{ position: [0, 20, 40], fov: 60 }}
+                  dpr={[1, 1.5]}
+                  gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
+                  onCreated={({ gl }) => {
+                    gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault());
+                  }}
+                >
+                  <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
+                </Canvas>
+              </Suspense>
+            </WebGLBoundary>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-white font-fredoka text-xl animate-pulse">
