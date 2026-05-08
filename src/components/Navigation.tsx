@@ -34,27 +34,38 @@ const Navigation = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass-card py-2' : 'py-4'}`}>
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <button onClick={() => scrollToSection('#home')} className="flex items-center gap-2 text-xl font-display font-bold text-foreground hover:text-primary transition-colors">
+      <div className="container mx-auto px-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+        <button onClick={() => scrollToSection('#home')} className="flex items-center gap-2 text-xl font-display font-bold text-foreground hover:text-primary transition-colors justify-self-start">
           <Rocket className="w-6 h-6 text-primary" />
           <span className="hidden sm:inline">Cosmic Classroom</span>
         </button>
 
-        <div className="hidden lg:flex items-center gap-6">
-          {navItems.map((item) => (
-            <button key={item.href} onClick={() => scrollToSection(item.href)} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              {item.name}
-            </button>
-          ))}
+        {/* Centered Dream Journey CTA — high visibility */}
+        <div className="justify-self-center relative">
+          <div className="absolute inset-0 -m-1 rounded-xl bg-gradient-to-r from-primary via-accent to-primary opacity-70 blur-lg animate-pulse pointer-events-none" />
+          <Button
+            asChild
+            size="lg"
+            className="relative font-display font-bold text-base sm:text-lg px-5 sm:px-8 py-5 sm:py-6 bg-gradient-to-r from-primary via-accent to-primary text-primary-foreground shadow-[0_0_40px_hsl(var(--primary)/0.8)] hover:shadow-[0_0_60px_hsl(var(--primary))] hover:scale-105 transition-all border-2 border-primary-foreground/30"
+          >
+            <Link to="/dream-journey">
+              <Sparkles className="w-5 h-5 mr-2 animate-pulse" />
+              <span className="hidden xs:inline sm:inline">Dream Journey</span>
+              <span className="xs:hidden sm:hidden">Dream</span>
+            </Link>
+          </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-self-end">
+          <div className="hidden lg:flex items-center gap-4 mr-2">
+            {navItems.slice(0, 5).map((item) => (
+              <button key={item.href} onClick={() => scrollToSection(item.href)} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                {item.name}
+              </button>
+            ))}
+          </div>
           <SearchBar />
           <ThemeToggle />
-
-          <Button asChild size="sm" variant="outline" className="cosmic-glow">
-            <Link to="/dream-journey"><Sparkles className="w-4 h-4 sm:mr-1" /><span className="hidden sm:inline"> Dream Journey</span></Link>
-          </Button>
 
           <Button onClick={() => scrollToSection('#explorer')} className="hidden md:flex cosmic-glow">
             Start Your Journey
