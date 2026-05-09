@@ -167,6 +167,8 @@ type ChatMsg = { role: 'user' | 'cosmo'; content: string };
 
 const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const { toast } = useToast();
+  const { addCoins } = useCoins();
+  const { user, profile, updateProfile } = useAuth();
   const initialIntro = getCosmoResponse(body.name);
   const initialFact = `${initialIntro}\n\n**Quick facts about ${body.name}:** ${body.longDescription} ${body.coolFact}`;
   const [messages, setMessages] = useState<ChatMsg[]>([
@@ -175,11 +177,39 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [savedIdx, setSavedIdx] = useState<Set<number>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
+
+  const saveAsNote = (idx: number) => {
+    if (savedIdx.has(idx) || isStreaming) return;
+    const answer = messages[idx]?.content?.trim();
+    if (!answer) return;
+    let question = `About ${body.name}`;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') { question = messages[i].content; break; }
+    }
+    const note: StudyNote = {
+      id: `${Date.now()}-${idx}`,
+      bodyName: body.name,
+      bodyIcon: body.icon,
+      question,
+      answer,
+      createdAt: Date.now(),
+    };
+    const all = loadNotes();
+    all.unshift(note);
+    saveNotes(all);
+    setSavedIdx(prev => new Set(prev).add(idx));
+    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
+    if (user && profile) {
+      void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+    }
+    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+  };
 
   const speak = (text: string) => {
     if (!('speechSynthesis' in window)) return;
