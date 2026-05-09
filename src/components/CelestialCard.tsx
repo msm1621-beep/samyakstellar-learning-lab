@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import type { CelestialBody } from '@/data/celestialBodies';
 
 interface CelestialCardProps {
