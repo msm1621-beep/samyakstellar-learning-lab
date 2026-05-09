@@ -1,9 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2 } from 'lucide-react';
+import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2, BookmarkPlus, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAuth } from '@/contexts/AuthContext';
 import type { CelestialBody } from '@/data/celestialBodies';
+
+const NOTE_REWARD = 10;
+
+export interface StudyNote {
+  id: string;
+  bodyName: string;
+  bodyIcon: string;
+  question: string;
+  answer: string;
+  createdAt: number;
+}
+
+const loadNotes = (): StudyNote[] => {
+  try {
+    return JSON.parse(localStorage.getItem('cosmoStudyNotes') || '[]');
+  } catch {
+    return [];
+  }
+};
+
+const saveNotes = (notes: StudyNote[]) => {
+  localStorage.setItem('cosmoStudyNotes', JSON.stringify(notes));
+};
 
 interface CelestialCardProps {
   body: CelestialBody;
@@ -142,6 +167,8 @@ type ChatMsg = { role: 'user' | 'cosmo'; content: string };
 
 const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const { toast } = useToast();
+  const { addCoins } = useCoins();
+  const { user, profile, updateProfile } = useAuth();
   const initialIntro = getCosmoResponse(body.name);
   const initialFact = `${initialIntro}\n\n**Quick facts about ${body.name}:** ${body.longDescription} ${body.coolFact}`;
   const [messages, setMessages] = useState<ChatMsg[]>([
@@ -150,11 +177,39 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [savedIdx, setSavedIdx] = useState<Set<number>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
+
+  const saveAsNote = (idx: number) => {
+    if (savedIdx.has(idx) || isStreaming) return;
+    const answer = messages[idx]?.content?.trim();
+    if (!answer) return;
+    let question = `About ${body.name}`;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') { question = messages[i].content; break; }
+    }
+    const note: StudyNote = {
+      id: `${Date.now()}-${idx}`,
+      bodyName: body.name,
+      bodyIcon: body.icon,
+      question,
+      answer,
+      createdAt: Date.now(),
+    };
+    const all = loadNotes();
+    all.unshift(note);
+    saveNotes(all);
+    setSavedIdx(prev => new Set(prev).add(idx));
+    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
+    if (user && profile) {
+      void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+    }
+    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+  };
 
   const speak = (text: string) => {
     if (!('speechSynthesis' in window)) return;
@@ -271,19 +326,41 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-3 pr-1 mb-3 min-h-[200px]">
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
-                  m.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-foreground'
-                }`}
-              >
-                {m.content || (isStreaming && i === messages.length - 1 ? <Loader2 className="w-4 h-4 animate-spin" /> : null)}
+          {messages.map((m, i) => {
+            const isCosmo = m.role === 'cosmo';
+            const hasContent = !!m.content?.trim();
+            const isLastStreaming = isStreaming && i === messages.length - 1;
+            const canSave = isCosmo && hasContent && !isLastStreaming;
+            const isSaved = savedIdx.has(i);
+            return (
+              <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+                <div
+                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
+                    m.role === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-foreground'
+                  }`}
+                >
+                  {m.content || (isLastStreaming ? <Loader2 className="w-4 h-4 animate-spin" /> : null)}
+                </div>
+                {canSave && (
+                  <Button
+                    size="sm"
+                    variant={isSaved ? 'secondary' : 'outline'}
+                    onClick={() => saveAsNote(i)}
+                    disabled={isSaved}
+                    className="mt-1 h-7 text-[11px] gap-1"
+                  >
+                    {isSaved ? (
+                      <><Check className="w-3 h-3" /> Saved as note</>
+                    ) : (
+                      <><BookmarkPlus className="w-3 h-3" /> Save as study note (+{NOTE_REWARD} 🪙)</>
+                    )}
+                  </Button>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="flex flex-wrap gap-2 mb-2">
