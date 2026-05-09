@@ -32,6 +32,7 @@ import ExplorationProgress from '@/components/ExplorationProgress';
 import PeriodicTableSidebar from '@/components/PeriodicTableSidebar';
 import StudyPlanner from '@/components/StudyPlanner';
 import Leaderboard from '@/components/Leaderboard';
+import StudyNotesViewer from '@/components/StudyNotesViewer';
 
 const Index = () => {
   return (
@@ -41,6 +42,7 @@ const Index = () => {
       <CoinDisplay />
       <AccountBar />
       <ExplorationProgress />
+      <StudyNotesViewer />
 
       <main className="relative z-10">
         <HeroSection />
