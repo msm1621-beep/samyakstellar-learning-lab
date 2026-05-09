@@ -78,7 +78,7 @@ const DreamJourney = () => {
     if (!text || isStreaming) return;
     setInput('');
     const userMsg: ChatMessage = { role: 'user', content: text };
-    const contextMsg = `The user is studying the astronaut training topic: "${activeTopic.title}" (${activeTopic.category}). Topic summary: ${activeTopic.summary}. Key concepts: ${activeTopic.keyConcepts.join(', ')}.`;
+    const contextMsg = `Context (for reference only — the user may ask about ANY topic): they are currently exploring the astronaut training topic "${activeTopic.title}" (${activeTopic.category}). Topic summary: ${activeTopic.summary}. Key concepts: ${activeTopic.keyConcepts.join(', ')}. IMPORTANT: Answer ANY question the user asks — space, science, history, math, daily life, anything at all. Do NOT restrict yourself to this topic. Use it only as background if the question is unrelated.`;
 
     setMessages(prev => [...prev, userMsg, { role: 'cosmo', content: '' }]);
     setIsStreaming(true);
