@@ -326,19 +326,41 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-3 pr-1 mb-3 min-h-[200px]">
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
-                  m.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-foreground'
-                }`}
-              >
-                {m.content || (isStreaming && i === messages.length - 1 ? <Loader2 className="w-4 h-4 animate-spin" /> : null)}
+          {messages.map((m, i) => {
+            const isCosmo = m.role === 'cosmo';
+            const hasContent = !!m.content?.trim();
+            const isLastStreaming = isStreaming && i === messages.length - 1;
+            const canSave = isCosmo && hasContent && !isLastStreaming;
+            const isSaved = savedIdx.has(i);
+            return (
+              <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+                <div
+                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
+                    m.role === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-foreground'
+                  }`}
+                >
+                  {m.content || (isLastStreaming ? <Loader2 className="w-4 h-4 animate-spin" /> : null)}
+                </div>
+                {canSave && (
+                  <Button
+                    size="sm"
+                    variant={isSaved ? 'secondary' : 'outline'}
+                    onClick={() => saveAsNote(i)}
+                    disabled={isSaved}
+                    className="mt-1 h-7 text-[11px] gap-1"
+                  >
+                    {isSaved ? (
+                      <><Check className="w-3 h-3" /> Saved as note</>
+                    ) : (
+                      <><BookmarkPlus className="w-3 h-3" /> Save as study note (+{NOTE_REWARD} 🪙)</>
+                    )}
+                  </Button>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="flex flex-wrap gap-2 mb-2">
