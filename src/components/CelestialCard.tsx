@@ -1,9 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2 } from 'lucide-react';
+import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2, BookmarkPlus, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAuth } from '@/contexts/AuthContext';
 import type { CelestialBody } from '@/data/celestialBodies';
+
+const NOTE_REWARD = 10;
+
+export interface StudyNote {
+  id: string;
+  bodyName: string;
+  bodyIcon: string;
+  question: string;
+  answer: string;
+  createdAt: number;
+}
+
+const loadNotes = (): StudyNote[] => {
+  try {
+    return JSON.parse(localStorage.getItem('cosmoStudyNotes') || '[]');
+  } catch {
+    return [];
+  }
+};
+
+const saveNotes = (notes: StudyNote[]) => {
+  localStorage.setItem('cosmoStudyNotes', JSON.stringify(notes));
+};
 
 interface CelestialCardProps {
   body: CelestialBody;
