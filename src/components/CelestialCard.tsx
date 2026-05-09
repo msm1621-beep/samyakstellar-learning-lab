@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { BookOpen, MessageCircle, X, ChevronDown, ChevronUp, Sparkles, Send, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import type { CelestialBody } from '@/data/celestialBodies';
 
 interface CelestialCardProps {
@@ -134,82 +136,182 @@ interface CosmoModalProps {
   onClose: () => void;
 }
 
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
+
+type ChatMsg = { role: 'user' | 'cosmo'; content: string };
+
 const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
+  const { toast } = useToast();
+  const initialIntro = getCosmoResponse(body.name);
+  const initialFact = `${initialIntro}\n\n**Quick facts about ${body.name}:** ${body.longDescription} ${body.coolFact}`;
+  const [messages, setMessages] = useState<ChatMsg[]>([
+    { role: 'cosmo', content: initialFact },
+  ]);
+  const [input, setInput] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const response = getCosmoResponse(body.name);
-  
-  const speak = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      
-      const utterance = new SpeechSynthesisUtterance(response);
-      utterance.rate = 0.9;
-      utterance.pitch = 1.1;
-      
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => 
-        v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Alex')
-      );
-      if (preferredVoice) utterance.voice = preferredVoice;
-      
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      
-      window.speechSynthesis.speak(utterance);
-    }
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
+
+  const speak = (text: string) => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/[*_#`]/g, ''));
+    u.rate = 0.95;
+    u.pitch = 1.1;
+    u.onstart = () => setIsSpeaking(true);
+    u.onend = () => setIsSpeaking(false);
+    u.onerror = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(u);
   };
-  
+
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
   };
-  
+
+  const ask = async (prompt?: string) => {
+    const text = (prompt ?? input).trim();
+    if (!text || isStreaming) return;
+    setInput('');
+    const ctx = `The user is asking about the celestial body "${body.name}" (${body.type}). Background: ${body.longDescription} Cool fact: ${body.coolFact} Extended: ${body.extendedFacts.join(' ')}. Answer ANY question they have — about ${body.name} specifically, related space topics, or anything else they wonder. Be warm, kid-friendly, and clear.`;
+    const history = messages.filter(m => m.content).map(m => ({ role: m.role === 'cosmo' ? 'assistant' : 'user', content: m.content }));
+    setMessages(prev => [...prev, { role: 'user', content: text }, { role: 'cosmo', content: '' }]);
+    setIsStreaming(true);
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'system', content: ctx }, ...history, { role: 'user', content: text }],
+          language: 'en',
+          targetLanguageName: 'English',
+        }),
+      });
+      if (!resp.ok || !resp.body) {
+        if (resp.status === 429) throw new Error('Too many questions! Try again in a moment.');
+        if (resp.status === 402) throw new Error('Cosmo needs a recharge.');
+        throw new Error('Cosmo could not respond.');
+      }
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = '';
+      let assistantText = '';
+      let done = false;
+      while (!done) {
+        const { value, done: d } = await reader.read();
+        if (d) break;
+        buf += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buf.indexOf('\n')) !== -1) {
+          let line = buf.slice(0, nl);
+          buf = buf.slice(nl + 1);
+          if (line.endsWith('\r')) line = line.slice(0, -1);
+          if (!line.startsWith('data: ')) continue;
+          const j = line.slice(6).trim();
+          if (j === '[DONE]') { done = true; break; }
+          try {
+            const parsed = JSON.parse(j);
+            const c = parsed.choices?.[0]?.delta?.content;
+            if (c) {
+              assistantText += c;
+              setMessages(prev => {
+                const copy = [...prev];
+                copy[copy.length - 1] = { role: 'cosmo', content: assistantText };
+                return copy;
+              });
+            }
+          } catch {
+            buf = line + '\n' + buf;
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Something went wrong.';
+      setMessages(prev => {
+        const copy = [...prev];
+        copy[copy.length - 1] = { role: 'cosmo', content: `⚠️ ${msg}` };
+        return copy;
+      });
+      toast({ title: 'Cosmo error', description: msg, variant: 'destructive' });
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
       onClick={onClose}
     >
-      <div 
-        className="glass-card max-w-lg w-full rounded-2xl p-6"
+      <div
+        className="glass-card max-w-lg w-full rounded-2xl p-5 flex flex-col max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-2xl animate-pulse">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-2xl animate-pulse">
               🤖
             </div>
             <div>
-              <h3 className="font-display font-bold">Cosmo Assistant</h3>
-              <p className="text-xs text-muted-foreground">Space Knowledge Expert</p>
+              <h3 className="font-display font-bold">Cosmo • {body.name}</h3>
+              <p className="text-xs text-muted-foreground">Ask any doubt about {body.name}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-          >
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-muted transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
-        
-        <div className="mb-4 p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{body.icon}</span>
-            <span className="font-semibold">About {body.name}...</span>
-          </div>
-          <p className="text-foreground leading-relaxed">{response}</p>
+
+        <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-3 pr-1 mb-3 min-h-[200px]">
+          {messages.map((m, i) => (
+            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div
+                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
+                  m.role === 'user'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-foreground'
+                }`}
+              >
+                {m.content || (isStreaming && i === messages.length - 1 ? <Loader2 className="w-4 h-4 animate-spin" /> : null)}
+              </div>
+            </div>
+          ))}
         </div>
-        
-        <div className="flex gap-3">
-          <Button 
-            onClick={isSpeaking ? stopSpeaking : speak} 
-            variant={isSpeaking ? "destructive" : "default"}
-            className="flex-1 gap-2"
+
+        <div className="flex flex-wrap gap-2 mb-2">
+          {[`Tell me more about ${body.name}`, `Fun facts about ${body.name}`, `How big is ${body.name}?`].map(s => (
+            <Button key={s} size="sm" variant="outline" className="text-xs h-7" disabled={isStreaming} onClick={() => ask(s)}>
+              {s}
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex gap-2">
+          <Input
+            placeholder={`Ask any doubt about ${body.name}...`}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') ask(); }}
+            disabled={isStreaming}
+          />
+          <Button size="icon" onClick={() => ask()} disabled={isStreaming || !input.trim()}>
+            {isStreaming ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+          </Button>
+          <Button
+            size="icon"
+            variant={isSpeaking ? 'destructive' : 'outline'}
+            onClick={() => isSpeaking ? stopSpeaking() : speak(messages[messages.length - 1]?.content || '')}
+            title="Listen to last reply"
           >
             <MessageCircle className={`w-4 h-4 ${isSpeaking ? 'animate-pulse' : ''}`} />
-            {isSpeaking ? 'Stop Speaking' : 'Listen to Cosmo 🎤'}
-          </Button>
-          <Button onClick={onClose} variant="outline">
-            Close
           </Button>
         </div>
       </div>
