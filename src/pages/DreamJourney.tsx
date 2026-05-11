@@ -268,15 +268,17 @@ const DreamJourney = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-3">Learning resources</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {activeTopic.resources.map((r, i) => (
-                    <Card key={i} className="p-4 bg-background/40 border-border/40 hover:border-primary/50 transition-colors">
-                      <div className="flex items-center gap-2 mb-2 text-primary">
+                  {activeTopic.resources.map((r, i) => {
+                    const isLong = r.type === 'book' || r.type === 'audiobook';
+                    return (
+                    <Card key={i} className={`p-5 bg-background/40 border-border/40 hover:border-primary/50 transition-colors ${isLong ? 'sm:col-span-2' : ''}`}>
+                      <div className="flex items-center gap-2 mb-3 text-primary">
                         {resourceIcon(r.type)}
                         <span className="text-xs uppercase tracking-wide font-medium">{r.type}</span>
                         {r.duration && <span className="text-xs text-muted-foreground ml-auto">{r.duration}</span>}
                       </div>
-                      <h4 className="font-medium text-foreground text-sm mb-1">{r.title}</h4>
-                      <p className="text-xs text-muted-foreground mb-3">{r.description}</p>
+                      <h4 className={`font-semibold text-foreground mb-2 ${isLong ? 'text-base' : 'text-sm'}`}>{r.title}</h4>
+                      <p className={`text-muted-foreground mb-3 leading-relaxed ${isLong ? 'text-sm' : 'text-xs'}`}>{r.description}</p>
                       <div className="flex gap-2">
                         {r.url && (
                           <Button asChild size="sm" variant="outline" className="text-xs">
@@ -302,7 +304,7 @@ const DreamJourney = () => {
                         </Button>
                       </div>
                     </Card>
-                  ))}
+                  );})}
                 </div>
               </div>
             </Card>

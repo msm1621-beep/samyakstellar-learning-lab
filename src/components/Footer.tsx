@@ -1,4 +1,4 @@
-import { Rocket, Heart } from 'lucide-react';
+import { Rocket, Heart, Phone } from 'lucide-react';
 
 const Footer = () => {
   const scrollToSection = (href: string) => {
@@ -33,10 +33,14 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Resources</h4>
+            <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <a href="tel:+919951140499" className="flex items-center gap-2 hover:text-primary transition-colors">
+                  <Phone className="w-4 h-4" /> +91 99511 40499
+                </a>
+              </li>
               <li><a href="#" className="hover:text-primary transition-colors">For Parents & Teachers</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
             </ul>
           </div>
