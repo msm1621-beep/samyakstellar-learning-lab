@@ -26,13 +26,22 @@ const StudyNotesViewer = () => {
   const [query, setQuery] = useState('');
   const [count, setCount] = useState(0);
 
-  // Refresh count regularly so the badge stays in sync after saves
+  // Keep notes + count fresh so saves appear immediately
   useEffect(() => {
-    const refresh = () => setCount(loadNotes().length);
+    const refresh = () => {
+      const fresh = loadNotes();
+      setNotes(fresh);
+      setCount(fresh.length);
+    };
     refresh();
-    const id = window.setInterval(refresh, 1500);
+    const id = window.setInterval(refresh, 1000);
     window.addEventListener('storage', refresh);
-    return () => { window.clearInterval(id); window.removeEventListener('storage', refresh); };
+    window.addEventListener('cosmo-notes-updated', refresh as EventListener);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('cosmo-notes-updated', refresh as EventListener);
+    };
   }, []);
 
   useEffect(() => {
