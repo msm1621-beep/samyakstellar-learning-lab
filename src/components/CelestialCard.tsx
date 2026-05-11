@@ -200,13 +200,20 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
       answer,
       createdAt: Date.now(),
     };
-    const all = loadNotes();
-    all.unshift(note);
-    saveNotes(all);
+    try {
+      const all = loadNotes();
+      all.unshift(note);
+      saveNotes(all);
+      window.dispatchEvent(new CustomEvent('cosmo-notes-updated'));
+    } catch (e) {
+      console.error('Failed to save study note', e);
+      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
+      return;
+    }
     setSavedIdx(prev => new Set(prev).add(idx));
     addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
     if (user && profile) {
-      void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
     }
     toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
   };
