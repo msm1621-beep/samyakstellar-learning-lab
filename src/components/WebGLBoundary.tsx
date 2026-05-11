@@ -29,10 +29,11 @@ const canCreateWebGLContext = () => {
   try {
     const canvas = document.createElement('canvas');
     const options = { failIfMajorPerformanceCaveat: false, powerPreference: 'low-power' as WebGLPowerPreference };
-    const gl =
+    const gl = (
       canvas.getContext('webgl2', options) ||
       canvas.getContext('webgl', options) ||
-      canvas.getContext('experimental-webgl', options as WebGLContextAttributes);
+      canvas.getContext('experimental-webgl', options as WebGLContextAttributes)
+    ) as WebGLRenderingContext | WebGL2RenderingContext | null;
 
     if (!gl) {
       webGLUnavailable = true;
