@@ -126,7 +126,7 @@ export const astronautTopics: AstronautTopic[] = [
     keyConcepts: ['Canadarm2', 'Joint Control', 'Berthing', 'Camera Views', 'Force Feedback'],
     resources: [
       { type: 'video', title: 'Flying Canadarm2 — CSA', description: 'Hadfield demos the robotic arm.', duration: '8 min' },
-      { type: 'book', title: 'Canadarm and Collaboration', description: 'The story of Canada\'s robotic legacy.' },
+      { type: 'book', title: 'Canadarm and Collaboration', description: 'How a small Canadian engineering team built the Shuttle Remote Manipulator System (Canadarm), then Canadarm2 and Dextre on the ISS. Full of behind-the-scenes stories about how teleoperated robotic arms catch visiting cargo ships and assemble billion-dollar modules in orbit.' },
       { type: 'audiobook', title: 'An Astronaut\'s Guide to Life on Earth', description: 'Commander Chris Hadfield reads his own 9h 11m memoir, sharing his journey from a Canadian farm boy who watched Apollo 11 to commanding the ISS. Lessons on goal-setting, fear, teamwork and his famous viral 'Space Oddity' video — perfect inspiration for kids who dream of space.', duration: '9h 11m' },
     ],
   },
@@ -155,7 +155,7 @@ export const astronautTopics: AstronautTopic[] = [
     resources: [
       { type: 'video', title: 'The Psychology of Isolation', description: 'Lessons from Antarctic & ISS crews.', duration: '16 min' },
       { type: 'book', title: 'The Right Stuff by Tom Wolfe', description: 'Tom Wolfe's classic profile of the test pilots who became the Mercury Seven. Captures the courage, ego, humour and discipline behind Project Mercury, with vivid scenes of supersonic test flights at Edwards Air Force Base and the political circus around the early space program.' },
-      { type: 'audiobook', title: 'Off the Planet', description: 'Cosmonaut Jerry Linenger\'s Mir story.', duration: '10h' },
+      { type: 'audiobook', title: 'Off the Planet', description: 'Jerry Linenger's 10-hour first-hand account of his 1997 Mir mission — including the worst fire ever on a crewed spacecraft, a near-collision with a cargo ship, and what it is like to live in an aging Russian station. A real-world lesson in resilience, language barriers, and trust.', duration: '10h' },
     ],
   },
   {
@@ -168,7 +168,7 @@ export const astronautTopics: AstronautTopic[] = [
     keyConcepts: ['Igneous Rocks', 'Regolith', 'Impact Craters', 'Sample Collection', 'Stratigraphy'],
     resources: [
       { type: 'video', title: 'Apollo Geology Training', description: 'How NASA turned pilots into geologists.', duration: '19 min' },
-      { type: 'book', title: 'To a Rocky Moon by Don Wilhelms', description: 'A geologist\'s history of lunar exploration.' },
+      { type: 'book', title: 'To a Rocky Moon by Don Wilhelms', description: 'Don Wilhelms helped train the Apollo astronauts to recognize Moon rocks. His detailed history covers every Apollo landing site, what we learned about lunar geology, the formation of the Moon, and how those samples still inspire today's Artemis program.' },
       { type: 'audiobook', title: 'The Planets by Andrew Cohen', description: 'A 9-hour audio companion to the BBC 'The Planets' series narrated by Andrew Cohen and Brian Cox. Each chapter visits one world — Mercury's iron heart, Venus's runaway greenhouse, Mars's ancient rivers, the gas giants and the icy outer worlds — using the latest probe data.', duration: '9h' },
     ],
   },
