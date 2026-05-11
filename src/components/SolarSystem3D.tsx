@@ -3,7 +3,7 @@ import { OrbitControls, Sphere, Ring, Html, Stars } from '@react-three/drei';
 import { useRef, useState, Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { Rocket, Info, X } from 'lucide-react';
-import WebGLBoundary from './WebGLBoundary';
+import { WebGLGuard } from './WebGLBoundary';
 
 interface MoonData {
   name: string;
@@ -451,7 +451,7 @@ const SolarSystem3D = () => {
 
           {/* 3D Canvas — only mounted when in view to avoid WebGL context exhaustion */}
           {inView ? (
-            <WebGLBoundary>
+            <WebGLGuard>
               <Suspense fallback={
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-white font-fredoka text-xl animate-pulse">
@@ -470,7 +470,7 @@ const SolarSystem3D = () => {
                   <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
                 </Canvas>
               </Suspense>
-            </WebGLBoundary>
+            </WebGLGuard>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-white font-fredoka text-xl animate-pulse">
