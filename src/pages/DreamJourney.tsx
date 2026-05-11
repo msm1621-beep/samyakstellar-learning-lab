@@ -304,7 +304,7 @@ const DreamJourney = () => {
                         </Button>
                       </div>
                     </Card>
-                  ))}
+                  );})}
                 </div>
               </div>
             </Card>
