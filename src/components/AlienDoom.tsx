@@ -6,6 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 import { WebGLGuard } from './WebGLBoundary';
+import { useToast } from '@/hooks/use-toast';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
 
 // Alien body component - legless floating alien
 const AlienBody = ({ 
@@ -169,6 +173,24 @@ const AlienDoom = () => {
   const language = 'en';
   const speechLocale = 'en-US';
   const targetLanguageName = 'English';
+  const { toast } = useToast();
+  const { addCoins } = useCoins();
+  const { user, profile, updateProfile } = useAuth();
+
+  const recordStudyNote = useCallback((question: string, answer: string) => {
+    try {
+      saveStudyNote({ bodyName: 'Mr & Mrs Doom', bodyIcon: '👽', question, answer, source: 'Mr & Mrs Doom' });
+      addCoins(NOTE_REWARD, 'Saved a Doom study note');
+      if (user && profile) {
+        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      }
+      toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+      return true;
+    } catch {
+      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
+      return false;
+    }
+  }, [addCoins, profile, toast, updateProfile, user]);
 
   // Initialize speech synthesis voices
   useEffect(() => {
@@ -266,6 +288,23 @@ const AlienDoom = () => {
 
     const userMessage = input.trim();
     setInput('');
+
+    if (isSaveNoteRequest(userMessage)) {
+      const conversation = messages
+        .filter(msg => msg.text.trim())
+        .map(msg => `${msg.speaker === 'user' ? 'You' : msg.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${msg.text}`)
+        .join('\n\n');
+
+      if (conversation && recordStudyNote('Saved Mr & Mrs Doom conversation', conversation)) {
+        setMessages(prev => [
+          ...prev,
+          { speaker: 'user', text: userMessage },
+          { speaker: 'mrs', text: 'Saved our cosmic conversation in My Notes! 📚' },
+        ]);
+      }
+      return;
+    }
+
     setMessages(prev => [...prev, { speaker: 'user', text: userMessage }]);
     setIsLoading(true);
 
@@ -325,7 +364,7 @@ const AlienDoom = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName]);
+  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName, messages, recordStudyNote]);
 
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
