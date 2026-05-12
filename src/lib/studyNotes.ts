@@ -39,4 +39,4 @@ export const saveStudyNote = (note: Omit<StudyNote, 'id' | 'createdAt'>): StudyN
   return savedNote;
 };
 
-export const isSaveNoteRequest = (text: string) => /\b(save|store|add|keep)\b[\s\S]*\b(note|notes|conversation|chat|answer|reply)\b/i.test(text);
+export const isSaveNoteRequest = (text: string) => /\b(save|store|add|keep)\b[\s\S]*\b(note|notes|conversation|chat|answer|reply|it|this)\b/i.test(text);
