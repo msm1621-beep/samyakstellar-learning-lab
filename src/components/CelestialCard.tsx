@@ -6,29 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import type { CelestialBody } from '@/data/celestialBodies';
-
-const NOTE_REWARD = 10;
-
-export interface StudyNote {
-  id: string;
-  bodyName: string;
-  bodyIcon: string;
-  question: string;
-  answer: string;
-  createdAt: number;
-}
-
-const loadNotes = (): StudyNote[] => {
-  try {
-    return JSON.parse(localStorage.getItem('cosmoStudyNotes') || '[]');
-  } catch {
-    return [];
-  }
-};
-
-const saveNotes = (notes: StudyNote[]) => {
-  localStorage.setItem('cosmoStudyNotes', JSON.stringify(notes));
-};
+import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
 
 interface CelestialCardProps {
   body: CelestialBody;
