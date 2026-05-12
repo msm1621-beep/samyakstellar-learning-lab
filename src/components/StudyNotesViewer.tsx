@@ -3,21 +3,7 @@ import { Button } from '@/components/ui/button';
 import { BookMarked, X, Trash2, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-
-interface StudyNote {
-  id: string;
-  bodyName: string;
-  bodyIcon: string;
-  question: string;
-  answer: string;
-  createdAt: number;
-}
-
-const STORAGE_KEY = 'cosmoStudyNotes';
-
-const loadNotes = (): StudyNote[] => {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
-};
+import { loadStudyNotes, saveStudyNotes, type StudyNote } from '@/lib/studyNotes';
 
 const StudyNotesViewer = () => {
   const { toast } = useToast();
@@ -29,7 +15,7 @@ const StudyNotesViewer = () => {
   // Keep notes + count fresh so saves appear immediately
   useEffect(() => {
     const refresh = () => {
-      const fresh = loadNotes();
+      const fresh = loadStudyNotes();
       setNotes(fresh);
       setCount(fresh.length);
     };
@@ -45,20 +31,20 @@ const StudyNotesViewer = () => {
   }, []);
 
   useEffect(() => {
-    if (open) setNotes(loadNotes());
+    if (open) setNotes(loadStudyNotes());
   }, [open]);
 
   const remove = (id: string) => {
     const next = notes.filter(n => n.id !== id);
     setNotes(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    saveStudyNotes(next);
     setCount(next.length);
     toast({ title: 'Note deleted' });
   };
 
   const clearAll = () => {
     if (!confirm('Delete all your study notes?')) return;
-    localStorage.setItem(STORAGE_KEY, '[]');
+    saveStudyNotes([]);
     setNotes([]);
     setCount(0);
   };
@@ -109,7 +95,7 @@ const StudyNotesViewer = () => {
               {filtered.length === 0 ? (
                 <div className="text-center py-10 text-sm text-muted-foreground">
                   {notes.length === 0
-                    ? 'No notes yet. Open Cosmo on any celestial card and tap "Save as study note" to start your collection!'
+                    ? 'No notes yet. Ask Cosmo, Mr. Doom, Mrs. Doom, or the doubt search bar to save an answer.'
                     : 'No notes match your search.'}
                 </div>
               ) : (
