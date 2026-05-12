@@ -162,6 +162,23 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
+  const recordStudyNote = (question: string, answer: string) => {
+    try {
+      saveStudyNote({ bodyName: body.name, bodyIcon: body.icon, question, answer, source: 'Cosmo' });
+    } catch (e) {
+      console.error('Failed to save study note', e);
+      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
+      return false;
+    }
+
+    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
+    if (user && profile) {
+      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
+    }
+    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+    return true;
+  };
+
   const saveAsNote = (idx: number) => {
     if (savedIdx.has(idx) || isStreaming) return;
     const answer = messages[idx]?.content?.trim();
@@ -170,30 +187,8 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     for (let i = idx - 1; i >= 0; i--) {
       if (messages[i].role === 'user') { question = messages[i].content; break; }
     }
-    const note: StudyNote = {
-      id: `${Date.now()}-${idx}`,
-      bodyName: body.name,
-      bodyIcon: body.icon,
-      question,
-      answer,
-      createdAt: Date.now(),
-    };
-    try {
-      const all = loadNotes();
-      all.unshift(note);
-      saveNotes(all);
-      window.dispatchEvent(new CustomEvent('cosmo-notes-updated'));
-    } catch (e) {
-      console.error('Failed to save study note', e);
-      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
-      return;
-    }
+    if (!recordStudyNote(question, answer)) return;
     setSavedIdx(prev => new Set(prev).add(idx));
-    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
-    if (user && profile) {
-      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
-    }
-    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
   };
 
   const speak = (text: string) => {
