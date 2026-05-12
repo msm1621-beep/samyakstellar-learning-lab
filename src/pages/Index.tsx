@@ -24,7 +24,6 @@ import GamePassSection from '@/components/GamePassSection';
 import SubscriptionSection from '@/components/SubscriptionSection';
 import CertificateShowcase from '@/components/CertificateShowcase';
 import FeaturedShop from '@/components/FeaturedShop';
-import GiftVoucherSection from '@/components/GiftVoucherSection';
 import ManuscriptsSection from '@/components/ManuscriptsSection';
 import BackToTop from '@/components/BackToTop';
 import AnimatedSection from '@/components/AnimatedSection';
@@ -69,9 +68,6 @@ const Index = () => {
         </AnimatedSection>
         <AnimatedSection>
           <Leaderboard />
-        </AnimatedSection>
-        <AnimatedSection>
-          <GiftVoucherSection />
         </AnimatedSection>
         <AnimatedSection>
           <StudyPlanner />
