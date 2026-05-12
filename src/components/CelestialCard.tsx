@@ -212,6 +212,16 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     const text = (prompt ?? input).trim();
     if (!text || isStreaming) return;
     setInput('');
+    if (isSaveNoteRequest(text)) {
+      const conversation = messages
+        .filter(m => m.content.trim())
+        .map(m => `${m.role === 'user' ? 'You' : 'Cosmo'}: ${m.content}`)
+        .join('\n\n');
+      if (conversation && recordStudyNote(`Saved Cosmo conversation about ${body.name}`, conversation)) {
+        setMessages(prev => [...prev, { role: 'user', content: text }, { role: 'cosmo', content: `Saved this ${body.name} conversation in My Notes! 📚` }]);
+      }
+      return;
+    }
     const ctx = `The user is asking about the celestial body "${body.name}" (${body.type}). Background: ${body.longDescription} Cool fact: ${body.coolFact} Extended: ${body.extendedFacts.join(' ')}. Answer ANY question they have — about ${body.name} specifically, related space topics, or anything else they wonder. Be warm, kid-friendly, and clear.`;
     const history = messages.filter(m => m.content).map(m => ({ role: m.role === 'cosmo' ? 'assistant' : 'user', content: m.content }));
     setMessages(prev => [...prev, { role: 'user', content: text }, { role: 'cosmo', content: '' }]);
@@ -267,6 +277,9 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
             break;
           }
         }
+      }
+      if (assistantText.trim()) {
+        recordStudyNote(text, assistantText.trim());
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Something went wrong.';
