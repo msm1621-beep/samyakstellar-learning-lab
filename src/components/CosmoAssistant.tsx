@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -150,9 +153,26 @@ const CosmoAssistant = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
+  const { addCoins } = useCoins();
+  const { user, profile, updateProfile } = useAuth();
   const language = 'en';
   const speechLocale = 'en-US';
   const targetLanguageName = 'English';
+
+  const recordStudyNote = (question: string, answer: string) => {
+    try {
+      saveStudyNote({ bodyName: 'Cosmo Chat', bodyIcon: '🤖', question, answer, source: 'Cosmo' });
+      addCoins(NOTE_REWARD, 'Saved a Cosmo study note');
+      if (user && profile) {
+        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      }
+      toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+      return true;
+    } catch {
+      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
+      return false;
+    }
+  };
 
   // Initialize speech recognition
   useEffect(() => {
@@ -215,6 +235,18 @@ const CosmoAssistant = () => {
   };
 
   const handleUserMessage = async (text: string) => {
+    if (isSaveNoteRequest(text)) {
+      const conversation = messages
+        .filter(m => m.content.trim())
+        .map(m => `${m.role === 'user' ? 'You' : 'Cosmo'}: ${m.content}`)
+        .join('\n\n');
+      setInputText('');
+      if (conversation && recordStudyNote('Saved Cosmo conversation', conversation)) {
+        setMessages(prev => [...prev, { role: 'user', content: text, timestamp: new Date() }, { role: 'cosmo', content: 'Saved our conversation in My Notes! 📚', timestamp: new Date() }]);
+      }
+      return;
+    }
+
     const userMessage: Message = { role: 'user', content: text, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
     setInputText('');

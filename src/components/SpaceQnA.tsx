@@ -2,6 +2,10 @@ import { useState, useRef } from 'react';
 import { Search, Sparkles, Rocket, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { useCoins } from '@/contexts/CoinsContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { NOTE_REWARD, saveStudyNote } from '@/lib/studyNotes';
 const SPACE_QNA_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/space-qna`;
 
 const suggestedQuestions = [
@@ -21,6 +25,22 @@ const SpaceQnA = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [askedQuestion, setAskedQuestion] = useState('');
   const abortRef = useRef<AbortController | null>(null);
+  const { toast } = useToast();
+  const { addCoins } = useCoins();
+  const { user, profile, updateProfile } = useAuth();
+
+  const autoSaveAnswer = (savedQuestion: string, savedAnswer: string) => {
+    try {
+      saveStudyNote({ bodyName: 'Space Doubt', bodyIcon: '🔭', question: savedQuestion, answer: savedAnswer, source: 'Doubt Search' });
+      addCoins(NOTE_REWARD, 'Saved a doubt answer');
+      if (user && profile) {
+        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      }
+      toast({ title: '📚 Doubt answer saved!', description: `Added to My Notes • +${NOTE_REWARD} coins` });
+    } catch {
+      toast({ title: 'Could not save note', description: 'The answer appeared, but saving failed.', variant: 'destructive' });
+    }
+  };
 
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
@@ -125,7 +145,11 @@ const SpaceQnA = () => {
         }
       }
 
-      if (!fullText) setAnswer("Hmm, I couldn't find an answer. Try rephrasing your question! 🤔");
+      if (fullText.trim()) {
+        autoSaveAnswer(queryToSearch, fullText.trim());
+      } else {
+        setAnswer("Hmm, I couldn't find an answer. Try rephrasing your question! 🤔");
+      }
         break; // success — exit retry loop
       } catch (e: any) {
         if (e.name === 'AbortError') break;

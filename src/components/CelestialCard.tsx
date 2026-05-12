@@ -6,29 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import type { CelestialBody } from '@/data/celestialBodies';
-
-const NOTE_REWARD = 10;
-
-export interface StudyNote {
-  id: string;
-  bodyName: string;
-  bodyIcon: string;
-  question: string;
-  answer: string;
-  createdAt: number;
-}
-
-const loadNotes = (): StudyNote[] => {
-  try {
-    return JSON.parse(localStorage.getItem('cosmoStudyNotes') || '[]');
-  } catch {
-    return [];
-  }
-};
-
-const saveNotes = (notes: StudyNote[]) => {
-  localStorage.setItem('cosmoStudyNotes', JSON.stringify(notes));
-};
+import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
 
 interface CelestialCardProps {
   body: CelestialBody;
@@ -184,6 +162,23 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
+  const recordStudyNote = (question: string, answer: string) => {
+    try {
+      saveStudyNote({ bodyName: body.name, bodyIcon: body.icon, question, answer, source: 'Cosmo' });
+    } catch (e) {
+      console.error('Failed to save study note', e);
+      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
+      return false;
+    }
+
+    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
+    if (user && profile) {
+      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
+    }
+    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
+    return true;
+  };
+
   const saveAsNote = (idx: number) => {
     if (savedIdx.has(idx) || isStreaming) return;
     const answer = messages[idx]?.content?.trim();
@@ -192,30 +187,8 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     for (let i = idx - 1; i >= 0; i--) {
       if (messages[i].role === 'user') { question = messages[i].content; break; }
     }
-    const note: StudyNote = {
-      id: `${Date.now()}-${idx}`,
-      bodyName: body.name,
-      bodyIcon: body.icon,
-      question,
-      answer,
-      createdAt: Date.now(),
-    };
-    try {
-      const all = loadNotes();
-      all.unshift(note);
-      saveNotes(all);
-      window.dispatchEvent(new CustomEvent('cosmo-notes-updated'));
-    } catch (e) {
-      console.error('Failed to save study note', e);
-      toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
-      return;
-    }
+    if (!recordStudyNote(question, answer)) return;
     setSavedIdx(prev => new Set(prev).add(idx));
-    addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
-    if (user && profile) {
-      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
-    }
-    toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
   };
 
   const speak = (text: string) => {
@@ -239,6 +212,16 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
     const text = (prompt ?? input).trim();
     if (!text || isStreaming) return;
     setInput('');
+    if (isSaveNoteRequest(text)) {
+      const conversation = messages
+        .filter(m => m.content.trim())
+        .map(m => `${m.role === 'user' ? 'You' : 'Cosmo'}: ${m.content}`)
+        .join('\n\n');
+      if (conversation && recordStudyNote(`Saved Cosmo conversation about ${body.name}`, conversation)) {
+        setMessages(prev => [...prev, { role: 'user', content: text }, { role: 'cosmo', content: `Saved this ${body.name} conversation in My Notes! 📚` }]);
+      }
+      return;
+    }
     const ctx = `The user is asking about the celestial body "${body.name}" (${body.type}). Background: ${body.longDescription} Cool fact: ${body.coolFact} Extended: ${body.extendedFacts.join(' ')}. Answer ANY question they have — about ${body.name} specifically, related space topics, or anything else they wonder. Be warm, kid-friendly, and clear.`;
     const history = messages.filter(m => m.content).map(m => ({ role: m.role === 'cosmo' ? 'assistant' : 'user', content: m.content }));
     setMessages(prev => [...prev, { role: 'user', content: text }, { role: 'cosmo', content: '' }]);
@@ -294,6 +277,9 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
             break;
           }
         }
+      }
+      if (assistantText.trim()) {
+        recordStudyNote(text, assistantText.trim());
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Something went wrong.';
