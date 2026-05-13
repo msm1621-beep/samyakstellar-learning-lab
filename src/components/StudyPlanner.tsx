@@ -207,9 +207,15 @@ const StudyPlanner = () => {
                     <p className="text-muted-foreground">{plan.description}</p>
                     <p className="text-sm text-primary mt-2">📅 {plan.totalWeeks} week plan • {plan.lessons.length} lessons</p>
                   </div>
-                  <Button variant="outline" onClick={reset} className="border-primary/30">
-                    <RotateCcw className="w-4 h-4 mr-2" /> New Plan
-                  </Button>
+                  <div className="flex gap-2 shrink-0">
+                    <Button variant="outline" onClick={copyPlan} className="border-primary/30">
+                      {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                      {copied ? 'Copied' : 'Copy Plan'}
+                    </Button>
+                    <Button variant="outline" onClick={reset} className="border-primary/30">
+                      <RotateCcw className="w-4 h-4 mr-2" /> New Plan
+                    </Button>
+                  </div>
                 </div>
               </div>
 
