@@ -43,6 +43,29 @@ const StudyPlanner = () => {
   const [plan, setPlan] = useState<StudyPlan | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  const planAsText = (p: StudyPlan) => {
+    const header = `${p.title}\n${p.description}\n${p.totalWeeks} week plan • ${p.lessons.length} lessons\n`;
+    const body = p.lessons.map((l, i) => {
+      const topics = l.topics.map(t => `   • ${t}`).join('\n');
+      return `\n${i + 1}. ${l.title} (${l.duration})\n${topics}\n   🎯 Fun Activity: ${l.funActivity}`;
+    }).join('\n');
+    return `${header}${body}`;
+  };
+
+  const copyPlan = async () => {
+    if (!plan) return;
+    try {
+      await navigator.clipboard.writeText(planAsText(plan));
+      setCopied(true);
+      toast({ title: '📋 Plan copied!', description: 'Paste it into "Your Topic" on Dream Journey to find resources.' });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Try selecting and copying manually.', variant: 'destructive' });
+    }
+  };
 
   const toggleInterest = (id: string) => {
     setSelectedInterests(prev =>
