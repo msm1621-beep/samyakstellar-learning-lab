@@ -185,6 +185,8 @@ const DreamJourney = () => {
           </p>
         </section>
 
+        <YourTopicMatcher />
+
         {/* Search + Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
