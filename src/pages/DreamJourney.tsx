@@ -1,26 +1,18 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Rocket, BookOpen, Video, Headphones, FileText, Send, Sparkles, Loader2, Volume2, VolumeX, Search } from 'lucide-react';
+import { ArrowLeft, Rocket, Send, Sparkles, Loader2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import EnhancedStarField from '@/components/EnhancedStarField';
-import { astronautTopics, topicCategories, type AstronautTopic, type Resource } from '@/data/astronautTopics';
+import { astronautTopics, topicCategories, type AstronautTopic } from '@/data/astronautTopics';
 import { useToast } from '@/hooks/use-toast';
 import YourTopicMatcher from '@/components/YourTopicMatcher';
+import DreamResourceCard from '@/components/DreamResourceCard';
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
-
-const resourceIcon = (type: Resource['type']) => {
-  switch (type) {
-    case 'video': return <Video className="w-4 h-4" />;
-    case 'book': return <BookOpen className="w-4 h-4" />;
-    case 'audiobook': return <Headphones className="w-4 h-4" />;
-    case 'article': return <FileText className="w-4 h-4" />;
-  }
-};
 
 interface ChatMessage {
   role: 'user' | 'cosmo';
@@ -32,7 +24,6 @@ const DreamJourney = () => {
   const [selectedCategory, setSelectedCategory] = useState<typeof topicCategories[number]>('All');
   const [search, setSearch] = useState('');
   const [activeTopic, setActiveTopic] = useState<AstronautTopic>(astronautTopics[0]);
-  const [speakingTitle, setSpeakingTitle] = useState<string | null>(null);
 
   // Cosmo chat state
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -54,25 +45,6 @@ const DreamJourney = () => {
       return matchCat && matchSearch;
     });
   }, [selectedCategory, search]);
-
-  const speak = (title: string, text: string) => {
-    if (!('speechSynthesis' in window)) {
-      toast({ title: 'Audio unavailable', description: 'Your browser does not support speech.' });
-      return;
-    }
-    if (speakingTitle === title) {
-      window.speechSynthesis.cancel();
-      setSpeakingTitle(null);
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.95;
-    utter.onend = () => setSpeakingTitle(null);
-    utter.onerror = () => setSpeakingTitle(null);
-    window.speechSynthesis.speak(utter);
-    setSpeakingTitle(title);
-  };
 
   const askCosmo = async (prompt?: string) => {
     const text = (prompt ?? input).trim();
@@ -270,44 +242,10 @@ const DreamJourney = () => {
 
               <div>
                 <h3 className="font-semibold text-foreground mb-3">Learning resources</h3>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {activeTopic.resources.map((r, i) => {
-                    const isLong = r.type === 'book' || r.type === 'audiobook';
-                    return (
-                    <Card key={i} className={`p-5 bg-background/40 border-border/40 hover:border-primary/50 transition-colors ${isLong ? 'sm:col-span-2' : ''}`}>
-                      <div className="flex items-center gap-2 mb-3 text-primary">
-                        {resourceIcon(r.type)}
-                        <span className="text-xs uppercase tracking-wide font-medium">{r.type}</span>
-                        {r.duration && <span className="text-xs text-muted-foreground ml-auto">{r.duration}</span>}
-                      </div>
-                      <h4 className={`font-semibold text-foreground mb-2 ${isLong ? 'text-base' : 'text-sm'}`}>{r.title}</h4>
-                      <p className={`text-muted-foreground mb-3 leading-relaxed ${isLong ? 'text-sm' : 'text-xs'}`}>{r.description}</p>
-                      <div className="flex gap-2">
-                        {r.url && (
-                          <Button asChild size="sm" variant="outline" className="text-xs">
-                            <a href={r.url} target="_blank" rel="noopener noreferrer">Open</a>
-                          </Button>
-                        )}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="text-xs"
-                          onClick={() => speak(r.title, `${r.title}. ${r.description}`)}
-                        >
-                          {speakingTitle === r.title ? <VolumeX className="w-3 h-3 mr-1" /> : <Volume2 className="w-3 h-3 mr-1" />}
-                          {speakingTitle === r.title ? 'Stop' : 'Listen'}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="text-xs ml-auto"
-                          onClick={() => askCosmo(`Explain "${r.title}" for the ${activeTopic.title} topic.`)}
-                        >
-                          Ask Cosmo
-                        </Button>
-                      </div>
-                    </Card>
-                  );})}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {activeTopic.resources.map((r, i) => (
+                    <DreamResourceCard key={i} resource={r} topicTitle={activeTopic.title} />
+                  ))}
                 </div>
               </div>
             </Card>
