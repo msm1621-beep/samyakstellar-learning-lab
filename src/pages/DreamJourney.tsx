@@ -9,6 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import EnhancedStarField from '@/components/EnhancedStarField';
 import { astronautTopics, topicCategories, type AstronautTopic, type Resource } from '@/data/astronautTopics';
 import { useToast } from '@/hooks/use-toast';
+import YourTopicMatcher from '@/components/YourTopicMatcher';
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
@@ -183,6 +184,8 @@ const DreamJourney = () => {
             Pick any topic an astronaut studies — from orbital mechanics to survival training. Watch videos, read books, listen to audiobooks, and ask Cosmo anything along the way.
           </p>
         </section>
+
+        <YourTopicMatcher />
 
         {/* Search + Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
