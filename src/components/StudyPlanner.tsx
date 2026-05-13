@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Sparkles, BookOpen, Clock, ChevronRight, Loader2, RotateCcw } from 'lucide-react';
+import { Brain, Sparkles, BookOpen, Clock, ChevronRight, Loader2, RotateCcw, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import LessonDoubtChat from '@/components/LessonDoubtChat';
+import { useToast } from '@/hooks/use-toast';
 
 interface Lesson {
   title: string;
