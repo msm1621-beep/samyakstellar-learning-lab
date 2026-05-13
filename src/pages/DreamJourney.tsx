@@ -14,15 +14,6 @@ import DreamResourceCard from '@/components/DreamResourceCard';
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
-const resourceIcon = (type: Resource['type']) => {
-  switch (type) {
-    case 'video': return <Video className="w-4 h-4" />;
-    case 'book': return <BookOpen className="w-4 h-4" />;
-    case 'audiobook': return <Headphones className="w-4 h-4" />;
-    case 'article': return <FileText className="w-4 h-4" />;
-  }
-};
-
 interface ChatMessage {
   role: 'user' | 'cosmo';
   content: string;
