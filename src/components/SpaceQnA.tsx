@@ -30,16 +30,22 @@ const SpaceQnA = () => {
   const { user, profile, updateProfile } = useAuth();
 
   const autoSaveAnswer = (savedQuestion: string, savedAnswer: string) => {
+    let saved = false;
     try {
       saveStudyNote({ bodyName: 'Space Doubt', bodyIcon: '🔭', question: savedQuestion, answer: savedAnswer, source: 'Doubt Search' });
-      addCoins(NOTE_REWARD, 'Saved a doubt answer');
-      if (user && profile) {
-        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
-      }
-      toast({ title: '📚 Doubt answer saved!', description: `Added to My Notes • +${NOTE_REWARD} coins` });
-    } catch {
-      toast({ title: 'Could not save note', description: 'The answer appeared, but saving failed.', variant: 'destructive' });
+      saved = true;
+    } catch (e) {
+      console.error('saveStudyNote failed', e);
     }
+    if (!saved) {
+      toast({ title: 'Could not save note', description: 'The answer appeared, but saving failed.', variant: 'destructive' });
+      return;
+    }
+    try { addCoins(NOTE_REWARD, 'Saved a doubt answer'); } catch (e) { console.error('addCoins failed', e); }
+    try {
+      if (user && profile) void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+    } catch (e) { console.error('updateProfile failed', e); }
+    toast({ title: '📚 Doubt answer saved!', description: `Added to My Notes • +${NOTE_REWARD} coins` });
   };
 
   const handleSearch = async (searchQuery?: string) => {
