@@ -1,13 +1,12 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Rocket, BookOpen, Video, Headphones, FileText, Send, Sparkles, Loader2, Volume2, VolumeX, Search } from 'lucide-react';
+import { ArrowLeft, Rocket, Send, Sparkles, Loader2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import EnhancedStarField from '@/components/EnhancedStarField';
-import { astronautTopics, topicCategories, type AstronautTopic, type Resource } from '@/data/astronautTopics';
+import { astronautTopics, topicCategories, type AstronautTopic } from '@/data/astronautTopics';
 import { useToast } from '@/hooks/use-toast';
 import YourTopicMatcher from '@/components/YourTopicMatcher';
 import DreamResourceCard from '@/components/DreamResourceCard';
