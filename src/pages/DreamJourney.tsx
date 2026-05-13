@@ -46,25 +46,6 @@ const DreamJourney = () => {
     });
   }, [selectedCategory, search]);
 
-  const speak = (title: string, text: string) => {
-    if (!('speechSynthesis' in window)) {
-      toast({ title: 'Audio unavailable', description: 'Your browser does not support speech.' });
-      return;
-    }
-    if (speakingTitle === title) {
-      window.speechSynthesis.cancel();
-      setSpeakingTitle(null);
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.95;
-    utter.onend = () => setSpeakingTitle(null);
-    utter.onerror = () => setSpeakingTitle(null);
-    window.speechSynthesis.speak(utter);
-    setSpeakingTitle(title);
-  };
-
   const askCosmo = async (prompt?: string) => {
     const text = (prompt ?? input).trim();
     if (!text || isStreaming) return;
