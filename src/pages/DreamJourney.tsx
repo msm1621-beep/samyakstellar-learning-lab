@@ -24,7 +24,6 @@ const DreamJourney = () => {
   const [selectedCategory, setSelectedCategory] = useState<typeof topicCategories[number]>('All');
   const [search, setSearch] = useState('');
   const [activeTopic, setActiveTopic] = useState<AstronautTopic>(astronautTopics[0]);
-  const [speakingTitle, setSpeakingTitle] = useState<string | null>(null);
 
   // Cosmo chat state
   const [messages, setMessages] = useState<ChatMessage[]>([
