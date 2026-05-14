@@ -396,6 +396,25 @@ const CosmoAssistant = () => {
               <Button
                 size="sm"
                 variant="ghost"
+                onClick={() => {
+                  const conversation = messages
+                    .filter(m => m.content.trim())
+                    .map(m => `${m.role === 'user' ? 'You' : 'Cosmo'}: ${m.content}`)
+                    .join('\n\n');
+                  if (conversation) {
+                    recordStudyNote('Saved Cosmo conversation', conversation);
+                  } else {
+                    toast({ title: 'Nothing to save', description: 'Start a conversation first!' });
+                  }
+                }}
+                className="text-white hover:bg-white/20"
+                title="Save conversation"
+              >
+                <Save className="w-5 h-5" />
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
                 onClick={() => setVoiceEnabled(!voiceEnabled)}
                 className="text-white hover:bg-white/20"
               >
