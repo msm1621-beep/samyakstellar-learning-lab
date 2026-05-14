@@ -4,7 +4,7 @@ import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import { X, Send, MessageCircle, Volume2, VolumeX, Save } from 'lucide-react';
 import { WebGLGuard } from './WebGLBoundary';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
