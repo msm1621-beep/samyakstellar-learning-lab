@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
@@ -393,6 +393,25 @@ const CosmoAssistant = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  const conversation = messages
+                    .filter(m => m.content.trim())
+                    .map(m => `${m.role === 'user' ? 'You' : 'Cosmo'}: ${m.content}`)
+                    .join('\n\n');
+                  if (conversation) {
+                    recordStudyNote('Saved Cosmo conversation', conversation);
+                  } else {
+                    toast({ title: 'Nothing to save', description: 'Start a conversation first!' });
+                  }
+                }}
+                className="text-white hover:bg-white/20"
+                title="Save conversation"
+              >
+                <Save className="w-5 h-5" />
+              </Button>
               <Button
                 size="sm"
                 variant="ghost"

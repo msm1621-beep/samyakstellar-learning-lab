@@ -4,7 +4,7 @@ import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Send, MessageCircle, Volume2, VolumeX } from 'lucide-react';
+import { X, Send, MessageCircle, Volume2, VolumeX, Save } from 'lucide-react';
 import { WebGLGuard } from './WebGLBoundary';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
@@ -419,6 +419,26 @@ const AlienDoom = () => {
               ) : (
                 <VolumeX className="w-5 h-5 text-muted-foreground" />
               )}
+            </button>
+
+            {/* Save conversation */}
+            <button
+              onClick={() => {
+                const conversation = messages
+                  .filter(msg => msg.text.trim())
+                  .map(msg => `${msg.speaker === 'user' ? 'You' : msg.speaker === 'mr' ? 'Mr. Doom' : 'Mrs. Doom'}: ${msg.text}`)
+                  .join('\n\n');
+                if (conversation) {
+                  recordStudyNote('Saved Mr & Mrs Doom conversation', conversation);
+                } else {
+                  toast({ title: 'Nothing to save', description: 'Start a conversation first!' });
+                }
+              }}
+              className="absolute top-4 left-14 z-10 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
+              aria-label="Save conversation"
+              title="Save conversation"
+            >
+              <Save className="w-5 h-5 text-primary" />
             </button>
             
             {/* 3D Canvas with aliens */}
