@@ -22,9 +22,11 @@ const COIN_REWARDS = {
 
 export { COIN_REWARDS };
 
-// We store a coin bonus ref that SubscriptionContext can update
+// We store a coin bonus ref that SubscriptionContext / PerksContext can update
 let _coinBonusPercent = 0;
+let _coinMultiplier = 1;
 export const setCoinBonusPercent = (percent: number) => { _coinBonusPercent = percent; };
+export const setCoinMultiplier = (mult: number) => { _coinMultiplier = Math.max(1, mult); };
 
 export const CoinsProvider = ({ children }: { children: ReactNode }) => {
   const [coins, setCoins] = useState(0);
