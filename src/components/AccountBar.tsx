@@ -251,7 +251,7 @@ const AccountBar = () => {
         >
           {account ? (
             <>
-              <span className="text-lg">{account.icon}</span>
+              <ProfileFrame icon={account.icon} size={32} />
               <span className="hidden sm:inline max-w-[100px] truncate">{account.name}</span>
               {expired && <AlertTriangle className="w-4 h-4 text-yellow-300" />}
             </>
