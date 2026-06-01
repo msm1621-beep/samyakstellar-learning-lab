@@ -96,6 +96,9 @@ const Index = () => {
           <SubscriptionSection />
         </AnimatedSection>
         <AnimatedSection>
+          <ExclusiveWebinars />
+        </AnimatedSection>
+        <AnimatedSection>
           <FeaturedShop />
         </AnimatedSection>
         <AnimatedSection>
