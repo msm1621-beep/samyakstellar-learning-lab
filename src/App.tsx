@@ -8,6 +8,7 @@ import { CoinsProvider } from "@/contexts/CoinsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 
 import { GamePassProvider } from "@/contexts/GamePassContext";
+import { PerksProvider } from "@/contexts/PerksContext";
 import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
