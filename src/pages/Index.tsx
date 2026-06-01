@@ -40,9 +40,11 @@ const Index = () => {
   return (
     <div className="relative min-h-screen">
       <EnhancedStarField />
+      <PerksFX />
       <Navigation />
       <CoinDisplay />
       <AccountBar />
+      <PerkBadgeRow />
       <ExplorationProgress />
       <StudyNotesViewer />
 
