@@ -48,15 +48,23 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
   }, [coins, totalEarned]);
 
   const addCoins = (amount: number, reason: string) => {
-    // Apply subscription coin bonus for positive earnings (not purchases)
+    // Apply subscription/perk coin bonus + game-pass multiplier for positive earnings (not purchases)
     let finalAmount = amount;
-    if (amount > 0 && _coinBonusPercent > 0) {
-      const bonus = Math.floor(amount * _coinBonusPercent / 100);
-      finalAmount = amount + bonus;
+    let bonusLabel = '';
+    if (amount > 0) {
+      if (_coinBonusPercent > 0) {
+        const bonus = Math.floor(amount * _coinBonusPercent / 100);
+        finalAmount = amount + bonus;
+        bonusLabel = ` (+${_coinBonusPercent}% perk bonus!)`;
+      }
+      if (_coinMultiplier > 1) {
+        finalAmount = finalAmount * _coinMultiplier;
+        bonusLabel += ` (x${_coinMultiplier} pass!)`;
+      }
     }
     setCoins(prev => prev + finalAmount);
     if (finalAmount > 0) setTotalEarned(prev => prev + finalAmount);
-    setRecentReward({ amount: finalAmount, reason: finalAmount > amount ? `${reason} (+${_coinBonusPercent}% bonus!)` : reason });
+    setRecentReward({ amount: finalAmount, reason: bonusLabel ? `${reason}${bonusLabel}` : reason });
     
     // Auto-clear reward notification after 3 seconds
     setTimeout(() => {
