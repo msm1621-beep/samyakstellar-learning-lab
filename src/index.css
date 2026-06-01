@@ -271,3 +271,29 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(195 100% 50% / 0.7);
 }
+
+/* ====== Premium Perks FX keyframes ====== */
+@keyframes meteor {
+  0%   { transform: translate3d(0, -10%, 0) rotate(20deg); opacity: 0; }
+  10%  { opacity: 0.9; }
+  100% { transform: translate3d(40vw, 120vh, 0) rotate(20deg); opacity: 0; }
+}
+.animate-meteor { animation: meteor 6s linear infinite; }
+
+@keyframes rainbow-shift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50%      { filter: hue-rotate(180deg); }
+}
+.animate-rainbow-shift { animation: rainbow-shift 8s ease-in-out infinite; }
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 30s linear infinite; }
+
+/* Theme tints driven by [data-perk-theme] on <html> */
+html[data-perk-theme="lunar"]    { --accent: 220 80% 65%; }
+html[data-perk-theme="solar"]    { --accent: 18 100% 60%; }
+html[data-perk-theme="galaxy"]   { --accent: 285 80% 65%; }
+html[data-perk-theme="rainbow"]  { --accent: 320 95% 65%; }
+html[data-perk-theme="supreme"]  { --accent: 45 100% 60%; --primary: 280 100% 65%; }
