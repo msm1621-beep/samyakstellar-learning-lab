@@ -295,11 +295,11 @@ const AccountBar = () => {
               {account ? (
                 <div className="text-center">
                   <motion.div
-                    className="text-6xl mb-4"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="mb-4 flex justify-center"
+                    animate={{ rotate: [0, 6, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity }}
                   >
-                    {account.icon}
+                    <ProfileFrame icon={account.icon} size={88} />
                   </motion.div>
                   <h2 className="text-2xl font-bold text-white mb-2">{account.name}</h2>
                   <p className="text-purple-300 text-sm mb-4">
