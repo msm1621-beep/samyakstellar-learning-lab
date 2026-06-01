@@ -27,6 +27,7 @@ const App = () => {
         <CoinsProvider>
           <SubscriptionProvider>
             <GamePassProvider>
+              <PerksProvider>
               <AchievementsProvider>
                 <TooltipProvider>
                   <Toaster />
