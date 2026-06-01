@@ -8,6 +8,7 @@ import { CoinsProvider } from "@/contexts/CoinsContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 
 import { GamePassProvider } from "@/contexts/GamePassContext";
+import { PerksProvider } from "@/contexts/PerksContext";
 import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
@@ -26,6 +27,7 @@ const App = () => {
         <CoinsProvider>
           <SubscriptionProvider>
             <GamePassProvider>
+              <PerksProvider>
               <AchievementsProvider>
                 <TooltipProvider>
                   <Toaster />
@@ -41,6 +43,7 @@ const App = () => {
                   </BrowserRouter>
                 </TooltipProvider>
               </AchievementsProvider>
+              </PerksProvider>
             </GamePassProvider>
           </SubscriptionProvider>
         </CoinsProvider>

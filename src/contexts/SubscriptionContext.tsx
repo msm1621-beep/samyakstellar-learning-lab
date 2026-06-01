@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Subscription, getSubscriptionById } from '@/data/subscriptions';
-import { useCoins, setCoinBonusPercent } from './CoinsContext';
+import { useCoins } from './CoinsContext';
 import { useToast } from '@/hooks/use-toast';
  
  interface ActiveSubscription {
@@ -81,10 +81,7 @@ import { useToast } from '@/hooks/use-toast';
    const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
    const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
 
-   // Sync coin bonus to CoinsContext so earned coins get the bonus applied
-   useEffect(() => {
-     setCoinBonusPercent(coinBonus);
-   }, [coinBonus]);
+    // Coin bonus is now applied by PerksContext (which aggregates subscription + shop boosts).
 
   // Check if daily bonus can be claimed
   const canClaimDailyBonus = useCallback(() => {

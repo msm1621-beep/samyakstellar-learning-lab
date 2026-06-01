@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCoins } from '@/contexts/CoinsContext';
 import { toast } from '@/hooks/use-toast';
+import ProfileFrame from './ProfileFrame';
 
 const ACCOUNT_ICONS = [
   '🚀', '🌟', '🪐', '🌙', '☄️', '🛸', '👽', '🌌', '🔭', '⭐',
@@ -250,7 +251,7 @@ const AccountBar = () => {
         >
           {account ? (
             <>
-              <span className="text-lg">{account.icon}</span>
+              <ProfileFrame icon={account.icon} size={32} />
               <span className="hidden sm:inline max-w-[100px] truncate">{account.name}</span>
               {expired && <AlertTriangle className="w-4 h-4 text-yellow-300" />}
             </>
@@ -294,11 +295,11 @@ const AccountBar = () => {
               {account ? (
                 <div className="text-center">
                   <motion.div
-                    className="text-6xl mb-4"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="mb-4 flex justify-center"
+                    animate={{ rotate: [0, 6, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity }}
                   >
-                    {account.icon}
+                    <ProfileFrame icon={account.icon} size={88} />
                   </motion.div>
                   <h2 className="text-2xl font-bold text-white mb-2">{account.name}</h2>
                   <p className="text-purple-300 text-sm mb-4">
