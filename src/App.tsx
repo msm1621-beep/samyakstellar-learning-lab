@@ -43,6 +43,7 @@ const App = () => {
                   </BrowserRouter>
                 </TooltipProvider>
               </AchievementsProvider>
+              </PerksProvider>
             </GamePassProvider>
           </SubscriptionProvider>
         </CoinsProvider>
