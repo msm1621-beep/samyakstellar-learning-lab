@@ -32,6 +32,9 @@ import PeriodicTableSidebar from '@/components/PeriodicTableSidebar';
 import StudyPlanner from '@/components/StudyPlanner';
 import Leaderboard from '@/components/Leaderboard';
 import StudyNotesViewer from '@/components/StudyNotesViewer';
+import PerksFX from '@/components/PerksFX';
+import PerkBadgeRow from '@/components/PerkBadgeRow';
+import ExclusiveWebinars from '@/components/ExclusiveWebinars';
 
 const Index = () => {
   return (
