@@ -47,8 +47,8 @@ const generateChallenges = (goals: Goal[]): Challenge[] => {
     picks.forEach((p, i) => {
       out.push({
         id: `${g.id}-${i}-${seed}`,
-        title: p.t.replaceAll('{goal}', g.text),
-        description: p.d.replaceAll('{goal}', g.text),
+        title: p.t.split('{goal}').join(g.text),
+        description: p.d.split('{goal}').join(g.text),
         reward: p.r,
         goalId: g.id,
         done: false,
