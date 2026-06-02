@@ -58,6 +58,9 @@ const Index = () => {
           <DailyFactWidget />
         </AnimatedSection>
         <AnimatedSection>
+          <DailyChallenges />
+        </AnimatedSection>
+        <AnimatedSection>
           <SpaceQnA />
         </AnimatedSection>
         <AnimatedSection>
