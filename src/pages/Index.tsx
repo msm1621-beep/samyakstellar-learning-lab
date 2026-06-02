@@ -35,6 +35,7 @@ import StudyNotesViewer from '@/components/StudyNotesViewer';
 import PerksFX from '@/components/PerksFX';
 import PerkBadgeRow from '@/components/PerkBadgeRow';
 import ExclusiveWebinars from '@/components/ExclusiveWebinars';
+import DailyChallenges from '@/components/DailyChallenges';
 
 const Index = () => {
   return (
