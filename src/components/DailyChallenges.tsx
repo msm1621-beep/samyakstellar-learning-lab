@@ -1,13 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save } from 'lucide-react';
+import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save, Cloud, CloudOff, LogIn, Loader2 } from 'lucide-react';
 import { useCoins } from '@/contexts/CoinsContext';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import AuthModal from '@/components/AuthModal';
 
 interface Goal {
   id: string;
@@ -102,13 +105,20 @@ const loadHistory = (): DayRecord[] => {
 
 const DailyChallenges = () => {
   const { addCoins } = useCoins();
+  const { user } = useAuth();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [newGoal, setNewGoal] = useState('');
   const [adding, setAdding] = useState(false);
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [askingFirst, setAskingFirst] = useState(false);
   const [history, setHistory] = useState<DayRecord[]>([]);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null);
+  const hydratedRef = useRef(false);
+  const remoteLoadedRef = useRef(false);
 
+  // Initial local load + daily rollover (always runs)
   useEffect(() => {
     const g = loadGoals();
     setGoals(g);
@@ -119,12 +129,10 @@ const DailyChallenges = () => {
     if (day === todayKey() && done) {
       try { setCompleted(JSON.parse(done)); } catch {}
     } else {
-      // new day rollover — archive yesterday into history
       if (day && done) {
         try {
           const prevDone: Record<string, boolean> = JSON.parse(done);
           const prevChallenges = generateChallenges(g);
-          // best-effort: only count if we still have same goals; otherwise skip
           if (prevChallenges.length > 0 && day !== todayKey()) {
             const perGoal: Record<string, { total: number; done: number }> = {};
             prevChallenges.forEach((c) => {
@@ -151,15 +159,98 @@ const DailyChallenges = () => {
       setCompleted({});
     }
     setHistory(loadHistory());
+    hydratedRef.current = true;
   }, []);
 
+  // Cloud sync: when user signs in, pull remote and merge with local
   useEffect(() => {
+    if (!user) {
+      remoteLoadedRef.current = false;
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      setSyncing(true);
+      const { data, error } = await supabase
+        .from('user_challenge_data')
+        .select('goals, history, completed, last_day')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      if (error) {
+        setSyncing(false);
+        toast({ title: 'Sync error', description: error.message, variant: 'destructive' });
+        return;
+      }
+      if (data) {
+        // Merge strategy: union goals by id+text; merge history by date (prefer higher done count); completed only if same day
+        const remoteGoals: Goal[] = Array.isArray(data.goals) ? (data.goals as any) : [];
+        const remoteHistory: DayRecord[] = Array.isArray(data.history) ? (data.history as any) : [];
+        const remoteCompleted: Record<string, boolean> = (data.completed as any) || {};
+
+        setGoals((local) => {
+          const byKey = new Map<string, Goal>();
+          [...remoteGoals, ...local].forEach((g) => {
+            const k = g.text.trim().toLowerCase();
+            if (!byKey.has(k)) byKey.set(k, g);
+          });
+          const merged = Array.from(byKey.values());
+          if (merged.length > 0) setAskingFirst(false);
+          return merged;
+        });
+
+        setHistory((local) => {
+          const byDate = new Map<string, DayRecord>();
+          [...local, ...remoteHistory].forEach((d) => {
+            const existing = byDate.get(d.date);
+            if (!existing || d.done > existing.done) byDate.set(d.date, d);
+          });
+          const merged = Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date)).slice(-60);
+          localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(merged));
+          return merged;
+        });
+
+        if (data.last_day === todayKey()) {
+          setCompleted((local) => ({ ...remoteCompleted, ...local }));
+        }
+      }
+      remoteLoadedRef.current = true;
+      setLastSyncedAt(Date.now());
+      setSyncing(false);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  // Persist locally
+  useEffect(() => {
+    if (!hydratedRef.current) return;
     localStorage.setItem(STORAGE_KEYS.goals, JSON.stringify(goals));
   }, [goals]);
 
   useEffect(() => {
+    if (!hydratedRef.current) return;
     localStorage.setItem(STORAGE_KEYS.done, JSON.stringify(completed));
   }, [completed]);
+
+  // Push to cloud (debounced) when signed in
+  useEffect(() => {
+    if (!user || !hydratedRef.current || !remoteLoadedRef.current) return;
+    const t = setTimeout(async () => {
+      setSyncing(true);
+      const { error } = await supabase.from('user_challenge_data').upsert({
+        user_id: user.id,
+        goals: goals as any,
+        history: history as any,
+        completed: completed as any,
+        last_day: todayKey(),
+        updated_at: new Date().toISOString(),
+      });
+      setSyncing(false);
+      if (!error) setLastSyncedAt(Date.now());
+    }, 800);
+    return () => clearTimeout(t);
+  }, [user, goals, history, completed]);
+
 
   const challenges = useMemo(() => generateChallenges(goals), [goals]);
 
@@ -274,8 +365,32 @@ const DailyChallenges = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-2">Daily Space Learning Challenges</h2>
           <p className="text-muted-foreground">Save your goals, get fresh challenges daily, and track your progress.</p>
         </div>
+        {/* Sync banner */}
+        <Card className={`p-3 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${user ? 'bg-primary/5 border-primary/30' : 'bg-yellow-500/5 border-yellow-500/30'}`}>
+          <div className="flex items-center gap-2 text-sm">
+            {syncing ? (
+              <Loader2 className="w-4 h-4 text-primary animate-spin" />
+            ) : user ? (
+              <Cloud className="w-4 h-4 text-primary" />
+            ) : (
+              <CloudOff className="w-4 h-4 text-yellow-500" />
+            )}
+            <span className="text-muted-foreground">
+              {user
+                ? syncing
+                  ? 'Syncing with your account…'
+                  : `Synced across devices${lastSyncedAt ? ` • ${new Date(lastSyncedAt).toLocaleTimeString()}` : ''}`
+                : 'Sign in to sync your goals and progress across devices.'}
+            </span>
+          </div>
+          {!user && (
+            <Button size="sm" onClick={() => setAuthOpen(true)} className="gap-1">
+              <LogIn className="w-4 h-4" /> Sign in to sync
+            </Button>
+          )}
+        </Card>
 
-        {/* Goals panel */}
+
         <Card className="p-5 mb-6 bg-card/40 backdrop-blur border-primary/20">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -440,6 +555,7 @@ const DailyChallenges = () => {
           </Card>
         )}
       </div>
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </section>
   );
 };
