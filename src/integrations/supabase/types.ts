@@ -44,6 +44,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_challenge_data: {
+        Row: {
+          completed: Json
+          goals: Json
+          history: Json
+          last_day: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: Json
+          goals?: Json
+          history?: Json
+          last_day?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: Json
+          goals?: Json
+          history?: Json
+          last_day?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
