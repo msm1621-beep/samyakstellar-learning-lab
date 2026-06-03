@@ -555,6 +555,7 @@ const DailyChallenges = () => {
           </Card>
         )}
       </div>
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </section>
   );
 };
