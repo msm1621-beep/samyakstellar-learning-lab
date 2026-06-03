@@ -1,13 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save } from 'lucide-react';
+import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save, Cloud, CloudOff, LogIn, Loader2 } from 'lucide-react';
 import { useCoins } from '@/contexts/CoinsContext';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import AuthModal from '@/components/AuthModal';
 
 interface Goal {
   id: string;
