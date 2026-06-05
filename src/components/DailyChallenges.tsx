@@ -378,28 +378,17 @@ const DailyChallenges = () => {
           <p className="text-muted-foreground">Save your goals, get fresh challenges daily, and track your progress.</p>
         </div>
         {/* Sync banner */}
-        <Card className={`p-3 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${user ? 'bg-primary/5 border-primary/30' : 'bg-yellow-500/5 border-yellow-500/30'}`}>
-          <div className="flex items-center gap-2 text-sm">
-            {syncing ? (
-              <Loader2 className="w-4 h-4 text-primary animate-spin" />
-            ) : user ? (
-              <Cloud className="w-4 h-4 text-primary" />
-            ) : (
-              <CloudOff className="w-4 h-4 text-yellow-500" />
-            )}
-            <span className="text-muted-foreground">
-              {user
-                ? syncing
-                  ? 'Syncing with your account…'
-                  : `Synced across devices${lastSyncedAt ? ` • ${new Date(lastSyncedAt).toLocaleTimeString()}` : ''}`
-                : 'Sign in to sync your goals and progress across devices.'}
-            </span>
-          </div>
-          {!user && (
-            <Button size="sm" onClick={() => setAuthOpen(true)} className="gap-1">
-              <LogIn className="w-4 h-4" /> Sign in to sync
-            </Button>
+        <Card className="p-3 mb-4 flex items-center gap-2 bg-primary/5 border-primary/30">
+          {syncing ? (
+            <Loader2 className="w-4 h-4 text-primary animate-spin" />
+          ) : (
+            <Cloud className="w-4 h-4 text-primary" />
           )}
+          <span className="text-sm text-muted-foreground">
+            {syncing
+              ? 'Syncing your goals & progress…'
+              : `Synced to your account${lastSyncedAt ? ` • ${new Date(lastSyncedAt).toLocaleTimeString()}` : ''}`}
+          </span>
         </Card>
 
 
