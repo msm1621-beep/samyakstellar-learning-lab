@@ -44,6 +44,10 @@ const AccountBar = () => {
     const savedAccount = localStorage.getItem('spaceAccount');
     if (savedAccount) {
       const parsed = JSON.parse(savedAccount) as AccountData;
+      if (!parsed.id) {
+        parsed.id = newId();
+        localStorage.setItem('spaceAccount', JSON.stringify(parsed));
+      }
       setAccount(parsed);
       
       // Check if maintenance is expired or expiring soon
