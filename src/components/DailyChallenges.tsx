@@ -122,14 +122,13 @@ const loadHistory = (): DayRecord[] => {
 
 const DailyChallenges = () => {
   const { addCoins } = useCoins();
-  const { user } = useAuth();
+  const [syncId] = useState<string>(() => getSyncId());
   const [goals, setGoals] = useState<Goal[]>([]);
   const [newGoal, setNewGoal] = useState('');
   const [adding, setAdding] = useState(false);
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [askingFirst, setAskingFirst] = useState(false);
   const [history, setHistory] = useState<DayRecord[]>([]);
-  const [authOpen, setAuthOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null);
   const hydratedRef = useRef(false);
