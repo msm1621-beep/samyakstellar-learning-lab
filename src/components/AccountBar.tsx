@@ -141,6 +141,7 @@ const AccountBar = () => {
     const maintenanceExpiresAt = new Date(now.getTime() + MAINTENANCE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
 
     const newAccount: AccountData = {
+      id: newId(),
       name: accountName.trim() || 'Space Explorer',
       icon: selectedIcon,
       isGuest: false,
