@@ -5,12 +5,29 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save, Cloud, CloudOff, LogIn, Loader2 } from 'lucide-react';
+import { Plus, Sparkles, Target, Trash2, RefreshCw, Trophy, Flame, TrendingUp, Lightbulb, Save, Cloud, Loader2 } from 'lucide-react';
 import { useCoins } from '@/contexts/CoinsContext';
 import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import AuthModal from '@/components/AuthModal';
+
+const SYNC_ID_KEY = 'dailyChallenge_syncId';
+const getSyncId = (): string => {
+  try {
+    const acc = localStorage.getItem('spaceAccount');
+    if (acc) {
+      const parsed = JSON.parse(acc);
+      if (parsed?.id) return parsed.id as string;
+    }
+  } catch {}
+  let id = localStorage.getItem(SYNC_ID_KEY);
+  if (!id) {
+    id = (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(SYNC_ID_KEY, id);
+  }
+  return id;
+};
 
 interface Goal {
   id: string;
@@ -105,14 +122,13 @@ const loadHistory = (): DayRecord[] => {
 
 const DailyChallenges = () => {
   const { addCoins } = useCoins();
-  const { user } = useAuth();
+  const [syncId] = useState<string>(() => getSyncId());
   const [goals, setGoals] = useState<Goal[]>([]);
   const [newGoal, setNewGoal] = useState('');
   const [adding, setAdding] = useState(false);
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [askingFirst, setAskingFirst] = useState(false);
   const [history, setHistory] = useState<DayRecord[]>([]);
-  const [authOpen, setAuthOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null);
   const hydratedRef = useRef(false);
@@ -162,19 +178,16 @@ const DailyChallenges = () => {
     hydratedRef.current = true;
   }, []);
 
-  // Cloud sync: when user signs in, pull remote and merge with local
+  // Cloud sync: pull remote and merge with local using the local account id
   useEffect(() => {
-    if (!user) {
-      remoteLoadedRef.current = false;
-      return;
-    }
+    if (!syncId) return;
     let cancelled = false;
     (async () => {
       setSyncing(true);
       const { data, error } = await supabase
         .from('user_challenge_data')
         .select('goals, history, completed, last_day')
-        .eq('user_id', user.id)
+        .eq('user_id', syncId)
         .maybeSingle();
       if (cancelled) return;
       if (error) {
@@ -183,7 +196,6 @@ const DailyChallenges = () => {
         return;
       }
       if (data) {
-        // Merge strategy: union goals by id+text; merge history by date (prefer higher done count); completed only if same day
         const remoteGoals: Goal[] = Array.isArray(data.goals) ? (data.goals as any) : [];
         const remoteHistory: DayRecord[] = Array.isArray(data.history) ? (data.history as any) : [];
         const remoteCompleted: Record<string, boolean> = (data.completed as any) || {};
@@ -219,7 +231,7 @@ const DailyChallenges = () => {
       setSyncing(false);
     })();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [syncId]);
 
   // Persist locally
   useEffect(() => {
@@ -232,13 +244,13 @@ const DailyChallenges = () => {
     localStorage.setItem(STORAGE_KEYS.done, JSON.stringify(completed));
   }, [completed]);
 
-  // Push to cloud (debounced) when signed in
+  // Push to cloud (debounced)
   useEffect(() => {
-    if (!user || !hydratedRef.current || !remoteLoadedRef.current) return;
+    if (!syncId || !hydratedRef.current || !remoteLoadedRef.current) return;
     const t = setTimeout(async () => {
       setSyncing(true);
       const { error } = await supabase.from('user_challenge_data').upsert({
-        user_id: user.id,
+        user_id: syncId,
         goals: goals as any,
         history: history as any,
         completed: completed as any,
@@ -249,7 +261,7 @@ const DailyChallenges = () => {
       if (!error) setLastSyncedAt(Date.now());
     }, 800);
     return () => clearTimeout(t);
-  }, [user, goals, history, completed]);
+  }, [syncId, goals, history, completed]);
 
 
   const challenges = useMemo(() => generateChallenges(goals), [goals]);
@@ -366,28 +378,17 @@ const DailyChallenges = () => {
           <p className="text-muted-foreground">Save your goals, get fresh challenges daily, and track your progress.</p>
         </div>
         {/* Sync banner */}
-        <Card className={`p-3 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${user ? 'bg-primary/5 border-primary/30' : 'bg-yellow-500/5 border-yellow-500/30'}`}>
-          <div className="flex items-center gap-2 text-sm">
-            {syncing ? (
-              <Loader2 className="w-4 h-4 text-primary animate-spin" />
-            ) : user ? (
-              <Cloud className="w-4 h-4 text-primary" />
-            ) : (
-              <CloudOff className="w-4 h-4 text-yellow-500" />
-            )}
-            <span className="text-muted-foreground">
-              {user
-                ? syncing
-                  ? 'Syncing with your account…'
-                  : `Synced across devices${lastSyncedAt ? ` • ${new Date(lastSyncedAt).toLocaleTimeString()}` : ''}`
-                : 'Sign in to sync your goals and progress across devices.'}
-            </span>
-          </div>
-          {!user && (
-            <Button size="sm" onClick={() => setAuthOpen(true)} className="gap-1">
-              <LogIn className="w-4 h-4" /> Sign in to sync
-            </Button>
+        <Card className="p-3 mb-4 flex items-center gap-2 bg-primary/5 border-primary/30">
+          {syncing ? (
+            <Loader2 className="w-4 h-4 text-primary animate-spin" />
+          ) : (
+            <Cloud className="w-4 h-4 text-primary" />
           )}
+          <span className="text-sm text-muted-foreground">
+            {syncing
+              ? 'Syncing your goals & progress…'
+              : `Synced to your account${lastSyncedAt ? ` • ${new Date(lastSyncedAt).toLocaleTimeString()}` : ''}`}
+          </span>
         </Card>
 
 
@@ -555,7 +556,7 @@ const DailyChallenges = () => {
           </Card>
         )}
       </div>
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      
     </section>
   );
 };

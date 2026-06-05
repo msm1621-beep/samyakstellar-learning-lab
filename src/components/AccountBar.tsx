@@ -18,6 +18,7 @@ const MAINTENANCE_COST = 50;
 const MAINTENANCE_PERIOD_DAYS = 90; // 3 months
 
 interface AccountData {
+  id?: string;
   name: string;
   icon: string;
   isGuest: boolean;
@@ -25,6 +26,11 @@ interface AccountData {
   lastMaintenanceAt: string;
   maintenanceExpiresAt: string;
 }
+
+const newId = () =>
+  (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 const AccountBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +44,10 @@ const AccountBar = () => {
     const savedAccount = localStorage.getItem('spaceAccount');
     if (savedAccount) {
       const parsed = JSON.parse(savedAccount) as AccountData;
+      if (!parsed.id) {
+        parsed.id = newId();
+        localStorage.setItem('spaceAccount', JSON.stringify(parsed));
+      }
       setAccount(parsed);
       
       // Check if maintenance is expired or expiring soon
@@ -131,6 +141,7 @@ const AccountBar = () => {
     const maintenanceExpiresAt = new Date(now.getTime() + MAINTENANCE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
 
     const newAccount: AccountData = {
+      id: newId(),
       name: accountName.trim() || 'Space Explorer',
       icon: selectedIcon,
       isGuest: false,
@@ -155,6 +166,7 @@ const AccountBar = () => {
 
   const handleContinueAsGuest = () => {
     const guestAccount: AccountData = {
+      id: newId(),
       name: 'Guest Explorer',
       icon: '👤',
       isGuest: true,
