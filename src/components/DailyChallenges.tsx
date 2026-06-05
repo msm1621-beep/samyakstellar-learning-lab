@@ -178,19 +178,16 @@ const DailyChallenges = () => {
     hydratedRef.current = true;
   }, []);
 
-  // Cloud sync: when user signs in, pull remote and merge with local
+  // Cloud sync: pull remote and merge with local using the local account id
   useEffect(() => {
-    if (!user) {
-      remoteLoadedRef.current = false;
-      return;
-    }
+    if (!syncId) return;
     let cancelled = false;
     (async () => {
       setSyncing(true);
       const { data, error } = await supabase
         .from('user_challenge_data')
         .select('goals, history, completed, last_day')
-        .eq('user_id', user.id)
+        .eq('user_id', syncId)
         .maybeSingle();
       if (cancelled) return;
       if (error) {
@@ -199,7 +196,6 @@ const DailyChallenges = () => {
         return;
       }
       if (data) {
-        // Merge strategy: union goals by id+text; merge history by date (prefer higher done count); completed only if same day
         const remoteGoals: Goal[] = Array.isArray(data.goals) ? (data.goals as any) : [];
         const remoteHistory: DayRecord[] = Array.isArray(data.history) ? (data.history as any) : [];
         const remoteCompleted: Record<string, boolean> = (data.completed as any) || {};
@@ -235,7 +231,7 @@ const DailyChallenges = () => {
       setSyncing(false);
     })();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [syncId]);
 
   // Persist locally
   useEffect(() => {
@@ -248,13 +244,13 @@ const DailyChallenges = () => {
     localStorage.setItem(STORAGE_KEYS.done, JSON.stringify(completed));
   }, [completed]);
 
-  // Push to cloud (debounced) when signed in
+  // Push to cloud (debounced)
   useEffect(() => {
-    if (!user || !hydratedRef.current || !remoteLoadedRef.current) return;
+    if (!syncId || !hydratedRef.current || !remoteLoadedRef.current) return;
     const t = setTimeout(async () => {
       setSyncing(true);
       const { error } = await supabase.from('user_challenge_data').upsert({
-        user_id: user.id,
+        user_id: syncId,
         goals: goals as any,
         history: history as any,
         completed: completed as any,
@@ -265,7 +261,7 @@ const DailyChallenges = () => {
       if (!error) setLastSyncedAt(Date.now());
     }, 800);
     return () => clearTimeout(t);
-  }, [user, goals, history, completed]);
+  }, [syncId, goals, history, completed]);
 
 
   const challenges = useMemo(() => generateChallenges(goals), [goals]);
