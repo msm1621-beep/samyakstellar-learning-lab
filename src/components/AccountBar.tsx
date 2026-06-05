@@ -166,6 +166,7 @@ const AccountBar = () => {
 
   const handleContinueAsGuest = () => {
     const guestAccount: AccountData = {
+      id: newId(),
       name: 'Guest Explorer',
       icon: '👤',
       isGuest: true,
