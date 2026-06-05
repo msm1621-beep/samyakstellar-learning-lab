@@ -18,6 +18,7 @@ const MAINTENANCE_COST = 50;
 const MAINTENANCE_PERIOD_DAYS = 90; // 3 months
 
 interface AccountData {
+  id?: string;
   name: string;
   icon: string;
   isGuest: boolean;
@@ -25,6 +26,11 @@ interface AccountData {
   lastMaintenanceAt: string;
   maintenanceExpiresAt: string;
 }
+
+const newId = () =>
+  (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 const AccountBar = () => {
   const [isOpen, setIsOpen] = useState(false);
