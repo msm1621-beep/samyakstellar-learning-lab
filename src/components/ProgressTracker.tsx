@@ -2,10 +2,24 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Flame, BookOpen, Brain, Gamepad2, Rocket, Trophy, Calendar, Sparkles } from 'lucide-react';
+import { Flame, BookOpen, Brain, Gamepad2, Rocket, Trophy, Calendar, Sparkles, CalendarDays } from 'lucide-react';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { courses } from '@/data/courses';
 import { celestialBodies } from '@/data/celestialBodies';
+
+interface DayRecord {
+  date: string;
+  total: number;
+  done: number;
+}
+
+const loadHistory = (): DayRecord[] => {
+  try {
+    return JSON.parse(localStorage.getItem('dailyChallenge_history') || '[]');
+  } catch {
+    return [];
+  }
+};
 
 const STREAK_KEY = 'spaceStreak';
 const todayKey = () => new Date().toISOString().slice(0, 10);
