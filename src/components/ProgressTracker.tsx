@@ -74,6 +74,20 @@ const CATEGORY_LABELS: Record<string, string> = {
 const ProgressTracker = () => {
   const { achievements } = useAchievements();
   const streak = useStreak();
+  const [history, setHistory] = useState<DayRecord[]>(() => loadHistory());
+
+  // refresh history if other components updated localStorage
+  useEffect(() => {
+    const t = setInterval(() => setHistory(loadHistory()), 5000);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'dailyChallenge_history') setHistory(loadHistory());
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      clearInterval(t);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
 
   const courseAch = useMemo(() => achievements.filter((a) => a.type === 'course'), [achievements]);
   const quizAch = useMemo(() => achievements.filter((a) => a.type === 'quiz'), [achievements]);
@@ -82,6 +96,35 @@ const ProgressTracker = () => {
     () => achievements.filter((a) => a.type === 'book' || a.type === 'audiobook'),
     [achievements]
   );
+
+  // Heatmap: last 12 weeks (84 days) of mission completion
+  const heatmap = useMemo(() => {
+    const byDate = new Map<string, DayRecord>();
+    history.forEach((d) => byDate.set(d.date, d));
+    const days: { date: string; level: 0 | 1 | 2 | 3 | 4; label: string }[] = [];
+    const today = new Date();
+    for (let i = 83; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const rec = byDate.get(key);
+      let level: 0 | 1 | 2 | 3 | 4 = 0;
+      if (rec && rec.total > 0) {
+        const r = rec.done / rec.total;
+        if (r >= 1) level = 4;
+        else if (r >= 0.66) level = 3;
+        else if (r >= 0.33) level = 2;
+        else if (r > 0) level = 1;
+      }
+      days.push({
+        date: key,
+        level,
+        label: rec ? `${rec.done}/${rec.total} on ${key}` : `No missions on ${key}`,
+      });
+    }
+    return days;
+  }, [history]);
+
 
   const totals = useMemo(() => {
     const byCat: Record<string, number> = {};
