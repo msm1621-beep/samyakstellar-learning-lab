@@ -1,41 +1,54 @@
+import { lazy, Suspense } from 'react';
 import EnhancedStarField from '@/components/EnhancedStarField';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
-import SolarSystem3D from '@/components/SolarSystem3D';
-import CelestialExplorer from '@/components/CelestialExplorer';
-import SpaceTimeline from '@/components/SpaceTimeline';
 import DailyFactWidget from '@/components/DailyFactWidget';
-import SpaceQnA from '@/components/SpaceQnA';
-import ConstellationViewer from '@/components/ConstellationViewer';
-import CourseSection from '@/components/CourseSection';
-import LibrarySection from '@/components/LibrarySection';
-import GamesSection from '@/components/GamesSection';
-import PremiumGamesSection from '@/components/PremiumGamesSection';
-import FunFactsSection from '@/components/FunFactsSection';
-import AboutSection from '@/components/AboutSection';
-import Footer from '@/components/Footer';
-import CosmoAssistant from '@/components/CosmoAssistant';
-import AlienDoom from '@/components/AlienDoom';
-import SpaceAmbience from '@/components/SpaceAmbience';
 import CoinDisplay from '@/components/CoinDisplay';
-
 import AccountBar from '@/components/AccountBar';
-import GamePassSection from '@/components/GamePassSection';
-import SubscriptionSection from '@/components/SubscriptionSection';
-import CertificateShowcase from '@/components/CertificateShowcase';
-import FeaturedShop from '@/components/FeaturedShop';
-import ManuscriptsSection from '@/components/ManuscriptsSection';
 import BackToTop from '@/components/BackToTop';
 import AnimatedSection from '@/components/AnimatedSection';
 import ExplorationProgress from '@/components/ExplorationProgress';
-import PeriodicTableSidebar from '@/components/PeriodicTableSidebar';
-import StudyPlanner from '@/components/StudyPlanner';
-import Leaderboard from '@/components/Leaderboard';
-import StudyNotesViewer from '@/components/StudyNotesViewer';
 import PerksFX from '@/components/PerksFX';
 import PerkBadgeRow from '@/components/PerkBadgeRow';
-import ExclusiveWebinars from '@/components/ExclusiveWebinars';
+import ProgressTracker from '@/components/ProgressTracker';
 import DailyChallenges from '@/components/DailyChallenges';
+import Footer from '@/components/Footer';
+
+// Lazy-load heavy below-the-fold sections to keep initial load snappy
+const SolarSystem3D = lazy(() => import('@/components/SolarSystem3D'));
+const CelestialExplorer = lazy(() => import('@/components/CelestialExplorer'));
+const SpaceTimeline = lazy(() => import('@/components/SpaceTimeline'));
+const SpaceQnA = lazy(() => import('@/components/SpaceQnA'));
+const ConstellationViewer = lazy(() => import('@/components/ConstellationViewer'));
+const CourseSection = lazy(() => import('@/components/CourseSection'));
+const LibrarySection = lazy(() => import('@/components/LibrarySection'));
+const GamesSection = lazy(() => import('@/components/GamesSection'));
+const PremiumGamesSection = lazy(() => import('@/components/PremiumGamesSection'));
+const FunFactsSection = lazy(() => import('@/components/FunFactsSection'));
+const AboutSection = lazy(() => import('@/components/AboutSection'));
+const CosmoAssistant = lazy(() => import('@/components/CosmoAssistant'));
+const AlienDoom = lazy(() => import('@/components/AlienDoom'));
+const SpaceAmbience = lazy(() => import('@/components/SpaceAmbience'));
+const GamePassSection = lazy(() => import('@/components/GamePassSection'));
+const SubscriptionSection = lazy(() => import('@/components/SubscriptionSection'));
+const CertificateShowcase = lazy(() => import('@/components/CertificateShowcase'));
+const FeaturedShop = lazy(() => import('@/components/FeaturedShop'));
+const ManuscriptsSection = lazy(() => import('@/components/ManuscriptsSection'));
+const PeriodicTableSidebar = lazy(() => import('@/components/PeriodicTableSidebar'));
+const StudyPlanner = lazy(() => import('@/components/StudyPlanner'));
+const Leaderboard = lazy(() => import('@/components/Leaderboard'));
+const StudyNotesViewer = lazy(() => import('@/components/StudyNotesViewer'));
+const ExclusiveWebinars = lazy(() => import('@/components/ExclusiveWebinars'));
+
+const SectionFallback = () => (
+  <div className="container mx-auto px-4 py-12">
+    <div className="h-40 rounded-xl bg-card/20 animate-pulse" />
+  </div>
+);
+
+const Lazy = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<SectionFallback />}>{children}</Suspense>
+);
 
 const Index = () => {
   return (
@@ -47,12 +60,15 @@ const Index = () => {
       <AccountBar />
       <PerkBadgeRow />
       <ExplorationProgress />
-      <StudyNotesViewer />
+      <Suspense fallback={null}><StudyNotesViewer /></Suspense>
 
       <main className="relative z-10">
         <HeroSection />
         <AnimatedSection>
-          <SolarSystem3D />
+          <ProgressTracker />
+        </AnimatedSection>
+        <AnimatedSection>
+          <Lazy><SolarSystem3D /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
           <DailyFactWidget />
@@ -61,67 +77,67 @@ const Index = () => {
           <DailyChallenges />
         </AnimatedSection>
         <AnimatedSection>
-          <SpaceQnA />
+          <Lazy><SpaceQnA /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <CelestialExplorer />
+          <Lazy><CelestialExplorer /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <SpaceTimeline />
+          <Lazy><SpaceTimeline /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <ConstellationViewer />
+          <Lazy><ConstellationViewer /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <CourseSection />
+          <Lazy><CourseSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <Leaderboard />
+          <Lazy><Leaderboard /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <StudyPlanner />
+          <Lazy><StudyPlanner /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <ManuscriptsSection />
+          <Lazy><ManuscriptsSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <LibrarySection />
+          <Lazy><LibrarySection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <GamesSection />
+          <Lazy><GamesSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <PremiumGamesSection />
+          <Lazy><PremiumGamesSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <GamePassSection />
+          <Lazy><GamePassSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <SubscriptionSection />
+          <Lazy><SubscriptionSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <ExclusiveWebinars />
+          <Lazy><ExclusiveWebinars /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <FeaturedShop />
+          <Lazy><FeaturedShop /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <CertificateShowcase />
+          <Lazy><CertificateShowcase /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <FunFactsSection />
+          <Lazy><FunFactsSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
-          <AboutSection />
+          <Lazy><AboutSection /></Lazy>
         </AnimatedSection>
       </main>
 
       <Footer />
-      <CosmoAssistant />
-      <AlienDoom />
-      <SpaceAmbience />
+      <Suspense fallback={null}><CosmoAssistant /></Suspense>
+      <Suspense fallback={null}><AlienDoom /></Suspense>
+      <Suspense fallback={null}><SpaceAmbience /></Suspense>
       <BackToTop />
-      <PeriodicTableSidebar />
+      <Suspense fallback={null}><PeriodicTableSidebar /></Suspense>
     </div>
   );
 };
