@@ -2,10 +2,24 @@ import { useEffect, useMemo, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Flame, BookOpen, Brain, Gamepad2, Rocket, Trophy, Calendar, Sparkles } from 'lucide-react';
+import { Flame, BookOpen, Brain, Gamepad2, Rocket, Trophy, Calendar, Sparkles, CalendarDays } from 'lucide-react';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { courses } from '@/data/courses';
 import { celestialBodies } from '@/data/celestialBodies';
+
+interface DayRecord {
+  date: string;
+  total: number;
+  done: number;
+}
+
+const loadHistory = (): DayRecord[] => {
+  try {
+    return JSON.parse(localStorage.getItem('dailyChallenge_history') || '[]');
+  } catch {
+    return [];
+  }
+};
 
 const STREAK_KEY = 'spaceStreak';
 const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -60,6 +74,20 @@ const CATEGORY_LABELS: Record<string, string> = {
 const ProgressTracker = () => {
   const { achievements } = useAchievements();
   const streak = useStreak();
+  const [history, setHistory] = useState<DayRecord[]>(() => loadHistory());
+
+  // refresh history if other components updated localStorage
+  useEffect(() => {
+    const t = setInterval(() => setHistory(loadHistory()), 5000);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'dailyChallenge_history') setHistory(loadHistory());
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      clearInterval(t);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
 
   const courseAch = useMemo(() => achievements.filter((a) => a.type === 'course'), [achievements]);
   const quizAch = useMemo(() => achievements.filter((a) => a.type === 'quiz'), [achievements]);
@@ -68,6 +96,35 @@ const ProgressTracker = () => {
     () => achievements.filter((a) => a.type === 'book' || a.type === 'audiobook'),
     [achievements]
   );
+
+  // Heatmap: last 12 weeks (84 days) of mission completion
+  const heatmap = useMemo(() => {
+    const byDate = new Map<string, DayRecord>();
+    history.forEach((d) => byDate.set(d.date, d));
+    const days: { date: string; level: 0 | 1 | 2 | 3 | 4; label: string }[] = [];
+    const today = new Date();
+    for (let i = 83; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const rec = byDate.get(key);
+      let level: 0 | 1 | 2 | 3 | 4 = 0;
+      if (rec && rec.total > 0) {
+        const r = rec.done / rec.total;
+        if (r >= 1) level = 4;
+        else if (r >= 0.66) level = 3;
+        else if (r >= 0.33) level = 2;
+        else if (r > 0) level = 1;
+      }
+      days.push({
+        date: key,
+        level,
+        label: rec ? `${rec.done}/${rec.total} on ${key}` : `No missions on ${key}`,
+      });
+    }
+    return days;
+  }, [history]);
+
 
   const totals = useMemo(() => {
     const byCat: Record<string, number> = {};
@@ -152,6 +209,51 @@ const ProgressTracker = () => {
             <div className="text-xs text-muted-foreground mt-1">trophies earned</div>
           </Card>
         </div>
+
+        {/* Streak Heatmap */}
+        <Card className="p-5 mb-6 bg-card/40 backdrop-blur border-primary/20">
+          <div className="flex items-center gap-2 mb-4">
+            <CalendarDays className="w-5 h-5 text-primary" />
+            <h3 className="font-semibold">Mission Streak — Last 12 Weeks</h3>
+            <Badge variant="secondary" className="ml-auto">
+              {heatmap.filter((d) => d.level > 0).length} active days
+            </Badge>
+          </div>
+          <div className="overflow-x-auto">
+            <div
+              className="grid grid-flow-col gap-1"
+              style={{ gridTemplateRows: 'repeat(7, minmax(0, 1fr))' }}
+            >
+              {heatmap.map((d) => {
+                const colors = [
+                  'bg-muted/30',
+                  'bg-orange-500/25',
+                  'bg-orange-500/50',
+                  'bg-orange-500/75',
+                  'bg-orange-500',
+                ];
+                return (
+                  <div
+                    key={d.date}
+                    title={d.label}
+                    className={`w-3.5 h-3.5 rounded-sm ${colors[d.level]} border border-border/30`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-1.5 mt-3 text-xs text-muted-foreground">
+            <span>Less</span>
+            <div className="w-3 h-3 rounded-sm bg-muted/30 border border-border/30" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/25" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/50" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/75" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500" />
+            <span>More</span>
+          </div>
+        </Card>
+
+
 
         {/* Topic categories */}
         <Card className="p-5 mb-6 bg-card/40 backdrop-blur border-primary/20">
