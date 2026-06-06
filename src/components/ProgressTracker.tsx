@@ -210,6 +210,51 @@ const ProgressTracker = () => {
           </Card>
         </div>
 
+        {/* Streak Heatmap */}
+        <Card className="p-5 mb-6 bg-card/40 backdrop-blur border-primary/20">
+          <div className="flex items-center gap-2 mb-4">
+            <CalendarDays className="w-5 h-5 text-primary" />
+            <h3 className="font-semibold">Mission Streak — Last 12 Weeks</h3>
+            <Badge variant="secondary" className="ml-auto">
+              {heatmap.filter((d) => d.level > 0).length} active days
+            </Badge>
+          </div>
+          <div className="overflow-x-auto">
+            <div
+              className="grid grid-flow-col gap-1"
+              style={{ gridTemplateRows: 'repeat(7, minmax(0, 1fr))' }}
+            >
+              {heatmap.map((d) => {
+                const colors = [
+                  'bg-muted/30',
+                  'bg-orange-500/25',
+                  'bg-orange-500/50',
+                  'bg-orange-500/75',
+                  'bg-orange-500',
+                ];
+                return (
+                  <div
+                    key={d.date}
+                    title={d.label}
+                    className={`w-3.5 h-3.5 rounded-sm ${colors[d.level]} border border-border/30`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-1.5 mt-3 text-xs text-muted-foreground">
+            <span>Less</span>
+            <div className="w-3 h-3 rounded-sm bg-muted/30 border border-border/30" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/25" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/50" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500/75" />
+            <div className="w-3 h-3 rounded-sm bg-orange-500" />
+            <span>More</span>
+          </div>
+        </Card>
+
+
+
         {/* Topic categories */}
         <Card className="p-5 mb-6 bg-card/40 backdrop-blur border-primary/20">
           <div className="flex items-center gap-2 mb-4">
