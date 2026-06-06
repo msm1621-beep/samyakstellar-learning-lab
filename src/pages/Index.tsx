@@ -40,11 +40,8 @@ const Leaderboard = lazy(() => import('@/components/Leaderboard'));
 const StudyNotesViewer = lazy(() => import('@/components/StudyNotesViewer'));
 const ExclusiveWebinars = lazy(() => import('@/components/ExclusiveWebinars'));
 
-const SectionFallback = () => (
-  <div className="container mx-auto px-4 py-12">
-    <div className="h-40 rounded-xl bg-card/20 animate-pulse" />
-  </div>
-);
+const SectionFallback = () => <div aria-hidden className="min-h-[40px]" />;
+
 
 const Lazy = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<SectionFallback />}>{children}</Suspense>
