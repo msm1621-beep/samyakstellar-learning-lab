@@ -56,6 +56,8 @@ const MIRRORED_KEYS = [
   // preferences
   'theme',
   'spaceMelody',
+  // alien pets
+  'alienPetsCollection',
 ];
 
 // One-shot: pull cookies into localStorage on app start if localStorage is missing them.

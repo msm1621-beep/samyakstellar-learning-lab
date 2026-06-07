@@ -39,6 +39,7 @@ const StudyPlanner = lazy(() => import('@/components/StudyPlanner'));
 const Leaderboard = lazy(() => import('@/components/Leaderboard'));
 const StudyNotesViewer = lazy(() => import('@/components/StudyNotesViewer'));
 const ExclusiveWebinars = lazy(() => import('@/components/ExclusiveWebinars'));
+const AlienPetsSection = lazy(() => import('@/components/AlienPetsSection'));
 
 const SectionFallback = () => <div aria-hidden className="min-h-[40px]" />;
 
@@ -117,6 +118,9 @@ const Index = () => {
         </AnimatedSection>
         <AnimatedSection>
           <Lazy><FeaturedShop /></Lazy>
+        </AnimatedSection>
+        <AnimatedSection>
+          <Lazy><AlienPetsSection /></Lazy>
         </AnimatedSection>
         <AnimatedSection>
           <Lazy><CertificateShowcase /></Lazy>
