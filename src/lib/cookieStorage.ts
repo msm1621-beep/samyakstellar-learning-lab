@@ -31,11 +31,31 @@ export const deleteCookie = (name: string) => {
 // Keys we keep mirrored between localStorage and cookies.
 // Keep this list small — cookies are sent on every request and capped at ~4KB.
 const MIRRORED_KEYS = [
+  // account & identity
   'spaceAccount',
-  'spaceStreak',
   'dailyChallenge_syncId',
+  // streaks & daily challenges
+  'spaceStreak',
   'dailyChallenge_day',
+  'dailyChallenge_goals',
   'dailyChallenge_goals_v2',
+  'dailyChallenge_history',
+  // progress
+  'completedCourses',
+  'completedBooks',
+  'courseProgress',
+  'visitedSections',
+  'spaceAchievements',
+  // economy
+  'spaceCoins',
+  'spaceTotalEarned',
+  'spaceExtraLives',
+  'spaceGamePasses',
+  'purchasedShopItems',
+  'spaceSubscription',
+  // preferences
+  'theme',
+  'spaceMelody',
 ];
 
 // One-shot: pull cookies into localStorage on app start if localStorage is missing them.
