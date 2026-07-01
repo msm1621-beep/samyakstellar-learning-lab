@@ -3,7 +3,7 @@ import { celestialSizes, typeColors, CelestialSize } from '@/data/sizeComparison
 import { Button } from '@/components/ui/button';
 import { ArrowLeftRight, Info } from 'lucide-react';
 
-type FilterType = 'all' | 'planet' | 'moon' | 'star' | 'dwarf-planet';
+type FilterType = 'all' | 'planet' | 'moon' | 'star' | 'dwarf-planet' | 'asteroid' | 'comet' | 'exoplanet' | 'nebula' | 'galaxy' | 'black-hole';
 
 const SizeComparison = () => {
   const [leftSelection, setLeftSelection] = useState<CelestialSize>(celestialSizes.find(c => c.id === 'earth')!);
@@ -66,8 +66,14 @@ const SizeComparison = () => {
           { value: 'all', label: 'All', emoji: '🌌' },
           { value: 'planet', label: 'Planets', emoji: '🪐' },
           { value: 'moon', label: 'Moons', emoji: '🌙' },
+          { value: 'dwarf-planet', label: 'Dwarfs', emoji: '💫' },
+          { value: 'asteroid', label: 'Asteroids', emoji: '🪨' },
+          { value: 'comet', label: 'Comets', emoji: '☄️' },
+          { value: 'exoplanet', label: 'Exoplanets', emoji: '🌐' },
           { value: 'star', label: 'Stars', emoji: '⭐' },
-          { value: 'dwarf-planet', label: 'Dwarf Planets', emoji: '💫' },
+          { value: 'black-hole', label: 'Black Holes', emoji: '🕳️' },
+          { value: 'nebula', label: 'Nebulae', emoji: '🌸' },
+          { value: 'galaxy', label: 'Galaxies', emoji: '🌀' },
         ].map(({ value, label, emoji }) => (
           <Button
             key={value}
