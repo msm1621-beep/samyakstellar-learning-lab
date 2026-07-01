@@ -114,7 +114,7 @@ const ExclusiveWebinars = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {WEBINARS.map((w, idx) => {
-            const unlocked = hasWebinarAccess && webinarTier >= w.requiredTier;
+            const unlocked = true; // webinars are open to everyone
             return (
               <motion.div
                 key={w.id}
