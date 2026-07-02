@@ -305,37 +305,35 @@ const LibrarySection = () => {
             {/* All Videos - Free for everyone! */}
             {filteredVideos.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVideos.map((video) => (
+                {filteredVideos.map((video) => {
+                  const youtubeUrl = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+                  return (
                   <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                     <div className="relative aspect-video">
-                      {playingVideo === video.id ? (
-                        <iframe
-                          src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`}
-                          title={video.title}
-                          className="w-full h-full"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
+                      <a
+                        href={youtubeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full h-full"
+                        aria-label={`Watch ${video.title} on YouTube`}
+                      >
+                        <img
+                          src={video.thumbnail}
+                          alt={video.title}
+                          className="w-full h-full object-cover"
                         />
-                      ) : (
-                        <>
-                          <img 
-                            src={video.thumbnail} 
-                            alt={video.title}
-                            className="w-full h-full object-cover"
-                          />
-                          <button 
-                            onClick={() => setPlayingVideo(video.id)}
-                            className="absolute inset-0 bg-background/40 flex items-center justify-center group-hover:bg-background/60 transition-colors"
-                          >
-                            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow transform group-hover:scale-110 transition-transform">
-                              <Play className="w-8 h-8 text-primary-foreground ml-1" />
-                            </div>
-                          </button>
-                          <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
-                            {video.duration}
-                          </span>
-                        </>
-                      )}
+                        <div className="absolute inset-0 bg-background/40 flex items-center justify-center group-hover:bg-background/60 transition-colors">
+                          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center cosmic-glow transform group-hover:scale-110 transition-transform">
+                            <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                          </div>
+                        </div>
+                        <span className="absolute bottom-2 right-2 px-2 py-1 rounded bg-background/80 text-xs font-medium">
+                          {video.duration}
+                        </span>
+                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-red-600 text-white text-[10px] font-bold tracking-wide">
+                          YOUTUBE
+                        </span>
+                      </a>
                     </div>
                     <div className="p-4">
                       <h3 className="font-display font-bold mb-1 group-hover:text-primary transition-colors">
@@ -349,30 +347,21 @@ const LibrarySection = () => {
                           </span>
                         ))}
                       </div>
-                      {playingVideo === video.id ? (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setPlayingVideo(null)}
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Close Video
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={() => setPlayingVideo(video.id)}
-                        >
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="w-full"
+                        asChild
+                      >
+                        <a href={youtubeUrl} target="_blank" rel="noopener noreferrer">
                           <Play className="w-4 h-4 mr-2" />
-                          Watch Now
-                        </Button>
-                      )}
+                          Watch on YouTube
+                        </a>
+                      </Button>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-12">
