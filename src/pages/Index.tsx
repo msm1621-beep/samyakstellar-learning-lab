@@ -13,6 +13,7 @@ import PerkBadgeRow from '@/components/PerkBadgeRow';
 import ProgressTracker from '@/components/ProgressTracker';
 import DailyChallenges from '@/components/DailyChallenges';
 import Footer from '@/components/Footer';
+import FeatureHub from '@/components/FeatureHub';
 
 // Lazy-load heavy below-the-fold sections to keep initial load snappy
 const SolarSystem3D = lazy(() => import('@/components/SolarSystem3D'));
@@ -62,6 +63,9 @@ const Index = () => {
 
       <main className="relative z-10">
         <HeroSection />
+        <AnimatedSection>
+          <FeatureHub />
+        </AnimatedSection>
         <AnimatedSection>
           <ProgressTracker />
         </AnimatedSection>
