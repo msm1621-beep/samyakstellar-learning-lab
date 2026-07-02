@@ -105,16 +105,19 @@ const ExclusiveWebinars = () => {
             <Sparkles className="w-8 h-8 text-amber-400" />
           </div>
           <p className="text-white/60 max-w-2xl mx-auto">
-            Live sessions with real astronauts and scientists, unlocked through VIP subscriptions and the Star Collector badge.
+            AI-generated live sessions with virtual astronauts and scientists — exclusive to VIP members with the Star Collector badge.
           </p>
-          <div className="mt-4 inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-slate-900/60 border border-white/10 text-white/70">
+          <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-400/30 text-fuchsia-200">
+            <Sparkles className="w-3 h-3" /> AI-generated · VIP only
+          </div>
+          <div className="mt-3 inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-slate-900/60 border border-white/10 text-white/70 ml-2">
             Your access tier: <span className="text-amber-300 font-bold">{webinarTier || '—'}</span>
           </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {WEBINARS.map((w, idx) => {
-            const unlocked = true; // webinars are open to everyone
+            const unlocked = hasWebinarAccess && webinarTier >= w.requiredTier;
             return (
               <motion.div
                 key={w.id}
