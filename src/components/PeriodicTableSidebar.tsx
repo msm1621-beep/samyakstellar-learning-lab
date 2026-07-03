@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Atom, X, Search } from 'lucide-react';
 import { elements, categories, categoryColors, Element } from '@/data/periodicTable';
 import { ScrollArea } from '@/components/ui/scroll-area';
