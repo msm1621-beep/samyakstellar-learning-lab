@@ -12,6 +12,12 @@ const PeriodicTableSidebar = () => {
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'category'>('list');
 
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener('open-periodic', handler);
+    return () => window.removeEventListener('open-periodic', handler);
+  }, []);
+
   const toggleCategory = (cat: string) => {
     setExpandedCategories(prev =>
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
