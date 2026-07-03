@@ -6,54 +6,61 @@ import {
   FlaskConical, Music, Target, Sparkle,
 } from 'lucide-react';
 
+export type FeatureKey =
+  | 'progress-tracker' | 'daily-challenges' | 'fun-facts' | 'solar-system-3d'
+  | 'facts' | 'space-qna' | 'explorer' | 'timeline' | 'constellations'
+  | 'courses' | 'leaderboard' | 'study-planner' | 'manuscripts' | 'library'
+  | 'games' | 'premium-games' | 'game-passes' | 'subscriptions' | 'webinars'
+  | 'shop' | 'alien-pets' | 'achievements' | 'about';
+
+export type FeatureAction =
+  | { kind: 'open'; key: FeatureKey }
+  | { kind: 'route'; href: string }
+  | { kind: 'toggle'; target: 'periodic' | 'music' };
+
 interface Feature {
   id: string;
   label: string;
-  href: string;
   icon: React.ElementType;
-  gradient: string; // tailwind gradient stops
-  ring: string; // ring color
+  gradient: string;
+  ring: string;
+  action: FeatureAction;
 }
 
 const FEATURES: Feature[] = [
-  { id: 'progress-tracker', label: 'Progress',       href: '#progress-tracker', icon: BarChart3,      gradient: 'from-emerald-500 to-teal-500',   ring: 'ring-emerald-400/40' },
-  { id: 'daily-challenges', label: 'Daily Missions', href: '#daily-challenges', icon: Target,         gradient: 'from-red-500 to-rose-500',       ring: 'ring-red-400/40' },
-  { id: 'fun-facts',        label: 'Fun Facts',      href: '#fun-facts',        icon: Sparkle,        gradient: 'from-pink-400 to-fuchsia-500',   ring: 'ring-pink-400/40' },
-  { id: 'solar-system-3d',  label: '3D Solar System',href: '#solar-system-3d',  icon: Globe2,         gradient: 'from-sky-500 to-indigo-500',     ring: 'ring-sky-400/40' },
-  { id: 'facts',            label: 'Daily Fact',     href: '#facts',            icon: Lightbulb,      gradient: 'from-amber-400 to-orange-500',   ring: 'ring-amber-400/40' },
-  { id: 'space-qna',        label: 'Ask Cosmo',      href: '#space-qna',        icon: MessageCircle,  gradient: 'from-fuchsia-500 to-purple-500', ring: 'ring-fuchsia-400/40' },
-  { id: 'explorer',         label: 'Celestial Explorer', href: '#explorer',     icon: Telescope,      gradient: 'from-cyan-500 to-blue-500',      ring: 'ring-cyan-400/40' },
-  { id: 'timeline',         label: 'Timeline',       href: '#timeline',         icon: Clock,          gradient: 'from-rose-500 to-pink-500',      ring: 'ring-rose-400/40' },
-  { id: 'constellations',   label: 'Constellations', href: '#constellations',   icon: Stars,          gradient: 'from-indigo-500 to-violet-500',  ring: 'ring-indigo-400/40' },
-  { id: 'courses',          label: 'Courses',        href: '#courses',          icon: GraduationCap,  gradient: 'from-blue-500 to-cyan-500',      ring: 'ring-blue-400/40' },
-  { id: 'leaderboard',      label: 'Leaderboard',    href: '#leaderboard',      icon: Trophy,         gradient: 'from-yellow-500 to-amber-500',   ring: 'ring-yellow-400/40' },
-  { id: 'study-planner',    label: 'Study Planner',  href: '#study-planner',    icon: CalendarCheck,  gradient: 'from-green-500 to-emerald-500',  ring: 'ring-green-400/40' },
-  { id: 'manuscripts',      label: 'Manuscripts',    href: '#manuscripts',      icon: ScrollText,     gradient: 'from-amber-600 to-yellow-600',   ring: 'ring-amber-500/40' },
-  { id: 'library',          label: 'Library',        href: '#library',          icon: BookOpen,       gradient: 'from-purple-500 to-pink-500',    ring: 'ring-purple-400/40' },
-  { id: 'games',            label: 'Learning Games', href: '#games',            icon: Gamepad2,       gradient: 'from-lime-500 to-green-500',     ring: 'ring-lime-400/40' },
-  { id: 'premium-games',    label: 'Premium Games',  href: '#premium-games',    icon: Crown,          gradient: 'from-orange-500 to-red-500',     ring: 'ring-orange-400/40' },
-  { id: 'game-passes',      label: 'Game Passes',    href: '#game-passes',      icon: Ticket,         gradient: 'from-cyan-500 to-teal-500',      ring: 'ring-cyan-400/40' },
-  { id: 'subscriptions',    label: 'VIP',            href: '#subscriptions',    icon: Sparkles,       gradient: 'from-amber-500 to-fuchsia-500',  ring: 'ring-amber-400/40' },
-  { id: 'webinars',         label: 'Webinars',       href: '#webinars',         icon: Video,          gradient: 'from-fuchsia-500 to-amber-500',  ring: 'ring-fuchsia-400/40' },
-  { id: 'shop',             label: 'Shop',           href: '#shop',             icon: ShoppingBag,    gradient: 'from-pink-500 to-purple-500',    ring: 'ring-pink-400/40' },
-  { id: 'alien-pets',       label: 'Alien Pets',     href: '#alien-pets',       icon: Sprout,         gradient: 'from-emerald-500 to-lime-500',   ring: 'ring-emerald-400/40' },
-  { id: 'achievements',     label: 'Trophies',       href: '#achievements',     icon: Award,          gradient: 'from-yellow-400 to-orange-500',  ring: 'ring-yellow-400/40' },
-  { id: 'about',            label: 'About',          href: '#about',            icon: Info,           gradient: 'from-slate-500 to-slate-700',    ring: 'ring-slate-400/40' },
-  { id: 'periodic',         label: 'Periodic Table', href: '#periodic-toggle',  icon: FlaskConical,   gradient: 'from-teal-500 to-cyan-500',      ring: 'ring-teal-400/40' },
-  { id: 'music',            label: 'Music',          href: '#music-toggle',     icon: Music,          gradient: 'from-purple-500 to-pink-500',    ring: 'ring-purple-400/40' },
-  { id: 'dream',            label: 'Dream Journey',  href: '/dream-journey',    icon: Rocket,         gradient: 'from-violet-500 to-fuchsia-500', ring: 'ring-violet-400/40' },
+  { id: 'progress-tracker', label: 'Progress',           icon: BarChart3,     gradient: 'from-emerald-500 to-teal-500',   ring: 'ring-emerald-400/40', action: { kind: 'open', key: 'progress-tracker' } },
+  { id: 'daily-challenges', label: 'Daily Missions',     icon: Target,        gradient: 'from-red-500 to-rose-500',       ring: 'ring-red-400/40',     action: { kind: 'open', key: 'daily-challenges' } },
+  { id: 'fun-facts',        label: 'Fun Facts',          icon: Sparkle,       gradient: 'from-pink-400 to-fuchsia-500',   ring: 'ring-pink-400/40',    action: { kind: 'open', key: 'fun-facts' } },
+  { id: 'solar-system-3d',  label: '3D Solar System',    icon: Globe2,        gradient: 'from-sky-500 to-indigo-500',     ring: 'ring-sky-400/40',     action: { kind: 'open', key: 'solar-system-3d' } },
+  { id: 'facts',            label: 'Daily Fact',         icon: Lightbulb,     gradient: 'from-amber-400 to-orange-500',   ring: 'ring-amber-400/40',   action: { kind: 'open', key: 'facts' } },
+  { id: 'space-qna',        label: 'Ask Cosmo',          icon: MessageCircle, gradient: 'from-fuchsia-500 to-purple-500', ring: 'ring-fuchsia-400/40', action: { kind: 'open', key: 'space-qna' } },
+  { id: 'explorer',         label: 'Celestial Explorer', icon: Telescope,     gradient: 'from-cyan-500 to-blue-500',      ring: 'ring-cyan-400/40',    action: { kind: 'open', key: 'explorer' } },
+  { id: 'timeline',         label: 'Timeline',           icon: Clock,         gradient: 'from-rose-500 to-pink-500',      ring: 'ring-rose-400/40',    action: { kind: 'open', key: 'timeline' } },
+  { id: 'constellations',   label: 'Constellations',     icon: Stars,         gradient: 'from-indigo-500 to-violet-500',  ring: 'ring-indigo-400/40',  action: { kind: 'open', key: 'constellations' } },
+  { id: 'courses',          label: 'Courses',            icon: GraduationCap, gradient: 'from-blue-500 to-cyan-500',      ring: 'ring-blue-400/40',    action: { kind: 'open', key: 'courses' } },
+  { id: 'leaderboard',      label: 'Leaderboard',        icon: Trophy,        gradient: 'from-yellow-500 to-amber-500',   ring: 'ring-yellow-400/40',  action: { kind: 'open', key: 'leaderboard' } },
+  { id: 'study-planner',    label: 'Study Planner',      icon: CalendarCheck, gradient: 'from-green-500 to-emerald-500',  ring: 'ring-green-400/40',   action: { kind: 'open', key: 'study-planner' } },
+  { id: 'manuscripts',      label: 'Manuscripts',        icon: ScrollText,    gradient: 'from-amber-600 to-yellow-600',   ring: 'ring-amber-500/40',   action: { kind: 'open', key: 'manuscripts' } },
+  { id: 'library',          label: 'Library',            icon: BookOpen,      gradient: 'from-purple-500 to-pink-500',    ring: 'ring-purple-400/40',  action: { kind: 'open', key: 'library' } },
+  { id: 'games',            label: 'Learning Games',     icon: Gamepad2,      gradient: 'from-lime-500 to-green-500',     ring: 'ring-lime-400/40',    action: { kind: 'open', key: 'games' } },
+  { id: 'premium-games',    label: 'Premium Games',      icon: Crown,         gradient: 'from-orange-500 to-red-500',     ring: 'ring-orange-400/40',  action: { kind: 'open', key: 'premium-games' } },
+  { id: 'game-passes',      label: 'Game Passes',        icon: Ticket,        gradient: 'from-cyan-500 to-teal-500',      ring: 'ring-cyan-400/40',    action: { kind: 'open', key: 'game-passes' } },
+  { id: 'subscriptions',    label: 'VIP',                icon: Sparkles,      gradient: 'from-amber-500 to-fuchsia-500',  ring: 'ring-amber-400/40',   action: { kind: 'open', key: 'subscriptions' } },
+  { id: 'webinars',         label: 'Webinars',           icon: Video,         gradient: 'from-fuchsia-500 to-amber-500',  ring: 'ring-fuchsia-400/40', action: { kind: 'open', key: 'webinars' } },
+  { id: 'shop',             label: 'Shop',               icon: ShoppingBag,   gradient: 'from-pink-500 to-purple-500',    ring: 'ring-pink-400/40',    action: { kind: 'open', key: 'shop' } },
+  { id: 'alien-pets',       label: 'Alien Pets',         icon: Sprout,        gradient: 'from-emerald-500 to-lime-500',   ring: 'ring-emerald-400/40', action: { kind: 'open', key: 'alien-pets' } },
+  { id: 'achievements',     label: 'Trophies',           icon: Award,         gradient: 'from-yellow-400 to-orange-500',  ring: 'ring-yellow-400/40',  action: { kind: 'open', key: 'achievements' } },
+  { id: 'about',            label: 'About',              icon: Info,          gradient: 'from-slate-500 to-slate-700',    ring: 'ring-slate-400/40',   action: { kind: 'open', key: 'about' } },
+  { id: 'periodic',         label: 'Periodic Table',     icon: FlaskConical,  gradient: 'from-teal-500 to-cyan-500',      ring: 'ring-teal-400/40',    action: { kind: 'toggle', target: 'periodic' } },
+  { id: 'music',            label: 'Music',              icon: Music,         gradient: 'from-purple-500 to-pink-500',    ring: 'ring-purple-400/40',  action: { kind: 'toggle', target: 'music' } },
+  { id: 'dream',            label: 'Dream Journey',      icon: Rocket,        gradient: 'from-violet-500 to-fuchsia-500', ring: 'ring-violet-400/40',  action: { kind: 'route', href: '/dream-journey' } },
 ];
 
-const FeatureHub = () => {
-  const go = (href: string) => {
-    if (href.startsWith('/')) {
-      window.location.href = href;
-      return;
-    }
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+interface Props {
+  onSelect: (action: FeatureAction) => void;
+}
 
+const FeatureHub = ({ onSelect }: Props) => {
   return (
     <section id="feature-hub" className="py-14 px-4">
       <div className="max-w-6xl mx-auto">
@@ -70,7 +77,7 @@ const FeatureHub = () => {
             Every Feature, One Tap Away
           </h2>
           <p className="text-white/60 max-w-2xl mx-auto mt-2 text-sm">
-            Jump straight to any part of Cosmic Classroom — courses, games, webinars, pets, and more.
+            Tap a logo to open that feature. Nothing else clutters your view.
           </p>
         </motion.div>
 
@@ -80,7 +87,7 @@ const FeatureHub = () => {
             return (
               <motion.button
                 key={f.id}
-                onClick={() => go(f.href)}
+                onClick={() => onSelect(f.action)}
                 className="group flex flex-col items-center gap-2 focus:outline-none"
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
