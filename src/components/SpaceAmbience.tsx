@@ -165,6 +165,12 @@ const SpaceAmbience = () => {
     return () => { stopSpaceMusic(); };
   }, [stopSpaceMusic]);
 
+  useEffect(() => {
+    const handler = () => { setShowControls(true); setShowMelodyList(true); };
+    window.addEventListener('open-music', handler);
+    return () => window.removeEventListener('open-music', handler);
+  }, []);
+
   return (
     <div
       className="fixed bottom-6 right-24 z-40"

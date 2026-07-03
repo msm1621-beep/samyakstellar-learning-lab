@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Atom, X, Search } from 'lucide-react';
 import { elements, categories, categoryColors, Element } from '@/data/periodicTable';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -11,6 +11,12 @@ const PeriodicTableSidebar = () => {
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'category'>('list');
+
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener('open-periodic', handler);
+    return () => window.removeEventListener('open-periodic', handler);
+  }, []);
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories(prev =>
