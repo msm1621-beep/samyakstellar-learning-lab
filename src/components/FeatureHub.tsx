@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
   CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
-  ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, MessageCircle,
+  ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
   FlaskConical, Music, Target, Sparkle,
 } from 'lucide-react';
 
