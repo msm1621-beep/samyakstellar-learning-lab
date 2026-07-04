@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <Rocket className="w-6 h-6 text-primary" />
-              <span className="font-display font-bold text-lg">Cosmic Classroom</span>
+              <span className="font-display font-bold text-lg">Stellar Learning Lab</span>
             </div>
             <p className="text-sm text-muted-foreground">Making space exploration fun for young minds! 🚀</p>
           </div>
@@ -47,7 +47,7 @@ const Footer = () => {
         </div>
         <div className="pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
           <p className="flex items-center justify-center gap-1">Made with <Heart className="w-4 h-4 text-destructive" /> for curious young explorers</p>
-          <p className="mt-2">© 2024 Cosmic Classroom. Keep exploring the stars! ✨</p>
+          <p className="mt-2">© 2024 Stellar Learning Lab. Keep exploring the stars! ✨</p>
         </div>
       </div>
     </footer>

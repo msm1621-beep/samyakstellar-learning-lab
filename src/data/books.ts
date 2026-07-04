@@ -57,7 +57,7 @@ export const books: Book[] = [
   {
     id: 'b3',
     title: 'Space Guide: Nebulas',
-    author: 'Cosmic Classroom',
+    author: 'Stellar Learning Lab',
     ageRange: '7-13',
     description: 'Explore the most beautiful nebulas in the universe with stunning images and kid-friendly explanations.',
     cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=300&h=400&fit=crop',
