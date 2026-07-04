@@ -33,7 +33,7 @@ const FEATURES: Feature[] = [
   { id: 'fun-facts',        label: 'Fun Facts',          icon: Sparkle,       gradient: 'from-pink-400 to-fuchsia-500',   ring: 'ring-pink-400/40',    action: { kind: 'open', key: 'fun-facts' } },
   { id: 'solar-system-3d',  label: '3D Solar System',    icon: Globe2,        gradient: 'from-sky-500 to-indigo-500',     ring: 'ring-sky-400/40',     action: { kind: 'open', key: 'solar-system-3d' } },
   { id: 'facts',            label: 'Daily Fact',         icon: Lightbulb,     gradient: 'from-amber-400 to-orange-500',   ring: 'ring-amber-400/40',   action: { kind: 'open', key: 'facts' } },
-  { id: 'space-qna',        label: 'Ask Cosmo',          icon: MessageCircle, gradient: 'from-fuchsia-500 to-purple-500', ring: 'ring-fuchsia-400/40', action: { kind: 'open', key: 'space-qna' } },
+  { id: 'space-qna',        label: 'Doubt Search',       icon: Search,        gradient: 'from-fuchsia-500 to-purple-500', ring: 'ring-fuchsia-400/40', action: { kind: 'open', key: 'space-qna' } },
   { id: 'explorer',         label: 'Celestial Explorer', icon: Telescope,     gradient: 'from-cyan-500 to-blue-500',      ring: 'ring-cyan-400/40',    action: { kind: 'open', key: 'explorer' } },
   { id: 'timeline',         label: 'Timeline',           icon: Clock,         gradient: 'from-rose-500 to-pink-500',      ring: 'ring-rose-400/40',    action: { kind: 'open', key: 'timeline' } },
   { id: 'constellations',   label: 'Constellations',     icon: Stars,         gradient: 'from-indigo-500 to-violet-500',  ring: 'ring-indigo-400/40',  action: { kind: 'open', key: 'constellations' } },

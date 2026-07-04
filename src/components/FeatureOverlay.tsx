@@ -33,7 +33,7 @@ const REGISTRY: Record<FeatureKey, { title: string; Component: React.LazyExoticC
   'fun-facts':        { title: 'Fun Facts',          Component: FunFactsSection },
   'solar-system-3d':  { title: '3D Solar System',    Component: SolarSystem3D },
   'facts':            { title: 'Daily Fact',         Component: DailyFactWidget },
-  'space-qna':        { title: 'Ask Cosmo',          Component: SpaceQnA },
+  'space-qna':        { title: 'Doubt Search',       Component: SpaceQnA },
   'explorer':         { title: 'Celestial Explorer', Component: CelestialExplorer },
   'timeline':         { title: 'Space Timeline',     Component: SpaceTimeline },
   'constellations':   { title: 'Constellations',     Component: ConstellationViewer },
