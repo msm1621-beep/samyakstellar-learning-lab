@@ -37,7 +37,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
         <button onClick={() => scrollToSection('#home')} className="flex items-center gap-2 text-xl font-display font-bold text-foreground hover:text-primary transition-colors justify-self-start">
           <Rocket className="w-6 h-6 text-primary" />
-          <span className="hidden sm:inline">Cosmic Classroom</span>
+          <span className="hidden sm:inline">Stellar Learning Lab</span>
         </button>
 
         {/* Centered Dream Journey CTA — high visibility */}

@@ -6,7 +6,7 @@ const AboutSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">✨ About Cosmic Classroom</h2>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">✨ About Stellar Learning Lab</h2>
           </div>
           <div className="glass-card rounded-2xl p-8 mb-12">
             <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -15,7 +15,7 @@ const AboutSection = () => {
                   <Rocket className="w-6 h-6 text-primary" />
                   Our Mission
                 </h3>
-                <p className="text-muted-foreground mb-4">Cosmic Classroom is designed to spark curiosity about the universe in young minds! We make learning about space fun and accessible for kids ages 7-13.</p>
+                <p className="text-muted-foreground mb-4">Stellar Learning Lab is designed to spark curiosity about the universe in young minds! We make learning about space fun and accessible for kids ages 7-13.</p>
                 <p className="text-muted-foreground">From planets in our solar system to distant galaxies, colorful nebulas to mysterious black holes - there's so much to explore!</p>
               </div>
               <div className="grid grid-cols-2 gap-4">

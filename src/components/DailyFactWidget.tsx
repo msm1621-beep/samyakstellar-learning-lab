@@ -27,9 +27,9 @@ const DailyFactWidget = () => {
   };
 
   const shareFact = async () => {
-    const shareText = `🌟 Space Fact: ${currentFact.fact} - via Cosmic Classroom`;
+    const shareText = `🌟 Space Fact: ${currentFact.fact} - via Stellar Learning Lab`;
     if (navigator.share) {
-      try { await navigator.share({ title: 'Cosmic Classroom - Space Fact', text: shareText }); } catch {}
+      try { await navigator.share({ title: 'Stellar Learning Lab - Space Fact', text: shareText }); } catch {}
     } else {
       await navigator.clipboard.writeText(shareText);
       toast.success('Fact copied to clipboard! 📋');

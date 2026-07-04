@@ -75,7 +75,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
         <div>
           <h1 className="text-4xl font-display font-bold text-foreground mb-2">
-            Cosmic Classroom
+            Stellar Learning Lab
           </h1>
           <p className="text-sm text-muted-foreground">Your launch sequence is starting</p>
         </div>
