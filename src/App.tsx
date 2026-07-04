@@ -15,11 +15,13 @@ import Index from "./pages/Index";
 import DreamJourney from "./pages/DreamJourney";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
+import AccountSlide from "./components/AccountSlide";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [splashDone, setSplashDone] = useState(false);
+  const [accountDone, setAccountDone] = useState(false);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -33,6 +35,7 @@ const App = () => {
                   <Toaster />
                   <Sonner />
                   {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
+                  {splashDone && !accountDone && <AccountSlide onComplete={() => setAccountDone(true)} />}
                   <BrowserRouter>
                     <Routes>
                       <Route path="/" element={<Index />} />
