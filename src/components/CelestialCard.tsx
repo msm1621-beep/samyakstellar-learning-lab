@@ -146,7 +146,7 @@ type ChatMsg = { role: 'user' | 'cosmo'; content: string };
 const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
   const initialIntro = getCosmoResponse(body.name);
   const initialFact = `${initialIntro}\n\n**Quick facts about ${body.name}:** ${body.longDescription} ${body.coolFact}`;
   const [messages, setMessages] = useState<ChatMsg[]>([
@@ -173,7 +173,7 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
 
     addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
     if (user && profile) {
-      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
+      try { void addCoinsServer(NOTE_REWARD); } catch {}
     }
     toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
     return true;

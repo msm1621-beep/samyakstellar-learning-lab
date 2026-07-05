@@ -76,7 +76,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_coins: { Args: { delta: number }; Returns: number }
+      increment_courses_completed: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never

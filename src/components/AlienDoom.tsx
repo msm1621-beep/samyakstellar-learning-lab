@@ -175,14 +175,14 @@ const AlienDoom = () => {
   const targetLanguageName = 'English';
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
 
   const recordStudyNote = useCallback((question: string, answer: string) => {
     try {
       saveStudyNote({ bodyName: 'Mr & Mrs Doom', bodyIcon: '👽', question, answer, source: 'Mr & Mrs Doom' });
       addCoins(NOTE_REWARD, 'Saved a Doom study note');
       if (user && profile) {
-        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+        void addCoinsServer(NOTE_REWARD);
       }
       toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
       return true;
@@ -190,7 +190,7 @@ const AlienDoom = () => {
       toast({ title: 'Could not save note', description: 'Please try again.', variant: 'destructive' });
       return false;
     }
-  }, [addCoins, profile, toast, updateProfile, user]);
+  }, [addCoins, profile, toast, addCoinsServer, user]);
 
   // Initialize speech synthesis voices
   useEffect(() => {

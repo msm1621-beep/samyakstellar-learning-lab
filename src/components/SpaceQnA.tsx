@@ -27,7 +27,7 @@ const SpaceQnA = () => {
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
 
   const autoSaveAnswer = (savedQuestion: string, savedAnswer: string) => {
     let saved = false;
@@ -43,7 +43,7 @@ const SpaceQnA = () => {
     }
     try { addCoins(NOTE_REWARD, 'Saved a doubt answer'); } catch (e) { console.error('addCoins failed', e); }
     try {
-      if (user && profile) void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      if (user) void addCoinsServer(NOTE_REWARD);
     } catch (e) { console.error('updateProfile failed', e); }
     toast({ title: '📚 Doubt answer saved!', description: `Added to My Notes • +${NOTE_REWARD} coins` });
   };

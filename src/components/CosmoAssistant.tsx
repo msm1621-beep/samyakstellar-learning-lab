@@ -154,7 +154,7 @@ const CosmoAssistant = () => {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
   const language = 'en';
   const speechLocale = 'en-US';
   const targetLanguageName = 'English';
@@ -164,7 +164,7 @@ const CosmoAssistant = () => {
       saveStudyNote({ bodyName: 'Cosmo Chat', bodyIcon: '🤖', question, answer, source: 'Cosmo' });
       addCoins(NOTE_REWARD, 'Saved a Cosmo study note');
       if (user && profile) {
-        void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+        void addCoinsServer(NOTE_REWARD);
       }
       toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
       return true;
