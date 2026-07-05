@@ -19,7 +19,9 @@ interface AuthContextType {
   signUp: (email: string, password: string, displayName: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<Pick<Profile, 'display_name' | 'avatar_emoji' | 'courses_completed' | 'total_coins'>>) => Promise<void>;
+  updateProfile: (updates: Partial<Pick<Profile, 'display_name' | 'avatar_emoji'>>) => Promise<void>;
+  addCoinsServer: (delta: number) => Promise<void>;
+  incrementCoursesCompleted: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
