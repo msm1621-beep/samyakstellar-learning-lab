@@ -43,7 +43,7 @@ const SpaceQnA = () => {
     }
     try { addCoins(NOTE_REWARD, 'Saved a doubt answer'); } catch (e) { console.error('addCoins failed', e); }
     try {
-      if (user && profile) void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD });
+      if (user) void addCoinsServer(NOTE_REWARD);
     } catch (e) { console.error('updateProfile failed', e); }
     toast({ title: '📚 Doubt answer saved!', description: `Added to My Notes • +${NOTE_REWARD} coins` });
   };

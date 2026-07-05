@@ -173,7 +173,7 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
 
     addCoins(NOTE_REWARD, `Saved a study note about ${body.name}`);
     if (user && profile) {
-      try { void updateProfile({ total_coins: (profile.total_coins || 0) + NOTE_REWARD }); } catch {}
+      try { void addCoinsServer(NOTE_REWARD); } catch {}
     }
     toast({ title: '📚 Study note saved!', description: `+${NOTE_REWARD} coins earned!` });
     return true;
