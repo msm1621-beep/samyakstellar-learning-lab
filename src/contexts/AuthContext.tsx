@@ -132,14 +132,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   };
 
-  const updateProfile = async (updates: Partial<Pick<Profile, 'display_name' | 'avatar_emoji' | 'courses_completed' | 'total_coins'>>) => {
+  const updateProfile = async (updates: Partial<Pick<Profile, 'display_name' | 'avatar_emoji'>>) => {
     if (!user) return;
     await supabase.from('profiles').update(updates).eq('user_id', user.id);
     if (profile) setProfile({ ...profile, ...updates });
   };
 
+  const addCoinsServer = async (delta: number) => {
+    if (!user) return;
+    const safe = Math.max(1, Math.min(500, Math.floor(delta)));
+    const { data, error } = await supabase.rpc('add_coins', { delta: safe });
+    if (!error && profile && typeof data === 'number') {
+      setProfile({ ...profile, total_coins: data });
+    }
+  };
+
+  const incrementCoursesCompleted = async () => {
+    if (!user) return;
+    const { data, error } = await supabase.rpc('increment_courses_completed');
+    if (!error && profile && typeof data === 'number') {
+      setProfile({ ...profile, courses_completed: data });
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, updateProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, updateProfile, addCoinsServer, incrementCoursesCompleted }}>
       {children}
     </AuthContext.Provider>
   );
