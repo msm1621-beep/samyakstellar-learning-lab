@@ -27,7 +27,7 @@ const SpaceQnA = () => {
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
 
   const autoSaveAnswer = (savedQuestion: string, savedAnswer: string) => {
     let saved = false;

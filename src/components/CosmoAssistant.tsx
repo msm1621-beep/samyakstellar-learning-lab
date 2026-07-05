@@ -154,7 +154,7 @@ const CosmoAssistant = () => {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
   const language = 'en';
   const speechLocale = 'en-US';
   const targetLanguageName = 'English';

@@ -175,7 +175,7 @@ const AlienDoom = () => {
   const targetLanguageName = 'English';
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
 
   const recordStudyNote = useCallback((question: string, answer: string) => {
     try {

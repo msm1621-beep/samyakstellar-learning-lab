@@ -146,7 +146,7 @@ type ChatMsg = { role: 'user' | 'cosmo'; content: string };
 const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, addCoinsServer } = useAuth();
   const initialIntro = getCosmoResponse(body.name);
   const initialFact = `${initialIntro}\n\n**Quick facts about ${body.name}:** ${body.longDescription} ${body.coolFact}`;
   const [messages, setMessages] = useState<ChatMsg[]>([
