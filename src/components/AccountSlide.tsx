@@ -255,6 +255,24 @@ const AccountSlide = ({ onComplete }: Props) => {
           </div>
 
           <div>
+            <label className="text-sm text-purple-300 mb-1 flex items-center gap-2"><Fingerprint className="w-4 h-4" /> Account ID <span className="text-white/40 font-normal">(optional)</span></label>
+            <Input
+              value={customId}
+              onChange={(e) => handleIdChange(e.target.value)}
+              onBlur={() => customId && setIdError(validateId(customId))}
+              placeholder="Create your own ID"
+              maxLength={32}
+              aria-invalid={!!idError}
+              className={`bg-slate-800/60 text-white placeholder:text-white/40 ${idError ? 'border-red-500 focus-visible:ring-red-500' : 'border-purple-500/30'}`}
+            />
+            {idError ? (
+              <p className="text-xs text-red-400 mt-1">{idError}</p>
+            ) : (
+              <p className="text-xs text-purple-300/70 mt-1">3–32 letters, numbers, dashes, or underscores. Leave blank for a random ID.</p>
+            )}
+          </div>
+
+          <div>
             <label className="text-sm text-purple-300 mb-2 block">Choose Your Icon</label>
             <div className="grid grid-cols-5 gap-2 p-3 bg-slate-800/40 rounded-xl border border-purple-500/20 max-h-44 overflow-y-auto">
               {ACCOUNT_ICONS.map((emoji) => (
