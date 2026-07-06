@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Rocket, Mail, User as UserIcon, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, Rocket, Mail, User as UserIcon, ArrowRight, ShieldCheck, Fingerprint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
@@ -38,6 +38,8 @@ interface Props {
 const AccountSlide = ({ onComplete }: Props) => {
   const [existing, setExisting] = useState<AccountData | null>(null);
   const [name, setName] = useState('');
+  const [customId, setCustomId] = useState('');
+  const [idError, setIdError] = useState<string | null>(null);
   const [icon, setIcon] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -59,9 +61,22 @@ const AccountSlide = ({ onComplete }: Props) => {
     return null;
   };
 
+  const ID_RE = /^[a-zA-Z0-9_-]{3,32}$/;
+  const validateId = (value: string): string | null => {
+    const v = value.trim();
+    if (!v) return null; // optional
+    if (!ID_RE.test(v)) return 'ID must be 3–32 characters and only contain letters, numbers, underscores, or dashes';
+    return null;
+  };
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if (emailError) setEmailError(validateEmail(value));
+  };
+
+  const handleIdChange = (value: string) => {
+    setCustomId(value);
+    if (idError) setIdError(validateId(value));
   };
 
   const handleCreate = () => {
@@ -78,10 +93,15 @@ const AccountSlide = ({ onComplete }: Props) => {
       setEmailError(err);
       return;
     }
+    const idErr = validateId(customId);
+    if (idErr) {
+      setIdError(idErr);
+      return;
+    }
 
     const now = new Date();
     const account: AccountData = {
-      id: newId(),
+      id: customId.trim() || newId(),
       name: name.trim(),
       icon,
       email: email.trim().toLowerCase(),
@@ -124,8 +144,14 @@ const AccountSlide = ({ onComplete }: Props) => {
       if (result.redirected) return; // browser navigates away
       // Session set — persist a lightweight local account so returning users see welcome-back
       const now = new Date();
+      const idErr = validateId(customId);
+      if (idErr) {
+        setIdError(idErr);
+        setGoogleLoading(false);
+        return;
+      }
       const account: AccountData = {
-        id: newId(),
+        id: customId.trim() || newId(),
         name: name.trim() || 'Space Explorer',
         icon: icon || '🚀',
         email: email.trim().toLowerCase() || undefined,
@@ -225,6 +251,24 @@ const AccountSlide = ({ onComplete }: Props) => {
             />
             {emailError && (
               <p className="text-xs text-red-400 mt-1">{emailError}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm text-purple-300 mb-1 flex items-center gap-2"><Fingerprint className="w-4 h-4" /> Account ID <span className="text-white/40 font-normal">(optional)</span></label>
+            <Input
+              value={customId}
+              onChange={(e) => handleIdChange(e.target.value)}
+              onBlur={() => customId && setIdError(validateId(customId))}
+              placeholder="Create your own ID"
+              maxLength={32}
+              aria-invalid={!!idError}
+              className={`bg-slate-800/60 text-white placeholder:text-white/40 ${idError ? 'border-red-500 focus-visible:ring-red-500' : 'border-purple-500/30'}`}
+            />
+            {idError ? (
+              <p className="text-xs text-red-400 mt-1">{idError}</p>
+            ) : (
+              <p className="text-xs text-purple-300/70 mt-1">3–32 letters, numbers, dashes, or underscores. Leave blank for a random ID.</p>
             )}
           </div>
 
