@@ -93,10 +93,15 @@ const AccountSlide = ({ onComplete }: Props) => {
       setEmailError(err);
       return;
     }
+    const idErr = validateId(customId);
+    if (idErr) {
+      setIdError(idErr);
+      return;
+    }
 
     const now = new Date();
     const account: AccountData = {
-      id: newId(),
+      id: customId.trim() || newId(),
       name: name.trim(),
       icon,
       email: email.trim().toLowerCase(),
