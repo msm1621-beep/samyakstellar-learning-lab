@@ -61,9 +61,22 @@ const AccountSlide = ({ onComplete }: Props) => {
     return null;
   };
 
+  const ID_RE = /^[a-zA-Z0-9_-]{3,32}$/;
+  const validateId = (value: string): string | null => {
+    const v = value.trim();
+    if (!v) return null; // optional
+    if (!ID_RE.test(v)) return 'ID must be 3–32 characters and only contain letters, numbers, underscores, or dashes';
+    return null;
+  };
+
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if (emailError) setEmailError(validateEmail(value));
+  };
+
+  const handleIdChange = (value: string) => {
+    setCustomId(value);
+    if (idError) setIdError(validateId(value));
   };
 
   const handleCreate = () => {
