@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Rocket, Mail, User as UserIcon, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, Rocket, Mail, User as UserIcon, ArrowRight, ShieldCheck, Fingerprint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
