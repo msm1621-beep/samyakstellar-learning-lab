@@ -144,8 +144,14 @@ const AccountSlide = ({ onComplete }: Props) => {
       if (result.redirected) return; // browser navigates away
       // Session set — persist a lightweight local account so returning users see welcome-back
       const now = new Date();
+      const idErr = validateId(customId);
+      if (idErr) {
+        setIdError(idErr);
+        setGoogleLoading(false);
+        return;
+      }
       const account: AccountData = {
-        id: newId(),
+        id: customId.trim() || newId(),
         name: name.trim() || 'Space Explorer',
         icon: icon || '🚀',
         email: email.trim().toLowerCase() || undefined,
