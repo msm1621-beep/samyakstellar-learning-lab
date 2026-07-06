@@ -38,6 +38,8 @@ interface Props {
 const AccountSlide = ({ onComplete }: Props) => {
   const [existing, setExisting] = useState<AccountData | null>(null);
   const [name, setName] = useState('');
+  const [customId, setCustomId] = useState('');
+  const [idError, setIdError] = useState<string | null>(null);
   const [icon, setIcon] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
