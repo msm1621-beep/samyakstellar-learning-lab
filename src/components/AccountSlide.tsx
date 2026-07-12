@@ -50,9 +50,34 @@ const AccountSlide = ({ onComplete }: Props) => {
     if (saved) {
       try {
         setExisting(JSON.parse(saved) as AccountData);
+        return;
       } catch {}
     }
-  }, []);
+    // If user returned from Google OAuth with a live session but no local account, auto-provision.
+    (async () => {
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+        const { data } = await supabase.auth.getSession();
+        const session = data?.session;
+        if (!session?.user) return;
+        const now = new Date();
+        const meta: any = session.user.user_metadata || {};
+        const account: AccountData = {
+          id: newId(),
+          name: meta.display_name || meta.full_name || meta.name || 'Space Explorer',
+          icon: '🚀',
+          email: session.user.email?.toLowerCase(),
+          isGuest: false,
+          createdAt: now.toISOString(),
+          lastMaintenanceAt: now.toISOString(),
+          maintenanceExpiresAt: new Date(now.getTime() + MAINTENANCE_PERIOD_DAYS * 86400000).toISOString(),
+        };
+        localStorage.setItem('spaceAccount', JSON.stringify(account));
+        toast({ title: `Welcome, ${account.name}! 🚀` });
+        onComplete();
+      } catch {}
+    })();
+  }, [onComplete]);
 
   const validateEmail = (value: string): string | null => {
     const v = value.trim();
