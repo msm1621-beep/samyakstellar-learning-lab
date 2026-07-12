@@ -307,6 +307,11 @@ const LibrarySection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredVideos.map((video) => {
                   const youtubeUrl = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+                  const openVideo = (e: React.MouseEvent) => {
+                    e.preventDefault();
+                    const win = window.open(youtubeUrl, '_blank', 'noopener,noreferrer');
+                    if (!win) window.location.href = youtubeUrl;
+                  };
                   return (
                   <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                     <div className="relative aspect-video">
@@ -314,7 +319,8 @@ const LibrarySection = () => {
                         href={youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full h-full"
+                        onClick={openVideo}
+                        className="block w-full h-full cursor-pointer"
                         aria-label={`Watch ${video.title} on YouTube`}
                       >
                         <img
@@ -351,12 +357,10 @@ const LibrarySection = () => {
                         variant="default"
                         size="sm"
                         className="w-full"
-                        asChild
+                        onClick={openVideo}
                       >
-                        <a href={youtubeUrl} target="_blank" rel="noopener noreferrer">
-                          <Play className="w-4 h-4 mr-2" />
-                          Watch on YouTube
-                        </a>
+                        <Play className="w-4 h-4 mr-2" />
+                        Watch on YouTube
                       </Button>
                     </div>
                   </div>
