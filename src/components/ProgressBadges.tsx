@@ -4,7 +4,6 @@ import { BookOpen, Brain, Gamepad2, Coins, Flame, Compass, Lock } from 'lucide-r
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Progress } from '@/components/ui/progress';
 
 interface BadgeTier {
   label: string;
