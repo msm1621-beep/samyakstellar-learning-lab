@@ -25,11 +25,7 @@ const Leaderboard = () => {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      const { data } = await supabase
-        .from('profiles')
-        .select('display_name, avatar_emoji, courses_completed, total_coins')
-        .order('courses_completed', { ascending: false })
-        .limit(20);
+      const { data } = await supabase.rpc('get_leaderboard', { limit_count: 20 });
 
       const rankedEntries = ((data || []) as LeaderboardEntry[]).filter((entry) => entry.courses_completed > 0);
 
