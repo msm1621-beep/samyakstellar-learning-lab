@@ -49,6 +49,7 @@ const Index = () => {
         <AnimatedSection>
           <FeatureHub onSelect={handleSelect} />
         </AnimatedSection>
+        <Suspense fallback={null}><ProgressBadges /></Suspense>
       </main>
 
       <Footer />
