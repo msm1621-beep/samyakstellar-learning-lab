@@ -46,37 +46,96 @@ const AccountSlide = ({ onComplete }: Props) => {
   const [googleLoading, setGoogleLoading] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('spaceAccount');
-    if (saved) {
+    let cancelled = false;
+    let unsub: (() => void) | undefined;
+
+    const cleanOAuthParams = () => {
       try {
-        setExisting(JSON.parse(saved) as AccountData);
-        return;
+        const url = new URL(window.location.href);
+        const dirty = ['code', 'access_token', 'refresh_token', 'error_description', 'provider_token'].some(
+          (k) => url.searchParams.has(k) || url.hash.includes(k)
+        );
+        if (dirty) {
+          window.history.replaceState({}, '', url.origin + url.pathname);
+        }
       } catch {}
-    }
-    // If user returned from Google OAuth with a live session but no local account, auto-provision.
-    (async () => {
-      try {
-        const { supabase } = await import('@/integrations/supabase/client');
-        const { data } = await supabase.auth.getSession();
-        const session = data?.session;
-        if (!session?.user) return;
-        const now = new Date();
-        const meta: any = session.user.user_metadata || {};
-        const account: AccountData = {
+    };
+
+    const provisionFromSession = (session: any) => {
+      if (cancelled || !session?.user) return;
+      const now = new Date();
+      const meta: any = session.user.user_metadata || {};
+      const googleName = meta.display_name || meta.full_name || meta.name || 'Space Explorer';
+      const googleEmail = session.user.email?.toLowerCase();
+
+      let account: AccountData;
+      const saved = localStorage.getItem('spaceAccount');
+      if (saved) {
+        // Merge Google identity into an existing local account instead of overwriting progress
+        try {
+          const prev = JSON.parse(saved) as AccountData;
+          account = {
+            ...prev,
+            name: prev.isGuest || !prev.name ? googleName : prev.name,
+            email: googleEmail || prev.email,
+            isGuest: false,
+            lastMaintenanceAt: prev.lastMaintenanceAt || now.toISOString(),
+            maintenanceExpiresAt:
+              prev.maintenanceExpiresAt ||
+              new Date(now.getTime() + MAINTENANCE_PERIOD_DAYS * 86400000).toISOString(),
+          };
+        } catch {
+          return;
+        }
+      } else {
+        account = {
           id: newId(),
-          name: meta.display_name || meta.full_name || meta.name || 'Space Explorer',
+          name: googleName,
           icon: '🚀',
-          email: session.user.email?.toLowerCase(),
+          email: googleEmail,
           isGuest: false,
           createdAt: now.toISOString(),
           lastMaintenanceAt: now.toISOString(),
           maintenanceExpiresAt: new Date(now.getTime() + MAINTENANCE_PERIOD_DAYS * 86400000).toISOString(),
         };
-        localStorage.setItem('spaceAccount', JSON.stringify(account));
-        toast({ title: `Welcome, ${account.name}! 🚀` });
-        onComplete();
+      }
+
+      localStorage.setItem('spaceAccount', JSON.stringify(account));
+      cleanOAuthParams();
+      toast({ title: `Welcome, ${account.name}! 🚀`, description: 'Signed in and synced to your account.' });
+      onComplete();
+    };
+
+    const saved = localStorage.getItem('spaceAccount');
+    if (saved) {
+      try {
+        setExisting(JSON.parse(saved) as AccountData);
+      } catch {}
+    }
+
+    // Handle the OAuth return: the session can land slightly after mount, so listen as well as poll.
+    (async () => {
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange((event, session) => {
+          if (session?.user && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED')) {
+            provisionFromSession(session);
+          }
+        });
+        unsub = () => subscription.unsubscribe();
+
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.user) provisionFromSession(data.session);
       } catch {}
     })();
+
+    return () => {
+      cancelled = true;
+      unsub?.();
+    };
   }, [onComplete]);
 
   const validateEmail = (value: string): string | null => {
