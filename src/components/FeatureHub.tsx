@@ -3,7 +3,7 @@ import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
   CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
   ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
-  FlaskConical, Music, Target, Sparkle,
+  FlaskConical, Music, Target, Sparkle, School,
 } from 'lucide-react';
 
 export type FeatureKey =
@@ -11,7 +11,7 @@ export type FeatureKey =
   | 'facts' | 'space-qna' | 'explorer' | 'timeline' | 'constellations'
   | 'courses' | 'leaderboard' | 'study-planner' | 'manuscripts' | 'library'
   | 'games' | 'premium-games' | 'game-passes' | 'subscriptions' | 'webinars'
-  | 'shop' | 'alien-pets' | 'achievements' | 'about';
+  | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about';
 
 export type FeatureAction =
   | { kind: 'open'; key: FeatureKey }
@@ -38,6 +38,7 @@ const FEATURES: Feature[] = [
   { id: 'timeline',         label: 'Timeline',           icon: Clock,         gradient: 'from-rose-500 to-pink-500',      ring: 'ring-rose-400/40',    action: { kind: 'open', key: 'timeline' } },
   { id: 'constellations',   label: 'Constellations',     icon: Stars,         gradient: 'from-indigo-500 to-violet-500',  ring: 'ring-indigo-400/40',  action: { kind: 'open', key: 'constellations' } },
   { id: 'courses',          label: 'Courses',            icon: GraduationCap, gradient: 'from-blue-500 to-cyan-500',      ring: 'ring-blue-400/40',    action: { kind: 'open', key: 'courses' } },
+  { id: 'academy',          label: 'Premium Academy',   icon: School,        gradient: 'from-emerald-500 to-cyan-500',   ring: 'ring-emerald-400/40', action: { kind: 'open', key: 'academy' } },
   { id: 'leaderboard',      label: 'Leaderboard',        icon: Trophy,        gradient: 'from-yellow-500 to-amber-500',   ring: 'ring-yellow-400/40',  action: { kind: 'open', key: 'leaderboard' } },
   { id: 'study-planner',    label: 'Study Planner',      icon: CalendarCheck, gradient: 'from-green-500 to-emerald-500',  ring: 'ring-green-400/40',   action: { kind: 'open', key: 'study-planner' } },
   { id: 'manuscripts',      label: 'Manuscripts',        icon: ScrollText,    gradient: 'from-amber-600 to-yellow-600',   ring: 'ring-amber-500/40',   action: { kind: 'open', key: 'manuscripts' } },
