@@ -77,6 +77,15 @@ export type Database = {
     }
     Functions: {
       add_coins: { Args: { delta: number }; Returns: number }
+      get_leaderboard: {
+        Args: { limit_count?: number }
+        Returns: {
+          avatar_emoji: string
+          courses_completed: number
+          display_name: string
+          total_coins: number
+        }[]
+      }
       increment_courses_completed: { Args: never; Returns: number }
     }
     Enums: {
