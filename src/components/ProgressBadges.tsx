@@ -152,7 +152,12 @@ const ProgressBadges = () => {
                     <p className="text-[11px] text-muted-foreground mt-0.5">
                       {earnedTier ? earnedTier.label : 'Locked'} • {badge.value}
                     </p>
-                    <Progress value={pct} className="h-1.5 mt-3" />
+                    <div className="h-1.5 mt-3 w-full rounded-full bg-muted/50 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
                     <p className="text-[10px] text-muted-foreground mt-1">
                       {nextTier ? `${badge.value}/${nextTier.need} to ${nextTier.label}` : 'Max tier reached ✨'}
                     </p>
