@@ -18,6 +18,7 @@ const AlienDoom = lazy(() => import('@/components/AlienDoom'));
 const SpaceAmbience = lazy(() => import('@/components/SpaceAmbience'));
 const PeriodicTableSidebar = lazy(() => import('@/components/PeriodicTableSidebar'));
 const StudyNotesViewer = lazy(() => import('@/components/StudyNotesViewer'));
+const ProgressBadges = lazy(() => import('@/components/ProgressBadges'));
 
 const Index = () => {
   const [activeFeature, setActiveFeature] = useState<FeatureKey | null>(null);
@@ -48,6 +49,7 @@ const Index = () => {
         <AnimatedSection>
           <FeatureHub onSelect={handleSelect} />
         </AnimatedSection>
+        <Suspense fallback={null}><ProgressBadges /></Suspense>
       </main>
 
       <Footer />
