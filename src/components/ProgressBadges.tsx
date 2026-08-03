@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Brain, Gamepad2, Coins, Flame, Compass, Lock } from 'lucide-react';
+import { BookOpen, Brain, Gamepad2, Coins, Flame, Compass, Lock, Headphones, Star, NotebookPen, Sprout, Rocket, Telescope, Trophy } from 'lucide-react';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -43,19 +43,45 @@ const readVisited = (): number => {
   }
 };
 
+const readLen = (key: string): number => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(key) || '[]');
+    if (Array.isArray(raw)) return raw.length;
+    if (raw && typeof raw === 'object') return Object.keys(raw).length;
+    return 0;
+  } catch {
+    return 0;
+  }
+};
+
 const ProgressBadges = () => {
   const { achievements } = useAchievements();
   const { coins } = useCoins();
   const [streak, setStreak] = useState(readStreak);
   const [visited, setVisited] = useState(readVisited);
+  const [extra, setExtra] = useState(() => ({
+    lectures: readLen('academy_completed_lectures'),
+    notes: readLen('studyNotes'),
+    favorites: readLen('stellar_favorites'),
+    pets: readLen('alienPetCollection'),
+    missions: readLen('challengeHistory'),
+  }));
 
   useEffect(() => {
     const t = setInterval(() => {
       setStreak(readStreak());
       setVisited(readVisited());
+      setExtra({
+        lectures: readLen('academy_completed_lectures'),
+        notes: readLen('studyNotes'),
+        favorites: readLen('stellar_favorites'),
+        pets: readLen('alienPetCollection'),
+        missions: readLen('challengeHistory'),
+      });
     }, 4000);
     return () => clearInterval(t);
   }, []);
+
 
   const badges: BadgeDef[] = useMemo(() => {
     const count = (type: string | string[]) => {
