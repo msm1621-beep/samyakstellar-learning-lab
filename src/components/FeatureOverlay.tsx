@@ -27,8 +27,10 @@ const FeaturedShop         = lazy(() => import('./FeaturedShop'));
 const AlienPetsSection     = lazy(() => import('./AlienPetsSection'));
 const CertificateShowcase  = lazy(() => import('./CertificateShowcase'));
 const AboutSection         = lazy(() => import('./AboutSection'));
+const FavoritesDashboard   = lazy(() => import('./FavoritesDashboard'));
 
 const REGISTRY: Record<FeatureKey, { title: string; Component: React.LazyExoticComponent<React.ComponentType> }> = {
+  'favorites':        { title: 'Favorites & Dashboard', Component: FavoritesDashboard },
   'progress-tracker': { title: 'Progress',           Component: ProgressTracker },
   'daily-challenges': { title: 'Daily Missions',     Component: DailyChallenges },
   'fun-facts':        { title: 'Fun Facts',          Component: FunFactsSection },
