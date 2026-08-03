@@ -257,3 +257,11 @@ export const moneyCourses: MoneyCourse[] = [
     ],
   },
 ];
+
+/** Hinglish intro line spoken in every recorded lecture. */
+export const hinglishLine = (title: string): string =>
+  `Is lecture mein hum "${title}" ko bilkul aasaan Hinglish mein samjhenge — thoda Hindi, thoda English, taaki har concept ekdum clear ho jaaye.`;
+
+/** Every lecture is taught by a different teacher — rotates through the whole faculty. */
+export const lectureTeacher = (courseIndex: number, lectureIndex: number): Faculty =>
+  faculty[(courseIndex * 7 + lectureIndex * 3) % faculty.length];
