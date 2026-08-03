@@ -119,7 +119,7 @@ export const moneyCourses: MoneyCourse[] = [
     facultyId: 1, level: 'Advanced', weeks: 6, originalPrice: '₹4,999', gradient: 'from-indigo-500 to-violet-600',
     outcomes: ['Read a galaxy classification chart', 'Explain how black holes form', 'Understand telescope data'],
     lectures: [
-      L('mc1-1', 'Welcome to the Deep Universe', '4 min', 'Your AI mentor introduces the course roadmap and how to study each week.'),
+      L('mc1-1', 'Welcome to the Deep Universe', '4 min', 'Your course lead introduces the course roadmap and how to study each week.'),
       L('mc1-2', 'How Galaxies Are Born', '5 min', 'Gas clouds, gravity, and the first stars that lit the cosmos.'),
       L('mc1-3', 'Black Holes: Beyond the Horizon', '6 min', 'Event horizons, singularities and what falling in would feel like.'),
       L('mc1-4', 'Reading the Sky With Telescopes', '5 min', 'From Hubble to James Webb — what each instrument reveals.'),
