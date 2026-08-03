@@ -15,19 +15,19 @@ import meeshaVoice from '@/assets/lectures/meesha.mp3.asset.json';
 export type VoiceKey = 'naina' | 'anand' | 'sana' | 'krishna' | 'myra' | 'rohit' | 'bhoomika' | 'dhurv' | 'maya' | 'raju' | 'sunnysingh' | 'bunty' | 'meesha';
 
 export const VOICES: Record<VoiceKey, { name: string; url: string }> = {
-  naina: { name: 'Naina Ma'am', url: nainaVoice.url },
+  naina: { name: 'Naina Maam', url: nainaVoice.url },
   anand: { name: 'Anand Sir', url: anandVoice.url },
-  sana: { name: 'Sana Ma'am', url: sanaVoice.url },
+  sana: { name: 'Sana Maam', url: sanaVoice.url },
   krishna: { name: 'Krishna Sir', url: krishnaVoice.url },
-  myra: { name: 'Myra Ma'am', url: myraVoice.url },
+  myra: { name: 'Myra Maam', url: myraVoice.url },
   rohit: { name: 'Rohit Sir', url: rohitVoice.url },
-  bhoomika: { name: 'Bhoomika Ma'am', url: bhoomikaVoice.url },
+  bhoomika: { name: 'Bhoomika Maam', url: bhoomikaVoice.url },
   dhurv: { name: 'Dhruv Sir', url: dhurvVoice.url },
-  maya: { name: 'Maya Ma'am', url: mayaVoice.url },
+  maya: { name: 'Maya Maam', url: mayaVoice.url },
   raju: { name: 'Raju Sir', url: rajuVoice.url },
   sunnysingh: { name: 'Sunny Sir', url: sunnysinghVoice.url },
   bunty: { name: 'Bunty Sir', url: buntyVoice.url },
-  meesha: { name: 'Meesha Ma'am', url: meeshaVoice.url },
+  meesha: { name: 'Meesha Maam', url: meeshaVoice.url },
 };
 
 export interface Faculty {
