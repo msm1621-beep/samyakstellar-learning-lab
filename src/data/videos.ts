@@ -41,16 +41,6 @@ export const videos: Video[] = [
     youtubeId: 'PM9CQDlQI0A'
   },
   {
-    id: 'v4',
-    title: 'Journey to the Milky Way Center',
-    description: 'Travel to the heart of our galaxy!',
-    thumbnail: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=225&fit=crop',
-    duration: '10:00',
-    category: 'Galaxies',
-    tags: ['Galaxies', 'Black Holes', 'Advanced'],
-    youtubeId: '5D9oqVB_6Kc'
-  },
-  {
     id: 'v5',
     title: 'Black Holes Explained for Kids',
     description: 'What happens when you fall into a black hole?',
@@ -101,16 +91,6 @@ export const videos: Video[] = [
     youtubeId: 'aysiMbgml5g'
   },
   {
-    id: 'v10',
-    title: 'Saturn and Its Rings',
-    description: 'Explore the most beautiful planet and its amazing ring system!',
-    thumbnail: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=400&h=225&fit=crop',
-    duration: '8:00',
-    category: 'Solar System',
-    tags: ['Planets', 'Saturn', 'Beginner'],
-    youtubeId: '8cFChyGLPqU'
-  },
-  {
     id: 'v11',
     title: 'The Andromeda Galaxy',
     description: 'Meet our neighbor galaxy that\'s heading straight for us!',
@@ -131,26 +111,6 @@ export const videos: Video[] = [
     youtubeId: 'rcLnMe1ELPA'
   },
   {
-    id: 'v13',
-    title: 'What is a Comet?',
-    description: 'Learn about these amazing icy visitors from the outer solar system!',
-    thumbnail: 'https://images.unsplash.com/photo-1506443432602-ac2fcd6f54e0?w=400&h=225&fit=crop',
-    duration: '6:00',
-    category: 'Solar System',
-    tags: ['Comets', 'Solar System', 'Beginner'],
-    youtubeId: '4jfRxZgcLjc'
-  },
-  {
-    id: 'v14',
-    title: 'Constellations for Kids',
-    description: 'Find patterns in the stars and learn their ancient stories!',
-    thumbnail: 'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=400&h=225&fit=crop',
-    duration: '10:15',
-    category: 'Stars',
-    tags: ['Constellations', 'Stars', 'Beginner'],
-    youtubeId: 'F4FkBGxB0Mg'
-  },
-  {
     id: 'v15',
     title: 'How Big is the Universe?',
     description: 'A mind-blowing journey from Earth to the edge of the observable universe!',
@@ -161,16 +121,6 @@ export const videos: Video[] = [
     youtubeId: 'Iy7NzjCmUf0'
   },
   {
-    id: 'v16',
-    title: 'The Ice Giants: Uranus and Neptune',
-    description: 'Explore the mysterious worlds at the edge of our solar system!',
-    thumbnail: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=400&h=225&fit=crop',
-    duration: '8:45',
-    category: 'Solar System',
-    tags: ['Planets', 'Uranus', 'Neptune', 'Beginner'],
-    youtubeId: 'mFj2EY3oLsA'
-  },
-  {
     id: 'v17',
     title: 'What is Dark Matter?',
     description: 'Discover the invisible stuff that holds galaxies together!',
@@ -179,16 +129,6 @@ export const videos: Video[] = [
     category: 'Galaxies',
     tags: ['Dark Matter', 'Galaxies', 'Advanced'],
     youtubeId: 'QAa2O_8wBUQ'
-  },
-  {
-    id: 'v18',
-    title: 'Dwarf Planets Explained',
-    description: 'Meet Pluto, Eris, and the other tiny worlds of our solar system!',
-    thumbnail: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&h=225&fit=crop',
-    duration: '9:00',
-    category: 'Solar System',
-    tags: ['Dwarf Planets', 'Pluto', 'Beginner'],
-    youtubeId: 'SnrVaLFpP5M'
   },
   {
     id: 'v19',
@@ -239,15 +179,5 @@ export const videos: Video[] = [
     category: 'Solar System',
     tags: ['Moon', 'Solar System', 'Beginner'],
     youtubeId: '6AviDjR9mmo'
-  },
-  {
-    id: 'v24',
-    title: 'How Planets Form',
-    description: 'Watch a solar system being born from dust and gas!',
-    thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=225&fit=crop',
-    duration: '8:00',
-    category: 'Solar System',
-    tags: ['Planets', 'Stars', 'Advanced'],
-    youtubeId: 'QdpKP2hE4Vc'
   }
 ];

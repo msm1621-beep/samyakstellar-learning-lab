@@ -2,14 +2,32 @@ import nainaVoice from '@/assets/lectures/naina.mp3.asset.json';
 import anandVoice from '@/assets/lectures/anand.mp3.asset.json';
 import sanaVoice from '@/assets/lectures/sana.mp3.asset.json';
 import krishnaVoice from '@/assets/lectures/krishna.mp3.asset.json';
+import myraVoice from '@/assets/lectures/myra.mp3.asset.json';
+import rohitVoice from '@/assets/lectures/rohit.mp3.asset.json';
+import bhoomikaVoice from '@/assets/lectures/bhoomika.mp3.asset.json';
+import dhurvVoice from '@/assets/lectures/dhurv.mp3.asset.json';
+import mayaVoice from '@/assets/lectures/maya.mp3.asset.json';
+import rajuVoice from '@/assets/lectures/raju.mp3.asset.json';
+import sunnysinghVoice from '@/assets/lectures/sunnysingh.mp3.asset.json';
+import buntyVoice from '@/assets/lectures/bunty.mp3.asset.json';
+import meeshaVoice from '@/assets/lectures/meesha.mp3.asset.json';
 
-export type VoiceKey = 'naina' | 'anand' | 'sana' | 'krishna';
+export type VoiceKey = 'naina' | 'anand' | 'sana' | 'krishna' | 'myra' | 'rohit' | 'bhoomika' | 'dhurv' | 'maya' | 'raju' | 'sunnysingh' | 'bunty' | 'meesha';
 
 export const VOICES: Record<VoiceKey, { name: string; url: string }> = {
-  naina: { name: 'Naina (warm, youthful)', url: nainaVoice.url },
-  anand: { name: 'Anand (clear, confident)', url: anandVoice.url },
-  sana: { name: 'Sana (friendly e-learning)', url: sanaVoice.url },
-  krishna: { name: 'Krishna (natural, calm)', url: krishnaVoice.url },
+  naina: { name: 'Naina Maam', url: nainaVoice.url },
+  anand: { name: 'Anand Sir', url: anandVoice.url },
+  sana: { name: 'Sana Maam', url: sanaVoice.url },
+  krishna: { name: 'Krishna Sir', url: krishnaVoice.url },
+  myra: { name: 'Myra Maam', url: myraVoice.url },
+  rohit: { name: 'Rohit Sir', url: rohitVoice.url },
+  bhoomika: { name: 'Bhoomika Maam', url: bhoomikaVoice.url },
+  dhurv: { name: 'Dhruv Sir', url: dhurvVoice.url },
+  maya: { name: 'Maya Maam', url: mayaVoice.url },
+  raju: { name: 'Raju Sir', url: rajuVoice.url },
+  sunnysingh: { name: 'Sunny Sir', url: sunnysinghVoice.url },
+  bunty: { name: 'Bunty Sir', url: buntyVoice.url },
+  meesha: { name: 'Meesha Maam', url: meeshaVoice.url },
 };
 
 export interface Faculty {
@@ -21,56 +39,56 @@ export interface Faculty {
 }
 
 export const faculty: Faculty[] = [
-  { id: 1, name: 'Arnav Sharma', role: 'Astrophysics Educator', topics: ['Galaxies & Cosmology', 'Black Holes', 'Space Telescopes', 'Star Formation'], voice: 'anand' },
-  { id: 2, name: 'Ishita Verma', role: 'Space Science Communicator', topics: ['Planetary Science', 'Space Missions', 'Science Communication'], voice: 'naina' },
-  { id: 3, name: 'Karan Mehta', role: 'Rocketry Mentor', topics: ['Rocket Design', 'Propulsion', 'Aerospace Basics', 'Model Rockets'], voice: 'krishna' },
-  { id: 4, name: 'Rohit Nair', role: 'Space Systems Engineer', topics: ['Satellite Systems', 'Launch Vehicles', 'Space Tech', 'Navigation & GPS'], voice: 'anand' },
-  { id: 5, name: 'Devansh Rai', role: 'Astrophotography Guide', topics: ['Astrophotography', 'Deep Sky Imaging', 'Telescopes', 'Night Sky Wonders'], voice: 'krishna' },
-  { id: 6, name: 'Gurpreet Singh', role: 'Astronomy Educator', topics: ['Solar System', 'Exoplanets', 'Astronomy Basics', 'Space History'], voice: 'anand' },
-  { id: 7, name: 'Meera Iyer', role: 'Science Storyteller', topics: ['Cosmic Mysteries', 'Space Exploration', 'Mythology & Space', 'Public Speaking'], voice: 'sana' },
-  { id: 8, name: 'Aditya Kulkarni', role: 'Planetary Scientist', topics: ['Planetary Geology', 'Mars Exploration', 'Moons & Satellites', 'Space Data Analysis'], voice: 'krishna' },
-  { id: 9, name: 'Sneha Patil', role: 'STEM Educator', topics: ['STEM Teaching', 'Science Experiments', 'Student Mentorship', 'Learning Innovation'], voice: 'naina' },
-  { id: 10, name: 'Raghav Bansal', role: 'Space Entrepreneurship Mentor', topics: ['New Space Startups', 'Satellites', 'ISRO & NASA', 'Innovation & Tech'], voice: 'anand' },
-  { id: 11, name: 'Aanya Deshpande', role: 'Black Hole Explorer', topics: ['Black Holes', 'Gravitational Waves', 'High Energy Physics', 'Theoretical Physics'], voice: 'sana' },
-  { id: 12, name: 'Nikhil Joshi', role: 'Space Content Creator', topics: ['Space Education', 'YouTube & Media', 'Visual Storytelling', 'Making Space Simple'], voice: 'krishna' },
-  { id: 13, name: 'Zoya Khan', role: 'Future Scientist Mentor', topics: ['Research Guidance', 'Career Mentorship', 'Girls in STEM', 'Future Technologies'], voice: 'naina' },
-  { id: 14, name: 'Kabir Malhotra', role: 'Space Tech Enthusiast', topics: ['Robotics in Space', 'AI & Space Tech', 'Space Instruments', 'CubeSats'], voice: 'anand' },
-  { id: 15, name: 'Tanvi Shah', role: 'Astrobiology Researcher', topics: ['Life Beyond Earth', 'Microbiology', 'Extremophiles', 'Space Biology'], voice: 'sana' },
-  { id: 16, name: 'Yashwant Rao', role: 'Orbital Mechanics Tutor', topics: ['Orbital Dynamics', 'Space Math', 'Trajectory Analysis', 'Simulation & Modeling'], voice: 'krishna' },
-  { id: 17, name: 'Diya Menon', role: 'Science Communicator', topics: ['Space Outreach', 'Science Writing', 'Educational Content', 'Community Building'], voice: 'naina' },
-  { id: 18, name: 'Sai Kiran', role: 'Launch Operations Analyst', topics: ['Launch Operations', 'Countdown Systems', 'Risk Analysis', 'Mission Assurance'], voice: 'anand' },
-  { id: 19, name: 'Ananya Bose', role: 'Cosmology Enthusiast', topics: ['Big Bang Theory', 'Dark Matter', 'Dark Energy', 'Cosmic Evolution'], voice: 'sana' },
-  { id: 20, name: 'Harsh Vardhan', role: 'Satellite Design Mentor', topics: ['Satellite Design', 'Communication Systems', 'Payloads', 'Mission Design'], voice: 'krishna' },
-  { id: 21, name: 'Krishna Reddy', role: 'Space Robotics Mentor', topics: ['Robotics', 'Autonomous Systems', 'Rovers & Landers', 'Control Systems'], voice: 'krishna' },
-  { id: 22, name: 'Pooja Nambiar', role: 'Astronomy Photographer', topics: ['Night Sky Photography', 'Image Processing', 'Telescope Handling', 'Celestial Landscapes'], voice: 'naina' },
-  { id: 23, name: 'Manav Sood', role: 'Space Physics Mentor', topics: ['Plasma Physics', 'Solar Physics', 'Magnetospheres', 'Space Weather'], voice: 'anand' },
-  { id: 24, name: 'Neha Reddy', role: 'Educational Psychologist', topics: ['Learning Strategies', 'Student Motivation', 'STEM Education', 'Mentorship'], voice: 'sana' },
-  { id: 25, name: 'Arjun Menon', role: 'Avionics Engineer', topics: ['Avionics Systems', 'Flight Computers', 'Sensors & Actuators', 'Embedded Systems'], voice: 'krishna' },
-  { id: 26, name: 'Simran Kaur', role: 'Space Outreach Lead', topics: ['Workshops', 'Events & Talks', 'STEM Outreach', 'Volunteer Programs'], voice: 'naina' },
-  { id: 27, name: 'Om Patwardhan', role: 'Exoplanet Researcher', topics: ['Exoplanets', 'Transit Method', 'Habitable Worlds', 'Alien Atmospheres'], voice: 'anand' },
-  { id: 28, name: 'Atharv Desai', role: 'Earth Observation Specialist', topics: ['Weather Satellites', 'Remote Sensing', 'Climate Monitoring', 'Disaster Management'], voice: 'krishna' },
+  { id: 1, name: 'Arnav Sharma', role: 'Astrophysics Educator', topics: ['Galaxies & Cosmology', 'Black Holes', 'Space Telescopes', 'Star Formation'], voice: 'naina' },
+  { id: 2, name: 'Ishita Verma', role: 'Space Science Communicator', topics: ['Planetary Science', 'Space Missions', 'Science Communication'], voice: 'anand' },
+  { id: 3, name: 'Karan Mehta', role: 'Rocketry Mentor', topics: ['Rocket Design', 'Propulsion', 'Aerospace Basics', 'Model Rockets'], voice: 'sana' },
+  { id: 4, name: 'Rohit Nair', role: 'Space Systems Engineer', topics: ['Satellite Systems', 'Launch Vehicles', 'Space Tech', 'Navigation & GPS'], voice: 'krishna' },
+  { id: 5, name: 'Devansh Rai', role: 'Astrophotography Guide', topics: ['Astrophotography', 'Deep Sky Imaging', 'Telescopes', 'Night Sky Wonders'], voice: 'myra' },
+  { id: 6, name: 'Gurpreet Singh', role: 'Astronomy Educator', topics: ['Solar System', 'Exoplanets', 'Astronomy Basics', 'Space History'], voice: 'rohit' },
+  { id: 7, name: 'Meera Iyer', role: 'Science Storyteller', topics: ['Cosmic Mysteries', 'Space Exploration', 'Mythology & Space', 'Public Speaking'], voice: 'bhoomika' },
+  { id: 8, name: 'Aditya Kulkarni', role: 'Planetary Scientist', topics: ['Planetary Geology', 'Mars Exploration', 'Moons & Satellites', 'Space Data Analysis'], voice: 'dhurv' },
+  { id: 9, name: 'Sneha Patil', role: 'STEM Educator', topics: ['STEM Teaching', 'Science Experiments', 'Student Mentorship', 'Learning Innovation'], voice: 'maya' },
+  { id: 10, name: 'Raghav Bansal', role: 'Space Entrepreneurship Mentor', topics: ['New Space Startups', 'Satellites', 'ISRO & NASA', 'Innovation & Tech'], voice: 'raju' },
+  { id: 11, name: 'Aanya Deshpande', role: 'Black Hole Explorer', topics: ['Black Holes', 'Gravitational Waves', 'High Energy Physics', 'Theoretical Physics'], voice: 'sunnysingh' },
+  { id: 12, name: 'Nikhil Joshi', role: 'Space Content Creator', topics: ['Space Education', 'YouTube & Media', 'Visual Storytelling', 'Making Space Simple'], voice: 'bunty' },
+  { id: 13, name: 'Zoya Khan', role: 'Future Scientist Mentor', topics: ['Research Guidance', 'Career Mentorship', 'Girls in STEM', 'Future Technologies'], voice: 'meesha' },
+  { id: 14, name: 'Kabir Malhotra', role: 'Space Tech Enthusiast', topics: ['Robotics in Space', 'AI & Space Tech', 'Space Instruments', 'CubeSats'], voice: 'naina' },
+  { id: 15, name: 'Tanvi Shah', role: 'Astrobiology Researcher', topics: ['Life Beyond Earth', 'Microbiology', 'Extremophiles', 'Space Biology'], voice: 'anand' },
+  { id: 16, name: 'Yashwant Rao', role: 'Orbital Mechanics Tutor', topics: ['Orbital Dynamics', 'Space Math', 'Trajectory Analysis', 'Simulation & Modeling'], voice: 'sana' },
+  { id: 17, name: 'Diya Menon', role: 'Science Communicator', topics: ['Space Outreach', 'Science Writing', 'Educational Content', 'Community Building'], voice: 'krishna' },
+  { id: 18, name: 'Sai Kiran', role: 'Launch Operations Analyst', topics: ['Launch Operations', 'Countdown Systems', 'Risk Analysis', 'Mission Assurance'], voice: 'myra' },
+  { id: 19, name: 'Ananya Bose', role: 'Cosmology Enthusiast', topics: ['Big Bang Theory', 'Dark Matter', 'Dark Energy', 'Cosmic Evolution'], voice: 'rohit' },
+  { id: 20, name: 'Harsh Vardhan', role: 'Satellite Design Mentor', topics: ['Satellite Design', 'Communication Systems', 'Payloads', 'Mission Design'], voice: 'bhoomika' },
+  { id: 21, name: 'Krishna Reddy', role: 'Space Robotics Mentor', topics: ['Robotics', 'Autonomous Systems', 'Rovers & Landers', 'Control Systems'], voice: 'dhurv' },
+  { id: 22, name: 'Pooja Nambiar', role: 'Astronomy Photographer', topics: ['Night Sky Photography', 'Image Processing', 'Telescope Handling', 'Celestial Landscapes'], voice: 'maya' },
+  { id: 23, name: 'Manav Sood', role: 'Space Physics Mentor', topics: ['Plasma Physics', 'Solar Physics', 'Magnetospheres', 'Space Weather'], voice: 'raju' },
+  { id: 24, name: 'Neha Reddy', role: 'Educational Psychologist', topics: ['Learning Strategies', 'Student Motivation', 'STEM Education', 'Mentorship'], voice: 'sunnysingh' },
+  { id: 25, name: 'Arjun Menon', role: 'Avionics Engineer', topics: ['Avionics Systems', 'Flight Computers', 'Sensors & Actuators', 'Embedded Systems'], voice: 'bunty' },
+  { id: 26, name: 'Simran Kaur', role: 'Space Outreach Lead', topics: ['Workshops', 'Events & Talks', 'STEM Outreach', 'Volunteer Programs'], voice: 'meesha' },
+  { id: 27, name: 'Om Patwardhan', role: 'Exoplanet Researcher', topics: ['Exoplanets', 'Transit Method', 'Habitable Worlds', 'Alien Atmospheres'], voice: 'naina' },
+  { id: 28, name: 'Atharv Desai', role: 'Earth Observation Specialist', topics: ['Weather Satellites', 'Remote Sensing', 'Climate Monitoring', 'Disaster Management'], voice: 'anand' },
   { id: 29, name: 'Ritika Malhotra', role: 'Human Spaceflight Mentor', topics: ['Astronaut Training', 'Space Habitats', 'Life Support Systems', 'Long Duration Missions'], voice: 'sana' },
-  { id: 30, name: 'Vikram Iyer', role: 'Deep Space Communicator', topics: ['DSN & Communication', 'Signal Processing', 'Radio Astronomy', 'Interstellar Missions'], voice: 'anand' },
-  { id: 31, name: 'Leena Thomas', role: 'Space Education Designer', topics: ['Creative Learning', 'DIY Experiments', 'Curriculum Design', 'EdTech & Innovation'], voice: 'naina' },
-  { id: 32, name: 'Rajveer Singh', role: 'Astronaut Training Mentor', topics: ['Astronaut Training', 'Physical Conditioning', 'Psychology in Space', 'Mission Preparation'], voice: 'krishna' },
-  { id: 33, name: 'Ira Mukherjee', role: 'Space Data Analyst', topics: ['Data Analysis', 'Machine Learning', 'Pattern Recognition', 'Scientific Insights'], voice: 'sana' },
-  { id: 34, name: 'Siddharth Jain', role: 'Earth Explorer Mentor', topics: ['Earth Observation', 'Geospatial Analysis', 'Environmental Tech', 'Sustainable Earth'], voice: 'anand' },
-  { id: 35, name: 'Dev Malhotra', role: 'Human Spaceflight Mentor', topics: ['System Engineering', 'Power Systems', 'Spacecraft Design', 'Mission Architecture'], voice: 'krishna' },
-  { id: 36, name: 'Mudit Chawla', role: 'AI in Space Mentor', topics: ['Artificial Intelligence', 'Predictive Modeling', 'Autonomous Systems', 'AI for Space'], voice: 'anand' },
-  { id: 37, name: 'Aarush Kapoor', role: 'Deep Space Astronomy Mentor', topics: ['Interstellar Space', 'Deep Sky Objects', 'Cosmic Distances', 'Nebulae'], voice: 'krishna' },
-  { id: 38, name: 'Kiara Sen', role: 'Galaxy Evolution Mentor', topics: ['Spiral Galaxies', 'Elliptical Galaxies', 'Galaxy Collisions', 'Local Group'], voice: 'naina' },
-  { id: 39, name: 'Dhruv Narayanan', role: 'Exoplanet Discovery Specialist', topics: ['Exoplanets', 'Habitable Worlds', 'Transit Method', 'Alien Worlds'], voice: 'anand' },
-  { id: 40, name: 'Anika Bose', role: 'Black Hole Physics Mentor', topics: ['Event Horizon', 'Hawking Radiation', 'Supermassive BHs', 'Accretion Disks'], voice: 'sana' },
-  { id: 41, name: 'Rohan Chatterjee', role: 'Cosmology Mentor', topics: ['Big Bang', 'Dark Energy', 'Dark Matter', 'Cosmic Expansion'], voice: 'krishna' },
-  { id: 42, name: 'Myra Thomas', role: 'Radio Astronomy Educator', topics: ['Pulsars', 'Radio Galaxies', 'Fast Radio Bursts', 'Giant Radio Telescopes'], voice: 'naina' },
-  { id: 43, name: 'Eesha Kapoor', role: 'Badge Sparks Scientist', topics: ['Voyager Missions', 'New Horizons', 'Interstellar Probes', 'Space Exploration'], voice: 'sana' },
-  { id: 44, name: 'Vivaan Krishnan', role: 'Deep Space Mission Mentor', topics: ['Voyager Missions', 'New Horizons', 'Interstellar Probes', 'Space Exploration'], voice: 'anand' },
-  { id: 45, name: 'Sana Iqbal', role: 'Stellar Evolution Specialist', topics: ['Star Formation', 'Red Giants', 'Supernovae', 'Neutron Stars'], voice: 'sana' },
-  { id: 46, name: 'Arvind Pillai', role: 'Deep Space Telescope Mentor', topics: ['James Webb Telescope', 'Hubble Telescope', 'Infrared Astronomy', 'Space Observatories'], voice: 'krishna' },
-  { id: 47, name: 'Naina Kulkarni', role: 'Astrobiology & Cosmic Life Mentor', topics: ['Alien Life', 'Biosignatures', 'Habitable Zones', 'Future Space Exploration'], voice: 'naina' },
-  { id: 48, name: 'Nikita Sharma', role: 'Space Law & Policy Guide', topics: ['Space Treaties', 'Space Debris Policy', 'Commercial Space', 'Ethics in Space'], voice: 'naina' },
-  { id: 49, name: 'Aryan Gupta', role: 'Mission Control Mentor', topics: ['Flight Operations', 'Telemetry', 'Anomaly Handling', 'Team Coordination'], voice: 'anand' },
-  { id: 50, name: 'Priya Menon', role: 'Space Medicine Educator', topics: ['Microgravity Effects', 'Astronaut Health', 'Radiation Safety', 'Space Nutrition'], voice: 'sana' },
+  { id: 30, name: 'Vikram Iyer', role: 'Deep Space Communicator', topics: ['DSN & Communication', 'Signal Processing', 'Radio Astronomy', 'Interstellar Missions'], voice: 'krishna' },
+  { id: 31, name: 'Leena Thomas', role: 'Space Education Designer', topics: ['Creative Learning', 'DIY Experiments', 'Curriculum Design', 'EdTech & Innovation'], voice: 'myra' },
+  { id: 32, name: 'Rajveer Singh', role: 'Astronaut Training Mentor', topics: ['Astronaut Training', 'Physical Conditioning', 'Psychology in Space', 'Mission Preparation'], voice: 'rohit' },
+  { id: 33, name: 'Ira Mukherjee', role: 'Space Data Analyst', topics: ['Data Analysis', 'Machine Learning', 'Pattern Recognition', 'Scientific Insights'], voice: 'bhoomika' },
+  { id: 34, name: 'Siddharth Jain', role: 'Earth Explorer Mentor', topics: ['Earth Observation', 'Geospatial Analysis', 'Environmental Tech', 'Sustainable Earth'], voice: 'dhurv' },
+  { id: 35, name: 'Dev Malhotra', role: 'Human Spaceflight Mentor', topics: ['System Engineering', 'Power Systems', 'Spacecraft Design', 'Mission Architecture'], voice: 'maya' },
+  { id: 36, name: 'Mudit Chawla', role: 'AI in Space Mentor', topics: ['Artificial Intelligence', 'Predictive Modeling', 'Autonomous Systems', 'AI for Space'], voice: 'raju' },
+  { id: 37, name: 'Aarush Kapoor', role: 'Deep Space Astronomy Mentor', topics: ['Interstellar Space', 'Deep Sky Objects', 'Cosmic Distances', 'Nebulae'], voice: 'sunnysingh' },
+  { id: 38, name: 'Kiara Sen', role: 'Galaxy Evolution Mentor', topics: ['Spiral Galaxies', 'Elliptical Galaxies', 'Galaxy Collisions', 'Local Group'], voice: 'bunty' },
+  { id: 39, name: 'Dhruv Narayanan', role: 'Exoplanet Discovery Specialist', topics: ['Exoplanets', 'Habitable Worlds', 'Transit Method', 'Alien Worlds'], voice: 'meesha' },
+  { id: 40, name: 'Anika Bose', role: 'Black Hole Physics Mentor', topics: ['Event Horizon', 'Hawking Radiation', 'Supermassive BHs', 'Accretion Disks'], voice: 'naina' },
+  { id: 41, name: 'Rohan Chatterjee', role: 'Cosmology Mentor', topics: ['Big Bang', 'Dark Energy', 'Dark Matter', 'Cosmic Expansion'], voice: 'anand' },
+  { id: 42, name: 'Myra Thomas', role: 'Radio Astronomy Educator', topics: ['Pulsars', 'Radio Galaxies', 'Fast Radio Bursts', 'Giant Radio Telescopes'], voice: 'sana' },
+  { id: 43, name: 'Eesha Kapoor', role: 'Badge Sparks Scientist', topics: ['Voyager Missions', 'New Horizons', 'Interstellar Probes', 'Space Exploration'], voice: 'krishna' },
+  { id: 44, name: 'Vivaan Krishnan', role: 'Deep Space Mission Mentor', topics: ['Voyager Missions', 'New Horizons', 'Interstellar Probes', 'Space Exploration'], voice: 'myra' },
+  { id: 45, name: 'Sana Iqbal', role: 'Stellar Evolution Specialist', topics: ['Star Formation', 'Red Giants', 'Supernovae', 'Neutron Stars'], voice: 'rohit' },
+  { id: 46, name: 'Arvind Pillai', role: 'Deep Space Telescope Mentor', topics: ['James Webb Telescope', 'Hubble Telescope', 'Infrared Astronomy', 'Space Observatories'], voice: 'bhoomika' },
+  { id: 47, name: 'Naina Kulkarni', role: 'Astrobiology & Cosmic Life Mentor', topics: ['Alien Life', 'Biosignatures', 'Habitable Zones', 'Future Space Exploration'], voice: 'dhurv' },
+  { id: 48, name: 'Nikita Sharma', role: 'Space Law & Policy Guide', topics: ['Space Treaties', 'Space Debris Policy', 'Commercial Space', 'Ethics in Space'], voice: 'maya' },
+  { id: 49, name: 'Aryan Gupta', role: 'Mission Control Mentor', topics: ['Flight Operations', 'Telemetry', 'Anomaly Handling', 'Team Coordination'], voice: 'raju' },
+  { id: 50, name: 'Priya Menon', role: 'Space Medicine Educator', topics: ['Microgravity Effects', 'Astronaut Health', 'Radiation Safety', 'Space Nutrition'], voice: 'sunnysingh' },
 ];
 
 export interface Lecture {
@@ -101,7 +119,7 @@ export const moneyCourses: MoneyCourse[] = [
     facultyId: 1, level: 'Advanced', weeks: 6, originalPrice: '₹4,999', gradient: 'from-indigo-500 to-violet-600',
     outcomes: ['Read a galaxy classification chart', 'Explain how black holes form', 'Understand telescope data'],
     lectures: [
-      L('mc1-1', 'Welcome to the Deep Universe', '4 min', 'Your AI mentor introduces the course roadmap and how to study each week.'),
+      L('mc1-1', 'Welcome to the Deep Universe', '4 min', 'Your course lead introduces the course roadmap and how to study each week.'),
       L('mc1-2', 'How Galaxies Are Born', '5 min', 'Gas clouds, gravity, and the first stars that lit the cosmos.'),
       L('mc1-3', 'Black Holes: Beyond the Horizon', '6 min', 'Event horizons, singularities and what falling in would feel like.'),
       L('mc1-4', 'Reading the Sky With Telescopes', '5 min', 'From Hubble to James Webb — what each instrument reveals.'),
@@ -239,3 +257,11 @@ export const moneyCourses: MoneyCourse[] = [
     ],
   },
 ];
+
+/** Hinglish intro line spoken in every recorded lecture. */
+export const hinglishLine = (title: string): string =>
+  `Is lecture mein hum "${title}" ko bilkul aasaan Hinglish mein samjhenge — thoda Hindi, thoda English, taaki har concept ekdum clear ho jaaye.`;
+
+/** Every lecture is taught by a different teacher — rotates through the whole faculty. */
+export const lectureTeacher = (courseIndex: number, lectureIndex: number): Faculty =>
+  faculty[(courseIndex * 7 + lectureIndex * 3) % faculty.length];

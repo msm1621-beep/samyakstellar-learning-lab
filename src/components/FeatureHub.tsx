@@ -3,7 +3,7 @@ import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
   CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
   ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
-  FlaskConical, Music, Target, Sparkle, School,
+  FlaskConical, Music, Target, Sparkle, School, Star,
 } from 'lucide-react';
 
 export type FeatureKey =
@@ -11,7 +11,7 @@ export type FeatureKey =
   | 'facts' | 'space-qna' | 'explorer' | 'timeline' | 'constellations'
   | 'courses' | 'leaderboard' | 'study-planner' | 'manuscripts' | 'library'
   | 'games' | 'premium-games' | 'game-passes' | 'subscriptions' | 'webinars'
-  | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about';
+  | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about' | 'favorites';
 
 export type FeatureAction =
   | { kind: 'open'; key: FeatureKey }
@@ -28,6 +28,7 @@ interface Feature {
 }
 
 const FEATURES: Feature[] = [
+  { id: 'favorites',        label: 'Favorites',          icon: Star,          gradient: 'from-amber-400 to-yellow-500',   ring: 'ring-amber-400/40',   action: { kind: 'open', key: 'favorites' } },
   { id: 'progress-tracker', label: 'Progress',           icon: BarChart3,     gradient: 'from-emerald-500 to-teal-500',   ring: 'ring-emerald-400/40', action: { kind: 'open', key: 'progress-tracker' } },
   { id: 'daily-challenges', label: 'Daily Missions',     icon: Target,        gradient: 'from-red-500 to-rose-500',       ring: 'ring-red-400/40',     action: { kind: 'open', key: 'daily-challenges' } },
   { id: 'fun-facts',        label: 'Fun Facts',          icon: Sparkle,       gradient: 'from-pink-400 to-fuchsia-500',   ring: 'ring-pink-400/40',    action: { kind: 'open', key: 'fun-facts' } },

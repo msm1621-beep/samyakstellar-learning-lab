@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Brain, Gamepad2, Coins, Flame, Compass, Lock } from 'lucide-react';
+import { BookOpen, Brain, Gamepad2, Coins, Flame, Compass, Lock, Headphones, Star, NotebookPen, Sprout, Rocket, Telescope, Trophy } from 'lucide-react';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { useCoins } from '@/contexts/CoinsContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -43,19 +43,45 @@ const readVisited = (): number => {
   }
 };
 
+const readLen = (key: string): number => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(key) || '[]');
+    if (Array.isArray(raw)) return raw.length;
+    if (raw && typeof raw === 'object') return Object.keys(raw).length;
+    return 0;
+  } catch {
+    return 0;
+  }
+};
+
 const ProgressBadges = () => {
   const { achievements } = useAchievements();
   const { coins } = useCoins();
   const [streak, setStreak] = useState(readStreak);
   const [visited, setVisited] = useState(readVisited);
+  const [extra, setExtra] = useState(() => ({
+    lectures: readLen('academy_completed_lectures'),
+    notes: readLen('studyNotes'),
+    favorites: readLen('stellar_favorites'),
+    pets: readLen('alienPetCollection'),
+    missions: readLen('challengeHistory'),
+  }));
 
   useEffect(() => {
     const t = setInterval(() => {
       setStreak(readStreak());
       setVisited(readVisited());
+      setExtra({
+        lectures: readLen('academy_completed_lectures'),
+        notes: readLen('studyNotes'),
+        favorites: readLen('stellar_favorites'),
+        pets: readLen('alienPetCollection'),
+        missions: readLen('challengeHistory'),
+      });
     }, 4000);
     return () => clearInterval(t);
   }, []);
+
 
   const badges: BadgeDef[] = useMemo(() => {
     const count = (type: string | string[]) => {
@@ -106,8 +132,89 @@ const ProgressBadges = () => {
         ],
         accent: 'text-primary',
       },
+      {
+        id: 'lectures',
+        title: 'Hinglish Lectures',
+        icon: Headphones,
+        value: extra.lectures,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 6 },
+          { label: 'Gold', need: 18 },
+          { label: 'Cosmic', need: 40 },
+        ],
+        accent: 'text-emerald-400',
+      },
+      {
+        id: 'notes',
+        title: 'Study Notes Saved',
+        icon: NotebookPen,
+        value: extra.notes,
+        tiers: TIERS,
+        accent: 'text-accent',
+      },
+      {
+        id: 'favorites',
+        title: 'Favorites Saved',
+        icon: Star,
+        value: extra.favorites,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 5 },
+          { label: 'Gold', need: 12 },
+          { label: 'Cosmic', need: 25 },
+        ],
+        accent: 'text-star',
+      },
+      {
+        id: 'pets',
+        title: 'Alien Pets Collected',
+        icon: Sprout,
+        value: extra.pets,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 10 },
+          { label: 'Gold', need: 50 },
+          { label: 'Cosmic', need: 150 },
+        ],
+        accent: 'text-accent',
+      },
+      {
+        id: 'missions',
+        title: 'Daily Missions Done',
+        icon: Rocket,
+        value: extra.missions,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 7 },
+          { label: 'Gold', need: 20 },
+          { label: 'Cosmic', need: 50 },
+        ],
+        accent: 'text-primary',
+      },
+      {
+        id: 'discoveries',
+        title: 'Celestial Discoveries',
+        icon: Telescope,
+        value: count(['celestial', 'discovery']),
+        tiers: TIERS,
+        accent: 'text-cyan-400',
+      },
+      {
+        id: 'trophies',
+        title: 'Total Trophies',
+        icon: Trophy,
+        value: achievements.length,
+        tiers: [
+          { label: 'Bronze', need: 3 },
+          { label: 'Silver', need: 12 },
+          { label: 'Gold', need: 30 },
+          { label: 'Cosmic', need: 75 },
+        ],
+        accent: 'text-star',
+      },
     ];
-  }, [achievements, coins, streak, visited]);
+  }, [achievements, coins, streak, visited, extra]);
 
   return (
     <section id="progress-badges" className="scroll-mt-28 py-12 px-4 sm:px-6 lg:px-8 relative">
