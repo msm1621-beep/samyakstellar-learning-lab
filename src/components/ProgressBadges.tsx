@@ -132,8 +132,89 @@ const ProgressBadges = () => {
         ],
         accent: 'text-primary',
       },
+      {
+        id: 'lectures',
+        title: 'Hinglish Lectures',
+        icon: Headphones,
+        value: extra.lectures,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 6 },
+          { label: 'Gold', need: 18 },
+          { label: 'Cosmic', need: 40 },
+        ],
+        accent: 'text-emerald-400',
+      },
+      {
+        id: 'notes',
+        title: 'Study Notes Saved',
+        icon: NotebookPen,
+        value: extra.notes,
+        tiers: TIERS,
+        accent: 'text-accent',
+      },
+      {
+        id: 'favorites',
+        title: 'Favorites Saved',
+        icon: Star,
+        value: extra.favorites,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 5 },
+          { label: 'Gold', need: 12 },
+          { label: 'Cosmic', need: 25 },
+        ],
+        accent: 'text-star',
+      },
+      {
+        id: 'pets',
+        title: 'Alien Pets Collected',
+        icon: Sprout,
+        value: extra.pets,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 10 },
+          { label: 'Gold', need: 50 },
+          { label: 'Cosmic', need: 150 },
+        ],
+        accent: 'text-accent',
+      },
+      {
+        id: 'missions',
+        title: 'Daily Missions Done',
+        icon: Rocket,
+        value: extra.missions,
+        tiers: [
+          { label: 'Bronze', need: 1 },
+          { label: 'Silver', need: 7 },
+          { label: 'Gold', need: 20 },
+          { label: 'Cosmic', need: 50 },
+        ],
+        accent: 'text-primary',
+      },
+      {
+        id: 'discoveries',
+        title: 'Celestial Discoveries',
+        icon: Telescope,
+        value: count(['celestial', 'discovery']),
+        tiers: TIERS,
+        accent: 'text-cyan-400',
+      },
+      {
+        id: 'trophies',
+        title: 'Total Trophies',
+        icon: Trophy,
+        value: achievements.length,
+        tiers: [
+          { label: 'Bronze', need: 3 },
+          { label: 'Silver', need: 12 },
+          { label: 'Gold', need: 30 },
+          { label: 'Cosmic', need: 75 },
+        ],
+        accent: 'text-star',
+      },
     ];
-  }, [achievements, coins, streak, visited]);
+  }, [achievements, coins, streak, visited, extra]);
 
   return (
     <section id="progress-badges" className="scroll-mt-28 py-12 px-4 sm:px-6 lg:px-8 relative">
