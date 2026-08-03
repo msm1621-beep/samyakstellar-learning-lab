@@ -11,7 +11,7 @@ export type FeatureKey =
   | 'facts' | 'space-qna' | 'explorer' | 'timeline' | 'constellations'
   | 'courses' | 'leaderboard' | 'study-planner' | 'manuscripts' | 'library'
   | 'games' | 'premium-games' | 'game-passes' | 'subscriptions' | 'webinars'
-  | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about';
+  | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about' | 'favorites';
 
 export type FeatureAction =
   | { kind: 'open'; key: FeatureKey }
