@@ -3,7 +3,7 @@ import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
   CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
   ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
-  FlaskConical, Music, Target, Sparkle, School,
+  FlaskConical, Music, Target, Sparkle, School, Star,
 } from 'lucide-react';
 
 export type FeatureKey =
