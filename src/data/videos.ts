@@ -179,15 +179,5 @@ export const videos: Video[] = [
     category: 'Solar System',
     tags: ['Moon', 'Solar System', 'Beginner'],
     youtubeId: '6AviDjR9mmo'
-  },
-  {
-    id: 'v24',
-    title: 'How Planets Form',
-    description: 'Watch a solar system being born from dust and gas!',
-    thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=225&fit=crop',
-    duration: '8:00',
-    category: 'Solar System',
-    tags: ['Planets', 'Stars', 'Advanced'],
-    youtubeId: 'QdpKP2hE4Vc'
   }
 ];
