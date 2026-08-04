@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,15 +13,23 @@ import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import DreamJourney from "./pages/DreamJourney";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import AccountSlide from "./components/AccountSlide";
+import { startReminderScheduler } from "@/lib/notifications";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [splashDone, setSplashDone] = useState(false);
   const [accountDone, setAccountDone] = useState(false);
+
+  useEffect(() => {
+    startReminderScheduler();
+  }, []);
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -40,6 +48,7 @@ const App = () => {
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/dream-journey" element={<DreamJourney />} />
+                      <Route path="/settings" element={<Settings />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
