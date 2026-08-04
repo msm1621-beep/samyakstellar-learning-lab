@@ -25,6 +25,12 @@ const App = () => {
   const [splashDone, setSplashDone] = useState(false);
   const [accountDone, setAccountDone] = useState(false);
 
+  useEffect(() => {
+    startReminderScheduler();
+  }, []);
+
+
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -42,6 +48,7 @@ const App = () => {
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/dream-journey" element={<DreamJourney />} />
+                      <Route path="/settings" element={<Settings />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
