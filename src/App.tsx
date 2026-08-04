@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,9 +13,11 @@ import { AchievementsProvider } from "@/contexts/AchievementsContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import DreamJourney from "./pages/DreamJourney";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import AccountSlide from "./components/AccountSlide";
+import { startReminderScheduler } from "@/lib/notifications";
 
 const queryClient = new QueryClient();
 
