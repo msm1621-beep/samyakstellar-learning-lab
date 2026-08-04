@@ -3,7 +3,7 @@ import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
   CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
   ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
-  FlaskConical, Music, Target, Sparkle, School, Star,
+  FlaskConical, Music, Target, Sparkle, School, Star, Settings as SettingsIcon,
 } from 'lucide-react';
 
 export type FeatureKey =
@@ -56,6 +56,7 @@ const FEATURES: Feature[] = [
   { id: 'periodic',         label: 'Periodic Table',     icon: FlaskConical,  gradient: 'from-teal-500 to-cyan-500',      ring: 'ring-teal-400/40',    action: { kind: 'toggle', target: 'periodic' } },
   { id: 'music',            label: 'Music',              icon: Music,         gradient: 'from-purple-500 to-pink-500',    ring: 'ring-purple-400/40',  action: { kind: 'toggle', target: 'music' } },
   { id: 'dream',            label: 'Dream Journey',      icon: Rocket,        gradient: 'from-violet-500 to-fuchsia-500', ring: 'ring-violet-400/40',  action: { kind: 'route', href: '/dream-journey' } },
+  { id: 'settings',         label: 'Settings',           icon: SettingsIcon,  gradient: 'from-slate-500 to-zinc-600',     ring: 'ring-slate-400/40',   action: { kind: 'route', href: '/settings' } },
 ];
 
 interface Props {
