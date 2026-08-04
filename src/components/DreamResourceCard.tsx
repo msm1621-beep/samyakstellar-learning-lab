@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Play, Pause, BookOpen, Headphones, Volume2, VolumeX, Square, X, ExternalLink, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import FavStar from '@/components/FavStar';
 
 interface DreamResource {
   type: 'video' | 'book' | 'audiobook' | 'article';
@@ -38,6 +39,14 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const youtubeId = resource.url ? getYouTubeId(resource.url) : null;
+
+  const favItem = {
+    id: `dream-${resource.type}-${resource.title}`,
+    kind: (resource.type === 'article' ? 'topic' : resource.type) as 'video' | 'book' | 'audiobook' | 'topic',
+    title: resource.title,
+    meta: topicTitle,
+    url: resource.url,
+  };
 
   useEffect(() => {
     return () => {
@@ -92,6 +101,7 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
       <>
         <div className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
           <div className="relative aspect-video">
+        <FavStar item={favItem} className="absolute top-2 left-2 z-10" />
             {playingVideo && youtubeId ? (
               <iframe
                 src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
@@ -153,6 +163,7 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
       <>
         <div className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
           <div className="relative aspect-[3/4] max-h-48">
+        <FavStar item={favItem} className="absolute top-2 left-2 z-10" />
             <img
               src={genericBookCover}
               alt={resource.title}
@@ -207,7 +218,7 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
                   <h4 className="font-display font-semibold text-primary mb-2 flex items-center gap-2">
                     <BookOpen className="w-5 h-5" /> Introduction
                   </h4>
-                  <p className="text-foreground leading-relaxed">{resource.description}</p>
+                  <p className="text-foreground leading-relaxed whitespace-pre-line">{resource.description}</p>
                 </div>
                 <div className="p-4 rounded-xl bg-secondary/10 border border-secondary/30">
                   <h4 className="font-display font-semibold text-secondary mb-2">About This Book</h4>
@@ -239,6 +250,7 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
       <>
         <div className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 border-2 border-purple-500/20 hover:border-purple-500/50 h-full flex flex-col">
           <div className="relative aspect-[3/4] max-h-48">
+        <FavStar item={favItem} className="absolute top-2 left-2 z-10" />
             <img
               src={genericAudioCover}
               alt={resource.title}
@@ -390,13 +402,13 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
                   <h4 className="font-display font-semibold text-purple-300 mb-2 flex items-center gap-2">
                     <Headphones className="w-5 h-5" /> Introduction
                   </h4>
-                  <p className="text-foreground leading-relaxed">{resource.description}</p>
+                  <p className="text-foreground leading-relaxed whitespace-pre-line">{resource.description}</p>
                 </div>
                 <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/5 to-pink-500/5 border border-purple-500/20">
                   <h4 className="font-display font-semibold text-purple-300 mb-2 flex items-center gap-2">
                     <Volume2 className="w-5 h-5" /> Now Playing
                   </h4>
-                  <p className="text-foreground leading-relaxed">{resource.description}</p>
+                  <p className="text-foreground leading-relaxed whitespace-pre-line">{resource.description}</p>
                 </div>
               </div>
 
@@ -420,6 +432,7 @@ export const DreamResourceCard = ({ resource, topicTitle }: DreamResourceCardPro
   return (
     <div className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
       <div className="relative aspect-[3/4] max-h-48">
+        <FavStar item={favItem} className="absolute top-2 left-2 z-10" />
         <img
           src={genericArticleCover}
           alt={resource.title}

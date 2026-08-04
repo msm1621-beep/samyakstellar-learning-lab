@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import FavStar from '@/components/FavStar';
 import { Play, Pause, BookOpen, Filter, X, ChevronLeft, ChevronRight, Headphones, Volume2, VolumeX, Award, CheckCircle, Square, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { videos } from '@/data/videos';
@@ -315,7 +316,8 @@ const LibrarySection = () => {
                   return (
                   <div key={video.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                     <div className="relative aspect-video">
-                      <a
+                      <FavStar item={{ id: `lib-video-${video.id ?? video.title}`, kind: 'video', title: video.title, url: (video as { url?: string }).url }} className="absolute top-2 left-2 z-10" />
+                                            <a
                         href={youtubeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -385,7 +387,8 @@ const LibrarySection = () => {
             {filteredBooks.map((book) => (
               <div key={book.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300">
                 <div className="relative aspect-[3/4] max-h-48">
-                  <img 
+                  <FavStar item={{ id: `lib-book-${book.id ?? book.title}`, kind: 'book', title: book.title, url: (book as { url?: string }).url }} className="absolute top-2 left-2 z-10" />
+                                        <img 
                     src={book.cover} 
                     alt={book.title}
                     className="w-full h-full object-cover"
@@ -456,7 +459,8 @@ const LibrarySection = () => {
             {filteredAudiobooks.map((book) => (
               <div key={book.id} className="glass-card rounded-xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 border-2 border-purple-500/20 hover:border-purple-500/50">
                 <div className="relative aspect-[3/4] max-h-48">
-                  <img 
+                  <FavStar item={{ id: `lib-audiobook-${book.id ?? book.title}`, kind: 'audiobook', title: book.title, url: (book as { url?: string }).url }} className="absolute top-2 left-2 z-10" />
+                                        <img 
                     src={book.cover} 
                     alt={book.title}
                     className="w-full h-full object-cover"
