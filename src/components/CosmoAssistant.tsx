@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Save } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Save, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
