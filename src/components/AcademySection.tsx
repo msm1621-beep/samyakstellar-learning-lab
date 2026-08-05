@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { GraduationCap, Play, Pause, CheckCircle2, Sparkles, ArrowLeft, Users, Clock, BadgeCheck, Star, Languages } from 'lucide-react';
 import { faculty, moneyCourses, VOICES, hinglishLine, lectureTeacher, type MoneyCourse } from '@/data/faculty';
 import { isFavorite, toggleFavorite } from '@/lib/favorites';
+import CourseQuiz from '@/components/CourseQuiz';
 
 const STORE_KEY = 'academy_completed_lectures';
 
@@ -16,7 +17,10 @@ const AcademySection = () => {
   const [playing, setPlaying] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [favTick, setFavTick] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
+  const [quizLecture, setQuizLecture] = useState<{ id: string; title: string } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const elapsedRef = useRef(0);
 
   useEffect(() => {
     localStorage.setItem(STORE_KEY, JSON.stringify(done));
@@ -33,20 +37,45 @@ const AcademySection = () => {
       audioRef.current = null;
     }
     setPlaying(null);
+    setElapsed(0);
+    elapsedRef.current = 0;
   };
 
-  const play = async (lectureId: string, url: string) => {
+  const durationSeconds = (duration: string) => {
+    const hours = Number(duration.match(/(\d+)h/)?.[1] || 0);
+    const minutes = Number(duration.match(/(\d+)\s*m/)?.[1] || 0);
+    return Math.max(30 * 60, hours * 3600 + minutes * 60);
+  };
+
+  const play = async (lectureId: string, duration: string, startVoice: number) => {
     setError(null);
     if (playing === lectureId) { stop(); return; }
     stop();
+    const voiceList = Object.values(VOICES);
+    const target = durationSeconds(duration);
     const a = new Audio();
     a.crossOrigin = 'anonymous';
     a.preload = 'auto';
-    a.src = url;
+    let chapter = startVoice % voiceList.length;
+    a.src = voiceList[chapter].url;
     audioRef.current = a;
+    a.ontimeupdate = () => {
+      const total = Math.min(target, Math.floor(elapsedRef.current + a.currentTime));
+      setElapsed(total);
+    };
     a.onended = () => {
-      setPlaying(null);
-      setDone(prev => (prev.includes(lectureId) ? prev : [...prev, lectureId]));
+      elapsedRef.current += Number.isFinite(a.duration) ? a.duration : 0;
+      if (elapsedRef.current >= target) {
+        setPlaying(null);
+        setElapsed(target);
+        setDone(prev => (prev.includes(lectureId) ? prev : [...prev, lectureId]));
+        const lecture = active?.lectures.find(item => item.id === lectureId);
+        if (lecture) setQuizLecture({ id: lecture.id, title: lecture.title });
+        return;
+      }
+      chapter = (chapter + 1) % voiceList.length;
+      a.src = voiceList[chapter].url;
+      void a.play();
     };
     a.onerror = () => {
       setPlaying(null);
@@ -141,7 +170,7 @@ const AcademySection = () => {
               return (
                 <div key={l.id} className="rounded-xl border border-white/10 bg-white/5 p-3 flex items-start gap-3">
                   <button
-                    onClick={() => play(l.id, voice.url)}
+                     onClick={() => play(l.id, l.duration, courseIndex * 7 + i * 3)}
                     className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-gradient-to-br ${active.gradient} text-white`}
                     aria-label={isPlaying ? `Pause ${l.title}` : `Play ${l.title}`}
                   >
@@ -156,15 +185,18 @@ const AcademySection = () => {
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" />{teacher.name} · {voice.name}</span>
                     </p>
                     {isPlaying && (
-                      <audio
-                        className="mt-2 w-full h-8"
-                        controls
-                        src={voice.url}
-                        onPlay={(e) => { stop(); (e.currentTarget as HTMLAudioElement).play().catch(() => {}); setPlaying(l.id); }}
-                      />
+                      <div className="mt-2">
+                        <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                          <div className={`h-full bg-gradient-to-r ${active.gradient}`} style={{ width: `${Math.min(100, (elapsed / durationSeconds(l.duration)) * 100)}%` }} />
+                        </div>
+                        <p className="mt-1 text-[10px] text-white/45">Long-form chapter playback · {Math.floor(elapsed / 60)} min completed</p>
+                      </div>
                     )}
                   </div>
-                  {isDone && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    {isDone && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
+                    {isDone && <button onClick={() => setQuizLecture({ id: l.id, title: l.title })} className="rounded-md border border-cyan-400/30 px-2 py-1 text-[10px] text-cyan-200 hover:bg-cyan-500/10">Quiz</button>}
+                  </div>
                 </div>
               );
             })}
@@ -182,6 +214,7 @@ const AcademySection = () => {
             ))}
           </div>
         </div>
+        {quizLecture && <CourseQuiz courseId={quizLecture.id} courseTitle={`${quizLecture.title} Quiz`} onClose={() => setQuizLecture(null)} />}
       </div>
     );
   }

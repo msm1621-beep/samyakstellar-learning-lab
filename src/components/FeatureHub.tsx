@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import {
   Rocket, Globe2, Sparkles, Telescope, Clock, Stars, GraduationCap, Trophy,
-  CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket, Video,
+  CalendarCheck, ScrollText, BookOpen, Gamepad2, Crown, Ticket,
   ShoppingBag, Sprout, Award, Lightbulb, Info, BarChart3, Search,
   FlaskConical, Music, Target, Sparkle, School, Star, Settings as SettingsIcon,
 } from 'lucide-react';
@@ -10,7 +10,7 @@ export type FeatureKey =
   | 'progress-tracker' | 'daily-challenges' | 'fun-facts' | 'solar-system-3d'
   | 'facts' | 'space-qna' | 'explorer' | 'timeline' | 'constellations'
   | 'courses' | 'leaderboard' | 'study-planner' | 'manuscripts' | 'library'
-  | 'games' | 'premium-games' | 'game-passes' | 'subscriptions' | 'webinars'
+   | 'games' | 'premium-games' | 'game-passes' | 'subscriptions'
   | 'academy' | 'shop' | 'alien-pets' | 'achievements' | 'about' | 'favorites';
 
 export type FeatureAction =
@@ -48,7 +48,6 @@ const FEATURES: Feature[] = [
   { id: 'premium-games',    label: 'Premium Games',      icon: Crown,         gradient: 'from-orange-500 to-red-500',     ring: 'ring-orange-400/40',  action: { kind: 'open', key: 'premium-games' } },
   { id: 'game-passes',      label: 'Game Passes',        icon: Ticket,        gradient: 'from-cyan-500 to-teal-500',      ring: 'ring-cyan-400/40',    action: { kind: 'open', key: 'game-passes' } },
   { id: 'subscriptions',    label: 'VIP',                icon: Sparkles,      gradient: 'from-amber-500 to-fuchsia-500',  ring: 'ring-amber-400/40',   action: { kind: 'open', key: 'subscriptions' } },
-  { id: 'webinars',         label: 'Webinars',           icon: Video,         gradient: 'from-fuchsia-500 to-amber-500',  ring: 'ring-fuchsia-400/40', action: { kind: 'open', key: 'webinars' } },
   { id: 'shop',             label: 'Shop',               icon: ShoppingBag,   gradient: 'from-pink-500 to-purple-500',    ring: 'ring-pink-400/40',    action: { kind: 'open', key: 'shop' } },
   { id: 'alien-pets',       label: 'Alien Pets',         icon: Sprout,        gradient: 'from-emerald-500 to-lime-500',   ring: 'ring-emerald-400/40', action: { kind: 'open', key: 'alien-pets' } },
   { id: 'achievements',     label: 'Trophies',           icon: Award,         gradient: 'from-yellow-400 to-orange-500',  ring: 'ring-yellow-400/40',  action: { kind: 'open', key: 'achievements' } },

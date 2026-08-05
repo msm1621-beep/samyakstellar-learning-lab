@@ -17,7 +17,7 @@ export interface AstronautTopic {
   resources: Resource[];
 }
 
-export const astronautTopics: AstronautTopic[] = [
+const rawAstronautTopics: AstronautTopic[] = [
   {
     id: "orbital-mechanics",
     title: "Orbital Mechanics",
@@ -189,5 +189,14 @@ export const astronautTopics: AstronautTopic[] = [
     ],
   },
 ];
+
+export const astronautTopics: AstronautTopic[] = rawAstronautTopics.map((topic) => ({
+  ...topic,
+  resources: topic.resources.map((resource) => resource.type !== 'audiobook' ? resource : ({
+    ...resource,
+    title: `${topic.title}: Complete Audio Lesson`,
+    description: `Lesson one builds the foundation. ${topic.summary} We begin with ${topic.keyConcepts.slice(0, 2).join(' and ')}, define each idea in simple language, and use a clear space-mission example to show exactly how it works. Pause after each explanation and try to describe the idea in your own words before continuing.\n\nLesson two connects the system. You will learn ${topic.keyConcepts.slice(2).join(', ')}, how these concepts affect one another, and why astronauts and mission teams depend on them. ${topic.whyItMatters} The guided examples move from an everyday comparison to a real operational decision, followed by short prediction questions with spoken answers.\n\nLesson three is practice and review. Follow a complete mission scenario, choose what should happen at each step, and check your reasoning against the explanation. The final recap revisits ${topic.keyConcepts.join(', ')}, gives you a five-question self-check, and leaves you able to teach the topic confidently to someone else.`,
+  })),
+}));
 
 export const topicCategories = ['All', 'Science', 'Engineering', 'Health', 'Operations', 'Survival', 'Mission'] as const;

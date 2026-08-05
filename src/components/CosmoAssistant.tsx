@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Send, Loader2, Save } from 'lucide-react';
+import { Mic, MicOff, Volume2, VolumeX, Bot, X, Sparkles, Save, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
+import { Conversation, ConversationContent, ConversationScrollButton } from '@/components/ai-elements/conversation';
+import { Message as ChatMessage, MessageContent, MessageResponse } from '@/components/ai-elements/message';
+import { PromptInput, PromptInputFooter, PromptInputSubmit, PromptInputTextarea } from '@/components/ai-elements/prompt-input';
 
 // TypeScript declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
@@ -44,6 +47,7 @@ async function streamChat({
   messages,
   language,
   targetLanguageName,
+  accessToken,
   onDelta,
   onDone,
   onError,
@@ -51,6 +55,7 @@ async function streamChat({
   messages: { role: string; content: string }[];
   language: string;
   targetLanguageName: string;
+  accessToken: string;
   onDelta: (deltaText: string) => void;
   onDone: () => void;
   onError: (error: string) => void;
@@ -62,7 +67,7 @@ async function streamChat({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ messages, language, targetLanguageName }),
     });
@@ -150,14 +155,14 @@ const CosmoAssistant = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [language, setLanguage] = useState<'en' | 'hinglish'>('en');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, addCoinsServer } = useAuth();
-  const language = 'en';
-  const speechLocale = 'en-US';
-  const targetLanguageName = 'English';
+  const { user, session, profile, addCoinsServer } = useAuth();
+  const speechLocale = language === 'hinglish' ? 'hi-IN' : 'en-US';
+  const targetLanguageName = language === 'hinglish' ? 'Hinglish (simple Hindi written in Latin script mixed with English)' : 'English';
 
   const recordStudyNote = (question: string, answer: string) => {
     try {
@@ -235,6 +240,10 @@ const CosmoAssistant = () => {
   };
 
   const handleUserMessage = async (text: string) => {
+    if (!session?.access_token) {
+      toast({ title: 'Sign in to ask Cosmo', description: 'Continue with Google first so Cosmo can answer securely.', variant: 'destructive' });
+      return;
+    }
     if (isSaveNoteRequest(text)) {
       const conversation = messages
         .filter(m => m.content.trim())
@@ -276,6 +285,7 @@ const CosmoAssistant = () => {
         messages: history,
         language,
         targetLanguageName,
+        accessToken: session.access_token,
         onDelta: (chunk) => upsertAssistant(chunk),
         onDone: () => undefined,
         onError: (error) => {
@@ -320,14 +330,6 @@ const CosmoAssistant = () => {
     }
   };
 
-  // Handle form submit
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputText.trim() && !isLoading) {
-      handleUserMessage(inputText.trim());
-    }
-  };
-
   // Open with greeting
   const handleOpen = async () => {
     setIsOpen(true);
@@ -335,11 +337,13 @@ const CosmoAssistant = () => {
       let greeting = "Hello, young explorer! I'm Cosmo, your AI-powered space assistant! 🚀✨ I can answer ANY question about space, science, and everything on this website. Ask me about planets, stars, black holes, rockets, astronauts, our courses, games, library — literally anything! What cosmic mystery shall we explore today? 🌌";
 
       try {
+        if (!session?.access_token) throw new Error('Sign in required');
         let introSoFar = '';
         await streamChat({
           messages: [{ role: 'user', content: 'Give a short welcome message for kids and invite one space question.' }],
           language,
           targetLanguageName,
+          accessToken: session.access_token,
           onDelta: (chunk) => {
             introSoFar += chunk;
           },
@@ -431,29 +435,30 @@ const CosmoAssistant = () => {
             </div>
           </div>
 
+          <div className="flex items-center gap-2 border-b border-purple-500/20 px-4 py-2" role="group" aria-label="Cosmo response language">
+            <span className="text-xs text-purple-200">Language</span>
+            <Button size="sm" variant={language === 'en' ? 'default' : 'ghost'} onClick={() => setLanguage('en')} className="h-7 text-xs">English</Button>
+            <Button size="sm" variant={language === 'hinglish' ? 'default' : 'ghost'} onClick={() => setLanguage('hinglish')} className="h-7 text-xs">Hinglish</Button>
+          </div>
+
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <Conversation className="flex-1">
+            <ConversationContent className="gap-4 p-4">
             {messages.map((message, index) => (
-              <div
+              <ChatMessage
                 key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                from={message.role === 'user' ? 'user' : 'assistant'}
               >
-                <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                    message.role === 'user'
-                      ? 'bg-space-star/80 text-white rounded-br-sm'
-                      : 'bg-purple-600/40 text-white rounded-bl-sm border border-purple-500/30'
-                  }`}
-                >
+                <MessageContent className={message.role === 'user' ? 'bg-space-star/80 text-primary-foreground' : 'bg-transparent'}>
                   {message.role === 'cosmo' && (
                     <div className="flex items-center gap-2 mb-1">
                       <Bot className="w-4 h-4 text-purple-300" />
                       <span className="text-xs text-purple-300 font-medium">Cosmo</span>
                     </div>
                   )}
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                </div>
-              </div>
+                  <MessageResponse className="text-sm leading-relaxed">{message.content}</MessageResponse>
+                </MessageContent>
+              </ChatMessage>
             ))}
             {isLoading && messages[messages.length - 1]?.role === 'user' && (
               <div className="flex justify-start">
@@ -466,11 +471,21 @@ const CosmoAssistant = () => {
               </div>
             )}
             <div ref={messagesEndRef} />
-          </div>
+            </ConversationContent>
+            <ConversationScrollButton />
+          </Conversation>
 
           {/* Input Area */}
           <div className="p-4 border-t border-purple-500/30 bg-space-deep/50">
-            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+            <PromptInput onSubmit={(message) => { if (message.text.trim() && !isLoading) void handleUserMessage(message.text.trim()); }} className="bg-white/10 border-purple-500/30">
+              <PromptInputTextarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder={isListening ? "Listening..." : language === 'hinglish' ? 'Space ke baare mein poochho...' : 'Ask me anything about space...'}
+                disabled={isLoading}
+                className="text-white placeholder:text-white/40"
+              />
+              <PromptInputFooter>
               <Button
                 type="button"
                 onClick={toggleListening}
@@ -482,22 +497,9 @@ const CosmoAssistant = () => {
               >
                 {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
               </Button>
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder={isListening ? "Listening..." : "Ask me anything about space..."}
-                className="flex-1 bg-white/10 border border-purple-500/30 rounded-full px-4 py-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-purple-400"
-                disabled={isLoading}
-              />
-              <Button
-                type="submit"
-                disabled={!inputText.trim() || isLoading}
-                className="shrink-0 w-12 h-12 rounded-full bg-space-star hover:bg-space-star/80"
-              >
-                <Send className="w-5 h-5" />
-              </Button>
-            </form>
+              <PromptInputSubmit status={isLoading ? 'streaming' : 'ready'} disabled={!inputText.trim() || isLoading} className="ml-auto" />
+              </PromptInputFooter>
+            </PromptInput>
           </div>
         </div>
       )}

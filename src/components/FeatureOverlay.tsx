@@ -22,7 +22,6 @@ const GamesSection         = lazy(() => import('./GamesSection'));
 const PremiumGamesSection  = lazy(() => import('./PremiumGamesSection'));
 const GamePassSection      = lazy(() => import('./GamePassSection'));
 const SubscriptionSection  = lazy(() => import('./SubscriptionSection'));
-const ExclusiveWebinars    = lazy(() => import('./ExclusiveWebinars'));
 const FeaturedShop         = lazy(() => import('./FeaturedShop'));
 const AlienPetsSection     = lazy(() => import('./AlienPetsSection'));
 const CertificateShowcase  = lazy(() => import('./CertificateShowcase'));
@@ -50,7 +49,6 @@ const REGISTRY: Record<FeatureKey, { title: string; Component: React.LazyExoticC
   'premium-games':    { title: 'Premium Games',      Component: PremiumGamesSection },
   'game-passes':      { title: 'Game Passes',        Component: GamePassSection },
   'subscriptions':    { title: 'VIP',                Component: SubscriptionSection },
-  'webinars':         { title: 'Webinars',           Component: ExclusiveWebinars },
   'shop':             { title: 'Shop',               Component: FeaturedShop },
   'alien-pets':       { title: 'Alien Pets',         Component: AlienPetsSection },
   'achievements':     { title: 'Trophies',           Component: CertificateShowcase },
