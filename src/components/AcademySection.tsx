@@ -170,7 +170,7 @@ const AcademySection = () => {
               return (
                 <div key={l.id} className="rounded-xl border border-white/10 bg-white/5 p-3 flex items-start gap-3">
                   <button
-                     onClick={() => play(l.id, l.duration, teacher.voice.length)}
+                     onClick={() => play(l.id, l.duration, courseIndex * 7 + i * 3)}
                     className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-gradient-to-br ${active.gradient} text-white`}
                     aria-label={isPlaying ? `Pause ${l.title}` : `Play ${l.title}`}
                   >

@@ -330,14 +330,6 @@ const CosmoAssistant = () => {
     }
   };
 
-  // Handle form submit
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputText.trim() && !isLoading) {
-      handleUserMessage(inputText.trim());
-    }
-  };
-
   // Open with greeting
   const handleOpen = async () => {
     setIsOpen(true);
