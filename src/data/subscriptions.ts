@@ -124,7 +124,7 @@ export interface Subscription {
      price: 3000,
      icon: '🎖️',
      color: 'from-amber-500 to-yellow-600',
-    features: ['Admiral badge 🏆', '75% bonus coins', '150 daily coins', 'Rainbow effects', 'Exclusive webinars'],
+    features: ['Admiral badge 🏆', '75% bonus coins', '150 daily coins', 'Rainbow effects', 'Advanced learning challenges'],
     isVIP: true,
     badge: '🎖️🏆',
     coinBonus: 75,
