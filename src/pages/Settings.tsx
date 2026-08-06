@@ -5,8 +5,9 @@ import {
   getNotifSettings,
   saveNotifSettings,
   notificationsSupported,
-  requestNotificationPermission,
+  enableNotifications,
   showNotification,
+  isInIframe,
   type NotifSettings,
 } from '@/lib/notifications';
 
@@ -78,14 +79,15 @@ const Settings = () => {
       setMsg('This device does not support notifications.');
       return;
     }
-    const p = await requestNotificationPermission();
-    setPerm(p);
-    if (p === 'granted') {
+    const res = await enableNotifications();
+    setPerm(res.permission);
+    if (res.ok) {
       update({ enabled: true });
       setMsg('Reminders on — we will nudge you for lectures and daily missions.');
-      showNotification('Stellar Learning Lab', 'Notifications enabled! 🚀');
+      const shown = await showNotification('Stellar Learning Lab', 'Notifications enabled! 🚀');
+      if (!shown) setMsg('Enabled, but your browser refused to display the alert. Try the installed app or a normal browser tab.');
     } else {
-      setMsg('Permission denied. Enable notifications in your browser or phone settings.');
+      setMsg(res.reason || 'Could not enable notifications.');
     }
   };
 
@@ -152,12 +154,17 @@ const Settings = () => {
 
           <Row icon={Volume2} title="Test alert" desc="Send a sample notification right now">
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (perm !== 'granted') {
                   setMsg('Turn on push reminders first.');
                   return;
                 }
-                showNotification('Test reminder 🎧', 'This is how your reminders will look.');
+                const shown = await showNotification('Test reminder 🎧', 'This is how your reminders will look.');
+                setMsg(
+                  shown
+                    ? 'Test notification sent — check your notification tray.'
+                    : 'Your browser blocked the notification. Open the installed app or a normal tab and retry.',
+                );
               }}
               className="px-3 py-2 rounded-xl text-xs font-semibold border border-primary/40 bg-primary/10 text-primary"
             >
@@ -174,6 +181,12 @@ const Settings = () => {
             </button>
           </Row>
 
+          {isInIframe() && (
+            <p className="text-xs text-amber-400 px-1">
+              You are viewing this inside a preview frame — browsers block notifications here. Open the app in its own
+              tab or install it to receive reminders.
+            </p>
+          )}
           {msg && <p className="text-xs text-muted-foreground px-1">{msg}</p>}
         </section>
 
