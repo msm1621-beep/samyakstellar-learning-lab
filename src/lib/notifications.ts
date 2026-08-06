@@ -1,5 +1,6 @@
 // Local reminder notifications for lectures + daily missions.
-// Uses the browser Notification API with in-app timers (no server push needed).
+// Uses a notification-only service worker (required on Android Chrome) with a
+// fallback to the classic Notification constructor on desktop browsers.
 
 export interface NotifSettings {
   enabled: boolean;
@@ -13,6 +14,7 @@ export interface NotifSettings {
 const KEY = 'stellar_notif_settings';
 const MASTER_KEY = 'stellar_notifications_enabled'; // legacy key kept in sync
 const LAST_FIRED_KEY = 'stellar_notif_last_fired';
+const SW_URL = '/notif-sw.js';
 
 export const DEFAULT_SETTINGS: NotifSettings = {
   enabled: false,
@@ -41,23 +43,106 @@ export const saveNotifSettings = (s: NotifSettings) => {
   startReminderScheduler();
 };
 
-export const notificationsSupported = () => typeof window !== 'undefined' && 'Notification' in window;
+export const notificationsSupported = () =>
+  typeof window !== 'undefined' && 'Notification' in window;
+
+export const isInIframe = () => {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+};
+
+export const getPermission = (): NotificationPermission | 'unsupported' =>
+  notificationsSupported() ? Notification.permission : 'unsupported';
+
+let swReg: ServiceWorkerRegistration | null = null;
+
+export const ensureNotifWorker = async (): Promise<ServiceWorkerRegistration | null> => {
+  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return null;
+  if (swReg) return swReg;
+  try {
+    const existing = await navigator.serviceWorker.getRegistration(SW_URL);
+    swReg = existing ?? (await navigator.serviceWorker.register(SW_URL, { scope: '/' }));
+    await navigator.serviceWorker.ready.catch(() => undefined);
+    return swReg;
+  } catch {
+    return null;
+  }
+};
+
+export type EnableResult = {
+  ok: boolean;
+  permission: NotificationPermission | 'unsupported';
+  reason?: string;
+};
 
 export const requestNotificationPermission = async (): Promise<NotificationPermission> => {
   if (!notificationsSupported()) return 'denied';
   if (Notification.permission === 'granted') return 'granted';
-  return await Notification.requestPermission();
+  try {
+    return await Notification.requestPermission();
+  } catch {
+    return 'denied';
+  }
 };
 
-export const showNotification = (title: string, body: string) => {
-  if (!notificationsSupported() || Notification.permission !== 'granted') return;
+export const enableNotifications = async (): Promise<EnableResult> => {
+  if (!notificationsSupported()) {
+    return {
+      ok: false,
+      permission: 'unsupported',
+      reason: isInIframe()
+        ? 'Notifications are blocked inside the preview frame. Open the app in its own browser tab (or install it) and try again.'
+        : 'This browser does not support notifications.',
+    };
+  }
+  const p = await requestNotificationPermission();
+  if (p !== 'granted') {
+    return {
+      ok: false,
+      permission: p,
+      reason:
+        p === 'denied'
+          ? isInIframe()
+            ? 'Blocked in the preview frame. Open the app in a real browser tab or install it, then allow notifications.'
+            : 'Permission blocked. Allow notifications for this site in your browser/phone settings and retry.'
+          : 'Permission request was dismissed. Tap again and choose Allow.',
+    };
+  }
+  await ensureNotifWorker();
+  return { ok: true, permission: 'granted' };
+};
+
+export const showNotification = async (title: string, body: string): Promise<boolean> => {
+  if (!notificationsSupported() || Notification.permission !== 'granted') return false;
+  const options: NotificationOptions = {
+    body,
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    tag: 'stellar-reminder-' + title,
+    data: { url: '/' },
+  };
+  // Preferred path (works on Android + desktop).
+  const reg = await ensureNotifWorker();
+  if (reg) {
+    try {
+      await reg.showNotification(title, options);
+      return true;
+    } catch {}
+  }
+  // Desktop fallback.
   try {
-    const n = new Notification(title, { body, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png' });
+    const n = new Notification(title, options);
     n.onclick = () => {
       window.focus();
       n.close();
     };
-  } catch {}
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
@@ -94,22 +179,28 @@ const tick = () => {
 
   if (s.missions && fired.missions !== today && dueNow(s.missionTime)) {
     markFired('missions');
-    showNotification('Daily Missions ready 🚀', 'Aaj ke space missions complete karo aur streak bachao!');
+    void showNotification('Daily Missions ready 🚀', 'Aaj ke space missions complete karo aur streak bachao!');
   }
   if (s.lectures && fired.lectures !== today && dueNow(s.lectureTime)) {
     markFired('lectures');
-    showNotification('Study reminder 📚', 'Time to explore a new space topic in Stellar Learning Lab.');
+    void showNotification('Study reminder 📚', 'Time to explore a new space topic in Stellar Learning Lab.');
   }
 };
 
 let timer: number | null = null;
+let visibilityBound = false;
 
 export const startReminderScheduler = () => {
   if (typeof window === 'undefined') return;
   if (timer !== null) window.clearInterval(timer);
+  const settings = getNotifSettings();
+  if (settings.enabled) void ensureNotifWorker();
   tick();
   timer = window.setInterval(tick, 60_000);
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') tick();
-  });
+  if (!visibilityBound) {
+    visibilityBound = true;
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tick();
+    });
+  }
 };
