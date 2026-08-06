@@ -3,7 +3,7 @@ import { Star, Trash2, Bell, BellRing, BarChart3, Flame, Coins, BookOpen, Trophy
 import { getFavorites, removeFavorite, type FavoriteItem } from '@/lib/favorites';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { useCoins } from '@/contexts/CoinsContext';
-import { moneyCourses } from '@/data/faculty';
+
 
 const NOTIF_KEY = 'stellar_notifications_enabled';
 
@@ -36,10 +36,6 @@ const FavoritesDashboard = () => {
 
   const stats = useMemo(() => {
     const count = (types: string[]) => achievements.filter(a => types.includes(a.type)).length;
-    const lectures = (() => {
-      try { return (JSON.parse(localStorage.getItem('academy_completed_lectures') || '[]') as string[]).length; } catch { return 0; }
-    })();
-    const totalLectures = moneyCourses.reduce((n, c) => n + c.lectures.length, 0);
     return {
       courses: count(['course']),
       quizzes: count(['quiz']),
@@ -47,8 +43,6 @@ const FavoritesDashboard = () => {
       library: count(['book', 'audiobook']),
       streak: readNum('spaceStreak', (v) => (v as { current?: number })?.current ?? 0),
       sections: readNum('visitedSections', (v) => (Array.isArray(v) ? v.length : 0)),
-      lectures,
-      totalLectures,
     };
   }, [achievements, favs]);
 
@@ -77,7 +71,7 @@ const FavoritesDashboard = () => {
   const cards = [
     { label: 'Courses done', value: stats.courses, icon: BookOpen, color: 'text-primary' },
     { label: 'Quizzes aced', value: stats.quizzes, icon: Trophy, color: 'text-accent' },
-    { label: 'Lectures heard', value: `${stats.lectures}/${stats.totalLectures}`, icon: BarChart3, color: 'text-emerald-400' },
+    { label: 'Library items', value: stats.library, icon: BarChart3, color: 'text-emerald-400' },
     { label: 'Day streak', value: stats.streak, icon: Flame, color: 'text-orange-400' },
     { label: 'Coins', value: coins, icon: Coins, color: 'text-star' },
     { label: 'Sections explored', value: stats.sections, icon: Compass, color: 'text-cyan-400' },

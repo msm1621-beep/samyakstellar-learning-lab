@@ -98,7 +98,7 @@ const tick = () => {
   }
   if (s.lectures && fired.lectures !== today && dueNow(s.lectureTime)) {
     markFired('lectures');
-    showNotification('Lecture reminder 🎧', 'Your Hinglish lecture is waiting in Premium Academy.');
+    showNotification('Study reminder 📚', 'Time to explore a new space topic in Stellar Learning Lab.');
   }
 };
 

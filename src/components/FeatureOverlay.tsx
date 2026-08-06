@@ -13,7 +13,7 @@ const CelestialExplorer    = lazy(() => import('./CelestialExplorer'));
 const SpaceTimeline        = lazy(() => import('./SpaceTimeline'));
 const ConstellationViewer  = lazy(() => import('./ConstellationViewer'));
 const CourseSection        = lazy(() => import('./CourseSection'));
-const AcademySection       = lazy(() => import('./AcademySection'));
+
 const Leaderboard          = lazy(() => import('./Leaderboard'));
 const StudyPlanner         = lazy(() => import('./StudyPlanner'));
 const ManuscriptsSection   = lazy(() => import('./ManuscriptsSection'));
@@ -40,7 +40,7 @@ const REGISTRY: Record<FeatureKey, { title: string; Component: React.LazyExoticC
   'timeline':         { title: 'Space Timeline',     Component: SpaceTimeline },
   'constellations':   { title: 'Constellations',     Component: ConstellationViewer },
   'courses':          { title: 'Courses',            Component: CourseSection },
-  'academy':          { title: 'Premium Academy',  Component: AcademySection },
+  
   'leaderboard':      { title: 'Leaderboard',        Component: Leaderboard },
   'study-planner':    { title: 'Study Planner',      Component: StudyPlanner },
   'manuscripts':      { title: 'Manuscripts',        Component: ManuscriptsSection },
