@@ -121,8 +121,8 @@ const Settings = () => {
             <Switch on={s.enabled} onClick={toggleMaster} label="Enable notifications" />
           </Row>
 
-          <Row icon={Headphones} title="Lecture reminders" desc="Daily nudge to continue your Hinglish lectures">
-            <Switch on={s.lectures} onClick={() => update({ lectures: !s.lectures })} label="Lecture reminders" />
+          <Row icon={Headphones} title="Study reminders" desc="Daily nudge to continue your learning">
+            <Switch on={s.lectures} onClick={() => update({ lectures: !s.lectures })} label="Study reminders" />
           </Row>
 
           <Row icon={Target} title="Daily mission alerts" desc="Reminder to finish missions and keep your streak">
@@ -131,7 +131,7 @@ const Settings = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <label className="rounded-2xl border border-border/40 bg-card/50 p-4 block">
-              <span className="text-xs text-muted-foreground">Lecture time</span>
+              <span className="text-xs text-muted-foreground">Study time</span>
               <input
                 type="time"
                 value={s.lectureTime}
