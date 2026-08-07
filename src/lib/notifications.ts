@@ -239,7 +239,8 @@ const dueNow = (time: string) => {
 
 const tick = () => {
   const s = getNotifSettings();
-  if (!s.enabled || !notificationsSupported() || Notification.permission !== 'granted') return;
+  // Reminders still land in the in-app inbox when OS notifications are blocked.
+  if (!s.enabled) return;
   const fired = readFired();
   const today = todayKey();
 
