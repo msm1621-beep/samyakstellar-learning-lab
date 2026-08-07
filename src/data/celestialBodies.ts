@@ -18,7 +18,7 @@ export interface CelestialBody {
   readMoreContent: string;
 }
 
-export const celestialBodies: CelestialBody[] = [
+const rawCelestialBodies: CelestialBody[] = [
   // Solar System
   {
     id: 'sun',
@@ -3362,6 +3362,13 @@ export const celestialBodies: CelestialBody[] = [
     readMoreContent: 'The TRAPPIST-1 system is remarkable - seven Earth-sized planets orbiting so close that they would all fit inside Mercury\'s orbit. Three or four are in the habitable zone. TRAPPIST-1e is the most promising for habitability, with similar size and stellar heating to Earth. The James Webb Space Telescope is studying these worlds for signs of atmospheres.'
   }
 ];
+
+// Some entries were duplicated across sections of this catalogue, which produced
+// duplicate React keys and repeated cards. Keep the first occurrence of each id.
+export const celestialBodies: CelestialBody[] = rawCelestialBodies.filter(
+  (body, index, all) => all.findIndex((b) => b.id === body.id) === index,
+);
+
 
 export const categoryLabels: Record<CelestialCategory, string> = {
   'solar-system': 'Solar System',
