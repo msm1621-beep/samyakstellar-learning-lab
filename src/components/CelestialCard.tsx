@@ -13,6 +13,19 @@ interface CelestialCardProps {
   onSelect: () => void;
 }
 
+// Tailwind cannot generate classes from interpolated strings, so map the token
+// names used in the data file to real, statically-analysable utility classes.
+const colorClasses: Record<string, string> = {
+  primary: 'bg-primary/20 text-primary',
+  secondary: 'bg-secondary/20 text-secondary',
+  accent: 'bg-accent/20 text-accent',
+  destructive: 'bg-destructive/20 text-destructive',
+  foreground: 'bg-foreground/10 text-foreground',
+  planet: 'bg-planet/20 text-planet',
+  nebula: 'bg-nebula/20 text-nebula',
+  galaxy: 'bg-galaxy/20 text-galaxy',
+};
+
 // Cosmo's knowledge base for celestial bodies
 const getCosmoResponse = (bodyName: string): string => {
   const responses: Record<string, string> = {
