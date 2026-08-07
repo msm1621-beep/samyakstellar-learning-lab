@@ -53,7 +53,7 @@ const ReadMoreModal = ({ body, onClose }: ReadMoreModalProps) => {
       onClick={onClose}
     >
       <div 
-        className="glass-card max-w-2xl w-full rounded-2xl p-6 my-8"
+        className="glass-card max-w-2xl w-full rounded-2xl p-6 my-8 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -406,7 +406,7 @@ const CelestialCard = ({ body, onSelect }: CelestialCardProps) => {
           <p className="text-xs text-muted-foreground line-clamp-2">
             {body.description}
           </p>
-          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs bg-${body.color}/20 text-${body.color}`}>
+          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs ${colorClasses[body.color] ?? colorClasses.primary}`}>
             {body.type}
           </span>
         </div>
