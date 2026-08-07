@@ -5,6 +5,7 @@ import HeroSection from '@/components/HeroSection';
 import CoinDisplay from '@/components/CoinDisplay';
 import AccountBar from '@/components/AccountBar';
 import BackToTop from '@/components/BackToTop';
+import NotificationInbox from '@/components/NotificationInbox';
 import AnimatedSection from '@/components/AnimatedSection';
 import ExplorationProgress from '@/components/ExplorationProgress';
 import PerksFX from '@/components/PerksFX';
@@ -40,6 +41,8 @@ const Index = () => {
       <Navigation />
       <CoinDisplay />
       <AccountBar />
+      <NotificationInbox />
+
       <PerkBadgeRow />
       <ExplorationProgress />
       <Suspense fallback={null}><StudyNotesViewer /></Suspense>

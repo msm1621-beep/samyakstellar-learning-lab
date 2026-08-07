@@ -46,7 +46,7 @@ const NotificationInbox = () => {
       <button
         onClick={() => setOpen(true)}
         aria-label={`Notification inbox${unread ? `, ${unread} unread` : ''}`}
-        className="fixed top-4 right-4 z-40 w-11 h-11 rounded-full glass-card border border-border/50 flex items-center justify-center text-foreground hover:border-primary/60 transition-colors"
+        className="fixed top-[4.5rem] right-4 z-40 w-11 h-11 rounded-full glass-card border border-border/50 flex items-center justify-center text-foreground hover:border-primary/60 transition-colors"
       >
         <Bell className="w-5 h-5" />
         {unread > 0 && (
