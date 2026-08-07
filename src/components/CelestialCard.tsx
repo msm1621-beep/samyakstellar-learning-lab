@@ -13,6 +13,19 @@ interface CelestialCardProps {
   onSelect: () => void;
 }
 
+// Tailwind cannot generate classes from interpolated strings, so map the token
+// names used in the data file to real, statically-analysable utility classes.
+const colorClasses: Record<string, string> = {
+  primary: 'bg-primary/20 text-primary',
+  secondary: 'bg-secondary/20 text-secondary',
+  accent: 'bg-accent/20 text-accent',
+  destructive: 'bg-destructive/20 text-destructive',
+  foreground: 'bg-foreground/10 text-foreground',
+  planet: 'bg-planet/20 text-planet',
+  nebula: 'bg-nebula/20 text-nebula',
+  galaxy: 'bg-galaxy/20 text-galaxy',
+};
+
 // Cosmo's knowledge base for celestial bodies
 const getCosmoResponse = (bodyName: string): string => {
   const responses: Record<string, string> = {
@@ -53,7 +66,7 @@ const ReadMoreModal = ({ body, onClose }: ReadMoreModalProps) => {
       onClick={onClose}
     >
       <div 
-        className="glass-card max-w-2xl w-full rounded-2xl p-6 my-8"
+        className="glass-card max-w-2xl w-full rounded-2xl p-6 my-8 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -406,7 +419,7 @@ const CelestialCard = ({ body, onSelect }: CelestialCardProps) => {
           <p className="text-xs text-muted-foreground line-clamp-2">
             {body.description}
           </p>
-          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs bg-${body.color}/20 text-${body.color}`}>
+          <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs ${colorClasses[body.color] ?? colorClasses.primary}`}>
             {body.type}
           </span>
         </div>
