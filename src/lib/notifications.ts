@@ -115,7 +115,71 @@ export const enableNotifications = async (): Promise<EnableResult> => {
   return { ok: true, permission: 'granted' };
 };
 
+// ---------------------------------------------------------------------------
+// In-app notification inbox — every reminder is stored locally so the user can
+// read past alerts even when the OS/browser blocks notifications.
+// ---------------------------------------------------------------------------
+
+export interface InboxItem {
+  id: string;
+  title: string;
+  body: string;
+  at: number;
+  read: boolean;
+  delivered: boolean; // whether the OS notification actually displayed
+}
+
+const INBOX_KEY = 'stellar_notif_inbox';
+const INBOX_LIMIT = 100;
+export const INBOX_EVENT = 'notif-inbox-changed';
+
+export const getInbox = (): InboxItem[] => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(INBOX_KEY) || '[]');
+    return Array.isArray(raw) ? (raw as InboxItem[]) : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeInbox = (items: InboxItem[]) => {
+  try {
+    localStorage.setItem(INBOX_KEY, JSON.stringify(items.slice(0, INBOX_LIMIT)));
+  } catch {}
+  window.dispatchEvent(new CustomEvent(INBOX_EVENT));
+};
+
+export const addInboxItem = (title: string, body: string, delivered = false): InboxItem => {
+  const item: InboxItem = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    title,
+    body,
+    at: Date.now(),
+    read: false,
+    delivered,
+  };
+  writeInbox([item, ...getInbox()]);
+  return item;
+};
+
+export const getUnreadCount = () => getInbox().filter((i) => !i.read).length;
+
+export const markInboxRead = (id?: string) => {
+  writeInbox(getInbox().map((i) => (!id || i.id === id ? { ...i, read: true } : i)));
+};
+
+export const removeInboxItem = (id: string) => {
+  writeInbox(getInbox().filter((i) => i.id !== id));
+};
+
+export const clearInbox = () => writeInbox([]);
+
 export const showNotification = async (title: string, body: string): Promise<boolean> => {
+  const item = addInboxItem(title, body, false);
+  const markDelivered = () => {
+    writeInbox(getInbox().map((i) => (i.id === item.id ? { ...i, delivered: true } : i)));
+  };
+
   if (!notificationsSupported() || Notification.permission !== 'granted') return false;
   const options: NotificationOptions = {
     body,
@@ -129,6 +193,7 @@ export const showNotification = async (title: string, body: string): Promise<boo
   if (reg) {
     try {
       await reg.showNotification(title, options);
+      markDelivered();
       return true;
     } catch {}
   }
@@ -139,6 +204,7 @@ export const showNotification = async (title: string, body: string): Promise<boo
       window.focus();
       n.close();
     };
+    markDelivered();
     return true;
   } catch {
     return false;
