@@ -36,52 +36,57 @@ import { useToast } from '@/hooks/use-toast';
     canClaimDailyBonus: false,
   });
  
- const SUBSCRIPTION_DURATION_DAYS = 30;
+  const SUBSCRIPTION_DURATION_DAYS = 30;
  
- export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
-   const [activeSubscription, setActiveSubscription] = useState<ActiveSubscription | null>(null);
-   const { coins, addCoins } = useCoins();
-   const { toast } = useToast();
+  export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
+    const [activeSubscription, setActiveSubscription] = useState<ActiveSubscription | null>(null);
+    const [loaded, setLoaded] = useState(false);
+    const { coins, addCoins } = useCoins();
+    const { toast } = useToast();
  
-   // Load from localStorage
-   useEffect(() => {
-     const saved = localStorage.getItem('spaceSubscription');
-     if (saved) {
-       const parsed = JSON.parse(saved) as ActiveSubscription;
-       // Check if expired
-       const expiresAt = new Date(parsed.expiresAt);
-       if (expiresAt > new Date()) {
-         setActiveSubscription(parsed);
-       } else {
-         localStorage.removeItem('spaceSubscription');
-       }
-     }
-   }, []);
+    // Load from localStorage on mount
+    useEffect(() => {
+      const saved = localStorage.getItem('spaceSubscription');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved) as ActiveSubscription;
+          // Check if expired
+          const expiresAt = new Date(parsed.expiresAt);
+          if (expiresAt > new Date()) {
+            setActiveSubscription(parsed);
+          } else {
+            localStorage.removeItem('spaceSubscription');
+          }
+        } catch (e) {
+          console.error('Failed to parse subscription:', e);
+          localStorage.removeItem('spaceSubscription');
+        }
+      }
+      setLoaded(true);
+    }, []);
  
-   // Save to localStorage
-   useEffect(() => {
-     if (activeSubscription) {
-       localStorage.setItem('spaceSubscription', JSON.stringify(activeSubscription));
-     }
-   }, [activeSubscription]);
+    // Save to localStorage when subscription changes
+    useEffect(() => {
+      if (loaded && activeSubscription) {
+        localStorage.setItem('spaceSubscription', JSON.stringify(activeSubscription));
+      }
+    }, [activeSubscription, loaded]);
  
-   const currentSubscription = activeSubscription 
-     ? getSubscriptionById(activeSubscription.subscriptionId) || null
-     : null;
+    const currentSubscription = activeSubscription 
+      ? getSubscriptionById(activeSubscription.subscriptionId) || null
+      : null;
  
-   const daysRemaining = activeSubscription
-     ? Math.max(0, Math.ceil((new Date(activeSubscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
-     : 0;
+    const daysRemaining = activeSubscription
+      ? Math.max(0, Math.ceil((new Date(activeSubscription.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+      : 0;
  
-   const isExpired = activeSubscription 
-     ? new Date(activeSubscription.expiresAt) <= new Date()
-     : true;
+    const isExpired = activeSubscription 
+      ? new Date(activeSubscription.expiresAt) <= new Date()
+      : true;
  
-   const coinBonus = currentSubscription && !isExpired ? currentSubscription.coinBonus : 0;
-   const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
-   const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
-
-    // Coin bonus is now applied by PerksContext (which aggregates subscription + shop boosts).
+    const coinBonus = currentSubscription && !isExpired ? currentSubscription.coinBonus : 0;
+    const dailyBonus = currentSubscription && !isExpired ? currentSubscription.dailyBonus : 0;
+    const badge = currentSubscription && !isExpired ? currentSubscription.badge : null;
 
   // Check if daily bonus can be claimed
   const canClaimDailyBonus = useCallback(() => {
@@ -91,6 +96,7 @@ import { useToast } from '@/hooks/use-toast';
     
     const lastClaimed = new Date(activeSubscription.lastDailyBonusClaimed);
     const today = new Date();
+    // Compare dates at midnight
     return lastClaimed.toDateString() !== today.toDateString();
   }, [activeSubscription, isExpired, currentSubscription]);
 
@@ -111,7 +117,6 @@ import { useToast } from '@/hooks/use-toast';
       lastDailyBonusClaimed: new Date().toISOString()
     };
     setActiveSubscription(updated);
-    localStorage.setItem('spaceSubscription', JSON.stringify(updated));
 
     toast({
       title: `🎁 Daily Bonus Claimed!`,
@@ -156,7 +161,6 @@ import { useToast } from '@/hooks/use-toast';
      };
  
      setActiveSubscription(newSubscription);
-     localStorage.setItem('spaceSubscription', JSON.stringify(newSubscription));
  
      toast({
        title: `🎉 ${subscription.icon} Subscription Activated!`,
