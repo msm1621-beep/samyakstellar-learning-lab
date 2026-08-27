@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircleQuestion, Send, X, Loader2, Bot } from 'lucide-react';
+import { MessageCircleQuestion, Send, X, Loader2, Bot, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -20,7 +21,9 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -28,6 +31,10 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
+    
+    // Clear previous error
+    setError(null);
+    
     const userMsg: Message = { role: 'user', content: input.trim() };
     const allMessages = [...messages, userMsg];
     setMessages(allMessages);
@@ -35,7 +42,7 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('lesson-doubt', {
+      const { data, error: functionError } = await supabase.functions.invoke('lesson-doubt', {
         body: {
           lessonTitle,
           lessonTopics,
@@ -43,10 +50,30 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
         },
       });
 
-      if (error) throw error;
+      if (functionError) {
+        throw functionError;
+      }
+
+      if (!data || !data.answer) {
+        throw new Error('No response from server');
+      }
+
       setMessages(prev => [...prev, { role: 'assistant', content: data.answer }]);
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I couldn't process that. Try again!" }]);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to get response';
+      console.error('Doubt chat error:', err);
+      setError(errorMessage);
+      
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: "Sorry, I couldn't process that right now. Please try again in a moment!" 
+      }]);
+
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
@@ -57,7 +84,10 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          setError(null);
+        }}
         className="text-primary hover:bg-primary/10 gap-1"
       >
         <MessageCircleQuestion className="w-4 h-4" />
@@ -86,10 +116,23 @@ const LessonDoubtChat = ({ lessonTitle, lessonTopics }: LessonDoubtChatProps) =>
                   </h3>
                   <p className="text-xs text-muted-foreground truncate max-w-[300px]">{lessonTitle}</p>
                 </div>
-                <button onClick={() => setIsOpen(false)} className="p-2 rounded-full bg-muted/50 hover:bg-muted">
+                <button 
+                  onClick={() => {
+                    setIsOpen(false);
+                    setError(null);
+                  }} 
+                  className="p-2 rounded-full bg-muted/50 hover:bg-muted"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </div>
+
+              {error && (
+                <div className="mx-4 mt-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-destructive">{error}</p>
+                </div>
+              )}
 
               <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[300px]">
                 {messages.length === 0 && (
