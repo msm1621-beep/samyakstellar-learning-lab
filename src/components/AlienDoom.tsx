@@ -4,7 +4,7 @@ import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Send, MessageCircle, Volume2, VolumeX, Save } from 'lucide-react';
+import { X, Send, MessageCircle, Volume2, VolumeX, Save, AlertCircle } from 'lucide-react';
 import { WebGLGuard } from './WebGLBoundary';
 import { useToast } from '@/hooks/use-toast';
 import { useCoins } from '@/contexts/CoinsContext';
@@ -170,6 +170,7 @@ const AlienDoom = () => {
   const [speakingAlien, setSpeakingAlien] = useState<'mr' | 'mrs' | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const language = 'en';
   const speechLocale = 'en-US';
   const targetLanguageName = 'English';
@@ -242,6 +243,7 @@ const AlienDoom = () => {
     if (messages.length > 0) return;
 
     try {
+      setError(null);
       let resp: Response | null = null;
 
       for (let attempt = 0; attempt < 3; attempt++) {
@@ -278,7 +280,10 @@ const AlienDoom = () => {
       }
 
       setMessages(ALIEN_INTRO_MESSAGES);
-    } catch {
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to load greeting';
+      console.error('Intro error:', err);
+      setError(errorMsg);
       setMessages(ALIEN_INTRO_MESSAGES);
     }
   }, [messages.length, language, targetLanguageName]);
@@ -288,6 +293,7 @@ const AlienDoom = () => {
 
     const userMessage = input.trim();
     setInput('');
+    setError(null);
 
     if (isSaveNoteRequest(userMessage)) {
       const conversation = messages
@@ -333,7 +339,8 @@ const AlienDoom = () => {
 
       if (!resp || !resp.ok) {
         const errData = await resp?.json().catch(() => ({}));
-        throw new Error(errData?.error || 'Failed to get response');
+        const errMsg = errData?.error || 'Failed to get response';
+        throw new Error(errMsg);
       }
 
       const data = await resp.json();
@@ -359,12 +366,20 @@ const AlienDoom = () => {
         }, (index + 1) * 1500);
       });
     } catch (e) {
+      const errorMsg = e instanceof Error ? e.message : 'Connection error';
       console.error('Alien chat error:', e);
+      setError(errorMsg);
       setMessages(prev => [...prev, { speaker: 'mr', text: "Our cosmic signal got disrupted! Please try asking again, Earthling! 🛸" }]);
+      
+      toast({
+        title: "Error",
+        description: errorMsg,
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }
-  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName, messages, recordStudyNote]);
+  }, [input, speak, isLoading, conversationHistory, language, targetLanguageName, messages, recordStudyNote, toast]);
 
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
@@ -373,6 +388,7 @@ const AlienDoom = () => {
 
   const handleOpen = async () => {
     setIsOpen(true);
+    setError(null);
     await initializeIntroMessages();
   };
 
@@ -381,7 +397,7 @@ const AlienDoom = () => {
       {/* Floating button to open alien chat */}
       <button
         onClick={handleOpen}
-        className="fixed bottom-24 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-24 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center"
         aria-label="Chat with Mr & Mrs Doom"
       >
         <span className="text-2xl">👽</span>
@@ -399,6 +415,7 @@ const AlienDoom = () => {
               onClick={() => {
                 setIsOpen(false);
                 stopSpeaking();
+                setError(null);
               }}
               className="absolute top-4 right-4 z-10 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
             >
@@ -461,6 +478,13 @@ const AlienDoom = () => {
             
             {/* Chat area */}
             <div className="h-[55%] flex flex-col p-4">
+              {error && (
+                <div className="mb-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-destructive">{error}</p>
+                </div>
+              )}
+              
               <div className="flex-1 overflow-y-auto space-y-3 mb-4 scrollbar-thin">
                 {messages.map((msg, index) => (
                   <div
