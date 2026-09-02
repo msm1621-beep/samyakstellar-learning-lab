@@ -1,34 +1,24 @@
+## Plan: Repair Reminders and Finish the Pending Fixes
 
+### 1. Make notification behavior reliable and honest
+- Route every notification toggle through the same notification service-worker flow; remove the older direct browser notification path.
+- Keep reminders and tests in the in-app inbox even when system notifications are denied.
+- Use local calendar dates and improve permission/worker error reporting in Settings.
+- Clarify that scheduled browser reminders require the app to be running; true closed-app push requires a backend push service and device subscriptions.
 
-## Plan: Expand Shop, Add Music Selection, and Open Premium Games
+### 2. Repair chat and doubt search
+- Send the signed-in session token from Mr. & Mrs. Doom and Doubt Search instead of the public app key.
+- Show a clear sign-in message when there is no session.
+- Correct the invalid lesson tutor model and deploy the updated backend functions.
 
-### 1. Add 20 More Shop Items (Allow Repeat Purchases)
+### 3. Repair coin spending
+- Replace negative coin rewards with one guarded spending operation for subscriptions and game passes.
+- Prevent stale balance checks and duplicate purchases.
 
-**File: `src/components/FeaturedShop.tsx`**
-- Add 20 new items across all 3 categories (boost, cosmetic, utility) -- examples: Time Warp, Gravity Boots, Nebula Skin, Meteor Shield, Wormhole Pass, Asteroid Cruncher, Solar Flare Boost, etc.
-- Remove the "one-time only" purchase restriction. Currently `isPurchased` blocks re-buying. Change the logic so items can be bought unlimited times -- track purchase count instead of boolean owned state.
-- Show purchase count on owned items (e.g., "Owned x3") instead of disabling the button.
-- Keep awarding achievements only on first purchase (existing logic stays).
+### 4. Add mission-based streak levels
+- Base streaks on completing all daily missions, not simply opening the app.
+- Advance one level after three fully completed days and generate the next missions from that level’s space topic.
+- Persist level progress and correct the daily-mission badge counter.
 
-### 2. Add 15 Selectable Space Music Melodies
-
-**File: `src/components/SpaceAmbience.tsx`**
-- Define 15 distinct melody presets using different Web Audio API configurations. Each melody will use unique frequency sets, oscillator types (sine, triangle, sawtooth), LFO speeds, filter settings, and noise textures. Examples:
-  - Deep Space Drone, Cosmic Waltz, Stellar Lullaby, Nebula Pulse, Aurora Waves, Galactic Harp, Lunar Drift, Solar Wind, Quantum Whisper, Astral Choir, Void Echo, Supernova Glow, Orbital Bells, Comet Trail, Starfield Shimmer
-- Add a melody selector dropdown/list that appears in the expanded controls panel. Users can click a melody name to switch.
-- When switching melodies: stop the current audio, apply new frequency/oscillator config, restart.
-- Store selected melody preference in `localStorage`.
-
-### 3. Make Premium Games Open for All (Free to Play)
-
-**File: `src/components/PremiumGamesSection.tsx`**
-- Remove the access gate (`hasAccess` check). All 12 premium games will be playable by anyone.
-- Remove the lock overlay and "Premium Access Required" toast.
-- Update the header text to remove the "exclusive" language; keep the premium branding as aspirational.
-- Keep coin rewards and achievement tracking as-is.
-
-### Technical Notes
-- All changes are frontend-only, using existing `localStorage` persistence and context providers.
-- The shop's `purchasedShopItems` localStorage will store item IDs with duplicates (array with repeated entries) to track quantity.
-- Music melodies are generated procedurally via Web Audio API -- no audio files needed.
-
+### Verification
+- Run focused tests/build checks, deploy changed backend functions, and exercise notification settings, inbox fallback, chat authorization, purchases, and mission progression in the live app.
