@@ -83,7 +83,7 @@ const readStats = (): LocalStats => {
     notes: readLen('studyNotes'),
     favorites: readLen('stellar_favorites'),
     pets: readLen('alienPetCollection'),
-    missions: readLen('challengeHistory'),
+    missions: readLen('dailyChallenge_history'),
     packs: readLen('alienPackHistory'),
     battles: readLen('alienBattleHistory'),
     passes: readLen('activeGamePasses'),

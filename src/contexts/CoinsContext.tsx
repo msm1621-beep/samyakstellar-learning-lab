@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 
 interface CoinsContextType {
   coins: number;
   addCoins: (amount: number, reason: string) => void;
-  removeCoins: (amount: number) => boolean;
+  removeCoins: (amount: number, reason?: string) => boolean;
   totalEarned: number;
   recentReward: { amount: number; reason: string } | null;
   clearRecentReward: () => void;
@@ -32,12 +32,17 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
   const [coins, setCoins] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
   const [recentReward, setRecentReward] = useState<{ amount: number; reason: string } | null>(null);
+  const coinsRef = useRef(0);
 
   // Load from localStorage
   useEffect(() => {
     const savedCoins = localStorage.getItem('spaceCoins');
     const savedTotal = localStorage.getItem('spaceTotalEarned');
-    if (savedCoins) setCoins(parseInt(savedCoins, 10));
+    if (savedCoins) {
+      const value = parseInt(savedCoins, 10);
+      coinsRef.current = Number.isFinite(value) ? value : 0;
+      setCoins(coinsRef.current);
+    }
     if (savedTotal) setTotalEarned(parseInt(savedTotal, 10));
   }, []);
 
@@ -62,7 +67,8 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
         bonusLabel += ` (x${_coinMultiplier} pass!)`;
       }
     }
-    setCoins(prev => prev + finalAmount);
+    coinsRef.current += finalAmount;
+    setCoins(coinsRef.current);
     if (finalAmount > 0) setTotalEarned(prev => prev + finalAmount);
     setRecentReward({ amount: finalAmount, reason: bonusLabel ? `${reason}${bonusLabel}` : reason });
     
@@ -72,12 +78,14 @@ export const CoinsProvider = ({ children }: { children: ReactNode }) => {
     }, 3000);
   };
 
-  const removeCoins = (amount: number): boolean => {
-    if (coins >= amount) {
-      setCoins(prev => prev - amount);
-      return true;
-    }
-    return false;
+  const removeCoins = (amount: number, reason = 'Purchase'): boolean => {
+    const cost = Math.max(0, Math.floor(amount));
+    if (cost === 0 || coinsRef.current < cost) return false;
+    coinsRef.current -= cost;
+    setCoins(coinsRef.current);
+    setRecentReward({ amount: -cost, reason });
+    window.setTimeout(() => setRecentReward(null), 3000);
+    return true;
   };
 
   const clearRecentReward = () => {

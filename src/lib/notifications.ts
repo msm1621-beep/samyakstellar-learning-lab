@@ -16,6 +16,13 @@ const MASTER_KEY = 'stellar_notifications_enabled'; // legacy key kept in sync
 const LAST_FIRED_KEY = 'stellar_notif_last_fired';
 const SW_URL = '/notif-sw.js';
 
+const localDayKey = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const DEFAULT_SETTINGS: NotifSettings = {
   enabled: false,
   lectures: true,
@@ -63,9 +70,9 @@ export const ensureNotifWorker = async (): Promise<ServiceWorkerRegistration | n
   if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return null;
   if (swReg) return swReg;
   try {
-    const existing = await navigator.serviceWorker.getRegistration(SW_URL);
+    const existing = await navigator.serviceWorker.getRegistration('/');
     swReg = existing ?? (await navigator.serviceWorker.register(SW_URL, { scope: '/' }));
-    await navigator.serviceWorker.ready.catch(() => undefined);
+    await swReg.update().catch(() => undefined);
     return swReg;
   } catch {
     return null;
@@ -211,7 +218,7 @@ export const showNotification = async (title: string, body: string): Promise<boo
   }
 };
 
-const todayKey = () => new Date().toISOString().slice(0, 10);
+const todayKey = () => localDayKey();
 
 const readFired = (): Record<string, string> => {
   try {

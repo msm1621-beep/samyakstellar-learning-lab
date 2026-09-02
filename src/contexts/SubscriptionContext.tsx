@@ -41,7 +41,7 @@ import { useToast } from '@/hooks/use-toast';
   export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     const [activeSubscription, setActiveSubscription] = useState<ActiveSubscription | null>(null);
     const [loaded, setLoaded] = useState(false);
-    const { coins, addCoins } = useCoins();
+    const { coins, addCoins, removeCoins } = useCoins();
     const { toast } = useToast();
  
     // Load from localStorage on mount
@@ -146,8 +146,10 @@ import { useToast } from '@/hooks/use-toast';
        return false;
      }
  
-     // Deduct coins (using negative amount)
-     addCoins(-subscription.price, `Purchased: ${subscription.name}`);
+     if (!removeCoins(subscription.price, `Purchased: ${subscription.name}`)) {
+       toast({ title: "Not enough coins! 🪙", description: "Your balance changed. Please earn more coins and retry.", variant: "destructive" });
+       return false;
+     }
  
      // Set subscription
      const now = new Date();

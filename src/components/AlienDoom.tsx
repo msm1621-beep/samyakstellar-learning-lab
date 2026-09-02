@@ -176,7 +176,7 @@ const AlienDoom = () => {
   const targetLanguageName = 'English';
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, addCoinsServer } = useAuth();
+  const { user, session, profile, addCoinsServer } = useAuth();
 
   const recordStudyNote = useCallback((question: string, answer: string) => {
     try {
@@ -241,6 +241,10 @@ const AlienDoom = () => {
 
   const initializeIntroMessages = useCallback(async () => {
     if (messages.length > 0) return;
+    if (!session?.access_token) {
+      setMessages(ALIEN_INTRO_MESSAGES);
+      return;
+    }
 
     try {
       setError(null);
@@ -251,7 +255,7 @@ const AlienDoom = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({
             messages: [{ role: 'user', content: 'Give a short greeting in 2 lines introducing Mr. Doom and Mrs. Doom to a kid.' }],
@@ -286,7 +290,7 @@ const AlienDoom = () => {
       setError(errorMsg);
       setMessages(ALIEN_INTRO_MESSAGES);
     }
-  }, [messages.length, language, targetLanguageName]);
+  }, [messages.length, language, targetLanguageName, session?.access_token]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
@@ -311,6 +315,12 @@ const AlienDoom = () => {
       return;
     }
 
+    if (!session?.access_token) {
+      setError('Please continue with Google to chat with Mr. & Mrs. Doom.');
+      toast({ title: 'Sign in required', description: 'Continue with Google, then try your question again.', variant: 'destructive' });
+      return;
+    }
+
     setMessages(prev => [...prev, { speaker: 'user', text: userMessage }]);
     setIsLoading(true);
 
@@ -324,7 +334,7 @@ const AlienDoom = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ messages: newHistory.slice(-10), language, targetLanguageName }),
         });

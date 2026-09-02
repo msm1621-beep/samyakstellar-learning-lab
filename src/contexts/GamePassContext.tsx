@@ -36,7 +36,7 @@ const GamePassContext = createContext<GamePassContextType>({
 export const GamePassProvider = ({ children }: { children: ReactNode }) => {
   const [activePasses, setActivePasses] = useState<ActiveGamePass[]>([]);
   const [extraLives, setExtraLives] = useState(0);
-  const { coins, addCoins } = useCoins();
+  const { coins, removeCoins } = useCoins();
 
   // Load from localStorage and filter expired passes
   useEffect(() => {
@@ -105,8 +105,10 @@ export const GamePassProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
-    // Deduct coins
-    addCoins(-gamePass.price, `Purchased: ${gamePass.name}`);
+    if (!removeCoins(gamePass.price, `Purchased: ${gamePass.name}`)) {
+      toast({ title: "Not enough coins! 🪙", description: "Your balance changed. Please earn more coins and retry.", variant: "destructive" });
+      return false;
+    }
 
     // Create new pass
     const now = new Date();

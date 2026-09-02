@@ -3,6 +3,7 @@ import { Star, Trash2, Bell, BellRing, BarChart3, Flame, Coins, BookOpen, Trophy
 import { getFavorites, removeFavorite, type FavoriteItem } from '@/lib/favorites';
 import { useAchievements } from '@/contexts/AchievementsContext';
 import { useCoins } from '@/contexts/CoinsContext';
+import { enableNotifications as requestNotifications, getNotifSettings, saveNotifSettings, showNotification } from '@/lib/notifications';
 
 
 const NOTIF_KEY = 'stellar_notifications_enabled';
@@ -21,7 +22,7 @@ const FavoritesDashboard = () => {
   const { achievements } = useAchievements();
   const { coins } = useCoins();
   const [favs, setFavs] = useState<FavoriteItem[]>(getFavorites);
-  const [notifOn, setNotifOn] = useState(() => localStorage.getItem(NOTIF_KEY) === 'true');
+  const [notifOn, setNotifOn] = useState(() => getNotifSettings().enabled);
   const [notifMsg, setNotifMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -53,18 +54,18 @@ const FavoritesDashboard = () => {
     }
     if (notifOn) {
       setNotifOn(false);
-      localStorage.setItem(NOTIF_KEY, 'false');
+      saveNotifSettings({ ...getNotifSettings(), enabled: false });
       setNotifMsg('Daily reminders turned off.');
       return;
     }
-    const perm = await Notification.requestPermission();
-    if (perm === 'granted') {
+    const result = await requestNotifications();
+    if (result.ok) {
       setNotifOn(true);
-      localStorage.setItem(NOTIF_KEY, 'true');
+      saveNotifSettings({ ...getNotifSettings(), enabled: true });
       setNotifMsg('Reminders on — we will nudge you to keep your streak alive.');
-      new Notification('Stellar Learning Lab', { body: 'Notifications enabled! Aaj ka mission complete karna mat bhoolna 🚀' });
+      await showNotification('Stellar Learning Lab', 'Notifications enabled! Aaj ka mission complete karna mat bhoolna 🚀');
     } else {
-      setNotifMsg('Permission denied. Enable notifications in your browser settings.');
+      setNotifMsg(result.reason || 'Permission denied. Enable notifications in your browser settings.');
     }
   };
 
