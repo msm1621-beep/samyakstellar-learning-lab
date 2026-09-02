@@ -40,6 +40,8 @@ const MIRRORED_KEYS = [
   'dailyChallenge_goals',
   'dailyChallenge_goals_v2',
   'dailyChallenge_history',
+  'dailyChallenge_level',
+  'dailyChallenge_done',
   // progress
   'completedCourses',
   'completedBooks',

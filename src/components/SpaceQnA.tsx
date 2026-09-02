@@ -27,7 +27,7 @@ const SpaceQnA = () => {
   const abortRef = useRef<AbortController | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
-  const { user, profile, addCoinsServer } = useAuth();
+  const { user, session, addCoinsServer } = useAuth();
 
   const autoSaveAnswer = (savedQuestion: string, savedAnswer: string) => {
     let saved = false;
@@ -51,6 +51,11 @@ const SpaceQnA = () => {
   const handleSearch = async (searchQuery?: string) => {
     const queryToSearch = searchQuery || question;
     if (!queryToSearch.trim()) return;
+    if (!session?.access_token) {
+      setAskedQuestion(queryToSearch);
+      setAnswer('Please continue with Google first, then ask your space question again.');
+      return;
+    }
 
     // Abort previous request
     abortRef.current?.abort();
@@ -71,7 +76,7 @@ const SpaceQnA = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ question: queryToSearch, language: 'en', targetLanguageName: 'English' }),
           signal: controller.signal,

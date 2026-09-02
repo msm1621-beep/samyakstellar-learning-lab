@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Bell, BellRing, Headphones, Target, Volume2, Trash2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Bell, BellRing, Headphones, Target, Volume2, Trash2, ShieldCheck, Inbox } from 'lucide-react';
 import {
   getNotifSettings,
   saveNotifSettings,
@@ -155,21 +155,23 @@ const Settings = () => {
           <Row icon={Volume2} title="Test alert" desc="Send a sample notification right now">
             <button
               onClick={async () => {
-                if (perm !== 'granted') {
-                  setMsg('Turn on push reminders first.');
-                  return;
-                }
                 const shown = await showNotification('Test reminder 🎧', 'This is how your reminders will look.');
                 setMsg(
                   shown
                     ? 'Test notification sent — check your notification tray.'
-                    : 'Your browser blocked the notification. Open the installed app or a normal tab and retry.',
+                    : 'Saved to the in-app inbox. System alerts are blocked until notification permission is allowed.',
                 );
               }}
               className="px-3 py-2 rounded-xl text-xs font-semibold border border-primary/40 bg-primary/10 text-primary"
             >
               Send test
             </button>
+          </Row>
+
+          <Row icon={Inbox} title="In-app inbox" desc="Tests and reminders are saved even when system alerts are blocked">
+            <Link to="/" className="px-3 py-2 rounded-xl text-xs font-semibold border border-border/60 bg-card/60 text-foreground">
+              Open inbox
+            </Link>
           </Row>
 
           <Row icon={Trash2} title="Reset today’s reminders" desc="Lets today’s alerts fire again">
@@ -193,8 +195,8 @@ const Settings = () => {
         <section className="rounded-2xl border border-border/40 bg-card/50 p-4 flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <p className="text-xs text-muted-foreground">
-            Reminders are generated on your device only — nothing is shared. They arrive while the app is open or
-            installed in the background on supported devices.
+            Scheduled web reminders run while the app is open. Tests and due reminders are always saved in the in-app
+            inbox; closed-app delivery requires a separate push-notification service.
           </p>
         </section>
       </div>
