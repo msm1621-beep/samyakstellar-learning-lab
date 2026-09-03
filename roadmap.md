@@ -1,0 +1,4 @@
+- [ ] Stabilize mission day history and add three-day topic levels
+- [ ] Make streak/progress widgets derive from completed missions only
+- [ ] Harden notification scheduling, test alerts, and inbox behavior
+- [ ] Verify chat, doubt search, spending, and browser flows
