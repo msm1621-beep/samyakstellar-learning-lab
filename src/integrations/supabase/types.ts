@@ -87,6 +87,7 @@ export type Database = {
         }[]
       }
       increment_courses_completed: { Args: never; Returns: number }
+      spend_coins: { Args: { cost: number }; Returns: number }
     }
     Enums: {
       [_ in never]: never
