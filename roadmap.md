@@ -2,3 +2,5 @@
 - [ ] Make streak/progress widgets derive from completed missions only
 - [ ] Harden notification scheduling, test alerts, and inbox behavior
 - [ ] Verify chat, doubt search, spending, and browser flows
+- [ ] Remove subscription system and move its perk concepts into Featured Shop
+- [ ] Publish the tested app for real-browser verification
