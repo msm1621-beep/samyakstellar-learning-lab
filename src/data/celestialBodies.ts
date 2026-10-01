@@ -1,3 +1,5 @@
+import { expandedCelestialCatalog } from './expandedCelestialCatalog';
+
 export type CelestialCategory = 'solar-system' | 'stars' | 'nebulas' | 'galaxies' | 'other';
 export type DistanceFilter = 'near' | 'far' | 'all';
 
@@ -3365,8 +3367,31 @@ const rawCelestialBodies: CelestialBody[] = [
 
 // Some entries were duplicated across sections of this catalogue, which produced
 // duplicate React keys and repeated cards. Keep the first occurrence of each id.
-export const celestialBodies: CelestialBody[] = rawCelestialBodies.filter(
-  (body, index, all) => all.findIndex((b) => b.id === body.id) === index,
+const expandedCelestialBodies: CelestialBody[] = expandedCelestialCatalog.map((body) => ({
+  id: body.id,
+  name: body.name,
+  category: body.explorerCategory,
+  type: body.objectType,
+  description: `${body.name} is a ${body.objectType.toLowerCase()} in or near our Milky Way neighborhood.`,
+  longDescription: `${body.name} belongs to the supplied Milky Way catalogue. Astronomers study objects of this kind to understand how stars, planetary systems, clouds, and galaxies form and change.`,
+  coolFact: `${body.name} helps astronomers map our cosmic neighborhood and compare very different kinds of space objects.`,
+  extendedFacts: [
+    `Object class: ${body.objectType}`,
+    'Included in the expanded Milky Way learning catalogue',
+    'Its measured size can vary as observations improve',
+  ],
+  metric: body.objectType,
+  metricLabel: 'Object type',
+  icon: body.emoji,
+  color: body.sizeType === 'star' ? 'star' : body.sizeType === 'galaxy' ? 'galaxy' : body.sizeType === 'nebula' ? 'nebula' : 'planet',
+  distance: body.name === 'Sun' ? 'near' : 'far',
+  readMoreContent: `${body.name} is part of a broad catalogue spanning nearby stars, exoplanets, stellar nurseries, clusters, molecular clouds, energetic remnants, and major Milky Way objects. Its entry is designed as a starting point for exploration and size comparison.`,
+}));
+
+const normalizeObjectName = (name: string) => name.toLowerCase().replace(/^the\s+/, '').replace(/\s*\([^)]*\)\s*/g, '').trim();
+
+export const celestialBodies: CelestialBody[] = [...rawCelestialBodies, ...expandedCelestialBodies].filter(
+  (body, index, all) => all.findIndex((candidate) => normalizeObjectName(candidate.name) === normalizeObjectName(body.name)) === index,
 );
 
 

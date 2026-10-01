@@ -6,8 +6,8 @@ import { ArrowLeftRight, Info } from 'lucide-react';
 type FilterType = 'all' | 'planet' | 'moon' | 'star' | 'dwarf-planet' | 'asteroid' | 'comet' | 'exoplanet' | 'nebula' | 'galaxy' | 'black-hole';
 
 const SizeComparison = () => {
-  const [leftSelection, setLeftSelection] = useState<CelestialSize>(celestialSizes.find(c => c.id === 'earth')!);
-  const [rightSelection, setRightSelection] = useState<CelestialSize>(celestialSizes.find(c => c.id === 'jupiter')!);
+  const [leftSelection, setLeftSelection] = useState<CelestialSize>(() => celestialSizes.find(c => c.id === 'earth') ?? celestialSizes[0]);
+  const [rightSelection, setRightSelection] = useState<CelestialSize>(() => celestialSizes.find(c => c.id === 'jupiter') ?? celestialSizes[1] ?? celestialSizes[0]);
   const [filter, setFilter] = useState<FilterType>('all');
   const [showFact, setShowFact] = useState<'left' | 'right' | null>(null);
 
@@ -93,7 +93,10 @@ const SizeComparison = () => {
           <label className="text-sm text-muted-foreground block text-center">First Object</label>
           <select
             value={leftSelection.id}
-            onChange={(e) => setLeftSelection(celestialSizes.find(c => c.id === e.target.value)!)}
+            onChange={(e) => {
+              const selection = celestialSizes.find(c => c.id === e.target.value);
+              if (selection) setLeftSelection(selection);
+            }}
             className="w-full p-2 rounded-lg bg-background/50 border border-primary/20 text-foreground text-sm"
           >
             {filteredBodies.map((body) => (
@@ -119,7 +122,10 @@ const SizeComparison = () => {
           <label className="text-sm text-muted-foreground block text-center">Second Object</label>
           <select
             value={rightSelection.id}
-            onChange={(e) => setRightSelection(celestialSizes.find(c => c.id === e.target.value)!)}
+            onChange={(e) => {
+              const selection = celestialSizes.find(c => c.id === e.target.value);
+              if (selection) setRightSelection(selection);
+            }}
             className="w-full p-2 rounded-lg bg-background/50 border border-primary/20 text-foreground text-sm"
           >
             {filteredBodies.map((body) => (
