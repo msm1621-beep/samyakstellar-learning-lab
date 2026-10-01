@@ -1,3 +1,5 @@
+import { expandedCelestialCatalog } from './expandedCelestialCatalog';
+
 export interface CelestialSize {
   id: string;
   name: string;
@@ -8,7 +10,7 @@ export interface CelestialSize {
   funFact: string;
 }
 
-export const celestialSizes: CelestialSize[] = [
+const baseCelestialSizes: CelestialSize[] = [
   // ============ Planets (all 8) ============
   { id: 'mercury', name: 'Mercury', type: 'planet', diameter: 4879, color: '#8C7853', emoji: '☿️', funFact: 'Mercury is the fastest planet, zooming around the Sun in just 88 days!' },
   { id: 'venus', name: 'Venus', type: 'planet', diameter: 12104, color: '#E6C87A', emoji: '♀️', funFact: 'Venus spins backwards - the Sun rises in the west there!' },
@@ -99,6 +101,22 @@ export const celestialSizes: CelestialSize[] = [
   { id: 'lmc', name: 'Large Magellanic Cloud', type: 'galaxy', diameter: 132000000000000000, color: '#FFDAB9', emoji: '☁️', funFact: 'The LMC is a satellite galaxy visible from the Southern Hemisphere!' },
   { id: 'ic-1101', name: 'IC 1101', type: 'galaxy', diameter: 56800000000000000000, color: '#FFF8DC', emoji: '🌀', funFact: 'IC 1101 is one of the largest known galaxies - 60x wider than the Milky Way!' },
 ];
+
+const expandedCelestialSizes: CelestialSize[] = expandedCelestialCatalog.map((body) => ({
+  id: body.id,
+  name: body.name,
+  type: body.sizeType,
+  diameter: body.diameterKm,
+  color: body.color,
+  emoji: body.emoji,
+  funFact: `${body.name} is a ${body.objectType.toLowerCase()} included in the expanded Milky Way catalogue. Its displayed diameter is a representative comparison scale.`,
+}));
+
+const normalizeObjectName = (name: string) => name.toLowerCase().replace(/^the\s+/, '').replace(/\s*\([^)]*\)\s*/g, '').trim();
+
+export const celestialSizes: CelestialSize[] = [...baseCelestialSizes, ...expandedCelestialSizes]
+  .filter((body, index, all) => all.findIndex((candidate) => normalizeObjectName(candidate.name) === normalizeObjectName(body.name)) === index)
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 export const typeColors = {
   'planet':       { bg: 'bg-blue-500/20',   text: 'text-blue-400',   border: 'border-blue-500/50' },

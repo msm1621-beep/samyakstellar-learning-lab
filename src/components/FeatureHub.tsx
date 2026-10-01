@@ -20,7 +20,7 @@ export type FeatureAction =
 
 type Feature = { id: string; label: string; icon: React.ElementType; gradient: string; action: FeatureAction };
 
-const FEATURES: Feature[] = [
+const FEATURE_ROWS: Array<[FeatureKey, string, React.ElementType, string]> = [
   ['favorites', 'Favorites', Star, 'from-amber-400 to-yellow-500'],
   ['progress-tracker', 'Progress', BarChart3, 'from-emerald-500 to-teal-500'],
   ['daily-challenges', 'Daily Missions', Target, 'from-red-500 to-rose-500'],
@@ -43,7 +43,15 @@ const FEATURES: Feature[] = [
   ['alien-pets', 'Alien Pets', Sprout, 'from-emerald-500 to-lime-500'],
   ['achievements', 'Trophies', Award, 'from-yellow-400 to-orange-500'],
   ['about', 'About', Info, 'from-slate-500 to-slate-700'],
-].map(([id, label, icon, gradient]) => ({ id, label, icon, gradient, action: { kind: 'open', key: id } as FeatureAction }));
+];
+
+const FEATURES: Feature[] = FEATURE_ROWS.map(([id, label, icon, gradient]) => ({
+  id,
+  label,
+  icon,
+  gradient,
+  action: { kind: 'open', key: id },
+}));
 
 const FeatureHub = ({ onSelect }: { onSelect: (action: FeatureAction) => void }) => (
   <section id="feature-hub" className="py-14 px-4">

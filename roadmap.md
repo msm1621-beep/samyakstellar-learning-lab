@@ -4,3 +4,4 @@
 - [ ] Verify chat, doubt search, spending, and browser flows
 - [ ] Consolidate subscription plans and controls into Featured Shop; remove standalone subscription UI and preserve existing subscriber status
 - [ ] Publish the tested app for real-browser verification
+- [ ] Add the supplied Milky Way catalogue to Celestial Explorer and Size Comparison
