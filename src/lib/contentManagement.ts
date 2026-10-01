@@ -1,6 +1,10 @@
 // Frontend integration with Content Management System
 import { supabase } from '@/integrations/supabase/client';
 
+// Content-management tables are deployed separately from the generated app
+// schema, so use a narrow untyped facade until those generated types arrive.
+const contentDb = supabase as any;
+
 export interface ContentItem {
   id: string;
   content_type: 'fact' | 'article' | 'quiz_question' | 'mission' | 'discovery' | 'celestial_body' | 'space_news' | 'educational_content';
@@ -33,7 +37,7 @@ export async function getContentByType(
   contentType: ContentItem['content_type'],
   onlyVerified = true
 ): Promise<ContentItem[]> {
-  let query = supabase
+  let query = contentDb
     .from('content_items')
     .select('*')
     .eq('content_type', contentType);
@@ -44,28 +48,28 @@ export async function getContentByType(
 
   const { data, error } = await query;
   if (error) throw error;
-  return data || [];
+  return (data || []) as ContentItem[];
 }
 
 /**
  * Get content that needs review
  */
 export async function getContentNeedingReview(): Promise<ContentReview[]> {
-  const { data, error } = await supabase
+  const { data, error } = await contentDb
     .from('content_review_queue')
     .select('*')
     .in('status', ['pending', 'in_progress'])
     .order('priority', { ascending: false });
 
   if (error) throw error;
-  return data || [];
+  return (data || []) as ContentReview[];
 }
 
 /**
  * Get sync status across targets
  */
 export async function getSyncStatus() {
-  const { data, error } = await supabase
+  const { data, error } = await contentDb
     .from('sync_status')
     .select('*');
 
@@ -77,7 +81,7 @@ export async function getSyncStatus() {
  * Get audit trail for a content item
  */
 export async function getContentAuditTrail(contentId: string) {
-  const { data, error } = await supabase
+  const { data, error } = await contentDb
     .from('content_updates')
     .select('*')
     .eq('content_id', contentId)
@@ -91,7 +95,7 @@ export async function getContentAuditTrail(contentId: string) {
  * Get content sources
  */
 export async function getContentSources() {
-  const { data, error } = await supabase
+  const { data, error } = await contentDb
     .from('content_sources')
     .select('*')
     .eq('is_active', true);
@@ -104,7 +108,7 @@ export async function getContentSources() {
  * Mark content as reviewed (with freshness status)
  */
 export async function markContentReviewed(contentId: string, freshnessStatus: 'current' | 'outdated' = 'current') {
-  const { data, error } = await supabase.rpc('mark_content_reviewed', {
+  const { data, error } = await contentDb.rpc('mark_content_reviewed', {
     content_id: contentId,
     freshness: freshnessStatus,
   });
