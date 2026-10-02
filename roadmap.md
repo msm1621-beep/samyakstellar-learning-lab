@@ -1,3 +1,4 @@
+- [ ] Expand the 3D Solar System with Oort Cloud, nearby star systems, clickable bodies/moons, selectable historic stages, event simulations, Earth alignment, and reset
 - [ ] Stabilize mission day history and add three-day topic levels
 - [ ] Make streak/progress widgets derive from completed missions only
 - [ ] Harden notification scheduling, test alerts, and inbox behavior
