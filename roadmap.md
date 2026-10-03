@@ -1,4 +1,5 @@
 - [ ] Expand the 3D Solar System with Oort Cloud, nearby star systems, clickable bodies/moons, selectable historic stages, event simulations, Earth alignment, and reset
+- [ ] Fix Google sign-in: merge guest progress, sync local/backend account data, and bypass splash on OAuth return
 - [ ] Stabilize mission day history and add three-day topic levels
 - [ ] Make streak/progress widgets derive from completed missions only
 - [ ] Harden notification scheduling, test alerts, and inbox behavior
