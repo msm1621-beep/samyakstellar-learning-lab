@@ -1,8 +1,10 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, Ring, Html, Stars } from '@react-three/drei';
-import { useRef, useState, Suspense, useMemo, useEffect } from 'react';
+import { Html, OrbitControls, Ring, Sphere, Stars } from '@react-three/drei';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
-import { Rocket, Info, X } from 'lucide-react';
+import { Clock3, Crosshair, Info, Orbit, RotateCcw, Rocket, Sparkles, Telescope, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { WebGLGuard } from './WebGLBoundary';
 
 interface MoonData {
@@ -11,8 +13,10 @@ interface MoonData {
   distance: number;
   color: string;
   orbitSpeed: number;
+  funFact: string;
 }
 
+type BodyKind = 'planet' | 'dwarf-planet' | 'comet' | 'asteroid';
 interface CelestialData {
   name: string;
   radius: number;
@@ -22,507 +26,580 @@ interface CelestialData {
   rotationSpeed: number;
   hasRings?: boolean;
   ringColor?: string;
-  moons?: number;
   moonData?: MoonData[];
   funFact: string;
   emoji: string;
-  type: 'planet' | 'dwarf-planet';
+  kind: BodyKind;
+  eccentricity?: number;
+  inclination?: number;
+  orbitPeriod?: string;
 }
 
+interface SelectedInfo {
+  name: string;
+  emoji: string;
+  category: string;
+  fact: string;
+  detail: string;
+  focus: [number, number, number];
+}
+
+interface StarSystemData {
+  name: string;
+  distanceLy: number;
+  position: [number, number, number];
+  radius: number;
+  color: string;
+  spectral: string;
+  category?: string;
+  fact: string;
+  companion?: {
+    name: string;
+    radius: number;
+    color: string;
+    spectral: string;
+    orbitRadius: number;
+    orbitSpeed: number;
+    fact: string;
+  };
+  distantShowcase?: boolean;
+}
+
+const moon = (name: string, radius: number, distance: number, color: string, orbitSpeed: number, funFact: string): MoonData => ({ name, radius, distance, color, orbitSpeed, funFact });
+
 const planetsData: CelestialData[] = [
-  { name: 'Mercury', radius: 0.2, distance: 4, color: '#b5b5b5', orbitSpeed: 0.8, rotationSpeed: 0.01, funFact: 'Mercury is the fastest planet, zooming around the Sun in just 88 days!', emoji: '☿️', type: 'planet' },
-  { name: 'Venus', radius: 0.35, distance: 6, color: '#e6c87a', orbitSpeed: 0.6, rotationSpeed: 0.008, funFact: 'Venus spins backwards! The Sun rises in the west there.', emoji: '♀️', type: 'planet' },
-  { 
-    name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moons: 1, 
-    moonData: [{ name: 'Moon', radius: 0.1, distance: 0.8, color: '#c0c0c0', orbitSpeed: 2 }],
-    funFact: 'Earth is the only planet not named after a god!', emoji: '🌍', type: 'planet' 
-  },
-  { 
-    name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moons: 2,
-    moonData: [
-      { name: 'Phobos', radius: 0.04, distance: 0.5, color: '#8b7355', orbitSpeed: 4 },
-      { name: 'Deimos', radius: 0.03, distance: 0.7, color: '#a08060', orbitSpeed: 2.5 },
-    ],
-    funFact: 'Mars has the tallest volcano in our solar system - Olympus Mons!', emoji: '♂️', type: 'planet' 
-  },
-  { 
-    name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moons: 95,
-    moonData: [
-      { name: 'Io', radius: 0.1, distance: 1.8, color: '#f4d03f', orbitSpeed: 3 },
-      { name: 'Europa', radius: 0.09, distance: 2.2, color: '#e8dcc8', orbitSpeed: 2.5 },
-      { name: 'Ganymede', radius: 0.15, distance: 2.7, color: '#a89080', orbitSpeed: 2 },
-      { name: 'Callisto', radius: 0.13, distance: 3.2, color: '#706050', orbitSpeed: 1.5 },
-    ],
-    funFact: 'Jupiter is so big that 1,300 Earths could fit inside it!', emoji: '♃', type: 'planet' 
-  },
-  { 
-    name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moons: 146,
-    moonData: [
-      { name: 'Titan', radius: 0.14, distance: 2, color: '#d4a574', orbitSpeed: 2 },
-      { name: 'Rhea', radius: 0.06, distance: 2.5, color: '#c8c8c8', orbitSpeed: 2.5 },
-      { name: 'Enceladus', radius: 0.04, distance: 1.5, color: '#ffffff', orbitSpeed: 3.5 },
-    ],
-    funFact: 'Saturn would float in water because it\'s less dense than water!', emoji: '🪐', type: 'planet' 
-  },
-  { 
-    name: 'Uranus', radius: 0.6, distance: 26, color: '#c9eeff', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moons: 28,
-    moonData: [
-      { name: 'Titania', radius: 0.06, distance: 1.2, color: '#b0a090', orbitSpeed: 2.5 },
-      { name: 'Oberon', radius: 0.05, distance: 1.5, color: '#908070', orbitSpeed: 2 },
-    ],
-    funFact: 'Uranus rotates on its side like a rolling ball!', emoji: '⛢', type: 'planet' 
-  },
-  { 
-    name: 'Neptune', radius: 0.55, distance: 31, color: '#5b5ddf', orbitSpeed: 0.08, rotationSpeed: 0.022, moons: 16,
-    moonData: [
-      { name: 'Triton', radius: 0.08, distance: 1.2, color: '#d0e0f0', orbitSpeed: 2.5 },
-    ],
-    funFact: 'Neptune has the strongest winds in the solar system - up to 1,200 mph!', emoji: '♆', type: 'planet' 
-  },
+  { name: 'Mercury', radius: 0.2, distance: 4, color: '#b5b5b5', orbitSpeed: 0.8, rotationSpeed: 0.01, funFact: 'Mercury is the fastest planet, completing an orbit in just 88 Earth days.', emoji: '☿️', kind: 'planet' },
+  { name: 'Venus', radius: 0.35, distance: 6, color: '#e6c87a', orbitSpeed: 0.6, rotationSpeed: 0.008, funFact: 'Venus rotates backwards compared with most planets, so its Sun rises in the west.', emoji: '♀️', kind: 'planet' },
+  { name: 'Earth', radius: 0.4, distance: 8, color: '#6b93d6', orbitSpeed: 0.5, rotationSpeed: 0.02, moonData: [moon('Moon (Luna)', 0.11, 0.85, '#c0c0c0', 2, 'Earth’s only natural satellite helps drive ocean tides and is the first world beyond Earth visited by people.')], funFact: 'Earth is the only known world with life on its surface and abundant liquid water.', emoji: '🌍', kind: 'planet' },
+  { name: 'Mars', radius: 0.25, distance: 10, color: '#c1440e', orbitSpeed: 0.4, rotationSpeed: 0.018, moonData: [
+    moon('Phobos', 0.07, 0.58, '#8b7355', 4, 'Phobos is slowly spiraling toward Mars and may break apart in the distant future.'),
+    moon('Deimos', 0.055, 0.9, '#a08060', 2.5, 'Deimos is the smaller, more distant of Mars’s two moons.'),
+  ], funFact: 'Mars is home to Olympus Mons, the tallest known volcano in the Solar System.', emoji: '♂️', kind: 'planet' },
+  { name: 'Jupiter', radius: 1.2, distance: 16, color: '#d8ca9d', orbitSpeed: 0.2, rotationSpeed: 0.04, moonData: [
+    moon('Io', 0.11, 1.65, '#f4d03f', 3, 'Io is the most volcanically active world known, powered by tidal heating.'), moon('Europa', 0.1, 2.0, '#e8dcc8', 2.7, 'Europa’s icy crust covers a global ocean that may contain more water than Earth’s oceans.'), moon('Ganymede', 0.15, 2.35, '#a89080', 2.2, 'Ganymede is the largest moon in the Solar System and has its own magnetic field.'), moon('Callisto', 0.13, 2.75, '#706050', 1.8, 'Callisto’s ancient, heavily cratered surface records billions of years of impacts.'), moon('Amalthea', 0.075, 3.15, '#bd6b42', 1.5, 'Amalthea is a small, irregular moon orbiting close to Jupiter.'), moon('Himalia', 0.07, 3.55, '#98816c', 1.3, 'Himalia is the largest member of Jupiter’s outer Himalia group.'), moon('Elara', 0.055, 3.95, '#a48a78', 1.1, 'Elara is a small irregular outer moon of Jupiter.'), moon('Pasiphae', 0.05, 4.35, '#806d60', 0.95, 'Pasiphae travels in a distant, retrograde orbit around Jupiter.'), moon('Sinope', 0.045, 4.75, '#997c68', 0.82, 'Sinope follows a far-out retrograde orbit around Jupiter.'), moon('Lysithea', 0.045, 5.15, '#ad9581', 0.7, 'Lysithea is a small irregular moon in Jupiter’s outer satellite system.'),
+  ], funFact: 'Jupiter is the largest planet; its Great Red Spot is a long-lived giant storm.', emoji: '♃', kind: 'planet' },
+  { name: 'Saturn', radius: 1, distance: 21, color: '#f4d59e', orbitSpeed: 0.15, rotationSpeed: 0.035, hasRings: true, ringColor: '#c9a55a', moonData: [
+    moon('Titan', 0.14, 1.55, '#d4a574', 2.8, 'Titan has lakes and seas of liquid methane and a thick nitrogen-rich atmosphere.'), moon('Enceladus', 0.07, 1.9, '#ffffff', 2.5, 'Enceladus sprays water-rich plumes into space from a hidden subsurface ocean.'), moon('Mimas', 0.06, 2.25, '#c8c8c8', 2.2, 'A huge impact crater gives Mimas a resemblance to the fictional Death Star.'), moon('Tethys', 0.07, 2.6, '#d0d0d0', 2, 'Tethys has a giant canyon system and a vast impact basin.'), moon('Dione', 0.08, 2.95, '#c9c9c9', 1.8, 'Dione has bright wispy cliffs made of exposed ice.'), moon('Rhea', 0.09, 3.3, '#c8c8c8', 1.65, 'Rhea is Saturn’s second-largest moon and is mostly made of water ice.'), moon('Iapetus', 0.08, 3.65, '#a89080', 1.5, 'Iapetus has one bright hemisphere and one very dark hemisphere.'), moon('Hyperion', 0.05, 4, '#b49a78', 1.35, 'Hyperion’s irregular shape and porous surface make it tumble chaotically.'), moon('Phoebe', 0.05, 4.35, '#796d60', 1.2, 'Phoebe travels backwards around Saturn and may be a captured object.'), moon('Epimetheus', 0.04, 4.7, '#c0b6a7', 1.05, 'Epimetheus shares a closely related orbit with Janus; the two moons exchange orbital tracks.'), moon('Janus', 0.05, 5.05, '#b8aa98', 0.95, 'Janus shares a co-orbital path with Epimetheus.'), moon('Helene', 0.035, 5.4, '#d2c5b4', 0.85, 'Helene is a small moon that travels near the same orbit as Dione.'), moon('Telesto', 0.035, 5.75, '#ded4c2', 0.75, 'Telesto is a small Trojan moon sharing Tethys’s orbit.'), moon('Calypso', 0.03, 6.1, '#d8d0c0', 0.68, 'Calypso is another small Trojan companion of Tethys.'), moon('Atlas', 0.035, 6.45, '#c8ad8e', 0.6, 'Atlas is a small moon that helps shape the edge of Saturn’s A ring.'),
+  ], funFact: 'Saturn’s bright rings are made mostly of countless pieces of water ice and rock.', emoji: '🪐', kind: 'planet' },
+  { name: 'Uranus', radius: 0.6, distance: 26, color: '#7dd9dc', orbitSpeed: 0.1, rotationSpeed: 0.025, hasRings: true, ringColor: '#8bc9e8', moonData: [
+    moon('Miranda', 0.06, 1.2, '#b0a090', 2.8, 'Miranda has enormous cliffs and patchwork terrain, likely shaped by ancient upheaval.'), moon('Ariel', 0.07, 1.6, '#d0c8bc', 2.45, 'Ariel has a young-looking surface marked by long valleys and fault canyons.'), moon('Umbriel', 0.07, 2.0, '#807a74', 2.1, 'Umbriel is one of Uranus’s darkest large moons.'), moon('Titania', 0.09, 2.4, '#b0a090', 1.8, 'Titania is the largest moon of Uranus.'), moon('Oberon', 0.08, 2.8, '#908070', 1.55, 'Oberon is a distant, cratered moon with possible signs of past geology.'), moon('Puck', 0.045, 3.2, '#a49a8a', 1.3, 'Puck is a small inner moon discovered by Voyager 2.'), moon('Belinda', 0.035, 3.6, '#c2b8aa', 1.1, 'Belinda is a small inner moon of Uranus, found in Voyager images.'),
+  ], funFact: 'Uranus rotates on its side, giving it some of the most extreme seasons in the Solar System.', emoji: '⛢', kind: 'planet' },
+  { name: 'Neptune', radius: 0.55, distance: 31, color: '#4b78df', orbitSpeed: 0.08, rotationSpeed: 0.022, moonData: [
+    moon('Triton', 0.09, 1.25, '#d0e0f0', 2.6, 'Triton orbits Neptune backwards and may be a captured Kuiper Belt object.'), moon('Proteus', 0.06, 1.7, '#a4a0a0', 2.2, 'Proteus is Neptune’s largest inner moon and has a heavily cratered surface.'), moon('Nereid', 0.05, 2.15, '#b0b0b0', 1.8, 'Nereid follows one of the most elongated orbits of any known moon.'), moon('Larissa', 0.04, 2.6, '#b9b2a8', 1.45, 'Larissa is a small inner moon named after a nymph from Greek mythology.'),
+  ], funFact: 'Neptune is a distant ice giant with supersonic winds and deep blue clouds.', emoji: '♆', kind: 'planet' },
 ];
 
 const dwarfPlanetsData: CelestialData[] = [
-  { name: 'Ceres', radius: 0.12, distance: 12.5, color: '#8c8c8c', orbitSpeed: 0.35, rotationSpeed: 0.015, funFact: 'Ceres is the largest object in the asteroid belt and has water ice!', emoji: '🪨', type: 'dwarf-planet' },
-  { 
-    name: 'Pluto', radius: 0.15, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moons: 5,
-    moonData: [
-      { name: 'Charon', radius: 0.07, distance: 0.5, color: '#808080', orbitSpeed: 2 },
-      { name: 'Nix', radius: 0.02, distance: 0.7, color: '#c0c0c0', orbitSpeed: 3 },
-    ],
-    funFact: 'Pluto has a heart-shaped glacier made of nitrogen ice!', emoji: '💜', type: 'dwarf-planet' 
-  },
-  { 
-    name: 'Haumea', radius: 0.13, distance: 38, color: '#f5f5f5', orbitSpeed: 0.035, rotationSpeed: 0.05, moons: 2,
-    moonData: [
-      { name: "Hi'iaka", radius: 0.02, distance: 0.5, color: '#d0d0d0', orbitSpeed: 2.5 },
-    ],
-    funFact: 'Haumea is shaped like an egg because it spins so fast!', emoji: '🥚', type: 'dwarf-planet' 
-  },
-  { 
-    name: 'Makemake', radius: 0.14, distance: 41, color: '#c4a882', orbitSpeed: 0.03, rotationSpeed: 0.012, moons: 1,
-    moonData: [
-      { name: 'MK2', radius: 0.02, distance: 0.4, color: '#505050', orbitSpeed: 3 },
-    ],
-    funFact: 'Makemake is named after the Rapa Nui god of fertility!', emoji: '🗿', type: 'dwarf-planet' 
-  },
-  { 
-    name: 'Eris', radius: 0.16, distance: 45, color: '#e8e8e8', orbitSpeed: 0.025, rotationSpeed: 0.008, moons: 1,
-    moonData: [
-      { name: 'Dysnomia', radius: 0.03, distance: 0.5, color: '#a0a0a0', orbitSpeed: 2 },
-    ],
-    funFact: 'Eris is more massive than Pluto and caused Pluto to be reclassified!', emoji: '⚪', type: 'dwarf-planet' 
-  },
+  { name: 'Ceres', radius: 0.14, distance: 12.4, color: '#929292', orbitSpeed: 0.34, rotationSpeed: 0.015, funFact: 'Ceres is the largest object in the asteroid belt and has bright salt deposits inside Occator Crater.', emoji: '🪨', kind: 'dwarf-planet', orbitPeriod: '4.6 years' },
+  { name: 'Pluto', radius: 0.16, distance: 35, color: '#d4a574', orbitSpeed: 0.04, rotationSpeed: 0.01, moonData: [moon('Charon', 0.08, 0.55, '#808080', 2, 'Charon is so large compared with Pluto that the pair orbit a point in space between them.'), moon('Hydra', 0.04, 0.82, '#c0c0c0', 1.5, 'Hydra is a small, irregular outer moon of Pluto.')], funFact: 'Pluto has a heart-shaped region called Tombaugh Regio, including a nitrogen-ice plain.', emoji: '💜', kind: 'dwarf-planet', orbitPeriod: '248 years' },
+  { name: 'Haumea', radius: 0.13, distance: 38, color: '#f5f5f5', orbitSpeed: 0.035, rotationSpeed: 0.05, moonData: [moon("Hi'iaka", 0.03, 0.55, '#d0d0d0', 2.5, "Hi'iaka is the larger outer moon of the rapidly spinning dwarf planet Haumea."), moon('Namaka', 0.025, 0.82, '#bcbcbc', 2, 'Namaka is Haumea’s smaller inner moon.')], funFact: 'Haumea spins so quickly that it is stretched into an unusually elongated shape.', emoji: '🥚', kind: 'dwarf-planet', orbitPeriod: '284 years' },
+  { name: 'Makemake', radius: 0.14, distance: 41, color: '#c4a882', orbitSpeed: 0.03, rotationSpeed: 0.012, moonData: [moon('MK2 (S/2015)', 0.03, 0.55, '#505050', 2.2, 'Makemake’s small, dark companion is informally nicknamed MK2.')], funFact: 'Makemake is a distant dwarf planet named for a creator deity from Rapa Nui tradition.', emoji: '🗿', kind: 'dwarf-planet', orbitPeriod: '306 years' },
+  { name: 'Eris', radius: 0.16, distance: 45, color: '#e8e8e8', orbitSpeed: 0.025, rotationSpeed: 0.008, moonData: [moon('Dysnomia', 0.04, 0.58, '#a0a0a0', 1.8, 'Dysnomia is the known moon of Eris and helps astronomers estimate Eris’s mass.')], funFact: 'Eris is a massive distant dwarf planet whose discovery helped spark the debate that redefined planets.', emoji: '⚪', kind: 'dwarf-planet', orbitPeriod: 'about 558 years' },
+  { name: 'Sedna', radius: 0.12, distance: 56, color: '#bd755b', orbitSpeed: 0.018, rotationSpeed: 0.009, funFact: 'Sedna travels on an extraordinarily long, elongated orbit far beyond Neptune; one orbit takes roughly 11,000 years.', emoji: '🔴', kind: 'dwarf-planet', eccentricity: 0.3, inclination: 0.12, orbitPeriod: 'about 11,000 years' },
 ];
 
-const allCelestialBodies = [...planetsData, ...dwarfPlanetsData];
+const minorBodiesData: CelestialData[] = [
+  { name: "Halley's Comet", radius: 0.14, distance: 28, color: '#bde7f1', orbitSpeed: 0.09, rotationSpeed: 0.02, funFact: "Halley's Comet returns to the inner Solar System about every 76 years. ESA's Giotto spacecraft flew past its nucleus in 1986.", emoji: '☄️', kind: 'comet', eccentricity: 0.44, inclination: 0.16, orbitPeriod: 'about 76 years' },
+  { name: 'Comet Hale–Bopp', radius: 0.19, distance: 34, color: '#c9efff', orbitSpeed: 0.045, rotationSpeed: 0.015, funFact: 'Hale–Bopp was exceptionally bright in 1997 and has an orbital period of roughly 2,500 years.', emoji: '☄️', kind: 'comet', eccentricity: 0.4, inclination: 0.12, orbitPeriod: 'about 2,500 years' },
+  { name: 'Comet Tsuchinshan–ATLAS', radius: 0.16, distance: 38, color: '#9de8df', orbitSpeed: 0.035, rotationSpeed: 0.015, funFact: 'Comet C/2023 A3 (Tsuchinshan–ATLAS) became a prominent naked-eye comet in 2024.', emoji: '☄️', kind: 'comet', eccentricity: 0.38, inclination: 0.18, orbitPeriod: 'very long-period' },
+  { name: "Devil's Comet (12P/Pons–Brooks)", radius: 0.15, distance: 25, color: '#b9d7ff', orbitSpeed: 0.07, rotationSpeed: 0.018, funFact: '12P/Pons–Brooks is a periodic comet whose outbursts can make its coma appear to grow dramatically.', emoji: '☄️', kind: 'comet', eccentricity: 0.32, inclination: 0.2, orbitPeriod: 'about 71 years' },
+  { name: 'Comet 67P/Churyumov–Gerasimenko', radius: 0.13, distance: 30, color: '#d8cdbb', orbitSpeed: 0.055, rotationSpeed: 0.025, funFact: 'ESA’s Rosetta mission orbited Comet 67P and delivered the Philae lander to its surface.', emoji: '☄️', kind: 'comet', eccentricity: 0.27, inclination: 0.09, orbitPeriod: 'about 6.4 years' },
+  { name: 'Bennu', radius: 0.09, distance: 12.1, color: '#9c9386', orbitSpeed: 0.36, rotationSpeed: 0.04, funFact: 'NASA’s OSIRIS-REx returned a sample from asteroid Bennu to Earth in 2023.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.17, inclination: 0.05, orbitPeriod: 'about 1.2 years' },
+  { name: 'Vesta', radius: 0.15, distance: 13.2, color: '#b3a89b', orbitSpeed: 0.31, rotationSpeed: 0.025, funFact: 'Vesta is one of the largest asteroids; NASA’s Dawn spacecraft studied it before visiting Ceres.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.08, inclination: 0.07, orbitPeriod: '3.6 years' },
+  { name: 'Pallas', radius: 0.12, distance: 13.8, color: '#a79b8c', orbitSpeed: 0.28, rotationSpeed: 0.02, funFact: 'Pallas is a large asteroid with an unusually tilted orbit through the asteroid belt.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.13, inclination: 0.22, orbitPeriod: '4.6 years' },
+];
 
-const Sun = ({ onClick }: { onClick: () => void }) => {
-  const sunRef = useRef<THREE.Mesh>(null);
-  
-  useFrame(() => {
-    if (sunRef.current) {
-      sunRef.current.rotation.y += 0.002;
-    }
-  });
+const allCelestialBodies = [...planetsData, ...dwarfPlanetsData, ...minorBodiesData];
 
-  return (
-    <group>
-      <mesh ref={sunRef} onClick={onClick}>
-        <Sphere args={[2, 32, 32]}>
-          <meshBasicMaterial color="#fdb813" />
-        </Sphere>
-        <pointLight intensity={2} distance={100} decay={0.5} />
-      </mesh>
-      <Html distanceFactor={15} position={[0, 3, 0]}>
-        <div className="bg-orange-500/80 px-2 py-0.5 rounded-full whitespace-nowrap">
-          <span className="text-white text-xs font-fredoka font-bold">☀️ Sun</span>
-        </div>
-      </Html>
-    </group>
-  );
-};
+const starSystems: StarSystemData[] = [
+  { name: 'Alpha Centauri A', distanceLy: 4.37, position: [155, 0, -30], radius: 1.25, color: '#ffe0a1', spectral: 'G2 V', fact: 'Alpha Centauri A is a Sun-like star and the brighter member of the Alpha Centauri AB binary. The binary’s separation changes over its long orbit.' , companion: { name: 'Alpha Centauri B', radius: 1.05, color: '#ffb56b', spectral: 'K1 V', orbitRadius: 3.2, orbitSpeed: 0.34, fact: 'Alpha Centauri B is the orange, cooler companion in the nearest bright stellar binary system.' } },
+  { name: 'Proxima Centauri', distanceLy: 4.24, position: [161, 8, -32], radius: 0.75, color: '#ff765c', spectral: 'M5.5 V', category: 'Red dwarf', fact: 'Proxima Centauri is the nearest known star to the Sun. It is a flare star with confirmed planets; its position here is schematic.' },
+  { name: "Barnard's Star", distanceLy: 5.96, position: [145, -24, 8], radius: 0.7, color: '#ff9b73', spectral: 'M4 V', category: 'Red dwarf', fact: "Barnard's Star has one of the largest apparent proper motions across Earth's sky." },
+  { name: 'Luhman 16A', distanceLy: 6.5, position: [166, -23, 50], radius: 0.9, color: '#db8b59', spectral: 'L7.5', category: 'Brown dwarf', fact: 'Luhman 16A is one component of a nearby pair of brown dwarfs, objects too small to sustain ordinary hydrogen fusion.', companion: { name: 'Luhman 16B', radius: 0.82, color: '#be7454', spectral: 'T0.5', orbitRadius: 2.2, orbitSpeed: 0.52, fact: 'Luhman 16B is the cooler companion in a nearby binary brown-dwarf system.' } },
+  { name: 'WISE 0855−0714', distanceLy: 7.43, position: [185, 15, -70], radius: 0.7, color: '#7fb8c9', spectral: 'Y dwarf', category: 'Brown dwarf', fact: 'WISE 0855−0714 is an extremely cold nearby brown dwarf; its atmosphere is cold enough for water clouds to be possible.' },
+  { name: 'Wolf 359', distanceLy: 7.86, position: [160, 15, 30], radius: 0.65, color: '#ff735c', spectral: 'M6 V', category: 'Red dwarf', fact: 'Wolf 359 is a very faint red dwarf in Leo and one of the nearest stars to the Sun.' },
+  { name: 'Lalande 21185', distanceLy: 8.31, position: [180, -10, 12], radius: 0.76, color: '#ff9c70', spectral: 'M2 V', category: 'Red dwarf', fact: 'Lalande 21185 is a nearby red dwarf in Ursa Major, observed for more than a century.' },
+  { name: 'Sirius A', distanceLy: 8.6, position: [205, 30, 40], radius: 1.5, color: '#dcecff', spectral: 'A1 V', fact: 'Sirius is the brightest star in Earth’s night sky. Sirius A and its white-dwarf companion orbit a shared centre of mass.', companion: { name: 'Sirius B', radius: 0.72, color: '#b7d8ff', spectral: 'White dwarf', orbitRadius: 4.1, orbitSpeed: 0.25, fact: 'Sirius B is a dense white dwarf and the faint companion of the much brighter Sirius A.' } },
+  { name: 'Luyten 726-8 A', distanceLy: 8.73, position: [220, -25, 64], radius: 0.72, color: '#ff765d', spectral: 'M5.5 V', fact: 'Luyten 726-8 is a close binary of flare-producing red dwarfs, also known as UV Ceti.', companion: { name: 'Luyten 726-8 B (UV Ceti)', radius: 0.68, color: '#ff8b69', spectral: 'M6 V', orbitRadius: 2.6, orbitSpeed: 0.44, fact: 'UV Ceti is the flaring companion in the Luyten 726-8 red-dwarf binary.' } },
+  { name: 'Ross 154', distanceLy: 9.69, position: [235, -10, 8], radius: 0.7, color: '#ff785d', spectral: 'M3.5 V', category: 'Red dwarf', fact: 'Ross 154 is a nearby red dwarf that occasionally produces stellar flares.' },
+  { name: 'WR 124 (distant showcase)', distanceLy: 21000, position: [450, 40, -100], radius: 1.35, color: '#a7cfff', spectral: 'Wolf–Rayet', category: 'Distant showcase', distantShowcase: true, fact: 'WR 124 is a Wolf–Rayet star thousands of light-years away—not a nearby star. It is included as a clearly marked distant showcase.' },
+];
 
-const AsteroidBelt = () => {
-  const asteroids = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 300; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 12 + Math.random() * 2;
-      const height = (Math.random() - 0.5) * 0.8;
-      items.push({
-        position: [
-          Math.cos(angle) * distance,
-          height,
-          Math.sin(angle) * distance
-        ] as [number, number, number],
-        size: 0.02 + Math.random() * 0.04,
-      });
-    }
-    return items;
-  }, []);
+const timelineStages = [
+  { id: 'formation', label: '4.5 billion years ago', note: 'Solar System formation — dusty disk view; all body positions are illustrative.' },
+  { id: '500m', label: '500 million years ago', note: 'A schematic historical view; planets are shown in illustrative positions.' },
+  { id: '49m', label: '49 million years ago', note: 'A schematic historical view; not a reconstruction of exact past orbits.' },
+  { id: '650k', label: '650,000 years ago', note: 'A schematic historical view; orbital positions are not precision ephemerides.' },
+  { id: '70k', label: '70,000 years ago', note: 'A schematic historical view; orbital positions are not precision ephemerides.' },
+  { id: 'present', label: 'Present', note: 'Present-day illustration. Distances and sizes are not to scale.' },
+] as const;
+type TimelineId = (typeof timelineStages)[number]['id'];
+type EventId = 'none' | 'solar-storm' | 'asteroid-encounter' | 'comet-flyby';
 
-  return (
-    <group>
-      {/* Belt ring indicator */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[11.8, 14.2, 64]} />
-        <meshBasicMaterial color="#8b7355" opacity={0.08} transparent side={THREE.DoubleSide} />
-      </mesh>
-      
-      {asteroids.map((asteroid, i) => (
-        <mesh key={i} position={asteroid.position}>
-          <dodecahedronGeometry args={[asteroid.size]} />
-          <meshStandardMaterial color="#a0937d" roughness={0.9} />
-        </mesh>
-      ))}
-      
-      <Html distanceFactor={20} position={[13, 1.5, 0]}>
-        <div className="bg-amber-700/70 px-2 py-0.5 rounded-full whitespace-nowrap">
-          <span className="text-white text-xs font-fredoka">🪨 Asteroid Belt</span>
-        </div>
-      </Html>
-    </group>
-  );
-};
+const infoForBody = (body: CelestialData): SelectedInfo => ({
+  name: body.name,
+  emoji: body.emoji,
+  category: body.kind === 'dwarf-planet' ? 'Dwarf planet' : body.kind === 'asteroid' ? 'Asteroid' : body.kind === 'comet' ? 'Comet' : 'Planet',
+  fact: body.funFact,
+  detail: [body.orbitPeriod ? `Illustrated orbit period: ${body.orbitPeriod}` : '', body.moonData?.length ? `${body.moonData.length} featured moon${body.moonData.length === 1 ? '' : 's'} shown` : ''].filter(Boolean).join(' · ') || 'Select a moon or keep exploring the scene.',
+  focus: [body.distance, 0, 0],
+});
 
-const KuiperBelt = () => {
-  const objects = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 500; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 33 + Math.random() * 15;
-      const height = (Math.random() - 0.5) * 2;
-      items.push({
-        position: [
-          Math.cos(angle) * distance,
-          height,
-          Math.sin(angle) * distance
-        ] as [number, number, number],
-        size: 0.03 + Math.random() * 0.06,
-        color: Math.random() > 0.5 ? '#a8c8dc' : '#d4c4a8',
-      });
-    }
-    return items;
-  }, []);
+const infoForStar = (star: StarSystemData, companion?: StarSystemData['companion']): SelectedInfo => ({
+  name: companion?.name ?? star.name,
+  emoji: star.category === 'Brown dwarf' ? '🟤' : star.distantShowcase ? '✦' : '⭐',
+  category: companion ? `${companion.spectral} companion` : `${star.category ?? 'Star'} · ${star.spectral}`,
+  fact: companion?.fact ?? star.fact,
+  detail: `${star.distantShowcase ? 'Distant showcase' : `${star.distanceLy} light-years from the Sun`} · ${companion?.spectral ?? star.spectral}. Nearby-star positions and companion paths are schematic.`,
+  focus: star.position,
+});
 
-  return (
-    <group>
-      {/* Belt ring indicator */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[32, 50, 64]} />
-        <meshBasicMaterial color="#6b8fa3" opacity={0.05} transparent side={THREE.DoubleSide} />
-      </mesh>
-      
-      {objects.map((obj, i) => (
-        <mesh key={i} position={obj.position}>
-          <icosahedronGeometry args={[obj.size]} />
-          <meshStandardMaterial color={obj.color} roughness={0.85} />
-        </mesh>
-      ))}
-      
-      <Html distanceFactor={25} position={[40, 3, 0]}>
-        <div className="bg-cyan-700/70 px-2 py-0.5 rounded-full whitespace-nowrap">
-          <span className="text-white text-xs font-fredoka">❄️ Kuiper Belt</span>
-        </div>
-      </Html>
-    </group>
-  );
-};
+const seededShell = (count: number, minRadius: number, maxRadius: number, seedOffset = 0) => Array.from({ length: count }, (_, i) => {
+  const seed = i + seedOffset;
+  const y = 1 - 2 * ((seed * 0.61803398875) % 1);
+  const angle = seed * 2.399963229728653;
+  const radial = Math.sqrt(1 - y * y);
+  const r = minRadius + ((seed * 0.754877666) % 1) * (maxRadius - minRadius);
+  return { position: [Math.cos(angle) * radial * r, y * r, Math.sin(angle) * radial * r] as [number, number, number], size: 0.035 + ((seed * 0.324717957) % 1) * 0.075 };
+});
 
-// Moon component that orbits around a planet
-const Moon = ({ moon, parentRef }: { moon: MoonData; parentRef: React.RefObject<THREE.Group> }) => {
-  const moonRef = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    if (moonRef.current && parentRef.current) {
-      const t = clock.getElapsedTime() * moon.orbitSpeed;
-      moonRef.current.position.x = Math.cos(t) * moon.distance;
-      moonRef.current.position.z = Math.sin(t) * moon.distance;
-      moonRef.current.position.y = Math.sin(t * 0.5) * 0.1; // Slight vertical wobble
-    }
-  });
-
-  return (
-    <mesh ref={moonRef}>
-      <Sphere args={[moon.radius, 16, 16]}>
-        <meshStandardMaterial color={moon.color} />
-      </Sphere>
+function InstancedBelt({ count, inner, outer, color, seedOffset = 0, label, labelPosition, shape = 'rock' }: { count: number; inner: number; outer: number; color: string; seedOffset?: number; label: string; labelPosition: [number, number, number]; shape?: 'rock' | 'ice' }) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const items = useMemo(() => seededShell(count, inner, outer, seedOffset).map((item, i) => {
+    const angle = (i * 2.3999632297 + seedOffset) % (Math.PI * 2);
+    const distance = inner + ((i * 0.6180339887) % 1) * (outer - inner);
+    return { ...item, position: [Math.cos(angle) * distance, item.position[1] * 0.018 * distance, Math.sin(angle) * distance] as [number, number, number], size: 0.025 + (i % 7) * 0.006, shade: 0.72 + (i % 5) * 0.07 };
+  }), [count, inner, outer, seedOffset]);
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    const dummy = new THREE.Object3D();
+    const base = new THREE.Color(color);
+    items.forEach((item, index) => {
+      dummy.position.set(...item.position);
+      dummy.rotation.set(index * 0.17, index * 0.31, index * 0.11);
+      dummy.scale.setScalar(item.size);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(index, dummy.matrix);
+      mesh.setColorAt(index, base.clone().multiplyScalar(item.shade));
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  }, [color, items]);
+  return <group>
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[inner, outer, 96]} />
+      <meshBasicMaterial color={color} opacity={0.08} transparent side={THREE.DoubleSide} />
     </mesh>
-  );
-};
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      {shape === 'ice' ? <icosahedronGeometry args={[1, 0]} /> : <dodecahedronGeometry args={[1, 0]} />}
+      <meshStandardMaterial color={color} roughness={0.9} />
+    </instancedMesh>
+    <Html distanceFactor={22} position={labelPosition}>
+      <span className="rounded-full border border-border bg-card/90 px-2 py-1 text-xs text-card-foreground whitespace-nowrap">{label}</span>
+    </Html>
+  </group>;
+}
 
-const CelestialBody = ({ data, onClick, isSelected }: { data: CelestialData; onClick: () => void; isSelected: boolean }) => {
+function OortCloud() {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const items = useMemo(() => seededShell(340, 91, 111, 814), []);
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh) return;
+    const dummy = new THREE.Object3D();
+    const pale = new THREE.Color('#92c8dd');
+    items.forEach((item, index) => {
+      dummy.position.set(...item.position);
+      dummy.scale.setScalar(item.size * 0.72);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(index, dummy.matrix);
+      mesh.setColorAt(index, pale.clone().multiplyScalar(0.65 + (index % 6) * 0.07));
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  }, [items]);
+  return <group>
+    <mesh>
+      <sphereGeometry args={[99, 28, 18]} />
+      <meshBasicMaterial color="#80bbd4" wireframe transparent opacity={0.065} />
+    </mesh>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, items.length]}>
+      <icosahedronGeometry args={[1, 0]} />
+      <meshStandardMaterial color="#92c8dd" roughness={1} />
+    </instancedMesh>
+    <Html distanceFactor={45} position={[0, 103, 0]}>
+      <span className="rounded-full border border-cyan-200/30 bg-slate-950/85 px-3 py-1.5 text-xs font-semibold text-cyan-100 whitespace-nowrap">Oort Cloud · schematic outer boundary</span>
+    </Html>
+  </group>;
+}
+
+function Sun({ onClick }: { onClick: () => void }) {
+  const sunRef = useRef<THREE.Mesh>(null);
+  useFrame((_, rawDelta) => {
+    if (sunRef.current) sunRef.current.rotation.y += Math.min(rawDelta, 0.05) * 0.28;
+  });
+  return <group>
+    <mesh ref={sunRef} onClick={onClick} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+      <Sphere args={[2, 32, 32]}><meshBasicMaterial color="#fdb813" /></Sphere>
+      <pointLight intensity={2.4} distance={160} decay={0.7} />
+    </mesh>
+    <Html distanceFactor={15} position={[0, 3, 0]}>
+      <span className="rounded-full border border-amber-300/40 bg-amber-950/85 px-2 py-1 text-xs font-bold text-amber-100 whitespace-nowrap">☀️ Sun</span>
+    </Html>
+  </group>;
+}
+
+function Moon({ moon: moonData, parentRef, onSelect }: { moon: MoonData; parentRef: React.RefObject<THREE.Group>; onSelect: () => void }) {
+  const moonRef = useRef<THREE.Mesh>(null);
+  useFrame(({ clock }) => {
+    if (!moonRef.current || !parentRef.current) return;
+    const t = clock.getElapsedTime() * moonData.orbitSpeed;
+    moonRef.current.position.set(Math.cos(t) * moonData.distance, Math.sin(t * 0.5) * 0.08, Math.sin(t) * moonData.distance);
+  });
+  return <mesh ref={moonRef} onClick={(event) => { event.stopPropagation(); onSelect(); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+    <Sphere args={[moonData.radius, 14, 14]}><meshStandardMaterial color={moonData.color} roughness={0.86} /></Sphere>
+  </mesh>;
+}
+
+function CometTail({ direction, length, radius }: { direction: THREE.Vector3; length: number; radius: number }) {
+  const rotation = useMemo(() => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction), [direction]);
+  return <mesh position={direction.clone().multiplyScalar(length * 0.48)} quaternion={rotation}>
+    <coneGeometry args={[radius, length, 10, 1, true]} />
+    <meshBasicMaterial color="#a9e9ed" transparent opacity={0.45} side={THREE.DoubleSide} depthWrite={false} />
+  </mesh>;
+}
+
+function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: CelestialData; onSelect: (info: SelectedInfo) => void; isSelected: boolean; timeStage: TimelineId }) {
   const bodyRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-
-  const isDwarf = data.type === 'dwarf-planet';
-  const labelColor = isDwarf ? 'bg-purple-600/80' : 'bg-cosmic-purple/80';
-
-  useFrame(({ clock }) => {
+  const isComet = data.kind === 'comet';
+  const eccentricity = data.eccentricity ?? 0.02;
+  const orbitGeometry = useMemo(() => {
+    const curve = new THREE.EllipseCurve(0, 0, data.distance * (1 + eccentricity), data.distance * (1 - eccentricity), 0, Math.PI * 2, false, 0);
+    const points = curve.getPoints(120).map((point) => new THREE.Vector3(point.x, point.x * (data.inclination ?? 0), point.y));
+    return new THREE.BufferGeometry().setFromPoints(points);
+  }, [data.distance, eccentricity, data.inclination]);
+  useEffect(() => () => orbitGeometry.dispose(), [orbitGeometry]);
+  useFrame(({ clock }, rawDelta) => {
+    const delta = Math.min(rawDelta, 0.05);
     if (bodyRef.current) {
-      const t = clock.getElapsedTime() * data.orbitSpeed;
-      bodyRef.current.position.x = Math.cos(t) * data.distance;
-      bodyRef.current.position.z = Math.sin(t) * data.distance;
+      const timelineOffset = timelineStages.findIndex((stage) => stage.id === timeStage);
+      const t = clock.getElapsedTime() * data.orbitSpeed + (timelineOffset * 0.43);
+      const orbitScale = timeStage === 'formation' ? 0.91 : 1 + Math.max(timelineOffset, 0) * 0.0025;
+      const a = data.distance * (1 + eccentricity) * orbitScale;
+      const b = data.distance * (1 - eccentricity) * orbitScale;
+      bodyRef.current.position.set(Math.cos(t) * a, Math.sin(t) * a * (data.inclination ?? 0), Math.sin(t) * b);
     }
-    if (meshRef.current) {
-      meshRef.current.rotation.y += data.rotationSpeed;
+    if (meshRef.current) meshRef.current.rotation.y += delta * data.rotationSpeed;
+  });
+  const localDirection = useMemo(() => new THREE.Vector3(data.distance, 0, 0).normalize(), [data.distance]);
+  const info = infoForBody(data);
+  return <>
+    <line geometry={orbitGeometry} rotation-y={timeStage === 'formation' ? 0.08 : 0}>
+      <lineBasicMaterial color={data.kind === 'dwarf-planet' ? '#a78bca' : isComet ? '#9ddce4' : '#9eb4c4'} transparent opacity={isComet ? 0.2 : 0.11} />
+    </line>
+    <group ref={bodyRef}>
+      <mesh ref={meshRef} onClick={(event) => { event.stopPropagation(); onSelect(info); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={hovered || isSelected ? 1.28 : 1}>
+        <Sphere args={[data.radius, 24, 20]}>
+          <meshStandardMaterial color={data.color} roughness={0.8} emissive={isSelected ? data.color : '#000000'} emissiveIntensity={isSelected ? 0.28 : 0} />
+        </Sphere>
+      </mesh>
+      {isComet && <CometTail direction={localDirection} length={Math.max(1.6, data.radius * 13)} radius={data.radius * 1.8} />}
+      {data.hasRings && <Ring args={[data.radius * 1.4, data.radius * 2.2, 48]} rotation={[-Math.PI / 2.5, 0, 0]}><meshBasicMaterial color={data.ringColor} opacity={0.68} transparent side={THREE.DoubleSide} /></Ring>}
+      {data.moonData?.map((moonData) => <Moon key={`${data.name}-${moonData.name}`} moon={moonData} parentRef={bodyRef} onSelect={() => onSelect({ name: moonData.name, emoji: '🌙', category: `Moon of ${data.name}`, fact: moonData.funFact, detail: `Shown as one of ${data.moonData?.length ?? 0} featured moons in this schematic viewer.`, focus: [data.distance, 0, 0] })} />)}
+      <Html distanceFactor={14} position={[0, data.radius + 0.58, 0]}>
+        <span className={`rounded-full border px-2 py-0.5 text-xs whitespace-nowrap transition-all ${isSelected || hovered ? 'border-white/50 bg-card text-card-foreground' : 'border-border bg-card/80 text-card-foreground'}`}>
+          {data.emoji} {data.name}{data.moonData?.length ? <span className="ml-1 opacity-70">· {data.moonData.length} moons</span> : null}
+        </span>
+      </Html>
+    </group>
+  </>;
+}
+
+function StarSystemNode({ star, onSelect, isSelected }: { star: StarSystemData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
+  const companionRef = useRef<THREE.Mesh>(null);
+  const hostRef = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
+  useFrame(({ clock }, rawDelta) => {
+    const delta = Math.min(rawDelta, 0.05);
+    if (hostRef.current) hostRef.current.rotation.y += delta * 0.1;
+    if (companionRef.current && star.companion) {
+      const angle = clock.getElapsedTime() * star.companion.orbitSpeed;
+      companionRef.current.position.set(Math.cos(angle) * star.companion.orbitRadius, Math.sin(angle * 0.4) * 0.18, Math.sin(angle) * star.companion.orbitRadius);
     }
   });
+  return <group position={star.position}>
+    {star.companion && <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[star.companion.orbitRadius - 0.035, star.companion.orbitRadius + 0.035, 64]} />
+      <meshBasicMaterial color={star.color} transparent opacity={0.32} side={THREE.DoubleSide} />
+    </mesh>}
+    <mesh ref={hostRef} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star)); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={isSelected || hovered ? 1.2 : 1}>
+      <Sphere args={[star.radius, 20, 16]}><meshBasicMaterial color={star.color} /></Sphere>
+      <pointLight intensity={star.distantShowcase ? 0.45 : 0.18} distance={star.distantShowcase ? 26 : 14} decay={2} color={star.color} />
+    </mesh>
+    {star.companion && <mesh ref={companionRef} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star, star.companion)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+      <Sphere args={[star.companion.radius, 18, 14]}><meshBasicMaterial color={star.companion.color} /></Sphere>
+    </mesh>}
+    <Html distanceFactor={46} position={[0, star.radius + 1.2, 0]}>
+      <span className="rounded-full border border-border bg-card/85 px-2 py-0.5 text-[11px] text-card-foreground whitespace-nowrap">{star.distantShowcase ? '✦ WR 124 · distant' : `${star.category === 'Brown dwarf' ? '🟤' : '⭐'} ${star.name.replace(/ A$/, '')}`}</span>
+    </Html>
+  </group>;
+}
 
-  return (
-    <>
-      {/* Orbit path */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[data.distance - 0.02, data.distance + 0.02, 64]} />
-        <meshBasicMaterial 
-          color={isDwarf ? '#9b87f5' : '#ffffff'} 
-          opacity={isDwarf ? 0.1 : 0.15} 
-          transparent 
-          side={THREE.DoubleSide} 
-        />
-      </mesh>
-      
-      <group ref={bodyRef}>
-        <mesh 
-          ref={meshRef} 
-          onClick={onClick}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-          scale={hovered || isSelected ? 1.3 : 1}
-        >
-          <Sphere args={[data.radius, 32, 32]}>
-            <meshStandardMaterial 
-              color={data.color} 
-              emissive={isSelected ? data.color : '#000000'}
-              emissiveIntensity={isSelected ? 0.4 : 0}
-            />
-          </Sphere>
-        </mesh>
-        
-        {/* Saturn-like rings */}
-        {data.hasRings && (
-          <Ring args={[data.radius * 1.4, data.radius * 2.2, 64]} rotation={[-Math.PI / 2.5, 0, 0]}>
-            <meshBasicMaterial color={data.ringColor} opacity={0.7} transparent side={THREE.DoubleSide} />
-          </Ring>
-        )}
-        
-        {/* Moons orbiting the planet */}
-        {data.moonData && data.moonData.map((moon, index) => (
-          <Moon key={`${data.name}-moon-${index}`} moon={moon} parentRef={bodyRef} />
-        ))}
-        
-        {/* Always visible label */}
-        <Html distanceFactor={12} position={[0, data.radius + 0.6, 0]}>
-          <div className={`${labelColor} px-2 py-0.5 rounded-full whitespace-nowrap transition-all ${
-            hovered || isSelected ? 'scale-110 ring-2 ring-white/50' : ''
-          }`}>
-            <span className="text-white text-xs font-fredoka">{data.emoji} {data.name}</span>
-            {isDwarf && <span className="text-white/70 text-[10px] ml-1">(dwarf)</span>}
-            {data.moonData && data.moonData.length > 0 && (
-              <span className="text-white/60 text-[10px] ml-1">🌙{data.moons}</span>
-            )}
-          </div>
-        </Html>
-      </group>
-    </>
-  );
-};
+function AccretionDisk() {
+  const ref = useRef<THREE.Group>(null);
+  useFrame((_, rawDelta) => { if (ref.current) ref.current.rotation.y += Math.min(rawDelta, 0.05) * 0.035; });
+  return <group ref={ref}>
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[4, 19, 96]} />
+      <meshBasicMaterial color="#e6a06c" transparent opacity={0.2} side={THREE.DoubleSide} />
+    </mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[8, 14, 96]} />
+      <meshBasicMaterial color="#e2c178" transparent opacity={0.12} side={THREE.DoubleSide} />
+    </mesh>
+    <Html distanceFactor={23} position={[0, 1, 12]}>
+      <span className="rounded-full border border-amber-200/30 bg-slate-950/85 px-2 py-1 text-xs text-amber-100 whitespace-nowrap">Illustrative early dust disk</span>
+    </Html>
+  </group>;
+}
 
-const Scene = ({ onSelectBody, selectedBody }: { onSelectBody: (body: CelestialData | null) => void; selectedBody: CelestialData | null }) => {
-  return (
-    <>
-      <ambientLight intensity={0.15} />
-      <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
-      
-      <Sun onClick={() => onSelectBody(null)} />
-      <AsteroidBelt />
-      <KuiperBelt />
-      
-      {allCelestialBodies.map((body) => (
-        <CelestialBody 
-          key={body.name} 
-          data={body} 
-          onClick={() => onSelectBody(body)}
-          isSelected={selectedBody?.name === body.name}
-        />
-      ))}
-      
-      <OrbitControls 
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={5}
-        maxDistance={80}
-        autoRotate={!selectedBody}
-        autoRotateSpeed={0.3}
-      />
-    </>
-  );
+function EventVisual({ event, targetName }: { event: EventId; targetName: string }) {
+  const markerRef = useRef<THREE.Mesh>(null);
+  const stormRef = useRef<THREE.Group>(null);
+  const targetDistance = planetsData.find((body) => body.name === targetName)?.distance ?? 10;
+  useFrame(({ clock }, rawDelta) => {
+    const delta = Math.min(rawDelta, 0.05);
+    if (stormRef.current) {
+      const elapsed = clock.getElapsedTime();
+      const pulse = 1.4 + (Math.sin(elapsed * 2.1) + 1) * 1.15;
+      stormRef.current.scale.setScalar(pulse);
+      stormRef.current.rotation.z += delta * 0.22;
+    }
+    if (markerRef.current && event !== 'none' && event !== 'solar-storm') {
+      const t = clock.getElapsedTime() * (event === 'asteroid-encounter' ? 0.82 : 0.48);
+      const direction = event === 'asteroid-encounter' ? 1 : -1;
+      markerRef.current.position.set(targetDistance + Math.sin(t) * 5 * direction, 0.8 + Math.sin(t * 2) * 0.45, Math.cos(t) * 4);
+    }
+  });
+  if (event === 'none') return null;
+  if (event === 'solar-storm') return <group ref={stormRef}>
+    <mesh rotation-x={Math.PI / 2}><torusGeometry args={[2.7, 0.16, 8, 64]} /><meshBasicMaterial color="#ff8c47" transparent opacity={0.75} /></mesh>
+    <mesh rotation-y={Math.PI / 2}><torusGeometry args={[3.2, 0.08, 8, 64]} /><meshBasicMaterial color="#f6d17a" transparent opacity={0.48} /></mesh>
+  </group>;
+  return <>
+    <mesh ref={markerRef}>
+      {event === 'asteroid-encounter' ? <dodecahedronGeometry args={[0.38, 0]} /> : <Sphere args={[0.28, 16, 12]} />}
+      <meshBasicMaterial color={event === 'asteroid-encounter' ? '#e4b97b' : '#94edf0'} />
+      {event === 'comet-flyby' && <pointLight intensity={0.7} distance={5} color="#8eeaf0" />}
+    </mesh>
+    <mesh position={[targetDistance, 0.04, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[1.25, 1.32, 48]} />
+      <meshBasicMaterial color={event === 'asteroid-encounter' ? '#e4b97b' : '#94edf0'} transparent opacity={0.6} side={THREE.DoubleSide} />
+    </mesh>
+  </>;
+}
+
+function Scene({ onSelect, selectedInfo, timeStage, event, eventTarget, alignmentView, focusTarget, resetKey }: { onSelect: (info: SelectedInfo | null) => void; selectedInfo: SelectedInfo | null; timeStage: TimelineId; event: EventId; eventTarget: string; alignmentView: boolean; focusTarget: [number, number, number] | null; resetKey: number }) {
+  const controlsRef = useRef<React.ComponentRef<typeof OrbitControls>>(null);
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls || !focusTarget) return;
+    controls.target.set(...focusTarget);
+    const viewOffset = alignmentView ? new THREE.Vector3(-7, 0.75, 0) : new THREE.Vector3(0, 11, 23);
+    const position = new THREE.Vector3(...focusTarget).add(viewOffset);
+    controls.object.position.copy(position);
+    controls.update();
+  }, [focusTarget, alignmentView]);
+  useEffect(() => {
+    if (resetKey === 0) return;
+    const controls = controlsRef.current;
+    if (!controls) return;
+    controls.target.set(0, 0, 0);
+    controls.object.position.set(0, 20, 40);
+    controls.update();
+  }, [resetKey]);
+  useFrame((state, rawDelta) => {
+    if (!alignmentView) return;
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const delta = Math.min(rawDelta, 0.05);
+    const target = new THREE.Vector3(8, 0, 0);
+    const position = new THREE.Vector3(1.2, 0.65, 0);
+    controls.target.lerp(target, 1 - Math.exp(-3.5 * delta));
+    state.camera.position.lerp(position, 1 - Math.exp(-3.5 * delta));
+    controls.update();
+  });
+  return <>
+    <ambientLight intensity={0.38} />
+    <Stars radius={700} depth={180} count={2500} factor={4} saturation={0.15} fade speed={0.35} />
+    <Sun onClick={() => onSelect({ name: 'Sun', emoji: '☀️', category: 'Star', fact: 'The Sun is the star at the centre of our Solar System. Its gravity holds the planets, comets, and asteroids in orbit.', detail: 'The scene uses compressed distances and sizes to keep the planetary system visible.', focus: [0, 0, 0] })} />
+    <InstancedBelt count={230} inner={11.8} outer={14.2} color="#927d64" label="Asteroid Belt" labelPosition={[13, 1.7, 0]} />
+    <InstancedBelt count={300} inner={32} outer={50} color="#82a9bb" seedOffset={90} label="Kuiper Belt" labelPosition={[40, 3, 0]} shape="ice" />
+    <OortCloud />
+    {timeStage === 'formation' && <AccretionDisk />}
+    {allCelestialBodies.map((body) => <CelestialBody key={body.name} data={body} onSelect={onSelect} isSelected={selectedInfo?.name === body.name} timeStage={timeStage} />)}
+    {starSystems.map((star) => <StarSystemNode key={star.name} star={star} onSelect={onSelect} isSelected={selectedInfo?.name === star.name || selectedInfo?.name === star.companion?.name} />)}
+    <EventVisual event={event} targetName={eventTarget} />
+    <OrbitControls ref={controlsRef} makeDefault enablePan enableZoom enableRotate minDistance={2.5} maxDistance={900} autoRotate={!selectedInfo && !alignmentView} autoRotateSpeed={0.22} />
+  </>;
+}
+
+const eventLabels: Record<EventId, string> = {
+  none: 'No event',
+  'solar-storm': 'Solar storm',
+  'asteroid-encounter': 'Asteroid encounter',
+  'comet-flyby': 'Comet flyby',
 };
 
 const SolarSystem3D = () => {
-  const [selectedBody, setSelectedBody] = useState<CelestialData | null>(null);
-  const [showInstructions, setShowInstructions] = useState(true);
+  const [selectedInfo, setSelectedInfo] = useState<SelectedInfo | null>(null);
+  const [jumpValue, setJumpValue] = useState('');
+  const [timeStage, setTimeStage] = useState<TimelineId>('present');
+  const [event, setEvent] = useState<EventId>('none');
+  const [eventTarget, setEventTarget] = useState('Earth');
+  const [alignmentView, setAlignmentView] = useState(false);
+  const [focusTarget, setFocusTarget] = useState<[number, number, number] | null>(null);
+  const [resetKey, setResetKey] = useState(0);
+  const [showInstructions, setShowInstructions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: '100px' }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    const element = containerRef.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin: '100px' });
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
-  return (
-    <section id="solar-system-3d" className="py-16 px-4 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cosmic-purple/20 to-nebula-pink/20 px-4 py-2 rounded-full mb-4">
-            <Rocket className="w-5 h-5 text-cosmic-purple" />
-            <span className="text-cosmic-purple font-semibold">Interactive Experience</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-fredoka font-bold text-white mb-4">
-            🚀 Explore Our Solar System in 3D!
-          </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Drag to rotate, scroll to zoom, and click on planets to learn amazing facts! Now with asteroid belt, Kuiper belt, and dwarf planets!
-          </p>
+  const selectableObjects = useMemo(() => [
+    { value: 'sun', label: 'Sun', info: { name: 'Sun', emoji: '☀️', category: 'Star', fact: 'The Sun is the star at the centre of our Solar System. Its gravity holds the planets, comets, and asteroids in orbit.', detail: 'Scene distances and sizes are compressed for exploration.', focus: [0, 0, 0] as [number, number, number] } },
+    ...allCelestialBodies.map((body) => ({ value: `body:${body.name}`, label: body.name, info: infoForBody(body) })),
+    ...starSystems.map((star) => ({ value: `star:${star.name}`, label: star.name, info: infoForStar(star) })),
+    ...starSystems.filter((star) => star.companion).map((star) => ({ value: `star:${star.companion?.name}`, label: star.companion?.name ?? star.name, info: infoForStar(star, star.companion) })),
+  ], []);
+  const selectedStage = timelineStages.find((stage) => stage.id === timeStage) ?? timelineStages[timelineStages.length - 1];
+
+  const chooseInfo = (info: SelectedInfo, value?: string) => {
+    setSelectedInfo(info);
+    setFocusTarget(info.focus);
+    setAlignmentView(false);
+    setJumpValue(value ?? '');
+  };
+  const resetSimulation = () => {
+    setSelectedInfo(null);
+    setJumpValue('');
+    setTimeStage('present');
+    setEvent('none');
+    setEventTarget('Earth');
+    setAlignmentView(false);
+    setFocusTarget(null);
+    setResetKey((key) => key + 1);
+  };
+  const toggleAlignment = () => {
+    const next = !alignmentView;
+    setAlignmentView(next);
+    if (next) {
+      const earth = planetsData.find((body) => body.name === 'Earth');
+      if (earth) setFocusTarget([earth.distance, 0, 0]);
+      setSelectedInfo(null);
+      setJumpValue('');
+    } else {
+      setFocusTarget(null);
+    }
+  };
+
+  return <section id="solar-system-3d" className="relative px-4 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl">
+      <header className="mb-6 text-center">
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-primary">
+          <Rocket className="h-5 w-5" /><span className="font-semibold">Interactive Solar System</span>
         </div>
+        <h2 className="mb-3 font-fredoka text-3xl font-bold text-foreground sm:text-4xl">Explore from the Sun to the Oort Cloud</h2>
+        <p className="mx-auto max-w-3xl text-sm text-muted-foreground sm:text-base">Select planets, moons, comets and nearby stars. Companion stars orbit their host; astronomical distances, historical stages and events are shown schematically.</p>
+      </header>
 
-        <div ref={containerRef} className="relative h-[500px] md:h-[650px] rounded-3xl overflow-hidden border-2 border-cosmic-purple/30 bg-space-dark/50 backdrop-blur-sm">
-          {/* Instructions overlay */}
-          {showInstructions && (
-            <div className="absolute top-4 left-4 z-20 bg-space-dark/90 p-4 rounded-xl border border-cosmic-purple/30 max-w-xs animate-fade-in">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-white font-fredoka font-bold flex items-center gap-2">
-                  <Info className="w-4 h-4 text-cosmic-purple" /> How to Explore
-                </h3>
-                <button 
-                  onClick={() => setShowInstructions(false)}
-                  className="text-white/50 hover:text-white"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <ul className="text-white/70 text-sm space-y-1">
-                <li>🖱️ <strong>Drag</strong> to rotate the view</li>
-                <li>🔍 <strong>Scroll</strong> to zoom in/out</li>
-                <li>👆 <strong>Click</strong> a planet to learn about it</li>
-                <li>🪨 <strong>Zoom out</strong> to see the Kuiper Belt!</li>
-              </ul>
-            </div>
-          )}
-
-          {/* Body info panel */}
-          {selectedBody && (
-            <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:top-4 md:bottom-auto z-20 bg-gradient-to-br from-space-dark/95 to-cosmic-purple/20 p-5 rounded-2xl border border-cosmic-purple/40 max-w-sm animate-scale-in backdrop-blur-md">
-              <button 
-                onClick={() => setSelectedBody(null)}
-                className="absolute top-2 right-2 text-white/50 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-4xl">{selectedBody.emoji}</span>
-                <div>
-                  <h3 className="text-2xl font-fredoka font-bold text-white">{selectedBody.name}</h3>
-                  <div className="flex items-center gap-2">
-                    {selectedBody.type === 'dwarf-planet' && (
-                      <span className="text-purple-400 text-xs bg-purple-500/20 px-2 py-0.5 rounded-full">Dwarf Planet</span>
-                    )}
-                    {selectedBody.moons && (
-                      <span className="text-cosmic-purple text-sm">🌙 {selectedBody.moons} moon{selectedBody.moons > 1 ? 's' : ''}</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white/5 rounded-xl p-3">
-                <p className="text-white/90 text-sm leading-relaxed">
-                  💡 <strong>Fun Fact:</strong> {selectedBody.funFact}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* 3D Canvas — only mounted when in view to avoid WebGL context exhaustion */}
-          {inView ? (
-            <WebGLGuard>
-              <Suspense fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-white font-fredoka text-xl animate-pulse">
-                    🌌 Loading Solar System...
-                  </div>
-                </div>
-              }>
-                <Canvas
-                  camera={{ position: [0, 20, 40], fov: 60 }}
-                  dpr={[1, 1.5]}
-                  gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }}
-                  onCreated={({ gl }) => {
-                    gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault());
-                  }}
-                >
-                  <Scene onSelectBody={setSelectedBody} selectedBody={selectedBody} />
-                </Canvas>
-              </Suspense>
-            </WebGLGuard>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-white font-fredoka text-xl animate-pulse">
-                🌌 Scroll to load Solar System...
-              </div>
-            </div>
-          )}
-
-          {/* Legend */}
-          <div className="absolute top-4 right-4 z-20 bg-space-dark/80 p-3 rounded-xl border border-cosmic-purple/20">
-            <div className="text-white/80 text-xs space-y-1.5">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-cosmic-purple"></div>
-                <span>Planets</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-purple-600"></div>
-                <span>Dwarf Planets</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-amber-700"></div>
-                <span>Asteroid Belt</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-cyan-700"></div>
-                <span>Kuiper Belt</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick select buttons */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 flex-wrap justify-center max-w-full px-4">
-            {allCelestialBodies.map((body) => (
-              <button
-                key={body.name}
-                onClick={() => setSelectedBody(body)}
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-sm transition-all hover:scale-125 ${
-                  selectedBody?.name === body.name 
-                    ? 'ring-2 ring-white scale-110' 
-                    : 'opacity-70 hover:opacity-100'
-                } ${body.type === 'dwarf-planet' ? 'ring-1 ring-purple-400/50' : ''}`}
-                style={{ backgroundColor: body.color }}
-                title={`${body.name}${body.type === 'dwarf-planet' ? ' (Dwarf Planet)' : ''}`}
-              >
-                <span className="text-[10px]">{body.emoji}</span>
-              </button>
-            ))}
-          </div>
+      <div className="mb-3 grid grid-cols-1 gap-2 rounded-lg border border-border bg-card/90 p-3 text-card-foreground shadow-sm sm:grid-cols-2 lg:grid-cols-6">
+        <label className="min-w-0 space-y-1">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Telescope className="h-3.5 w-3.5" />Find a body</span>
+          <Select value={jumpValue} onValueChange={(value) => {
+            const choice = selectableObjects.find((item) => item.value === value);
+            if (choice) chooseInfo(choice.info, choice.value);
+          }}>
+            <SelectTrigger aria-label="Find a celestial object" className="h-9 text-xs"><SelectValue placeholder="Planets, moons, stars…" /></SelectTrigger>
+            <SelectContent>{selectableObjects.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
+          </Select>
+        </label>
+        <label className="min-w-0 space-y-1">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Clock3 className="h-3.5 w-3.5" />Time stage</span>
+          <Select value={timeStage} onValueChange={(value) => setTimeStage(value as TimelineId)}>
+            <SelectTrigger aria-label="Choose a Solar System timeline stage" className="h-9 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>{timelineStages.map((stage) => <SelectItem key={stage.id} value={stage.id}>{stage.label}</SelectItem>)}</SelectContent>
+          </Select>
+        </label>
+        <label className="min-w-0 space-y-1">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Sparkles className="h-3.5 w-3.5" />Simulation</span>
+          <Select value={event} onValueChange={(value) => setEvent(value as EventId)}>
+            <SelectTrigger aria-label="Choose a Solar System event" className="h-9 text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No event</SelectItem>
+              <SelectItem value="solar-storm">Solar storm</SelectItem>
+              <SelectItem value="asteroid-encounter">Asteroid encounter</SelectItem>
+              <SelectItem value="comet-flyby">Comet flyby</SelectItem>
+            </SelectContent>
+          </Select>
+        </label>
+        <label className="min-w-0 space-y-1">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Orbit className="h-3.5 w-3.5" />Event target</span>
+          <Select value={eventTarget} onValueChange={setEventTarget}>
+            <SelectTrigger aria-label="Choose the event target planet" className="h-9 text-xs" disabled={event === 'none' || event === 'solar-storm'}><SelectValue /></SelectTrigger>
+            <SelectContent>{planetsData.map((body) => <SelectItem key={body.name} value={body.name}>{body.name}</SelectItem>)}</SelectContent>
+          </Select>
+        </label>
+        <div className="flex items-end">
+          <Button type="button" variant={alignmentView ? 'default' : 'outline'} className="h-9 w-full px-2 text-xs" onClick={toggleAlignment} aria-pressed={alignmentView}>
+            <Crosshair className="h-4 w-4" />Earth view
+          </Button>
+        </div>
+        <div className="flex items-end">
+          <Button type="button" variant="secondary" className="h-9 w-full px-2 text-xs" onClick={resetSimulation}>
+            <RotateCcw className="h-4 w-4" />Reset
+          </Button>
         </div>
       </div>
-    </section>
-  );
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-xs text-muted-foreground" aria-live="polite">
+        <span>{selectedStage.note}</span>
+        {event !== 'none' && <span className="font-medium text-primary">{eventLabels[event]}{event !== 'solar-storm' ? ` near ${eventTarget}` : ''} · illustrative simulation</span>}
+        <Button type="button" variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={() => setShowInstructions((value) => !value)} aria-expanded={showInstructions}><Info className="h-3.5 w-3.5" />{showInstructions ? 'Hide guide' : 'Guide'}</Button>
+      </div>
+      {showInstructions && <div className="mb-3 border-l-2 border-primary px-3 py-2 text-sm text-muted-foreground">Drag to rotate, scroll or pinch to zoom, and select a body or moon for facts. Use the object picker to travel directly to a star system.</div>}
+
+      <div ref={containerRef} className="relative h-[460px] overflow-hidden rounded-xl border border-border bg-background/70 shadow-card md:h-[650px]">
+        {selectedInfo && <aside className="absolute bottom-3 left-3 right-3 z-20 max-h-[43%] overflow-y-auto rounded-lg border border-border bg-card/95 p-4 text-card-foreground shadow-lg backdrop-blur md:bottom-auto md:left-auto md:right-4 md:top-4 md:max-h-[70%] md:w-80">
+          <Button type="button" variant="ghost" size="icon" className="absolute right-1 top-1 h-8 w-8" aria-label="Close celestial object facts" onClick={() => { setSelectedInfo(null); setJumpValue(''); }}><X className="h-4 w-4" /></Button>
+          <div className="mb-2 flex items-center gap-3 pr-7">
+            <span className="text-3xl" aria-hidden="true">{selectedInfo.emoji}</span>
+            <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-normal text-primary">{selectedInfo.category}</p><h3 className="break-words font-fredoka text-xl font-bold">{selectedInfo.name}</h3></div>
+          </div>
+          <p className="text-sm leading-relaxed">{selectedInfo.fact}</p>
+          <p className="mt-2 border-t border-border pt-2 text-xs leading-relaxed text-muted-foreground">{selectedInfo.detail}</p>
+        </aside>}
+        {inView ? <WebGLGuard>
+          <Canvas camera={{ position: [0, 20, 40], fov: 60 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }} onCreated={({ gl }) => { gl.domElement.addEventListener('webglcontextlost', (event) => event.preventDefault()); }}>
+            <Scene onSelect={(info) => { if (info) chooseInfo(info); else setSelectedInfo(null); }} selectedInfo={selectedInfo} timeStage={timeStage} event={event} eventTarget={eventTarget} alignmentView={alignmentView} focusTarget={focusTarget} resetKey={resetKey} />
+          </Canvas>
+        </WebGLGuard> : <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Scroll to load the Solar System explorer</div>}
+        <div className="pointer-events-none absolute bottom-3 left-3 z-10 flex flex-wrap gap-2 text-[11px] text-card-foreground">
+          <span className="rounded border border-border bg-card/85 px-2 py-1">Planets & moons</span><span className="rounded border border-border bg-card/85 px-2 py-1">Comets & asteroids</span><span className="rounded border border-border bg-card/85 px-2 py-1">Nearby stars · brown dwarfs</span>
+        </div>
+        {alignmentView && <div className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-full border border-primary/30 bg-card/90 px-3 py-1.5 text-xs font-semibold text-card-foreground">Earth alignment view · schematic</div>}
+      </div>
+      <p className="mt-2 text-center text-xs text-muted-foreground">Illustrative scale and simulations for learning. Past positions, stellar distances in the scene, and event paths are not precision ephemerides or predictions.</p>
+    </div>
+  </section>;
 };
 
 export default SolarSystem3D;
