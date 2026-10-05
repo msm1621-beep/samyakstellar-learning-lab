@@ -113,7 +113,7 @@ const infoForBody = (body: CelestialData): SelectedInfo => ({
   focus: [body.distance, 0, 0],
 });
 
-const infoForStar = (star: StarSystemData, companion?: StarSystemData['companion']): SelectedInfo => ({
+const infoForStar = (star: NearbyStarSystemData, companion?: StarCompanionData): SelectedInfo => ({
   name: companion?.name ?? star.name,
   emoji: star.category === 'Brown dwarf' ? '🟤' : star.distantShowcase ? '✦' : '⭐',
   category: companion ? `${companion.spectral} companion` : `${star.category ?? 'Star'} · ${star.spectral}`,
@@ -265,9 +265,7 @@ function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: Celest
   const localDirection = useMemo(() => new THREE.Vector3(data.distance, 0, 0).normalize(), [data.distance]);
   const info = infoForBody(data);
   return <>
-    <line geometry={orbitGeometry} rotation-y={timeStage === 'formation' ? 0.08 : 0}>
-      <lineBasicMaterial color={data.kind === 'dwarf-planet' ? '#a78bca' : isComet ? '#9ddce4' : '#9eb4c4'} transparent opacity={isComet ? 0.2 : 0.11} />
-    </line>
+    <primitive object={new THREE.Line(orbitGeometry, new THREE.LineBasicMaterial({ color: data.kind === 'dwarf-planet' ? '#a78bca' : isComet ? '#9ddce4' : '#9eb4c4', transparent: true, opacity: isComet ? 0.2 : 0.11 }))} rotation-y={timeStage === 'formation' ? 0.08 : 0} />
     <group ref={bodyRef}>
       <mesh ref={meshRef} onClick={(event) => { event.stopPropagation(); onSelect(info); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={hovered || isSelected ? 1.28 : 1}>
         <Sphere args={[data.radius, 24, 20]}>
@@ -286,7 +284,24 @@ function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: Celest
   </>;
 }
 
-function StarSystemNode({ star, onSelect, isSelected }: { star: StarSystemData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
+function NearbyPlanetNode({ planet: planetData, onSelect, isSelected }: { planet: NearbyPlanetData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
+  const ref = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
+  useFrame(({ clock }, rawDelta) => {
+    const delta = Math.min(rawDelta, 0.05);
+    if (ref.current) {
+      const angle = clock.getElapsedTime() * planetData.orbitSpeed;
+      ref.current.position.set(Math.cos(angle) * planetData.orbitRadius, Math.sin(angle * 0.4) * 0.12, Math.sin(angle) * planetData.orbitRadius);
+      ref.current.rotation.y += delta * 0.2;
+    }
+  });
+  const info: SelectedInfo = { name: planetData.name, emoji: '🪐', category: 'Exoplanet', fact: planetData.fact, detail: 'Schematic mini-orbit around its host star; discovery and orbital values are simplified for learning.', focus: [0, 0, 0] };
+  return <mesh ref={ref} onClick={(event) => { event.stopPropagation(); onSelect(info); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={isSelected || hovered ? 1.45 : 1}>
+    <Sphere args={[planetData.radius, 10, 8]}><meshStandardMaterial color={planetData.color} roughness={0.9} /></Sphere>
+  </mesh>;
+}
+
+function StarSystemNode({ star, onSelect, isSelected }: { star: NearbyStarSystemData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
   const companionRef = useRef<THREE.Mesh>(null);
   const hostRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
@@ -299,19 +314,20 @@ function StarSystemNode({ star, onSelect, isSelected }: { star: StarSystemData; 
     }
   });
   return <group position={star.position}>
-    {star.companion && <mesh rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[star.companion.orbitRadius - 0.035, star.companion.orbitRadius + 0.035, 64]} />
+    {star.companions?.map((companion) => <mesh key={`${star.name}-${companion.name}`} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[companion.orbitRadius - 0.035, companion.orbitRadius + 0.035, 64]} />
       <meshBasicMaterial color={star.color} transparent opacity={0.32} side={THREE.DoubleSide} />
-    </mesh>}
+    </mesh>)}
     <mesh ref={hostRef} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star)); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={isSelected || hovered ? 1.2 : 1}>
       <Sphere args={[star.radius, 20, 16]}><meshBasicMaterial color={star.color} /></Sphere>
       <pointLight intensity={star.distantShowcase ? 0.45 : 0.18} distance={star.distantShowcase ? 26 : 14} decay={2} color={star.color} />
     </mesh>
-    {star.companion && <mesh ref={companionRef} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star, star.companion)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
-      <Sphere args={[star.companion.radius, 18, 14]}><meshBasicMaterial color={star.companion.color} /></Sphere>
-    </mesh>}
+    {star.companions?.map((companion, index) => <mesh key={companion.name} ref={index === 0 ? companionRef : undefined} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star, companion)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+      <Sphere args={[companion.radius, 18, 14]}><meshBasicMaterial color={companion.color} /></Sphere>
+    </mesh>)}
+    {star.planets?.map((planetData) => <NearbyPlanetNode key={planetData.name} planet={planetData} onSelect={onSelect} isSelected={isSelected} />)}
     <Html distanceFactor={46} position={[0, star.radius + 1.2, 0]}>
-      <span className="rounded-full border border-border bg-card/85 px-2 py-0.5 text-[11px] text-card-foreground whitespace-nowrap">{star.distantShowcase ? '✦ WR 124 · distant' : `${star.category === 'Brown dwarf' ? '🟤' : '⭐'} ${star.name.replace(/ A$/, '')}`}</span>
+      <span className="rounded-full border border-border bg-card/85 px-2 py-0.5 text-[11px] text-card-foreground whitespace-nowrap">{star.distantShowcase ? '✦ distant showcase' : `${star.category === 'Brown dwarf' ? '🟤' : '⭐'} ${star.name.replace(/ A$/, '')}`}</span>
     </Html>
   </group>;
 }
