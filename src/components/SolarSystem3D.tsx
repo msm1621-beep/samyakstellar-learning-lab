@@ -6,6 +6,7 @@ import { Clock3, Crosshair, Info, Orbit, RotateCcw, Rocket, Sparkles, Telescope,
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { WebGLGuard } from './WebGLBoundary';
+import { nearbyStarSystems, type NearbyPlanetData, type NearbyStarSystemData, type StarCompanionData } from '@/data/nearbyStarSystems';
 
 interface MoonData {
   name: string;
@@ -42,27 +43,6 @@ interface SelectedInfo {
   fact: string;
   detail: string;
   focus: [number, number, number];
-}
-
-interface StarSystemData {
-  name: string;
-  distanceLy: number;
-  position: [number, number, number];
-  radius: number;
-  color: string;
-  spectral: string;
-  category?: string;
-  fact: string;
-  companion?: {
-    name: string;
-    radius: number;
-    color: string;
-    spectral: string;
-    orbitRadius: number;
-    orbitSpeed: number;
-    fact: string;
-  };
-  distantShowcase?: boolean;
 }
 
 const moon = (name: string, radius: number, distance: number, color: string, orbitSpeed: number, funFact: string): MoonData => ({ name, radius, distance, color, orbitSpeed, funFact });
@@ -111,19 +91,7 @@ const minorBodiesData: CelestialData[] = [
 
 const allCelestialBodies = [...planetsData, ...dwarfPlanetsData, ...minorBodiesData];
 
-const starSystems: StarSystemData[] = [
-  { name: 'Alpha Centauri A', distanceLy: 4.37, position: [155, 0, -30], radius: 1.25, color: '#ffe0a1', spectral: 'G2 V', fact: 'Alpha Centauri A is a Sun-like star and the brighter member of the Alpha Centauri AB binary. The binary’s separation changes over its long orbit.' , companion: { name: 'Alpha Centauri B', radius: 1.05, color: '#ffb56b', spectral: 'K1 V', orbitRadius: 3.2, orbitSpeed: 0.34, fact: 'Alpha Centauri B is the orange, cooler companion in the nearest bright stellar binary system.' } },
-  { name: 'Proxima Centauri', distanceLy: 4.24, position: [161, 8, -32], radius: 0.75, color: '#ff765c', spectral: 'M5.5 V', category: 'Red dwarf', fact: 'Proxima Centauri is the nearest known star to the Sun. It is a flare star with confirmed planets; its position here is schematic.' },
-  { name: "Barnard's Star", distanceLy: 5.96, position: [145, -24, 8], radius: 0.7, color: '#ff9b73', spectral: 'M4 V', category: 'Red dwarf', fact: "Barnard's Star has one of the largest apparent proper motions across Earth's sky." },
-  { name: 'Luhman 16A', distanceLy: 6.5, position: [166, -23, 50], radius: 0.9, color: '#db8b59', spectral: 'L7.5', category: 'Brown dwarf', fact: 'Luhman 16A is one component of a nearby pair of brown dwarfs, objects too small to sustain ordinary hydrogen fusion.', companion: { name: 'Luhman 16B', radius: 0.82, color: '#be7454', spectral: 'T0.5', orbitRadius: 2.2, orbitSpeed: 0.52, fact: 'Luhman 16B is the cooler companion in a nearby binary brown-dwarf system.' } },
-  { name: 'WISE 0855−0714', distanceLy: 7.43, position: [185, 15, -70], radius: 0.7, color: '#7fb8c9', spectral: 'Y dwarf', category: 'Brown dwarf', fact: 'WISE 0855−0714 is an extremely cold nearby brown dwarf; its atmosphere is cold enough for water clouds to be possible.' },
-  { name: 'Wolf 359', distanceLy: 7.86, position: [160, 15, 30], radius: 0.65, color: '#ff735c', spectral: 'M6 V', category: 'Red dwarf', fact: 'Wolf 359 is a very faint red dwarf in Leo and one of the nearest stars to the Sun.' },
-  { name: 'Lalande 21185', distanceLy: 8.31, position: [180, -10, 12], radius: 0.76, color: '#ff9c70', spectral: 'M2 V', category: 'Red dwarf', fact: 'Lalande 21185 is a nearby red dwarf in Ursa Major, observed for more than a century.' },
-  { name: 'Sirius A', distanceLy: 8.6, position: [205, 30, 40], radius: 1.5, color: '#dcecff', spectral: 'A1 V', fact: 'Sirius is the brightest star in Earth’s night sky. Sirius A and its white-dwarf companion orbit a shared centre of mass.', companion: { name: 'Sirius B', radius: 0.72, color: '#b7d8ff', spectral: 'White dwarf', orbitRadius: 4.1, orbitSpeed: 0.25, fact: 'Sirius B is a dense white dwarf and the faint companion of the much brighter Sirius A.' } },
-  { name: 'Luyten 726-8 A', distanceLy: 8.73, position: [220, -25, 64], radius: 0.72, color: '#ff765d', spectral: 'M5.5 V', fact: 'Luyten 726-8 is a close binary of flare-producing red dwarfs, also known as UV Ceti.', companion: { name: 'Luyten 726-8 B (UV Ceti)', radius: 0.68, color: '#ff8b69', spectral: 'M6 V', orbitRadius: 2.6, orbitSpeed: 0.44, fact: 'UV Ceti is the flaring companion in the Luyten 726-8 red-dwarf binary.' } },
-  { name: 'Ross 154', distanceLy: 9.69, position: [235, -10, 8], radius: 0.7, color: '#ff785d', spectral: 'M3.5 V', category: 'Red dwarf', fact: 'Ross 154 is a nearby red dwarf that occasionally produces stellar flares.' },
-  { name: 'WR 124 (distant showcase)', distanceLy: 21000, position: [450, 40, -100], radius: 1.35, color: '#a7cfff', spectral: 'Wolf–Rayet', category: 'Distant showcase', distantShowcase: true, fact: 'WR 124 is a Wolf–Rayet star thousands of light-years away—not a nearby star. It is included as a clearly marked distant showcase.' },
-];
+const starSystems: NearbyStarSystemData[] = nearbyStarSystems;
 
 const timelineStages = [
   { id: 'formation', label: '4.5 billion years ago', note: 'Solar System formation — dusty disk view; all body positions are illustrative.' },
