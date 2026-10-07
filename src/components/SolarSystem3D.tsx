@@ -471,7 +471,7 @@ const SolarSystem3D = () => {
             if (choice) chooseInfo(choice.info, choice.value);
           }}>
             <SelectTrigger aria-label="Find a celestial object" className="h-9 text-xs"><SelectValue placeholder="Planets, moons, stars…" /></SelectTrigger>
-            <SelectContent>{selectableObjects.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
+            <SelectContent className="z-[150]">{selectableObjects.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
           </Select>
         </label>
         <div className="flex items-end">
