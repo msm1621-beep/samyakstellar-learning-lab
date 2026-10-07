@@ -2,10 +2,11 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, OrbitControls, Ring, Sphere, Stars } from '@react-three/drei';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
-import { Clock3, Crosshair, Info, Orbit, RotateCcw, Rocket, Sparkles, Telescope, X } from 'lucide-react';
+import { Crosshair, Info, RotateCcw, Rocket, Telescope, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { WebGLGuard } from './WebGLBoundary';
+import { distantSpaceObjects, type DistantSpaceObject } from '@/data/distantSpaceObjects';
 import { nearbyStarSystems, type NearbyPlanetData, type NearbyStarSystemData, type StarCompanionData } from '@/data/nearbyStarSystems';
 
 interface MoonData {
@@ -87,22 +88,15 @@ const minorBodiesData: CelestialData[] = [
   { name: 'Bennu', radius: 0.09, distance: 12.1, color: '#9c9386', orbitSpeed: 0.36, rotationSpeed: 0.04, funFact: 'NASA’s OSIRIS-REx returned a sample from asteroid Bennu to Earth in 2023.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.17, inclination: 0.05, orbitPeriod: 'about 1.2 years' },
   { name: 'Vesta', radius: 0.15, distance: 13.2, color: '#b3a89b', orbitSpeed: 0.31, rotationSpeed: 0.025, funFact: 'Vesta is one of the largest asteroids; NASA’s Dawn spacecraft studied it before visiting Ceres.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.08, inclination: 0.07, orbitPeriod: '3.6 years' },
   { name: 'Pallas', radius: 0.12, distance: 13.8, color: '#a79b8c', orbitSpeed: 0.28, rotationSpeed: 0.02, funFact: 'Pallas is a large asteroid with an unusually tilted orbit through the asteroid belt.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.13, inclination: 0.22, orbitPeriod: '4.6 years' },
+  { name: 'Hygiea', radius: 0.12, distance: 14, color: '#908b83', orbitSpeed: 0.26, rotationSpeed: 0.02, funFact: 'Hygiea is one of the largest objects in the main asteroid belt and is nearly spherical.', emoji: '🪨', kind: 'asteroid', orbitPeriod: '5.6 years' },
+  { name: 'Apophis', radius: 0.09, distance: 7, color: '#baaa96', orbitSpeed: 0.54, rotationSpeed: 0.03, funFact: 'Apophis is a near-Earth asteroid that will pass close to Earth in 2029. It poses no known impact threat for at least the next century.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.16, orbitPeriod: '0.9 years' },
+  { name: 'Eros', radius: 0.11, distance: 10.8, color: '#b79a7c', orbitSpeed: 0.38, rotationSpeed: 0.03, funFact: 'Eros was the first asteroid orbited and landed on by a spacecraft, NASA’s NEAR Shoemaker.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.2, orbitPeriod: '1.8 years' },
+  { name: 'Itokawa', radius: 0.09, distance: 9, color: '#aea393', orbitSpeed: 0.43, rotationSpeed: 0.03, funFact: 'Itokawa is a rubble-pile asteroid. Japan’s Hayabusa mission returned tiny samples to Earth in 2010.', emoji: '🪨', kind: 'asteroid', eccentricity: 0.15, orbitPeriod: '1.5 years' },
 ];
 
 const allCelestialBodies = [...planetsData, ...dwarfPlanetsData, ...minorBodiesData];
 
 const starSystems: NearbyStarSystemData[] = nearbyStarSystems;
-
-const timelineStages = [
-  { id: 'formation', label: '4.5 billion years ago', note: 'Solar System formation — dusty disk view; all body positions are illustrative.' },
-  { id: '500m', label: '500 million years ago', note: 'A schematic historical view; planets are shown in illustrative positions.' },
-  { id: '49m', label: '49 million years ago', note: 'A schematic historical view; not a reconstruction of exact past orbits.' },
-  { id: '650k', label: '650,000 years ago', note: 'A schematic historical view; orbital positions are not precision ephemerides.' },
-  { id: '70k', label: '70,000 years ago', note: 'A schematic historical view; orbital positions are not precision ephemerides.' },
-  { id: 'present', label: 'Present', note: 'Present-day illustration. Distances and sizes are not to scale.' },
-] as const;
-type TimelineId = (typeof timelineStages)[number]['id'];
-type EventId = 'none' | 'solar-storm' | 'asteroid-encounter' | 'comet-flyby';
 
 const infoForBody = (body: CelestialData): SelectedInfo => ({
   name: body.name,
@@ -197,7 +191,7 @@ function OortCloud() {
       <meshStandardMaterial color="#92c8dd" roughness={1} />
     </instancedMesh>
     <Html distanceFactor={45} position={[0, 103, 0]}>
-      <span className="rounded-full border border-cyan-200/30 bg-slate-950/85 px-3 py-1.5 text-xs font-semibold text-cyan-100 whitespace-nowrap">Oort Cloud · schematic outer boundary</span>
+      <span className="rounded-full border border-border bg-card/85 px-3 py-1.5 text-xs font-semibold text-card-foreground whitespace-nowrap">Oort Cloud · schematic outer boundary</span>
     </Html>
   </group>;
 }
@@ -213,7 +207,7 @@ function Sun({ onClick }: { onClick: () => void }) {
       <pointLight intensity={2.4} distance={160} decay={0.7} />
     </mesh>
     <Html distanceFactor={15} position={[0, 3, 0]}>
-      <span className="rounded-full border border-amber-300/40 bg-amber-950/85 px-2 py-1 text-xs font-bold text-amber-100 whitespace-nowrap">☀️ Sun</span>
+      <span className="rounded-full border border-border bg-card/85 px-2 py-1 text-xs font-bold text-card-foreground whitespace-nowrap">☀️ Sun</span>
     </Html>
   </group>;
 }
@@ -238,7 +232,7 @@ function CometTail({ direction, length, radius }: { direction: THREE.Vector3; le
   </mesh>;
 }
 
-function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: CelestialData; onSelect: (info: SelectedInfo) => void; isSelected: boolean; timeStage: TimelineId }) {
+function CelestialBody({ data, onSelect, isSelected }: { data: CelestialData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
   const bodyRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
@@ -253,11 +247,9 @@ function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: Celest
   useFrame(({ clock }, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
     if (bodyRef.current) {
-      const timelineOffset = timelineStages.findIndex((stage) => stage.id === timeStage);
-      const t = clock.getElapsedTime() * data.orbitSpeed + (timelineOffset * 0.43);
-      const orbitScale = timeStage === 'formation' ? 0.91 : 1 + Math.max(timelineOffset, 0) * 0.0025;
-      const a = data.distance * (1 + eccentricity) * orbitScale;
-      const b = data.distance * (1 - eccentricity) * orbitScale;
+      const t = clock.getElapsedTime() * data.orbitSpeed;
+      const a = data.distance * (1 + eccentricity);
+      const b = data.distance * (1 - eccentricity);
       bodyRef.current.position.set(Math.cos(t) * a, Math.sin(t) * a * (data.inclination ?? 0), Math.sin(t) * b);
     }
     if (meshRef.current) meshRef.current.rotation.y += delta * data.rotationSpeed;
@@ -265,7 +257,7 @@ function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: Celest
   const localDirection = useMemo(() => new THREE.Vector3(data.distance, 0, 0).normalize(), [data.distance]);
   const info = infoForBody(data);
   return <>
-    <primitive object={new THREE.Line(orbitGeometry, new THREE.LineBasicMaterial({ color: data.kind === 'dwarf-planet' ? '#a78bca' : isComet ? '#9ddce4' : '#9eb4c4', transparent: true, opacity: isComet ? 0.2 : 0.11 }))} rotation-y={timeStage === 'formation' ? 0.08 : 0} />
+    <primitive object={new THREE.Line(orbitGeometry, new THREE.LineBasicMaterial({ color: data.kind === 'dwarf-planet' ? '#a78bca' : isComet ? '#9ddce4' : '#9eb4c4', transparent: true, opacity: isComet ? 0.2 : 0.11 }))} />
     <group ref={bodyRef}>
       <mesh ref={meshRef} onClick={(event) => { event.stopPropagation(); onSelect(info); }} onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }} onPointerOut={() => { setHovered(false); document.body.style.cursor = ''; }} scale={hovered || isSelected ? 1.28 : 1}>
         <Sphere args={[data.radius, 24, 20]}>
@@ -276,7 +268,7 @@ function CelestialBody({ data, onSelect, isSelected, timeStage }: { data: Celest
       {data.hasRings && <Ring args={[data.radius * 1.4, data.radius * 2.2, 48]} rotation={[-Math.PI / 2.5, 0, 0]}><meshBasicMaterial color={data.ringColor} opacity={0.68} transparent side={THREE.DoubleSide} /></Ring>}
       {data.moonData?.map((moonData) => <Moon key={`${data.name}-${moonData.name}`} moon={moonData} parentRef={bodyRef} onSelect={() => onSelect({ name: moonData.name, emoji: '🌙', category: `Moon of ${data.name}`, fact: moonData.funFact, detail: `Shown as one of ${data.moonData?.length ?? 0} featured moons in this schematic viewer.`, focus: [data.distance, 0, 0] })} />)}
       <Html distanceFactor={14} position={[0, data.radius + 0.58, 0]}>
-        <span className={`rounded-full border px-2 py-0.5 text-xs whitespace-nowrap transition-all ${isSelected || hovered ? 'border-white/50 bg-card text-card-foreground' : 'border-border bg-card/80 text-card-foreground'}`}>
+        <span className={`rounded-full border px-2 py-0.5 text-xs whitespace-nowrap transition-all ${isSelected || hovered ? 'border-primary/50 bg-card text-card-foreground' : 'border-border bg-card/80 text-card-foreground'}`}>
           {data.emoji} {data.name}{data.moonData?.length ? <span className="ml-1 opacity-70">· {data.moonData.length} moons</span> : null}
         </span>
       </Html>
@@ -302,16 +294,18 @@ function NearbyPlanetNode({ planet: planetData, onSelect, isSelected }: { planet
 }
 
 function StarSystemNode({ star, onSelect, isSelected }: { star: NearbyStarSystemData; onSelect: (info: SelectedInfo) => void; isSelected: boolean }) {
-  const companionRef = useRef<THREE.Mesh>(null);
+  const companionsRef = useRef<(THREE.Mesh | null)[]>([]);
   const hostRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
   useFrame(({ clock }, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
     if (hostRef.current) hostRef.current.rotation.y += delta * 0.1;
-    if (companionRef.current && star.companion) {
-      const angle = clock.getElapsedTime() * star.companion.orbitSpeed;
-      companionRef.current.position.set(Math.cos(angle) * star.companion.orbitRadius, Math.sin(angle * 0.4) * 0.18, Math.sin(angle) * star.companion.orbitRadius);
-    }
+    star.companions?.forEach((companion, index) => {
+      const mesh = companionsRef.current[index];
+      if (!mesh) return;
+      const angle = clock.getElapsedTime() * companion.orbitSpeed + index * Math.PI;
+      mesh.position.set(Math.cos(angle) * companion.orbitRadius, Math.sin(angle * 0.4) * 0.18, Math.sin(angle) * companion.orbitRadius);
+    });
   });
   return <group position={star.position}>
     {star.companions?.map((companion) => <mesh key={`${star.name}-${companion.name}`} rotation={[-Math.PI / 2, 0, 0]}>
@@ -322,71 +316,46 @@ function StarSystemNode({ star, onSelect, isSelected }: { star: NearbyStarSystem
       <Sphere args={[star.radius, 20, 16]}><meshBasicMaterial color={star.color} /></Sphere>
       <pointLight intensity={star.distantShowcase ? 0.45 : 0.18} distance={star.distantShowcase ? 26 : 14} decay={2} color={star.color} />
     </mesh>
-    {star.companions?.map((companion, index) => <mesh key={companion.name} ref={index === 0 ? companionRef : undefined} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star, companion)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+    {star.companions?.map((companion, index) => <mesh key={companion.name} ref={(mesh) => { companionsRef.current[index] = mesh; }} onClick={(event) => { event.stopPropagation(); onSelect(infoForStar(star, companion)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
       <Sphere args={[companion.radius, 18, 14]}><meshBasicMaterial color={companion.color} /></Sphere>
     </mesh>)}
-    {star.planets?.map((planetData) => <NearbyPlanetNode key={planetData.name} planet={planetData} onSelect={onSelect} isSelected={isSelected} />)}
+    {star.planets?.map((planetData) => <NearbyPlanetNode key={planetData.name} planet={planetData} onSelect={(info) => onSelect({ ...info, focus: star.position })} isSelected={isSelected} />)}
     <Html distanceFactor={46} position={[0, star.radius + 1.2, 0]}>
       <span className="rounded-full border border-border bg-card/85 px-2 py-0.5 text-[11px] text-card-foreground whitespace-nowrap">{star.distantShowcase ? '✦ distant showcase' : `${star.category === 'Brown dwarf' ? '🟤' : '⭐'} ${star.name.replace(/ A$/, '')}`}</span>
     </Html>
   </group>;
 }
 
-function AccretionDisk() {
-  const ref = useRef<THREE.Group>(null);
-  useFrame((_, rawDelta) => { if (ref.current) ref.current.rotation.y += Math.min(rawDelta, 0.05) * 0.035; });
-  return <group ref={ref}>
-    <mesh rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[4, 19, 96]} />
-      <meshBasicMaterial color="#e6a06c" transparent opacity={0.2} side={THREE.DoubleSide} />
+const infoForDistant = (object: DistantSpaceObject): SelectedInfo => ({
+  name: object.name, emoji: object.kind === 'Black hole' ? '⚫' : object.kind === 'Star' ? '⭐' : '✦',
+  category: object.kind, fact: object.fact,
+  detail: `${object.distanceLy === null ? 'Distance uncertain' : `Approximately ${object.distanceLy.toLocaleString()} light-years from Earth`} · Schematic position and size.`,
+  focus: object.position,
+});
+
+function DistantObjectNode({ object, onSelect }: { object: DistantSpaceObject; onSelect: (info: SelectedInfo) => void }) {
+  const cloud = object.kind === 'Nebula' || object.kind === 'Supernova remnant';
+  const cluster = object.kind === 'Star cluster';
+  const particles = useMemo(() => {
+    const items = seededShell(cluster ? 65 : 220, cluster ? 1 : 2, cluster ? 5 : 8);
+    return new Float32Array(items.flatMap((item) => item.position));
+  }, [cluster]);
+  return <group position={object.position}>
+    <mesh onClick={(event) => { event.stopPropagation(); onSelect(infoForDistant(object)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+      <sphereGeometry args={[cloud ? 5 : cluster ? 4 : object.kind === 'Black hole' ? 1.6 : 1.1, 24, 16]} />
+      <meshBasicMaterial color={object.color} transparent={cloud || cluster || object.kind === 'Black hole'} opacity={cloud ? 0.12 : cluster ? 0.04 : object.kind === 'Black hole' ? 0.05 : 1} depthWrite={!cloud && !cluster} />
     </mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[8, 14, 96]} />
-      <meshBasicMaterial color="#e2c178" transparent opacity={0.12} side={THREE.DoubleSide} />
-    </mesh>
-    <Html distanceFactor={23} position={[0, 1, 12]}>
-      <span className="rounded-full border border-amber-200/30 bg-slate-950/85 px-2 py-1 text-xs text-amber-100 whitespace-nowrap">Illustrative early dust disk</span>
-    </Html>
+    {(cloud || cluster) && <points>
+      <bufferGeometry><bufferAttribute attach="attributes-position" args={[particles, 3]} /></bufferGeometry>
+      <pointsMaterial color={object.color} size={cluster ? 0.22 : 0.42} transparent opacity={cluster ? 0.9 : 0.48} depthWrite={false} />
+    </points>}
+    {(object.kind === 'Black hole' || object.name.includes('Helix') || object.name.includes('Ring')) && <Ring args={[2, 3.5, 64]} rotation={[0.4, 0.2, 0]}><meshBasicMaterial color={object.color} transparent opacity={0.7} side={THREE.DoubleSide} /></Ring>}
+    {(object.kind === 'Pulsar' || object.kind === 'Neutron star') && <mesh rotation={[0, 0, 0.4]}><cylinderGeometry args={[0.07, 0.07, 7, 8]} /><meshBasicMaterial color={object.color} transparent opacity={0.4} /></mesh>}
+    <Html distanceFactor={48} position={[0, cloud || cluster ? 9 : 3, 0]}><span className="whitespace-nowrap rounded border border-border bg-card/85 px-2 py-1 text-xs text-card-foreground">{object.name}</span></Html>
   </group>;
 }
 
-function EventVisual({ event, targetName }: { event: EventId; targetName: string }) {
-  const markerRef = useRef<THREE.Mesh>(null);
-  const stormRef = useRef<THREE.Group>(null);
-  const targetDistance = planetsData.find((body) => body.name === targetName)?.distance ?? 10;
-  useFrame(({ clock }, rawDelta) => {
-    const delta = Math.min(rawDelta, 0.05);
-    if (stormRef.current) {
-      const elapsed = clock.getElapsedTime();
-      const pulse = 1.4 + (Math.sin(elapsed * 2.1) + 1) * 1.15;
-      stormRef.current.scale.setScalar(pulse);
-      stormRef.current.rotation.z += delta * 0.22;
-    }
-    if (markerRef.current && event !== 'none' && event !== 'solar-storm') {
-      const t = clock.getElapsedTime() * (event === 'asteroid-encounter' ? 0.82 : 0.48);
-      const direction = event === 'asteroid-encounter' ? 1 : -1;
-      markerRef.current.position.set(targetDistance + Math.sin(t) * 5 * direction, 0.8 + Math.sin(t * 2) * 0.45, Math.cos(t) * 4);
-    }
-  });
-  if (event === 'none') return null;
-  if (event === 'solar-storm') return <group ref={stormRef}>
-    <mesh rotation-x={Math.PI / 2}><torusGeometry args={[2.7, 0.16, 8, 64]} /><meshBasicMaterial color="#ff8c47" transparent opacity={0.75} /></mesh>
-    <mesh rotation-y={Math.PI / 2}><torusGeometry args={[3.2, 0.08, 8, 64]} /><meshBasicMaterial color="#f6d17a" transparent opacity={0.48} /></mesh>
-  </group>;
-  return <>
-    <mesh ref={markerRef}>
-      {event === 'asteroid-encounter' ? <dodecahedronGeometry args={[0.38, 0]} /> : <Sphere args={[0.28, 16, 12]} />}
-      <meshBasicMaterial color={event === 'asteroid-encounter' ? '#e4b97b' : '#94edf0'} />
-      {event === 'comet-flyby' && <pointLight intensity={0.7} distance={5} color="#8eeaf0" />}
-    </mesh>
-    <mesh position={[targetDistance, 0.04, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[1.25, 1.32, 48]} />
-      <meshBasicMaterial color={event === 'asteroid-encounter' ? '#e4b97b' : '#94edf0'} transparent opacity={0.6} side={THREE.DoubleSide} />
-    </mesh>
-  </>;
-}
-
-function Scene({ onSelect, selectedInfo, timeStage, event, eventTarget, alignmentView, focusTarget, resetKey }: { onSelect: (info: SelectedInfo | null) => void; selectedInfo: SelectedInfo | null; timeStage: TimelineId; event: EventId; eventTarget: string; alignmentView: boolean; focusTarget: [number, number, number] | null; resetKey: number }) {
+function Scene({ onSelect, selectedInfo, alignmentView, focusTarget, resetKey }: { onSelect: (info: SelectedInfo | null) => void; selectedInfo: SelectedInfo | null; alignmentView: boolean; focusTarget: [number, number, number] | null; resetKey: number }) {
   const controlsRef = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   useEffect(() => {
     const controls = controlsRef.current;
@@ -423,27 +392,16 @@ function Scene({ onSelect, selectedInfo, timeStage, event, eventTarget, alignmen
     <InstancedBelt count={230} inner={11.8} outer={14.2} color="#927d64" label="Asteroid Belt" labelPosition={[13, 1.7, 0]} />
     <InstancedBelt count={300} inner={32} outer={50} color="#82a9bb" seedOffset={90} label="Kuiper Belt" labelPosition={[40, 3, 0]} shape="ice" />
     <OortCloud />
-    {timeStage === 'formation' && <AccretionDisk />}
-    {allCelestialBodies.map((body) => <CelestialBody key={body.name} data={body} onSelect={onSelect} isSelected={selectedInfo?.name === body.name} timeStage={timeStage} />)}
-    {starSystems.map((star) => <StarSystemNode key={star.name} star={star} onSelect={onSelect} isSelected={selectedInfo?.name === star.name || selectedInfo?.name === star.companion?.name} />)}
-    <EventVisual event={event} targetName={eventTarget} />
+    {allCelestialBodies.map((body) => <CelestialBody key={body.name} data={body} onSelect={onSelect} isSelected={selectedInfo?.name === body.name} />)}
+    {starSystems.map((star) => <StarSystemNode key={star.name} star={star} onSelect={onSelect} isSelected={selectedInfo?.name === star.name || star.companions?.some((companion) => selectedInfo?.name === companion.name) === true} />)}
+    {distantSpaceObjects.map((object) => <DistantObjectNode key={object.name} object={object} onSelect={onSelect} />)}
     <OrbitControls ref={controlsRef} makeDefault enablePan enableZoom enableRotate minDistance={2.5} maxDistance={900} autoRotate={!selectedInfo && !alignmentView} autoRotateSpeed={0.22} />
   </>;
 }
 
-const eventLabels: Record<EventId, string> = {
-  none: 'No event',
-  'solar-storm': 'Solar storm',
-  'asteroid-encounter': 'Asteroid encounter',
-  'comet-flyby': 'Comet flyby',
-};
-
 const SolarSystem3D = () => {
   const [selectedInfo, setSelectedInfo] = useState<SelectedInfo | null>(null);
   const [jumpValue, setJumpValue] = useState('');
-  const [timeStage, setTimeStage] = useState<TimelineId>('present');
-  const [event, setEvent] = useState<EventId>('none');
-  const [eventTarget, setEventTarget] = useState('Earth');
   const [alignmentView, setAlignmentView] = useState(false);
   const [focusTarget, setFocusTarget] = useState<[number, number, number] | null>(null);
   const [resetKey, setResetKey] = useState(0);
@@ -463,9 +421,11 @@ const SolarSystem3D = () => {
     { value: 'sun', label: 'Sun', info: { name: 'Sun', emoji: '☀️', category: 'Star', fact: 'The Sun is the star at the centre of our Solar System. Its gravity holds the planets, comets, and asteroids in orbit.', detail: 'Scene distances and sizes are compressed for exploration.', focus: [0, 0, 0] as [number, number, number] } },
     ...allCelestialBodies.map((body) => ({ value: `body:${body.name}`, label: body.name, info: infoForBody(body) })),
     ...starSystems.map((star) => ({ value: `star:${star.name}`, label: star.name, info: infoForStar(star) })),
-    ...starSystems.filter((star) => star.companion).map((star) => ({ value: `star:${star.companion?.name}`, label: star.companion?.name ?? star.name, info: infoForStar(star, star.companion) })),
+    ...starSystems.flatMap((star) => (star.companions ?? []).map((companion) => ({ value: `star:${companion.name}`, label: companion.name, info: infoForStar(star, companion) }))),
+    ...starSystems.flatMap((star) => (star.planets ?? []).map((planet) => ({ value: `exoplanet:${planet.name}`, label: planet.name, info: { name: planet.name, emoji: '🪐', category: 'Exoplanet', fact: planet.fact, detail: `Orbits ${star.name} · ${star.distanceLy} light-years from the Sun · Schematic orbit.`, focus: star.position } }))),
+    ...allCelestialBodies.flatMap((body) => (body.moonData ?? []).map((moon) => ({ value: `moon:${moon.name}`, label: moon.name, info: { name: moon.name, emoji: '🌙', category: `Moon of ${body.name}`, fact: moon.funFact, detail: 'Schematic orbit and size.', focus: [body.distance, 0, 0] as [number, number, number] } }))),
+    ...distantSpaceObjects.map((object) => ({ value: `distant:${object.name}`, label: object.name, info: infoForDistant(object) })),
   ], []);
-  const selectedStage = timelineStages.find((stage) => stage.id === timeStage) ?? timelineStages[timelineStages.length - 1];
 
   const chooseInfo = (info: SelectedInfo, value?: string) => {
     setSelectedInfo(info);
@@ -473,12 +433,9 @@ const SolarSystem3D = () => {
     setAlignmentView(false);
     setJumpValue(value ?? '');
   };
-  const resetSimulation = () => {
+  const resetView = () => {
     setSelectedInfo(null);
     setJumpValue('');
-    setTimeStage('present');
-    setEvent('none');
-    setEventTarget('Earth');
     setAlignmentView(false);
     setFocusTarget(null);
     setResetKey((key) => key + 1);
@@ -502,11 +459,11 @@ const SolarSystem3D = () => {
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-primary">
           <Rocket className="h-5 w-5" /><span className="font-semibold">Interactive Solar System</span>
         </div>
-        <h2 className="mb-3 font-fredoka text-3xl font-bold text-foreground sm:text-4xl">Explore from the Sun to the Oort Cloud</h2>
-        <p className="mx-auto max-w-3xl text-sm text-muted-foreground sm:text-base">Select planets, moons, comets and nearby stars. Companion stars orbit their host; astronomical distances, historical stages and events are shown schematically.</p>
+        <h2 className="mb-3 font-fredoka text-3xl font-bold text-foreground sm:text-4xl">Explore the Solar System & Beyond</h2>
+        <p className="mx-auto max-w-3xl text-sm text-muted-foreground sm:text-base">Planets, moons, asteroids, nearby stars, nebulae and stellar remnants.</p>
       </header>
 
-      <div className="mb-3 grid grid-cols-1 gap-2 rounded-lg border border-border bg-card/90 p-3 text-card-foreground shadow-sm sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mb-3 grid grid-cols-1 gap-2 rounded-lg border border-border bg-card/90 p-3 text-card-foreground shadow-sm sm:grid-cols-2 lg:grid-cols-3">
         <label className="min-w-0 space-y-1">
           <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Telescope className="h-3.5 w-3.5" />Find a body</span>
           <Select value={jumpValue} onValueChange={(value) => {
@@ -514,33 +471,7 @@ const SolarSystem3D = () => {
             if (choice) chooseInfo(choice.info, choice.value);
           }}>
             <SelectTrigger aria-label="Find a celestial object" className="h-9 text-xs"><SelectValue placeholder="Planets, moons, stars…" /></SelectTrigger>
-            <SelectContent>{selectableObjects.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
-          </Select>
-        </label>
-        <label className="min-w-0 space-y-1">
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Clock3 className="h-3.5 w-3.5" />Time stage</span>
-          <Select value={timeStage} onValueChange={(value) => setTimeStage(value as TimelineId)}>
-            <SelectTrigger aria-label="Choose a Solar System timeline stage" className="h-9 text-xs"><SelectValue /></SelectTrigger>
-            <SelectContent>{timelineStages.map((stage) => <SelectItem key={stage.id} value={stage.id}>{stage.label}</SelectItem>)}</SelectContent>
-          </Select>
-        </label>
-        <label className="min-w-0 space-y-1">
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Sparkles className="h-3.5 w-3.5" />Simulation</span>
-          <Select value={event} onValueChange={(value) => setEvent(value as EventId)}>
-            <SelectTrigger aria-label="Choose a Solar System event" className="h-9 text-xs"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No event</SelectItem>
-              <SelectItem value="solar-storm">Solar storm</SelectItem>
-              <SelectItem value="asteroid-encounter">Asteroid encounter</SelectItem>
-              <SelectItem value="comet-flyby">Comet flyby</SelectItem>
-            </SelectContent>
-          </Select>
-        </label>
-        <label className="min-w-0 space-y-1">
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"><Orbit className="h-3.5 w-3.5" />Event target</span>
-          <Select value={eventTarget} onValueChange={setEventTarget}>
-            <SelectTrigger aria-label="Choose the event target planet" className="h-9 text-xs" disabled={event === 'none' || event === 'solar-storm'}><SelectValue /></SelectTrigger>
-            <SelectContent>{planetsData.map((body) => <SelectItem key={body.name} value={body.name}>{body.name}</SelectItem>)}</SelectContent>
+            <SelectContent className="z-[150]">{selectableObjects.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
           </Select>
         </label>
         <div className="flex items-end">
@@ -549,14 +480,14 @@ const SolarSystem3D = () => {
           </Button>
         </div>
         <div className="flex items-end">
-          <Button type="button" variant="secondary" className="h-9 w-full px-2 text-xs" onClick={resetSimulation}>
+          <Button type="button" variant="secondary" className="h-9 w-full px-2 text-xs" onClick={resetView}>
             <RotateCcw className="h-4 w-4" />Reset
           </Button>
         </div>
       </div>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-xs text-muted-foreground" aria-live="polite">
-        <span>{selectedStage.note}</span>
-        {event !== 'none' && <span className="font-medium text-primary">{eventLabels[event]}{event !== 'solar-storm' ? ` near ${eventTarget}` : ''} · illustrative simulation</span>}
+        <span>Distances and sizes are schematic; reported distances are approximate.</span>
+
         <Button type="button" variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={() => setShowInstructions((value) => !value)} aria-expanded={showInstructions}><Info className="h-3.5 w-3.5" />{showInstructions ? 'Hide guide' : 'Guide'}</Button>
       </div>
       {showInstructions && <div className="mb-3 border-l-2 border-primary px-3 py-2 text-sm text-muted-foreground">Drag to rotate, scroll or pinch to zoom, and select a body or moon for facts. Use the object picker to travel directly to a star system.</div>}
@@ -573,15 +504,15 @@ const SolarSystem3D = () => {
         </aside>}
         {inView ? <WebGLGuard>
           <Canvas camera={{ position: [0, 20, 40], fov: 60 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: false }} onCreated={({ gl }) => { gl.domElement.addEventListener('webglcontextlost', (event) => event.preventDefault()); }}>
-            <Scene onSelect={(info) => { if (info) chooseInfo(info); else setSelectedInfo(null); }} selectedInfo={selectedInfo} timeStage={timeStage} event={event} eventTarget={eventTarget} alignmentView={alignmentView} focusTarget={focusTarget} resetKey={resetKey} />
+            <Scene onSelect={(info) => { if (info) chooseInfo(info); else setSelectedInfo(null); }} selectedInfo={selectedInfo} alignmentView={alignmentView} focusTarget={focusTarget} resetKey={resetKey} />
           </Canvas>
         </WebGLGuard> : <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Scroll to load the Solar System explorer</div>}
         <div className="pointer-events-none absolute bottom-3 left-3 z-10 flex flex-wrap gap-2 text-[11px] text-card-foreground">
-          <span className="rounded border border-border bg-card/85 px-2 py-1">Planets & moons</span><span className="rounded border border-border bg-card/85 px-2 py-1">Comets & asteroids</span><span className="rounded border border-border bg-card/85 px-2 py-1">Nearby stars · brown dwarfs</span>
+          <span className="rounded border border-border bg-card/85 px-2 py-1">Planets & moons</span><span className="rounded border border-border bg-card/85 px-2 py-1">Comets & asteroids</span><span className="rounded border border-border bg-card/85 px-2 py-1">Stars · nebulae · remnants</span>
         </div>
         {alignmentView && <div className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-full border border-primary/30 bg-card/90 px-3 py-1.5 text-xs font-semibold text-card-foreground">Earth alignment view · schematic</div>}
       </div>
-      <p className="mt-2 text-center text-xs text-muted-foreground">Illustrative scale and simulations for learning. Past positions, stellar distances in the scene, and event paths are not precision ephemerides or predictions.</p>
+      <p className="mt-2 text-center text-xs text-muted-foreground">Schematic exploration, not a precision sky map. Calvera’s distance is uncertain; some distant objects lie beyond 1,550 light-years.</p>
     </div>
   </section>;
 };
