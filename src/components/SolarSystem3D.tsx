@@ -333,6 +333,39 @@ const infoForDistant = (object: DistantSpaceObject): SelectedInfo => ({
   focus: object.position,
 });
 
+function SoftGalaxy({ object, onSelect }: { object: DistantSpaceObject; onSelect: (info: SelectedInfo) => void }) {
+  const ref = useRef<THREE.Mesh>(null);
+  const spiral = object.name.includes('Andromeda');
+  const uniforms = useMemo(() => ({
+    tint: { value: new THREE.Color(object.color) },
+    spiral: { value: spiral ? 1 : 0 },
+  }), [object.color, spiral]);
+  useFrame(({ camera }) => { ref.current?.quaternion.copy(camera.quaternion); });
+  return <mesh ref={ref} onClick={(event) => { event.stopPropagation(); onSelect(infoForDistant(object)); }}
+    onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
+    <planeGeometry args={[spiral ? 32 : 24, spiral ? 32 : 24]} />
+    <shaderMaterial transparent depthWrite={false} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} uniforms={uniforms}
+      vertexShader={`varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`}
+      fragmentShader={`
+        varying vec2 vUv; uniform vec3 tint; uniform float spiral;
+        void main() {
+          vec2 p = (vUv - 0.5) * 2.0;
+          p = mat2(0.92, -0.39, 0.39, 0.92) * p;
+          p.y *= mix(1.2, 2.15, spiral);
+          float r = length(p);
+          float angle = atan(p.y, p.x);
+          float halo = exp(-r * r * 5.5);
+          float core = exp(-r * r * 60.0);
+          float arms = 0.5 + 0.5 * sin(angle * 2.0 - r * 14.0);
+          float clouds = 0.65 + 0.18 * sin(p.x * 14.0 + p.y * 9.0) + 0.17 * cos(p.y * 19.0 - p.x * 7.0);
+          float light = halo * mix(clouds, 0.35 + arms * 0.45, spiral) + core * mix(0.12, 0.5, spiral);
+          float edge = 1.0 - smoothstep(0.65, 1.0, r);
+          gl_FragColor = vec4(mix(tint, vec3(1.0), core * 0.45), light * edge * 0.8);
+        }
+      `} />
+  </mesh>;
+}
+
 function DistantObjectNode({ object, onSelect }: { object: DistantSpaceObject; onSelect: (info: SelectedInfo) => void }) {
   const cloud = object.kind === 'Nebula' || object.kind === 'Supernova remnant';
   const cluster = object.kind === 'Star cluster';
@@ -341,9 +374,10 @@ function DistantObjectNode({ object, onSelect }: { object: DistantSpaceObject; o
     return new Float32Array(items.flatMap((item) => item.position));
   }, [cluster]);
   return <group position={object.position}>
+    {object.kind === 'Galaxy' && <SoftGalaxy object={object} onSelect={onSelect} />}
     <mesh onClick={(event) => { event.stopPropagation(); onSelect(infoForDistant(object)); }} onPointerOver={() => { document.body.style.cursor = 'pointer'; }} onPointerOut={() => { document.body.style.cursor = ''; }}>
       <sphereGeometry args={[cloud ? 5 : cluster ? 4 : object.kind === 'Black hole' ? 1.6 : 1.1, 24, 16]} />
-      <meshBasicMaterial color={object.color} transparent={cloud || cluster || object.kind === 'Black hole'} opacity={cloud ? 0.12 : cluster ? 0.04 : object.kind === 'Black hole' ? 0.05 : 1} depthWrite={!cloud && !cluster} />
+      <meshBasicMaterial color={object.color} transparent={cloud || cluster || object.kind === 'Black hole' || object.kind === 'Galaxy'} opacity={object.kind === 'Galaxy' ? 0 : cloud ? 0.12 : cluster ? 0.04 : object.kind === 'Black hole' ? 0.05 : 1} depthWrite={!cloud && !cluster && object.kind !== 'Galaxy'} />
     </mesh>
     {(cloud || cluster) && <points>
       <bufferGeometry><bufferAttribute attach="attributes-position" args={[particles, 3]} /></bufferGeometry>
@@ -351,7 +385,7 @@ function DistantObjectNode({ object, onSelect }: { object: DistantSpaceObject; o
     </points>}
     {(object.kind === 'Black hole' || object.name.includes('Helix') || object.name.includes('Ring')) && <Ring args={[2, 3.5, 64]} rotation={[0.4, 0.2, 0]}><meshBasicMaterial color={object.color} transparent opacity={0.7} side={THREE.DoubleSide} /></Ring>}
     {(object.kind === 'Pulsar' || object.kind === 'Neutron star') && <mesh rotation={[0, 0, 0.4]}><cylinderGeometry args={[0.07, 0.07, 7, 8]} /><meshBasicMaterial color={object.color} transparent opacity={0.4} /></mesh>}
-    <Html distanceFactor={48} position={[0, cloud || cluster ? 9 : 3, 0]}><span className="whitespace-nowrap rounded border border-border bg-card/85 px-2 py-1 text-xs text-card-foreground">{object.name}</span></Html>
+    <Html distanceFactor={48} position={[0, object.kind === 'Galaxy' ? 13 : cloud || cluster ? 9 : 3, 0]}><span className="whitespace-nowrap rounded border border-border bg-card/85 px-2 py-1 text-xs text-card-foreground">{object.name}</span></Html>
   </group>;
 }
 
