@@ -1,7 +1,7 @@
 export interface DistantSpaceObject {
   name: string;
   distanceLy: number | null;
-  kind: 'Star' | 'Star cluster' | 'Nebula' | 'Supernova remnant' | 'Neutron star' | 'Pulsar' | 'Black hole';
+  kind: 'Star' | 'Star cluster' | 'Nebula' | 'Supernova remnant' | 'Neutron star' | 'Pulsar' | 'Black hole' | 'Galaxy';
   color: string;
   fact: string;
   position: [number, number, number];
@@ -58,6 +58,9 @@ const entries: [string, number | null, DistantSpaceObject['kind'], string, strin
   ['RX J1856.5−3754', 400, 'Neutron star', '#b3efff', 'RX J1856.5−3754 is an isolated neutron star detected through its thermal X-rays; it is not usually classified as a radio pulsar.'],
   ['Calvera', null, 'Pulsar', '#99dbff', 'Calvera is an isolated X-ray pulsar, also called 1RXS J141256.0+792204. Its distance remains uncertain.'],
   ['Gaia BH1', 1560, 'Black hole', '#ffce8d', 'Gaia BH1 is a dormant stellar-mass black hole detected through the motion of its Sun-like companion. The ring here is illustrative, not an observed accretion disk.'],
+  ['Large Magellanic Cloud (LMC)', 163000, 'Galaxy', '#9cded7', 'The Large Magellanic Cloud is a nearby satellite galaxy of the Milky Way, containing the Tarantula Nebula and many young stars.'],
+  ['Small Magellanic Cloud (SMC)', 200000, 'Galaxy', '#9fcaff', 'The Small Magellanic Cloud is a dwarf irregular galaxy and a satellite of the Milky Way, interacting with the Large Magellanic Cloud.'],
+  ['Andromeda Galaxy (M31)', 2500000, 'Galaxy', '#ffe6b1', 'Andromeda is a large spiral galaxy approximately 2.5 million light-years away, and the nearest major spiral galaxy to the Milky Way.'],
 ];
 
 export const distantSpaceObjects: DistantSpaceObject[] = entries.map(([name, distanceLy, kind, color, fact], index) => {
