@@ -8,6 +8,7 @@ const components: Record<FeatureKey, React.LazyExoticComponent<React.ComponentTy
   'progress-tracker': lazy(() => import('./ProgressTracker')),
   'daily-challenges': lazy(() => import('./DailyChallenges')),
   'fun-facts': lazy(() => import('./FunFactsSection')),
+  'space-news': lazy(() => import('./SpaceNews')),
   'solar-system-3d': lazy(() => import('./SolarSystem3D')),
   facts: lazy(() => import('./DailyFactWidget')),
   'space-qna': lazy(() => import('./SpaceQnA')),
@@ -29,7 +30,7 @@ const components: Record<FeatureKey, React.LazyExoticComponent<React.ComponentTy
 };
 
 const titles: Record<FeatureKey, string> = {
-  favorites: 'Favorites & Dashboard', 'progress-tracker': 'Progress', 'daily-challenges': 'Daily Missions', 'fun-facts': 'Fun Facts', 'solar-system-3d': '3D Solar System', facts: 'Daily Fact', 'space-qna': 'Doubt Search', explorer: 'Celestial Explorer', timeline: 'Space Timeline', constellations: 'Constellations', courses: 'Courses', leaderboard: 'Leaderboard', 'study-planner': 'Study Planner', manuscripts: 'Manuscripts', library: 'Library', games: 'Learning Games', 'premium-games': 'Premium Games', 'game-passes': 'Game Passes', shop: 'Featured Shop', 'alien-pets': 'Alien Pets', achievements: 'Trophies', about: 'About',
+  favorites: 'Favorites & Dashboard', 'progress-tracker': 'Progress', 'daily-challenges': 'Daily Missions', 'fun-facts': 'Fun Facts', 'space-news': 'Latest Space News', 'solar-system-3d': '3D Solar System', facts: 'Daily Fact', 'space-qna': 'Doubt Search', explorer: 'Celestial Explorer', timeline: 'Space Timeline', constellations: 'Constellations', courses: 'Courses', leaderboard: 'Leaderboard', 'study-planner': 'Study Planner', manuscripts: 'Manuscripts', library: 'Library', games: 'Learning Games', 'premium-games': 'Premium Games', 'game-passes': 'Game Passes', shop: 'Featured Shop', 'alien-pets': 'Alien Pets', achievements: 'Trophies', about: 'About',
 };
 
 const FeatureOverlay = ({ featureKey, onClose }: { featureKey: FeatureKey | null; onClose: () => void }) => {

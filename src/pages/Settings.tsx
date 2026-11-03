@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Bell, BellRing, Headphones, Target, Volume2, Trash2, ShieldCheck, Inbox } from 'lucide-react';
+import { ArrowLeft, Bell, BellRing, Headphones, Target, Volume2, Trash2, ShieldCheck, Inbox, Newspaper, Rocket } from 'lucide-react';
 import {
   getNotifSettings,
   saveNotifSettings,
@@ -83,7 +83,7 @@ const Settings = () => {
     setPerm(res.permission);
     if (res.ok) {
       update({ enabled: true });
-      setMsg('Reminders on — we will nudge you for lectures and daily missions.');
+      setMsg('Alerts on — you will get study reminders, app updates and the latest space news.');
       const shown = await showNotification('Stellar Learning Lab', 'Notifications enabled! 🚀');
       if (!shown) setMsg('Enabled, but your browser refused to display the alert. Try the installed app or a normal browser tab.');
     } else {
@@ -129,6 +129,14 @@ const Settings = () => {
 
           <Row icon={Target} title="Daily mission alerts" desc="Reminder to finish missions and keep your streak">
             <Switch on={s.missions} onClick={() => update({ missions: !s.missions })} label="Mission reminders" />
+          </Row>
+
+          <Row icon={Newspaper} title="Latest space news" desc="Alerts when new NASA/ESA space stories land">
+            <Switch on={s.news} onClick={() => update({ news: !s.news })} label="Space news alerts" />
+          </Row>
+
+          <Row icon={Rocket} title="App updates" desc="What's new whenever the app gets an upgrade">
+            <Switch on={s.appUpdates} onClick={() => update({ appUpdates: !s.appUpdates })} label="App update alerts" />
           </Row>
 
           <div className="grid grid-cols-2 gap-3">

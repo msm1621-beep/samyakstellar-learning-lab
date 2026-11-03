@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import {
   Award, BarChart3, BookOpen, CalendarCheck, Clock, FlaskConical, Gamepad2,
-  Globe2, Info, Lightbulb, Music, Search, Settings, ShoppingBag, Sparkle,
-  Sprout, Star, Stars, Target, Telescope, Ticket, Trophy, GraduationCap,
+  Globe2, Info, Lightbulb, Music, Newspaper, Search, Settings, ShoppingBag,
+  Sparkle, Sprout, Star, Stars, Target, Telescope, Ticket, Trophy, GraduationCap,
   ScrollText, Crown, Rocket,
 } from 'lucide-react';
 
 export type FeatureKey =
   | 'favorites' | 'progress-tracker' | 'daily-challenges' | 'fun-facts'
+  | 'space-news'
   | 'solar-system-3d' | 'facts' | 'space-qna' | 'explorer' | 'timeline'
   | 'constellations' | 'courses' | 'leaderboard' | 'study-planner'
   | 'manuscripts' | 'library' | 'games' | 'premium-games' | 'game-passes'
@@ -25,6 +26,7 @@ const FEATURE_ROWS: Array<[FeatureKey, string, React.ElementType, string]> = [
   ['progress-tracker', 'Progress', BarChart3, 'from-emerald-500 to-teal-500'],
   ['daily-challenges', 'Daily Missions', Target, 'from-red-500 to-rose-500'],
   ['fun-facts', 'Fun Facts', Sparkle, 'from-pink-400 to-fuchsia-500'],
+  ['space-news', 'Space News', Newspaper, 'from-sky-400 to-blue-600'],
   ['solar-system-3d', '3D Solar System', Globe2, 'from-sky-500 to-indigo-500'],
   ['facts', 'Daily Fact', Lightbulb, 'from-amber-400 to-orange-500'],
   ['space-qna', 'Doubt Search', Search, 'from-fuchsia-500 to-purple-500'],

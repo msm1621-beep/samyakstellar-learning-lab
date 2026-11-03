@@ -6,6 +6,8 @@ export interface NotifSettings {
   enabled: boolean;
   lectures: boolean;
   missions: boolean;
+  appUpdates: boolean;
+  news: boolean;
   lectureTime: string; // "HH:MM"
   missionTime: string; // "HH:MM"
   sound: boolean;
@@ -27,6 +29,8 @@ export const DEFAULT_SETTINGS: NotifSettings = {
   enabled: false,
   lectures: true,
   missions: true,
+  appUpdates: true,
+  news: true,
   lectureTime: '18:00',
   missionTime: '09:00',
   sound: true,
@@ -134,6 +138,7 @@ export interface InboxItem {
   at: number;
   read: boolean;
   delivered: boolean; // whether the OS notification actually displayed
+  type: 'reminder' | 'news' | 'update';
 }
 
 const INBOX_KEY = 'stellar_notif_inbox';
@@ -156,7 +161,12 @@ const writeInbox = (items: InboxItem[]) => {
   window.dispatchEvent(new CustomEvent(INBOX_EVENT));
 };
 
-export const addInboxItem = (title: string, body: string, delivered = false): InboxItem => {
+export const addInboxItem = (
+  title: string,
+  body: string,
+  delivered = false,
+  type: InboxItem['type'] = 'reminder',
+): InboxItem => {
   const item: InboxItem = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     title,
@@ -164,6 +174,7 @@ export const addInboxItem = (title: string, body: string, delivered = false): In
     at: Date.now(),
     read: false,
     delivered,
+    type,
   };
   writeInbox([item, ...getInbox()]);
   return item;
@@ -181,8 +192,12 @@ export const removeInboxItem = (id: string) => {
 
 export const clearInbox = () => writeInbox([]);
 
-export const showNotification = async (title: string, body: string): Promise<boolean> => {
-  const item = addInboxItem(title, body, false);
+export const showNotification = async (
+  title: string,
+  body: string,
+  type: InboxItem['type'] = 'reminder',
+): Promise<boolean> => {
+  const item = addInboxItem(title, body, false, type);
   const markDelivered = () => {
     writeInbox(getInbox().map((i) => (i.id === item.id ? { ...i, delivered: true } : i)));
   };
@@ -190,8 +205,8 @@ export const showNotification = async (title: string, body: string): Promise<boo
   if (!notificationsSupported() || Notification.permission !== 'granted') return false;
   const options: NotificationOptions = {
     body,
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
+    icon: '/app-icon-192.png',
+    badge: '/app-icon-192.png',
     tag: 'stellar-reminder-' + title,
     data: { url: '/' },
   };
@@ -264,8 +279,38 @@ const tick = () => {
 let timer: number | null = null;
 let visibilityBound = false;
 
+// ---------------------------------------------------------------------------
+// App updates — when a new version ships, announce what's new (once per
+// version, stored locally so returning users aren't re-alerted).
+// ---------------------------------------------------------------------------
+export const APP_VERSION = '2.5.0';
+export const APP_UPDATE_NOTES = [
+  '• New "Latest Space News" section with live NASA/ESA headlines',
+  '• Three notification types: Reminders, App Updates and Space News',
+  '• Notification alerts now show the app icon correctly',
+].join('\n');
+const VERSION_SEEN_KEY = 'stellar_app_version_seen';
+
+const checkAppUpdate = () => {
+  const s = getNotifSettings();
+  let seen: string | null = null;
+  try {
+    seen = localStorage.getItem(VERSION_SEEN_KEY);
+  } catch {}
+  if (seen === APP_VERSION) return;
+  if (s.enabled && s.appUpdates) {
+    const body = `${APP_UPDATE_NOTES}\n\nTap to explore everything that's new.`;
+    addInboxItem(`🚀 App update — v${APP_VERSION}`, body, false, 'update');
+    void showNotification(`🚀 App update — v${APP_VERSION}`, body, 'update');
+  }
+  try {
+    localStorage.setItem(VERSION_SEEN_KEY, APP_VERSION);
+  } catch {}
+};
+
 export const startReminderScheduler = () => {
   if (typeof window === 'undefined') return;
+  checkAppUpdate();
   if (timer !== null) window.clearInterval(timer);
   const settings = getNotifSettings();
   if (settings.enabled) void ensureNotifWorker();
