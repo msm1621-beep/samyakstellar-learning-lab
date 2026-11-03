@@ -161,7 +161,12 @@ const writeInbox = (items: InboxItem[]) => {
   window.dispatchEvent(new CustomEvent(INBOX_EVENT));
 };
 
-export const addInboxItem = (title: string, body: string, delivered = false): InboxItem => {
+export const addInboxItem = (
+  title: string,
+  body: string,
+  delivered = false,
+  type: InboxItem['type'] = 'reminder',
+): InboxItem => {
   const item: InboxItem = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     title,
@@ -169,6 +174,7 @@ export const addInboxItem = (title: string, body: string, delivered = false): In
     at: Date.now(),
     read: false,
     delivered,
+    type,
   };
   writeInbox([item, ...getInbox()]);
   return item;
@@ -186,8 +192,12 @@ export const removeInboxItem = (id: string) => {
 
 export const clearInbox = () => writeInbox([]);
 
-export const showNotification = async (title: string, body: string): Promise<boolean> => {
-  const item = addInboxItem(title, body, false);
+export const showNotification = async (
+  title: string,
+  body: string,
+  type: InboxItem['type'] = 'reminder',
+): Promise<boolean> => {
+  const item = addInboxItem(title, body, false, type);
   const markDelivered = () => {
     writeInbox(getInbox().map((i) => (i.id === item.id ? { ...i, delivered: true } : i)));
   };
@@ -195,8 +205,8 @@ export const showNotification = async (title: string, body: string): Promise<boo
   if (!notificationsSupported() || Notification.permission !== 'granted') return false;
   const options: NotificationOptions = {
     body,
-    icon: '/icons/icon-192.png',
-    badge: '/icons/icon-192.png',
+    icon: '/app-icon-192.png',
+    badge: '/app-icon-192.png',
     tag: 'stellar-reminder-' + title,
     data: { url: '/' },
   };
