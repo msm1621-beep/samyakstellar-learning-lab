@@ -1,4 +1,4 @@
-- [x] Update the 3D Solar System: remove events/history, add requested asteroids and uploaded distant objects, repair companion orbits, and verify exploration
+- [x] Add live space news feed with three notification types (reminders, app updates, space news) and fix missing alert icon
 - [ ] Fix Google sign-in: merge guest progress, sync local/backend account data, and bypass splash on OAuth return
 - [ ] Stabilize mission day history and add three-day topic levels
 - [ ] Make streak/progress widgets derive from completed missions only
