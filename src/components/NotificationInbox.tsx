@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Bell, X, Trash2, CheckCheck, BellOff } from 'lucide-react';
+import { Bell, X, Trash2, CheckCheck, BellOff, Newspaper, Rocket } from 'lucide-react';
 import {
   getInbox,
   markInboxRead,
