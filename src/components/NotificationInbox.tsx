@@ -112,7 +112,11 @@ const NotificationInbox = () => {
                   onClick={() => !item.read && markInboxRead(item.id)}
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                    <div className="flex items-center gap-1.5">
+                      {(item.type ?? 'reminder') === 'news' && <Newspaper className="w-3 h-3 text-sky-400 shrink-0" />}
+                      {(item.type ?? 'reminder') === 'update' && <Rocket className="w-3 h-3 text-amber-400 shrink-0" />}
+                      <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                    </div>
                     <p className="text-xs text-muted-foreground mt-0.5 whitespace-pre-wrap">{item.body}</p>
                     <p className="text-[11px] text-muted-foreground/70 mt-1">
                       {timeAgo(item.at)}
