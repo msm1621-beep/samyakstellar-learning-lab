@@ -6,6 +6,8 @@ export interface NotifSettings {
   enabled: boolean;
   lectures: boolean;
   missions: boolean;
+  appUpdates: boolean;
+  news: boolean;
   lectureTime: string; // "HH:MM"
   missionTime: string; // "HH:MM"
   sound: boolean;
@@ -27,6 +29,8 @@ export const DEFAULT_SETTINGS: NotifSettings = {
   enabled: false,
   lectures: true,
   missions: true,
+  appUpdates: true,
+  news: true,
   lectureTime: '18:00',
   missionTime: '09:00',
   sound: true,
@@ -134,6 +138,7 @@ export interface InboxItem {
   at: number;
   read: boolean;
   delivered: boolean; // whether the OS notification actually displayed
+  type: 'reminder' | 'news' | 'update';
 }
 
 const INBOX_KEY = 'stellar_notif_inbox';
