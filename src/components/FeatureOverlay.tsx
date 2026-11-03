@@ -8,6 +8,7 @@ const components: Record<FeatureKey, React.LazyExoticComponent<React.ComponentTy
   'progress-tracker': lazy(() => import('./ProgressTracker')),
   'daily-challenges': lazy(() => import('./DailyChallenges')),
   'fun-facts': lazy(() => import('./FunFactsSection')),
+  'space-news': lazy(() => import('./SpaceNews')),
   'solar-system-3d': lazy(() => import('./SolarSystem3D')),
   facts: lazy(() => import('./DailyFactWidget')),
   'space-qna': lazy(() => import('./SpaceQnA')),
