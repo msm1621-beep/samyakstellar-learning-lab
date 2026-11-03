@@ -279,8 +279,38 @@ const tick = () => {
 let timer: number | null = null;
 let visibilityBound = false;
 
+// ---------------------------------------------------------------------------
+// App updates — when a new version ships, announce what's new (once per
+// version, stored locally so returning users aren't re-alerted).
+// ---------------------------------------------------------------------------
+export const APP_VERSION = '2.5.0';
+export const APP_UPDATE_NOTES = [
+  '• New "Latest Space News" section with live NASA/ESA headlines',
+  '• Three notification types: Reminders, App Updates and Space News',
+  '• Notification alerts now show the app icon correctly',
+].join('\n');
+const VERSION_SEEN_KEY = 'stellar_app_version_seen';
+
+const checkAppUpdate = () => {
+  const s = getNotifSettings();
+  let seen: string | null = null;
+  try {
+    seen = localStorage.getItem(VERSION_SEEN_KEY);
+  } catch {}
+  if (seen === APP_VERSION) return;
+  if (s.enabled && s.appUpdates) {
+    const body = `${APP_UPDATE_NOTES}\n\nTap to explore everything that's new.`;
+    addInboxItem(`🚀 App update — v${APP_VERSION}`, body, false, 'update');
+    void showNotification(`🚀 App update — v${APP_VERSION}`, body, 'update');
+  }
+  try {
+    localStorage.setItem(VERSION_SEEN_KEY, APP_VERSION);
+  } catch {}
+};
+
 export const startReminderScheduler = () => {
   if (typeof window === 'undefined') return;
+  checkAppUpdate();
   if (timer !== null) window.clearInterval(timer);
   const settings = getNotifSettings();
   if (settings.enabled) void ensureNotifWorker();
