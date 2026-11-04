@@ -175,14 +175,20 @@ const CosmoAssistant = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [language, setLanguage] = useState<'en' | 'hinglish'>('en');
+  const [model, setModel] = useState<CosmoModelId>(loadCosmoModel);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
   const { user, session, profile, addCoinsServer } = useAuth();
-  const speechLocale = language === 'hinglish' ? 'hi-IN' : 'en-US';
-  const targetLanguageName = language === 'hinglish' ? 'Hinglish (simple Hindi written in Latin script mixed with English)' : 'English';
+  const speechLocale = 'en-US';
+
+  const changeModel = (next: CosmoModelId) => {
+    setModel(next);
+    try {
+      localStorage.setItem(MODEL_STORAGE_KEY, next);
+    } catch { /* ignore */ }
+  };
 
   const recordStudyNote = (question: string, answer: string) => {
     try {
