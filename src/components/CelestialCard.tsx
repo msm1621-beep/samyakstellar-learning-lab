@@ -7,6 +7,7 @@ import { useCoins } from '@/contexts/CoinsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import type { CelestialBody } from '@/data/celestialBodies';
 import { NOTE_REWARD, isSaveNoteRequest, saveStudyNote } from '@/lib/studyNotes';
+import { loadCosmoModel } from '@/components/CosmoAssistant';
 
 interface CelestialCardProps {
   body: CelestialBody;
@@ -248,8 +249,7 @@ const CosmoModal = ({ body, onClose }: CosmoModalProps) => {
         },
         body: JSON.stringify({
           messages: [{ role: 'system', content: ctx }, ...history, { role: 'user', content: text }],
-          language: 'en',
-          targetLanguageName: 'English',
+          model: loadCosmoModel(),
         }),
       });
       if (!resp.ok || !resp.body) {
