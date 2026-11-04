@@ -26,8 +26,8 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const language = clampStr(body.language, 10) || "en";
-    const targetLanguageName = clampStr(body.targetLanguageName, 40);
+    const targetModel = clampStr(body.model, 40);
+    const profile = MODEL_PROFILES[targetModel] ?? MODEL_PROFILES["cosmo-1.5-core"];
     const rawMessages = Array.isArray(body.messages) ? body.messages.slice(-20) : [];
     const messages = rawMessages
       .filter((m: any) => m && (m.role === "user" || m.role === "assistant"))
@@ -36,10 +36,6 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const responseLanguageInstruction = language === "en"
-      ? "CRITICAL LANGUAGE RULE: Respond ONLY in English."
-      : `CRITICAL LANGUAGE RULE: Respond ONLY in ${targetLanguageName || language} (language code: ${language}).`;
-
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -47,13 +43,12 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: profile.gateway,
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "system", content: responseLanguageInstruction },
+          { role: "system", content: `${SYSTEM_PROMPT}\n\n${profile.style}` },
           ...messages,
         ],
-        temperature: 0.2,
+        temperature: profile.temperature,
         stream: true,
       }),
     });
