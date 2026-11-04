@@ -10,27 +10,27 @@ type ModelProfile = { gateway: string; style: string; temperature: number };
 
 const MODEL_PROFILES: Record<string, ModelProfile> = {
   "cosmo-1.0-basic": {
-    gateway: "google/gemini-2.5-flash-lite",
+    gateway: "google/gemini-3.1-flash-lite",
     style: "ANSWER STYLE: extremely short and simple — 1-2 easy sentences, tiny words, no lists.",
     temperature: 0.3,
   },
   "cosmo-1.0-pro": {
-    gateway: "google/gemini-3.6-flash",
+    gateway: "google/gemini-3.8-flash",
     style: "ANSWER STYLE: deep and thorough — structured answer with short headings or bullet lists (up to 6 short paragraphs), include an amazing extra fact.",
     temperature: 0.2,
   },
   "cosmo-1.5-core": {
-    gateway: "google/gemini-2.5-flash",
+    gateway: "google/gemini-3.7-flash",
     style: "ANSWER STYLE: balanced — 2-4 short paragraphs, friendly and clear.",
     temperature: 0.2,
   },
   "cosmo-2.0-lite": {
-    gateway: "google/gemini-2.5-flash",
+    gateway: "google/gemini-3.7-flash",
     style: "ANSWER STYLE: light and breezy — 2-3 very short paragraphs, no lists.",
     temperature: 0.25,
   },
   "cosmo-2.5-flash-lite": {
-    gateway: "google/gemini-2.5-flash-lite",
+    gateway: "google/gemini-3.1-flash-lite",
     style: "ANSWER STYLE: quick and snappy — 1-3 sentences maximum.",
     temperature: 0.3,
   },
