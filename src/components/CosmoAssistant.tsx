@@ -45,16 +45,14 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function streamChat({
   messages,
-  language,
-  targetLanguageName,
+  model,
   accessToken,
   onDelta,
   onDone,
   onError,
 }: {
   messages: { role: string; content: string }[];
-  language: string;
-  targetLanguageName: string;
+  model: string;
   accessToken: string;
   onDelta: (deltaText: string) => void;
   onDone: () => void;
@@ -69,7 +67,7 @@ async function streamChat({
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ messages, language, targetLanguageName }),
+      body: JSON.stringify({ messages, model }),
     });
 
     if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
