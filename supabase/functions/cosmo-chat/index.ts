@@ -20,12 +20,12 @@ const MODEL_PROFILES: Record<string, ModelProfile> = {
     temperature: 0.2,
   },
   "cosmo-1.5-core": {
-    gateway: "google/gemini-3.7-flash",
+    gateway: "google/gemini-3.5-flash",
     style: "ANSWER STYLE: balanced — 2-4 short paragraphs, friendly and clear.",
     temperature: 0.2,
   },
   "cosmo-2.0-lite": {
-    gateway: "google/gemini-3.7-flash",
+    gateway: "google/gemini-3.5-flash",
     style: "ANSWER STYLE: light and breezy — 2-3 very short paragraphs, no lists.",
     temperature: 0.25,
   },
