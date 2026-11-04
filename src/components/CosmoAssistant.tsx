@@ -309,8 +309,7 @@ const CosmoAssistant = () => {
     try {
       await streamChat({
         messages: history,
-        language,
-        targetLanguageName,
+        model,
         accessToken: session.access_token,
         onDelta: (chunk) => upsertAssistant(chunk),
         onDone: () => undefined,
@@ -367,8 +366,7 @@ const CosmoAssistant = () => {
         let introSoFar = '';
         await streamChat({
           messages: [{ role: 'user', content: 'Give a short welcome message for kids and invite one space question.' }],
-          language,
-          targetLanguageName,
+          model,
           accessToken: session.access_token,
           onDelta: (chunk) => {
             introSoFar += chunk;
@@ -461,10 +459,23 @@ const CosmoAssistant = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 border-b border-purple-500/20 px-4 py-2" role="group" aria-label="Cosmo response language">
-            <span className="text-xs text-purple-200">Language</span>
-            <Button size="sm" variant={language === 'en' ? 'default' : 'ghost'} onClick={() => setLanguage('en')} className="h-7 text-xs">English</Button>
-            <Button size="sm" variant={language === 'hinglish' ? 'default' : 'ghost'} onClick={() => setLanguage('hinglish')} className="h-7 text-xs">Hinglish</Button>
+          <div className="flex items-center gap-2 border-b border-purple-500/20 px-4 py-2" role="group" aria-label="Cosmo model">
+            <span className="text-xs text-purple-200 shrink-0">Model</span>
+            <select
+              value={model}
+              onChange={(e) => changeModel(e.target.value as CosmoModelId)}
+              className="flex-1 min-w-0 h-7 rounded-md bg-space-deep/80 border border-purple-500/30 text-xs text-white px-2 outline-none focus:border-purple-400"
+              aria-label="Choose Cosmo model"
+            >
+              {COSMO_MODELS.map((m) => (
+                <option key={m.id} value={m.id} className="bg-space-deep">
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <span className="hidden sm:inline text-[10px] text-purple-300/70 shrink-0 truncate max-w-[110px]">
+              {COSMO_MODELS.find((m) => m.id === model)?.tag}
+            </span>
           </div>
 
           {/* Messages */}
@@ -507,7 +518,7 @@ const CosmoAssistant = () => {
               <PromptInputTextarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={isListening ? "Listening..." : language === 'hinglish' ? 'Space ke baare mein poochho...' : 'Ask me anything about space...'}
+                placeholder={isListening ? "Listening..." : 'Ask me anything about space...'}
                 disabled={isLoading}
                 className="text-white placeholder:text-white/40"
               />
