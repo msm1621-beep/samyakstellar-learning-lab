@@ -41,6 +41,28 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
+const MODEL_STORAGE_KEY = 'cosmo_model';
+
+export const COSMO_MODELS = [
+  { id: 'cosmo-1.0-basic', label: 'Cosmo 1.0 Basic', tag: 'Short & simple answers' },
+  { id: 'cosmo-1.0-pro', label: 'Cosmo 1.0 Pro', tag: 'Deep, detailed explanations' },
+  { id: 'cosmo-1.5-core', label: 'Cosmo 1.5 Core', tag: 'Balanced everyday helper' },
+  { id: 'cosmo-2.0-lite', label: 'Cosmo 2.0 Lite', tag: 'Light & quick replies' },
+  { id: 'cosmo-2.5-flash-lite', label: 'Cosmo 2.5 Flash Lite', tag: 'Fastest snappy answers' },
+] as const;
+
+export type CosmoModelId = (typeof COSMO_MODELS)[number]['id'];
+
+export const DEFAULT_COSMO_MODEL: CosmoModelId = 'cosmo-1.5-core';
+
+export const loadCosmoModel = (): CosmoModelId => {
+  try {
+    const stored = localStorage.getItem(MODEL_STORAGE_KEY);
+    if (COSMO_MODELS.some((m) => m.id === stored)) return stored as CosmoModelId;
+  } catch { /* ignore */ }
+  return DEFAULT_COSMO_MODEL;
+};
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function streamChat({
