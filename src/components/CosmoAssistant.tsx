@@ -41,20 +41,40 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cosmo-chat`;
 
+const MODEL_STORAGE_KEY = 'cosmo_model';
+
+export const COSMO_MODELS = [
+  { id: 'cosmo-1.0-basic', label: 'Cosmo 1.0 Basic', tag: 'Short & simple answers' },
+  { id: 'cosmo-1.0-pro', label: 'Cosmo 1.0 Pro', tag: 'Deep, detailed explanations' },
+  { id: 'cosmo-1.5-core', label: 'Cosmo 1.5 Core', tag: 'Balanced everyday helper' },
+  { id: 'cosmo-2.0-lite', label: 'Cosmo 2.0 Lite', tag: 'Light & quick replies' },
+  { id: 'cosmo-2.5-flash-lite', label: 'Cosmo 2.5 Flash Lite', tag: 'Fastest snappy answers' },
+] as const;
+
+export type CosmoModelId = (typeof COSMO_MODELS)[number]['id'];
+
+export const DEFAULT_COSMO_MODEL: CosmoModelId = 'cosmo-1.5-core';
+
+export const loadCosmoModel = (): CosmoModelId => {
+  try {
+    const stored = localStorage.getItem(MODEL_STORAGE_KEY);
+    if (COSMO_MODELS.some((m) => m.id === stored)) return stored as CosmoModelId;
+  } catch { /* ignore */ }
+  return DEFAULT_COSMO_MODEL;
+};
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function streamChat({
   messages,
-  language,
-  targetLanguageName,
+  model,
   accessToken,
   onDelta,
   onDone,
   onError,
 }: {
   messages: { role: string; content: string }[];
-  language: string;
-  targetLanguageName: string;
+  model: string;
   accessToken: string;
   onDelta: (deltaText: string) => void;
   onDone: () => void;
@@ -69,7 +89,7 @@ async function streamChat({
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ messages, language, targetLanguageName }),
+      body: JSON.stringify({ messages, model }),
     });
 
     if ((resp.status === 429 || resp.status >= 500) && attempt < 2) {
@@ -155,14 +175,20 @@ const CosmoAssistant = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [language, setLanguage] = useState<'en' | 'hinglish'>('en');
+  const [model, setModel] = useState<CosmoModelId>(loadCosmoModel);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const { toast } = useToast();
   const { addCoins } = useCoins();
   const { user, session, profile, addCoinsServer } = useAuth();
-  const speechLocale = language === 'hinglish' ? 'hi-IN' : 'en-US';
-  const targetLanguageName = language === 'hinglish' ? 'Hinglish (simple Hindi written in Latin script mixed with English)' : 'English';
+  const speechLocale = 'en-US';
+
+  const changeModel = (next: CosmoModelId) => {
+    setModel(next);
+    try {
+      localStorage.setItem(MODEL_STORAGE_KEY, next);
+    } catch { /* ignore */ }
+  };
 
   const recordStudyNote = (question: string, answer: string) => {
     try {
@@ -283,8 +309,7 @@ const CosmoAssistant = () => {
     try {
       await streamChat({
         messages: history,
-        language,
-        targetLanguageName,
+        model,
         accessToken: session.access_token,
         onDelta: (chunk) => upsertAssistant(chunk),
         onDone: () => undefined,
@@ -341,8 +366,7 @@ const CosmoAssistant = () => {
         let introSoFar = '';
         await streamChat({
           messages: [{ role: 'user', content: 'Give a short welcome message for kids and invite one space question.' }],
-          language,
-          targetLanguageName,
+          model,
           accessToken: session.access_token,
           onDelta: (chunk) => {
             introSoFar += chunk;
@@ -435,10 +459,23 @@ const CosmoAssistant = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 border-b border-purple-500/20 px-4 py-2" role="group" aria-label="Cosmo response language">
-            <span className="text-xs text-purple-200">Language</span>
-            <Button size="sm" variant={language === 'en' ? 'default' : 'ghost'} onClick={() => setLanguage('en')} className="h-7 text-xs">English</Button>
-            <Button size="sm" variant={language === 'hinglish' ? 'default' : 'ghost'} onClick={() => setLanguage('hinglish')} className="h-7 text-xs">Hinglish</Button>
+          <div className="flex items-center gap-2 border-b border-purple-500/20 px-4 py-2" role="group" aria-label="Cosmo model">
+            <span className="text-xs text-purple-200 shrink-0">Model</span>
+            <select
+              value={model}
+              onChange={(e) => changeModel(e.target.value as CosmoModelId)}
+              className="flex-1 min-w-0 h-7 rounded-md bg-space-deep/80 border border-purple-500/30 text-xs text-white px-2 outline-none focus:border-purple-400"
+              aria-label="Choose Cosmo model"
+            >
+              {COSMO_MODELS.map((m) => (
+                <option key={m.id} value={m.id} className="bg-space-deep">
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <span className="hidden sm:inline text-[10px] text-purple-300/70 shrink-0 truncate max-w-[110px]">
+              {COSMO_MODELS.find((m) => m.id === model)?.tag}
+            </span>
           </div>
 
           {/* Messages */}
@@ -481,7 +518,7 @@ const CosmoAssistant = () => {
               <PromptInputTextarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder={isListening ? "Listening..." : language === 'hinglish' ? 'Space ke baare mein poochho...' : 'Ask me anything about space...'}
+                placeholder={isListening ? "Listening..." : 'Ask me anything about space...'}
                 disabled={isLoading}
                 className="text-white placeholder:text-white/40"
               />

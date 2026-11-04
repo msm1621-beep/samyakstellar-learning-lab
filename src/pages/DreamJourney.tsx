@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import EnhancedStarField from '@/components/EnhancedStarField';
+import { loadCosmoModel } from '@/components/CosmoAssistant';
 import { astronautTopics, topicCategories, type AstronautTopic } from '@/data/astronautTopics';
 import { useToast } from '@/hooks/use-toast';
 import YourTopicMatcher from '@/components/YourTopicMatcher';
@@ -69,8 +70,7 @@ const DreamJourney = () => {
             ...messages.filter(m => m.content).map(m => ({ role: m.role === 'cosmo' ? 'assistant' : 'user', content: m.content })),
             { role: 'user', content: text },
           ],
-          language: 'en',
-          targetLanguageName: 'English',
+          model: loadCosmoModel(),
         }),
       });
 

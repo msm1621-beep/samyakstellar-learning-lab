@@ -6,6 +6,36 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+type ModelProfile = { gateway: string; style: string; temperature: number };
+
+const MODEL_PROFILES: Record<string, ModelProfile> = {
+  "cosmo-1.0-basic": {
+    gateway: "google/gemini-3.1-flash-lite",
+    style: "ANSWER STYLE: extremely short and simple — 1-2 easy sentences, tiny words, no lists.",
+    temperature: 0.3,
+  },
+  "cosmo-1.0-pro": {
+    gateway: "google/gemini-3.8-flash",
+    style: "ANSWER STYLE: deep and thorough — structured answer with short headings or bullet lists (up to 6 short paragraphs), include an amazing extra fact.",
+    temperature: 0.2,
+  },
+  "cosmo-1.5-core": {
+    gateway: "google/gemini-3.5-flash",
+    style: "ANSWER STYLE: balanced — 2-4 short paragraphs, friendly and clear.",
+    temperature: 0.2,
+  },
+  "cosmo-2.0-lite": {
+    gateway: "google/gemini-3.5-flash",
+    style: "ANSWER STYLE: light and breezy — 2-3 very short paragraphs, no lists.",
+    temperature: 0.25,
+  },
+  "cosmo-2.5-flash-lite": {
+    gateway: "google/gemini-3.1-flash-lite",
+    style: "ANSWER STYLE: quick and snappy — 1-3 sentences maximum.",
+    temperature: 0.3,
+  },
+};
+
 const SYSTEM_PROMPT = `You are Cosmo, a friendly, enthusiastic space assistant for a children's educational space website called "Samyak's Stellar Learning Lab."
 
 Personality: warm, encouraging, emoji-friendly, educational, concise (2-4 paragraphs max).
@@ -26,8 +56,8 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const language = clampStr(body.language, 10) || "en";
-    const targetLanguageName = clampStr(body.targetLanguageName, 40);
+    const targetModel = clampStr(body.model, 40);
+    const profile = MODEL_PROFILES[targetModel] ?? MODEL_PROFILES["cosmo-1.5-core"];
     const rawMessages = Array.isArray(body.messages) ? body.messages.slice(-20) : [];
     const messages = rawMessages
       .filter((m: any) => m && (m.role === "user" || m.role === "assistant"))
@@ -36,10 +66,6 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const responseLanguageInstruction = language === "en"
-      ? "CRITICAL LANGUAGE RULE: Respond ONLY in English."
-      : `CRITICAL LANGUAGE RULE: Respond ONLY in ${targetLanguageName || language} (language code: ${language}).`;
-
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -47,13 +73,12 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: profile.gateway,
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "system", content: responseLanguageInstruction },
+          { role: "system", content: `${SYSTEM_PROMPT}\n\n${profile.style}` },
           ...messages,
         ],
-        temperature: 0.2,
+        temperature: profile.temperature,
         stream: true,
       }),
     });
