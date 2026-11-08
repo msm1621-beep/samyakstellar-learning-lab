@@ -1,7 +1,7 @@
 {
   "name": "Samyak Stellar Learning Lab",
   "short_name": "Stellar Lab",
-  "description": "A fun, interactive space learning app for kids aged 7-13 — planets, quizzes, courses, games and more.",
+  "description": "A fun, interactive space learning app for kids 7 years and above — planets, quizzes, courses, games and more.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
