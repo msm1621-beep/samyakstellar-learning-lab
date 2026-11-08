@@ -15,7 +15,7 @@ const AboutSection = () => {
                   <Rocket className="w-6 h-6 text-primary" />
                   Our Mission
                 </h3>
-                <p className="text-muted-foreground mb-4">Stellar Learning Lab is designed to spark curiosity about the universe in young minds! We make learning about space fun and accessible for kids ages 7-13.</p>
+                <p className="text-muted-foreground mb-4">Stellar Learning Lab is designed to spark curiosity about the universe in young minds! We make learning about space fun and accessible for kids 7 years and above.</p>
                 <p className="text-muted-foreground">From planets in our solar system to distant galaxies, colorful nebulas to mysterious black holes - there's so much to explore!</p>
               </div>
               <div className="grid grid-cols-2 gap-4">

@@ -13,6 +13,28 @@ const ALLOWED_INTERESTS = new Set([
 ]);
 const ALLOWED_DURATIONS = new Set(["1week", "2weeks", "1month"]);
 
+function isStudyPlan(value: unknown): value is {
+  title: string;
+  description: string;
+  totalWeeks: number;
+  lessons: { title: string; duration: string; topics: string[]; funActivity: string }[];
+} {
+  if (!value || typeof value !== "object") return false;
+  const plan = value as Record<string, unknown>;
+  return typeof plan.title === "string" && plan.title.trim().length > 0 &&
+    typeof plan.description === "string" && plan.description.trim().length > 0 &&
+    typeof plan.totalWeeks === "number" && Number.isFinite(plan.totalWeeks) &&
+    Array.isArray(plan.lessons) && plan.lessons.length > 0 &&
+    plan.lessons.every((lesson: unknown) => {
+      if (!lesson || typeof lesson !== "object") return false;
+      const item = lesson as Record<string, unknown>;
+      return typeof item.title === "string" && item.title.trim().length > 0 &&
+        typeof item.duration === "string" && Array.isArray(item.topics) &&
+        item.topics.every((topic: unknown) => typeof topic === "string") &&
+        typeof item.funActivity === "string" && item.funActivity.trim().length > 0;
+    });
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -22,10 +44,14 @@ serve(async (req) => {
       return new Response(auth.error.body, { status: auth.error.status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const body = await req.json();
+    const parsedBody: unknown = await req.json();
+    const body = parsedBody && typeof parsedBody === "object"
+      ? parsedBody as Record<string, unknown>
+      : {};
     const rawInterests = Array.isArray(body.interests) ? body.interests.slice(0, 10) : [];
     const interests = rawInterests
-      .filter((i: unknown) => typeof i === "string" && ALLOWED_INTERESTS.has(i));
+      .map((interest: unknown) => interest === "blackholes" ? "black-holes" : interest)
+      .filter((interest: unknown): interest is string => typeof interest === "string" && ALLOWED_INTERESTS.has(interest));
     const duration = ALLOWED_DURATIONS.has(body.duration) ? body.duration : "1week";
 
     if (interests.length === 0) {
@@ -38,7 +64,7 @@ serve(async (req) => {
     const lessonCount = duration === '1week' ? '5-7' : duration === '2weeks' ? '10-14' : '20-25';
     const weekCount = duration === '1week' ? 1 : duration === '2weeks' ? 2 : 4;
 
-    const prompt = `Create a personalized space study plan for a kid aged 7-13.
+    const prompt = `Create a personalized space study plan for a learner aged 7 years and above.
 Their interests (validated allowlist values): ${interests.join(', ')}.
 Duration: ${weekCount} week(s), approximately ${lessonCount} lessons.
 
@@ -95,13 +121,16 @@ Each lesson should be exciting, educational, age-appropriate, and include a fun 
 
     const data = await response.json();
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
-    let plan;
+    let plan: unknown;
     if (toolCall?.function?.arguments) {
       plan = JSON.parse(toolCall.function.arguments);
     } else {
       const content = data.choices?.[0]?.message?.content || '';
       const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       plan = JSON.parse(cleaned);
+    }
+    if (!isStudyPlan(plan)) {
+      return new Response(JSON.stringify({ error: "The AI returned an incomplete plan. Please try again." }), { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     return new Response(JSON.stringify({ plan }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {

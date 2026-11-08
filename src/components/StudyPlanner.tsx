@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import LessonDoubtChat from '@/components/LessonDoubtChat';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Lesson {
   title: string;
@@ -24,7 +25,7 @@ const INTERESTS = [
   { id: 'planets', label: 'Planets & Moons', emoji: '🪐' },
   { id: 'stars', label: 'Stars & Nebulas', emoji: '⭐' },
   { id: 'galaxies', label: 'Galaxies', emoji: '🌌' },
-  { id: 'blackholes', label: 'Black Holes', emoji: '🕳️' },
+  { id: 'black-holes', label: 'Black Holes', emoji: '🕳️' },
   { id: 'rockets', label: 'Rockets & Missions', emoji: '🚀' },
   { id: 'astronauts', label: 'Astronauts', emoji: '👨‍🚀' },
   { id: 'exoplanets', label: 'Exoplanets', emoji: '🌍' },
@@ -45,6 +46,7 @@ const StudyPlanner = () => {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
 
   const planAsText = (p: StudyPlan) => {
     const header = `${p.title}\n${p.description}\n${p.totalWeeks} week plan • ${p.lessons.length} lessons\n`;
@@ -75,6 +77,10 @@ const StudyPlanner = () => {
 
   const generatePlan = async () => {
     if (selectedInterests.length === 0) return;
+    if (!user) {
+      setError('Sign in to generate your personalized study plan.');
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -84,10 +90,35 @@ const StudyPlanner = () => {
       });
 
       if (fnError) throw fnError;
+      if (!data?.plan || !Array.isArray(data.plan.lessons) || data.plan.lessons.length === 0) {
+        throw new Error('The plan came back incomplete. Please try again.');
+      }
       setPlan(data.plan);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error('Study planner error:', e);
-      setError('Failed to generate plan. Please try again!');
+      const context = typeof e === 'object' && e !== null && 'context' in e
+        ? (e as { context?: unknown }).context
+        : undefined;
+      let status: number | undefined;
+      if (context instanceof Response) {
+        status = context.status;
+      } else if (typeof e === 'object' && e !== null && 'status' in e && typeof e.status === 'number') {
+        status = e.status;
+      }
+
+      if (status === 401) {
+        setError('Your sign-in has expired. Sign in again, then generate your plan.');
+      } else if (status === 402) {
+        setError('AI plan generation is temporarily out of credits. Please try again later.');
+      } else if (status === 429) {
+        setError('Plan generation is busy right now. Please try again in a moment.');
+      } else if (status === 400) {
+        setError('Please choose a topic and try again.');
+      } else if (e instanceof Error && e.message.includes('incomplete')) {
+        setError(e.message);
+      } else {
+        setError('Could not generate your plan right now. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -172,10 +203,14 @@ const StudyPlanner = () => {
                 <div className="text-center text-destructive text-sm">{error}</div>
               )}
 
+              {!authLoading && !user && (
+                <p className="text-center text-sm text-muted-foreground">Sign in to generate and view your personalized plan.</p>
+              )}
+
               <div className="text-center">
                 <Button
                   onClick={generatePlan}
-                  disabled={selectedInterests.length === 0 || loading}
+                  disabled={selectedInterests.length === 0 || loading || authLoading || !user}
                   className="px-8 py-6 text-lg font-bold rounded-xl"
                   size="lg"
                 >
