@@ -9,3 +9,4 @@
 - [x] Add both supplied celestial and galaxy catalogues to Celestial Explorer and Size Comparison
 - [x] Update audience wording to 7 years and above
 - [x] Repair study-plan topic validation, sign-in guidance, and useful generation errors
+- [ ] Add the supplied galaxy catalog with distance-based visibility, morphology-shaped galaxies, and searchable galaxy types in the 3D explorer
